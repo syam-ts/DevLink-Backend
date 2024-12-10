@@ -5,12 +5,14 @@
   "repository": "https://github.com/syam-ts/DevLink-Backend.git",
   "author": "<syamnandhu3@gmail.com>",
   "scripts": {
-     "dev": "ts-node --transpile-only src/app.ts"
-    },
+    "dev": "ts-node --transpile-only src/app.ts"
+  },
   "license": "MIT",
   "dependencies": {
     "express": "^4.21.2",
-    "ts-node": "^10.9.2"
+    "mongoose": "^8.8.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
