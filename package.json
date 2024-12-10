@@ -1,0 +1,8 @@
+{
+  "name": "DevLink-Backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/syam-ts/DevLink-Backend.git",
+  "author": "<syamnandhu3@gmail.com>",
+  "license": "MIT"
+}
