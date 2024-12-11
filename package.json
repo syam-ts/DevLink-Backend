@@ -5,7 +5,7 @@
   "repository": "https://github.com/syam-ts/DevLink-Backend.git",
   "author": "<syamnandhu3@gmail.com>",
   "scripts": {
-    "dev": "ts-node --transpile-only src/app.ts"
+    "dev": "npx nodemon --exec ts-node --transpile-only src/app.ts"
   },
   "license": "MIT",
   "dependencies": {
