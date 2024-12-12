@@ -1,25 +1,27 @@
-import express from 'express';
-import mongoose from 'mongoose'
+import express from 'express'; 
+import { connectDB } from './infrastructure/database/db'
+import { SignupController } from './infrastructure/http/controllers/userCtrl'
+require('dotenv').config();
 
+const app = express(); 
+app.use(express.json());
+const PORT: number = 3000; // process.env.PORT
 
-const connectDB = async () => {
-       await mongoose.connect('mongodb+srv://syamnandhu3:AUZcKAsIJHM5phLC@cluster0.ukj87.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')  
-};
+// app.post('/signup', SignupController());
 
+(async () => {
+    await connectDB();
 
-connectDB()
-.then(() => {
-    console.log('db connected');
-
-    app.listen(3000, () => {
-        console.log('server running on port 3000')
+    app.post('/signup', SignupController());
+    app.listen(PORT, () => {
+        console.log(`Server running on ${PORT}`)
     })
-})
-.catch((err) => console.log(err))
-const app = express();
+})();
 
-app.get('/', (req, res) => {
-    res.send('About  page')
+
+app.get('/about', (req, res) => {
+    res.send('About Page')
 })
+
+
  
-
