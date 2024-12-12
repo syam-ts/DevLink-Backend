@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 import { User } from '../../domain/entities/User';
-import { UserRepositary } from '../../application/usecases/client/signupUser';
+import { UserRepositary } from '../../application/usecases/user/signupUser';
 
  
 interface UserDocument extends Document {
