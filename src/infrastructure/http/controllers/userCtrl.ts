@@ -1,8 +1,10 @@
 import { SignupUser } from '../../../application/usecases/user/signupUser';
+import { LoginUser } from '../../../application/usecases/user/loginUser';
 import { UserRepositoryMongoose } from '../../repositories/userRepositoryMongoose'; 
 
 const userRepository = new UserRepositoryMongoose();
 const signupUseCase = new SignupUser(userRepository); 
+const loginUseCase = new LoginUser(userRepository)
 
 export const userController = {
       signupUser: async (req: any, res: any) => {
@@ -15,9 +17,9 @@ export const userController = {
             }
         },
 
-        getHome: async (req: any, res: any) => {
+        loginUser: async (req: any, res: any) => {
             try{
-
+                 const user = await loginUseCase.execute(req.body);
                 res.send('Home Page User')
             }catch(err) {
                 console.error(err)
