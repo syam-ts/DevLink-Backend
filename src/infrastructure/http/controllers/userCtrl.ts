@@ -11,11 +11,12 @@ export const userController = {
             try {
                 console.log('req.body', req.body)
                 const user = await signupUseCase.execute(req.body);
-                res.status(201).json(user);
+                res.status(201).json({message: 'Registration successed'});
             } catch (err: any) {
                 res.status(400).json({error: err.message});
             }
         },
+
 
         loginUser: async (req: any, res: any) => {
             try{
