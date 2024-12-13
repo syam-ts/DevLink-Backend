@@ -21,7 +21,7 @@ export const userController = {
         loginUser: async (req: any, res: any) => {
             try{
                  const user = await loginUseCase.execute(req.body);
-                res.send('Home Page User')
+                res.json({message: "successfully login"})
             }catch(err) {
                 console.error(err)
             }
