@@ -8,8 +8,9 @@ export interface UserRepositary {
 export class SignupUser {
     constructor(private userRepositary: UserRepositary) {}
 
-    async execute(user: User) {
+    async execute(user: User) {   
         const existigUser = await this.userRepositary.findUserByEmail(user.email);
+
         if(existigUser) {
             throw new Error('Email already Exists');
         }

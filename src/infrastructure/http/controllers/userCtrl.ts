@@ -11,9 +11,9 @@ export const userController = {
             try {
                 console.log('req.body', req.body)
                 const user = await signupUseCase.execute(req.body);
-                res.status(201).json({message: 'Registration successed'});
+                res.status(201).json({message: 'Registration successed', type: 'success'});
             } catch (err: any) {
-                res.status(400).json({error: err.message});
+                res.status(400).json({message: err, type: 'error'});
             }
         },
 
@@ -21,9 +21,9 @@ export const userController = {
         loginUser: async (req: any, res: any) => {
             try{
                  const user = await loginUseCase.execute(req.body);
-                res.json({message: "successfully login"})
-            }catch(err) {
-                console.error(err)
+                res.json({message: "successfully login", type: 'success'})
+            }catch(err: any) {
+                res.json({message: err.message, type: 'error'});
             }
         }
     }

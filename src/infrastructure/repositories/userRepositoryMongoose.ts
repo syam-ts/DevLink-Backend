@@ -23,7 +23,7 @@ const UserModel: Model<UserDocument> = mongoose.model<UserDocument>('User', User
 export class UserRepositoryMongoose implements UserRepositary {
   async createUser(user: User): Promise<User> {
     const createdUser = new UserModel({
-      name: user.username, // Map fields explicitly
+      name: user.name, 
       email: user.email,
       password: user.password,
       mobile: user.mobile,
@@ -31,9 +31,8 @@ export class UserRepositoryMongoose implements UserRepositary {
 
     const savedUser = await createdUser.save();
 
- 
     return { 
-      username: savedUser.name,
+      name: savedUser.name,
       email: savedUser.email,
       password: savedUser.password,
       mobile: savedUser.mobile,
@@ -46,7 +45,20 @@ export class UserRepositoryMongoose implements UserRepositary {
 
  
     return { 
-      username: user.name,
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      mobile: user.mobile,
+    } as User;
+  }
+
+
+  async findUserByEmailAndPassword(email: string, password: string): Promise<User | null> {
+    const user = await UserModel.findOne({ email, password }).exec();
+    if (!user) return null;
+
+    return { 
+      name: user.name,
       email: user.email,
       password: user.password,
       mobile: user.mobile,
