@@ -13,7 +13,7 @@ interface UserDocument extends Document {
 const UserSchema = new Schema<UserDocument>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String, required: false },
   mobile: { type: Number, required: false },
 });
 
@@ -72,4 +72,33 @@ export class UserRepositoryMongoose implements UserRepositary {
       mobile: user.mobile,
     } as User;
   }
-}
+
+  async findUserByOnlyEmail(email: string, name: string): Promise<User | null> {
+     const user = await UserModel.findOne({ email }).exec();
+     if (user) {
+       console.log('the user ', user)
+
+       return { 
+        name: user.name,
+        email: user.email
+      } as User;
+     } else {
+ 
+    const createdUser = new UserModel({
+      name: name, 
+      email: email
+    });
+
+    const savedUser = await createdUser.save();
+
+    return { 
+      name: savedUser.name,
+      email: savedUser.email
+    } as User;
+  }
+
+
+     }
+     
+  }
+

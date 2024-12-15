@@ -1,10 +1,12 @@
 import { SignupUser } from '../../../application/usecases/user/signupUser';
 import { LoginUser } from '../../../application/usecases/user/loginUser';
-import { UserRepositoryMongoose } from '../../repositories/userRepositoryMongoose'; 
+import { GoogleLoginUser } from '../../../application/usecases/user/GoogleLoginUser';
+import { UserRepositoryMongoose } from '../../repositories/userRepositoryMongoose';  
 
 const userRepository = new UserRepositoryMongoose();
 const signupUseCase = new SignupUser(userRepository); 
-const loginUseCase = new LoginUser(userRepository)
+const loginUseCase = new LoginUser(userRepository);
+const GoogleLoginUserUseCase = new GoogleLoginUser(userRepository);
 
 export const userController = {
       signupUser: async (req: any, res: any) => {
@@ -21,8 +23,21 @@ export const userController = {
         loginUser: async (req: any, res: any) => {
             try{
                  const user = await loginUseCase.execute(req.body);
-                res.json({message: "successfully login", type: 'success'})
+                res.json({message: "successfully login", type: 'success'});
             }catch(err: any) {
+                res.json({message: err.message, type: 'error'});
+            }
+        },
+
+
+        googleLogin: async (req: any, res: any) => {
+            try {
+                const { email } = req.body;
+                const user = await GoogleLoginUserUseCase.execute(req.body);
+                res.json({message: "successfully login", type: 'success'});
+
+
+            } catch (err: any) {
                 res.json({message: err.message, type: 'error'});
             }
         }

@@ -11,7 +11,7 @@ export class LoginUser {
         const { email, password } = user;
         
         const foundUser = await this.userRepositary.findUserByEmailAndPassword(email, password);
-        console.log('The founded user', foundUser)
+       
          
         if(!foundUser) {
             throw new Error('User not Found');
