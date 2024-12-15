@@ -8,7 +8,7 @@ export class LoginUser {
     constructor(private userRepositary: UserRepositary) {}
 
     async execute(user: User) {
-        const { email, password } = user;
+        const { email, password }: any = user;
         
         const foundUser = await this.userRepositary.findUserByEmailAndPassword(email, password);
        

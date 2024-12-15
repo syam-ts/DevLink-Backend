@@ -21,7 +21,7 @@ const UserSchema = new Schema<UserDocument>({
 const UserModel: Model<UserDocument> = mongoose.model<UserDocument>('User', UserSchema);
 
 export class UserRepositoryMongoose implements UserRepositary {
-  async createUser(user: User): Promise<User> {
+  async createUser(user: User | any): Promise<User> {
 
     const salt: number = 10;
     const hashedPassword = await bcrypt.hash(user.password, salt);
@@ -73,6 +73,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     } as User;
   }
 
+
   async findUserByOnlyEmail(email: string, name: string): Promise<User | null> {
      const user = await UserModel.findOne({ email }).exec();
      if (user) {
@@ -83,14 +84,17 @@ export class UserRepositoryMongoose implements UserRepositary {
         email: user.email
       } as User;
      } else {
- 
-    const createdUser = new UserModel({
-      name: name, 
-      email: email
-    });
+
+       
+       const createdUser = new UserModel({
+         name: name, 
+         email: email
+        });
+       
 
     const savedUser = await createdUser.save();
 
+     
     return { 
       name: savedUser.name,
       email: savedUser.email

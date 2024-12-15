@@ -32,7 +32,6 @@ export const userController = {
 
         googleLogin: async (req: any, res: any) => {
             try {
-                const { email } = req.body;
                 const user = await GoogleLoginUserUseCase.execute(req.body);
                 res.json({message: "successfully login", type: 'success'});
 

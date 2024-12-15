@@ -8,11 +8,15 @@ export interface UserRepositary {
 export class GoogleLoginUser {
     constructor(private userRepositary: UserRepositary) {}
 
-    async execute(user: User) {   
-        const existigUser = await this.userRepositary.findUserByOnlyEmail(user.email, user.name);
+    async execute(user: User) {  
+        const {email, name} = user;  
+        const existigUser = await this.userRepositary.findUserByOnlyEmail(email, name);
 
         if(existigUser) {
             console.log('User Found')
+            return (
+                existigUser
+            )
         }
 
         return this.userRepositary.createUser(user);
