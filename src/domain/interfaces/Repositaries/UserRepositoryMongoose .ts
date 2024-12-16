@@ -126,8 +126,7 @@ export class UserRepositoryMongoose implements UserRepositary {
 
   async findAllClients(): Promise<Client | any> {
      const clients: any = await ClientModel.find().exec();
-     if (clients) {
-       console.log('the clients ', clients);
+     if (clients) { 
  
      
     return { 

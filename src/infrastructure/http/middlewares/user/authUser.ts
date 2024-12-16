@@ -1,25 +1,25 @@
-import jwt from "jsonwebtoken";
-import { User } from "../../../../domain/entities/User";
+import jwt from "jsonwebtoken"; 
 
 export const userAuth = async (req: any, res: any, next: any) => {
+
   try {
+    console.log('the tok', req.cookies);
+
     const { token } = req.cookies;
+    console.log('rel', token)
 
     if (!token) {
       throw new Error("Token not valid");
     }
 
-    const decodedObj = await jwt.verify(token, "devLink$auth123");
+    const secret = 'devLink$auth123';
 
-    const { email }: any = decodedObj;
+    const currentUser = await jwt.verify(token, secret);
 
-    // const user = await User.findOnlyByEmail(email);
+    console.log('THe curr user', currentUser);
 
-    // if (!user) {
-    //   throw new Error("User not found");
-    // }
 
-    // req.user = user;
+    // req.user = currentUser;
     next();
   } catch (err: any) {
     res.status(404).send(err.message);
