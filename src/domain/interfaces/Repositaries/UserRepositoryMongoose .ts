@@ -1,6 +1,9 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 import { User } from '../../entities/User';
+import { Client } from '../../entities/Client';
 import { UserRepositary } from '../../../application/usecases/user/signupUser';
+import { ClientRepositary } from '../../../application/usecases/client/signupClient';
+import {ClientModel} from './ClientRepositoryMongoose'
 import bcrypt from 'bcrypt';
  
 interface UserDocument extends Document {
@@ -16,6 +19,23 @@ const UserSchema = new Schema<UserDocument>({
   password: { type: String, required: false },
   mobile: { type: Number, required: false },
 });
+
+
+//client
+interface ClientDocument extends Document {
+  name: string;
+  email: string;
+  password: string;
+}
+
+const ClientSchema = new Schema<ClientDocument>({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: false }
+});
+
+// const ClientModel: Model<ClientDocument> = mongoose.model<ClientDocument>('Client', ClientSchema);
+
 
  
 const UserModel: Model<UserDocument> = mongoose.model<UserDocument>('User', UserSchema);
@@ -85,7 +105,6 @@ export class UserRepositoryMongoose implements UserRepositary {
       } as User;
      } else {
 
-       
        const createdUser = new UserModel({
          name: name, 
          email: email
@@ -99,6 +118,21 @@ export class UserRepositoryMongoose implements UserRepositary {
       name: savedUser.name,
       email: savedUser.email
     } as User;
+  }
+
+
+     }
+
+
+  async findAllClients(): Promise<Client | any> {
+     const clients: any = await ClientModel.find().exec();
+     if (clients) {
+       console.log('the clients ', clients);
+ 
+     
+    return { 
+      ...clients
+    } as Client;
   }
 
 

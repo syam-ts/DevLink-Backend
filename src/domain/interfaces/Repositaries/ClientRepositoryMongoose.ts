@@ -16,7 +16,7 @@ const ClientSchema = new Schema<ClientDocument>({
 });
 
 
-const ClientModel: Model<ClientDocument> = mongoose.model<ClientDocument>('Client', ClientSchema);
+export const ClientModel: Model<ClientDocument> = mongoose.model<ClientDocument>('Client', ClientSchema);
 
 export class ClientRepositoryMongoose implements ClientRepositary {
   async createClient(client: Client | any): Promise<Client> {

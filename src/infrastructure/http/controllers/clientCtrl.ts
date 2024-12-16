@@ -44,13 +44,13 @@ export const ClientController = {
         },
 
 
-        // getHomeClient: async (req: any, res: any) => {
-        //     try{
+        getHomeClient: async (req: any, res: any) => {
+            try{
 
-
-        //     }catch(err: any) {
-        //         res.json({message: err.message, type: 'error'})
-        //     }
-        // }
+            
+            }catch(err: any) {
+                res.json({message: err.message, type: 'error'})
+            }
+        }
         
     }

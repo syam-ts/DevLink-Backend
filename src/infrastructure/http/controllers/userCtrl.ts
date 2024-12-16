@@ -1,11 +1,13 @@
 import { SignupUser } from '../../../application/usecases/user/signupUser';
 import { LoginUser } from '../../../application/usecases/user/loginUser';
 import { GoogleLoginUser } from '../../../application/usecases/user/GoogleLoginUser';
+import { getHomeUser } from '../../../application/usecases/user/getHomeUser';
 import { UserRepositoryMongoose } from '../../../domain/interfaces/Repositaries/UserRepositoryMongoose ';  
 
 const userRepository = new UserRepositoryMongoose();
 const signupUseCase = new SignupUser(userRepository); 
 const loginUseCase = new LoginUser(userRepository);
+const getHomeUseCase = new getHomeUser(userRepository);
 const GoogleLoginUserUseCase = new GoogleLoginUser(userRepository);
 
 export const userController = {
@@ -44,13 +46,14 @@ export const userController = {
         },
 
 
-        // getHomeUser: async (req: any, res: any) => {
-        //     try{
+        getHomeUser: async (req: any, res: any) => {
+            try{
+               const clients = await getHomeUseCase.execute();
+               res.json({message: 'successfully loaded clients', data: clients, type: 'success'});
 
-
-        //     }catch(err: any) {
-        //         res.json({message: err.message, type: 'error'})
-        //     }
-        // }
+            }catch(err: any) {
+                res.json({message: err.message, type: 'error'})
+            }
+        }
         
     }
