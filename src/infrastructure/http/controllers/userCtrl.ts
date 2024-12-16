@@ -23,6 +23,8 @@ export const userController = {
         loginUser: async (req: any, res: any) => {
             try{
                  const user = await loginUseCase.execute(req.body);
+                 console.log('the return cookie ', user);
+                 res.cookie(user);
                 res.json({message: "successfully login", type: 'success'});
             }catch(err: any) {
                 res.json({message: err.message, type: 'error'});
@@ -39,5 +41,16 @@ export const userController = {
             } catch (err: any) {
                 res.json({message: err.message, type: 'error'});
             }
-        }
+        },
+
+
+        // getHomeUser: async (req: any, res: any) => {
+        //     try{
+
+
+        //     }catch(err: any) {
+        //         res.json({message: err.message, type: 'error'})
+        //     }
+        // }
+        
     }

@@ -24,7 +24,7 @@ const UserModel: Model<UserDocument> = mongoose.model<UserDocument>('User', User
 export class UserRepositoryMongoose implements UserRepositary {
   async createUser(user: User): Promise<User> {
     const createdUser = new UserModel({
-      name: user.username,  
+      name: user.name,  
       email: user.email,
       password: user.password,
       mobile: user.mobile,
