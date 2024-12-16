@@ -1,7 +1,7 @@
 import { SignupUser } from '../../../application/usecases/user/signupUser';
 import { LoginUser } from '../../../application/usecases/user/loginUser';
 import { GoogleLoginUser } from '../../../application/usecases/user/GoogleLoginUser';
-import { UserRepositoryMongoose } from '../../repositories/userRepositoryMongoose';  
+import { UserRepositoryMongoose } from '../../../domain/interfaces/Repositaries/UserRepositoryMongoose ';  
 
 const userRepository = new UserRepositoryMongoose();
 const signupUseCase = new SignupUser(userRepository); 
@@ -23,11 +23,11 @@ export const userController = {
         loginUser: async (req: any, res: any) => {
             try{
                  const user = await loginUseCase.execute(req.body);
-                 console.log('the return cookie ', user);
-                 res.cookie(user);
+                 console.log('the return cookies ', user);
+                 res.cookie("token", user);
                 res.json({message: "successfully login", type: 'success'});
             }catch(err: any) {
-                res.json({message: err.message, type: 'error'});
+                console.log({message: err, type: 'error'});
             }
         },
 

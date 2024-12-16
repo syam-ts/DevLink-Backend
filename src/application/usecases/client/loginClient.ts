@@ -11,12 +11,12 @@ export class LoginClient {
     async execute(client: Client) {
         const { email, password }: any = client;
         
-        const foundClient = await this.ClientRepositary.findClientByEmailAndPassword(email, password);
+        const foundClient: any = await this.ClientRepositary.findClientByEmailAndPassword(email, password);
 
         const secret = 'devLink$auth123';
+  
        
-        const token = await jwt.sign({client}, secret);
-        const cookie = token;
+        const token = await jwt.sign({name: foundClient.name, email: foundClient.email}, secret, { expiresIn: "7d"});
         
         if(!foundClient) {
             throw new Error('Client not Found');
@@ -24,6 +24,6 @@ export class LoginClient {
             console.log('Client Found')
         }
 
-        return { cookie };
+        return { token };
     }
 }

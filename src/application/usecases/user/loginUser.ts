@@ -6,24 +6,25 @@ export interface UserRepositary {
 }
 
 export class LoginUser {
-    constructor(private userRepositary: UserRepositary) {}
+    constructor(private userRepositary: UserRepositary) { }
 
     async execute(user: User) {
         const { email, password }: any = user;
-        
-        const foundUser = await this.userRepositary.findUserByEmailAndPassword(email, password);
+
+        const foundUser: any = await this.userRepositary.findUserByEmailAndPassword(email, password);
 
         const secret = 'devLink$auth123';
-       
-        const token = await jwt.sign({user}, secret);
-        const cookie = token;
-        
-        if(!foundUser) {
+
+        const token = await jwt.sign({ name: foundUser.name, email: foundUser.email }, secret, { expiresIn: "7d" });
+
+
+
+        if (!foundUser) {
             throw new Error('User not Found');
         } else {
             console.log('user Found')
         }
 
-        return { cookie };
+        return { token };
     }
 }
