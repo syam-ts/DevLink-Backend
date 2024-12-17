@@ -11,11 +11,11 @@ const GoogleLoginClientUseCase = new GoogleLoginClient(ClientRepository);
 export const ClientController = {
       signupClient: async (req: any, res: any) => {
             try {
-                console.log('req.body', req.body)
+                // console.log('req.body', req.body)
                 const Client = await signupUseCase.execute(req.body);
                 res.status(201).json({message: 'Registration successed', type: 'success'});
             } catch (err: any) {
-                res.status(400).json({message: err, type: 'error'});
+                res.status(400).json({message: err.message, type: 'error'});
             }
         },
 
@@ -51,6 +51,17 @@ export const ClientController = {
             }catch(err: any) {
                 res.json({message: err.message, type: 'error'})
             }
-        }
+        },
+
+        logoutUser: async (req: any, res: any) => {
+            try{
+               
+                res.clearCookie("token", { path: '/'}); 
+               res.json({message: 'successfully loggedout', type: 'success'});
+
+            }catch(err: any) {
+                res.json({message: err.message, type: 'error'})
+            }
+        },
         
     }

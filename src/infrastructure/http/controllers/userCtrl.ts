@@ -28,17 +28,18 @@ export const userController = {
         loginUser: async (req: any, res: any) => {
             try{
                  const user = await loginUseCase.execute(req.body);
+                 console.log('use',user)
                  if(!user) {
                     res.json({message: 'user not found', type: 'error'})
                  } else {
 
                      res.cookie("token", user.token);
-                 
-                 
-                res.json({message: "successfully login", type: 'success'});
-            }
+                     res.json({message: "successfully login", type: 'success'});
+               }
             }catch(err: any) {
-                console.log({message: err, type: 'error'});
+                console.log('er' ,err.message)
+                res.json({message: err.message, type: 'error'})
+                // console.log({message: err, type: 'error'});
             }
         },
 

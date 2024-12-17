@@ -2,6 +2,7 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 import { Client } from '../../entities/Client';
 import { ClientRepositary } from '../../../application/usecases/client/signupClient';
 import bcrypt from 'bcrypt';
+import validator from 'validator';
 
 interface ClientDocument extends Document {
   name: string;
@@ -20,6 +21,25 @@ export const ClientModel: Model<ClientDocument> = mongoose.model<ClientDocument>
 
 export class ClientRepositoryMongoose implements ClientRepositary {
   async createClient(client: Client | any): Promise<Client> {
+
+
+     if (!client.name || !client.email || !client.password) {
+          throw new Error('Name, email, and password are required');
+      }
+    
+      if(client.name.length < 4 || client.name.length > 20) {
+         throw new Error('Name should be between 4 to 20 characters');
+      }
+    
+      
+      if (!validator.isEmail(client.email)) {
+          throw new Error('Invalid email format');
+      }
+    
+      if (!validator.isStrongPassword(client.password)) {
+          throw new Error('Please enter a strong password');
+      }
+
 
     const salt: number = 10;
     const hashedPassword = await bcrypt.hash(client.password, salt);
