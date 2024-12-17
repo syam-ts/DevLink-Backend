@@ -65,9 +65,7 @@ export const userController = {
         logoutUser: async (req: any, res: any) => {
             try{
                
-                res.cookie("token", null)
-            //    const logout = await logoutUserUseCase.execute(res);
-            //    console.log('the log', logout)
+                res.clearCookie("token", { path: '/'}); 
                res.json({message: 'successfully loggedout', type: 'success'});
 
             }catch(err: any) {

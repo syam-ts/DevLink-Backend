@@ -80,6 +80,7 @@ export class UserRepositoryMongoose implements UserRepositary {
      const user = await UserModel.findOne({ email }).exec();
      console.log('the user ', user)
      if (!user) throw new Error('user not found');
+     console.log('the pass', password)
    
      const isValidPassword = await bcrypt.compare(password, user.password);
       

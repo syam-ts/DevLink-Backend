@@ -2,19 +2,22 @@ import jwt from "jsonwebtoken";
 
 export const userAuth = async (req: any, res: any, next: any) => {
 
-  try {
-    console.log('the tok', req.cookies);
+  try { 
 
-    const { token } = req.cookies;
-    console.log('rel', token)
+    
+    const { token } = req.cookies; 
 
-    if (!token) {
+    if (!token) {  
       throw new Error("Token not valid");
     }
 
     const secret = 'devLink$auth123';
 
     const currentUser = await jwt.verify(token, secret);
+
+    if(!currentUser) {
+      throw new Error('Token Invalid')
+    }
 
     console.log('THe curr user', currentUser);
 
