@@ -3,8 +3,9 @@ import { User } from '../../entities/User';
 import { Client } from '../../entities/Client';
 import { UserRepositary } from '../../../application/usecases/user/signupUser';
 import { ClientRepositary } from '../../../application/usecases/client/signupClient';
-import {ClientModel} from './ClientRepositoryMongoose'
+import {ClientModel} from './ClientRepositoryMongoose';
 import bcrypt from 'bcrypt';
+import validator from 'validator';
  
 interface UserDocument extends Document {
   name: string;
@@ -34,14 +35,30 @@ const ClientSchema = new Schema<ClientDocument>({
   password: { type: String, required: false }
 });
 
-// const ClientModel: Model<ClientDocument> = mongoose.model<ClientDocument>('Client', ClientSchema);
-
 
  
 const UserModel: Model<UserDocument> = mongoose.model<UserDocument>('User', UserSchema);
 
 export class UserRepositoryMongoose implements UserRepositary {
   async createUser(user: User | any): Promise<User> {
+
+    if (!user.name || !user.email || !user.password) {
+      throw new Error('Name, email, and password are required');
+  }
+
+  if(user.name.length < 4 || user.name.length > 20) {
+     throw new Error('Name should be between 4 to 20 characters');
+  }
+
+  
+  if (!validator.isEmail(user.email)) {
+      throw new Error('Invalid email format');
+  }
+
+  if (!validator.isStrongPassword(user.password)) {
+      throw new Error('Please enter a strong password');
+  }
+
 
     const salt: number = 10;
     const hashedPassword = await bcrypt.hash(user.password, salt);
@@ -53,7 +70,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       mobile: user.mobile,
     });
 
-    const savedUser = await createdUser.save();
+    const savedUser = await createdUser.save()
 
     return { 
       name: savedUser.name,

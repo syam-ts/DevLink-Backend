@@ -16,11 +16,11 @@ const GoogleLoginUserUseCase = new GoogleLoginUser(userRepository);
 export const userController = {
       signupUser: async (req: any, res: any) => {
             try {
-                console.log('req.body', req.body)
+                // console.log('req.body : ', req.body);
                 const user = await signupUseCase.execute(req.body);
                 res.status(201).json({message: 'Registration successed', type: 'success'});
             } catch (err: any) {
-                res.status(400).json({message: err, type: 'error'});
+                res.status(400).json({message: err.message, type: 'error'});
             }
         },
 
