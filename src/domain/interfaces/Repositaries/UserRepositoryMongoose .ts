@@ -93,12 +93,16 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
 
-  async findUserByEmailAndPassword(email: string, password: string): Promise<User | null> {
-     const user = await UserModel.findOne({ email }).exec();
-     console.log('the user ', user)
-     if (!user) throw new Error('user not found');
-     console.log('the pass', password)
-   
+  async findUserByEmailAndPassword(email: string, password: string): Promise<User | any> {
+     try {
+      const user = await UserModel.findOne({ email }).exec();
+     console.log('the user ', user);
+
+     if (!user) {
+        return null;
+     };
+     
+
      const isValidPassword = await bcrypt.compare(password, user.password);
       
      if(!isValidPassword) throw new Error('wrong password');
@@ -109,6 +113,9 @@ export class UserRepositoryMongoose implements UserRepositary {
       email: user.email,
       mobile: user.mobile,
     } as User;
+     } catch (error) {
+        console.log(error)
+     }
   }
 
 

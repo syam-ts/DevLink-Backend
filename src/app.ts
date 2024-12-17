@@ -7,9 +7,9 @@ import cors from 'cors';
 
 const app = express(); 
 
-app.use(cors());
 app.use(express.json());
 app.use(cookieparser())
+app.use(cors());
 app.use('/', routes);
 
 const PORT: number = 3000; // process.env.PORT

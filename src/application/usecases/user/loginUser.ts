@@ -9,22 +9,31 @@ export class LoginUser {
     constructor(private userRepositary: UserRepositary) { }
 
     async execute(user: User) {
+       try {
         const { email, password }: any = user;
 
         const foundUser: any = await this.userRepositary.findUserByEmailAndPassword(email, password);
+
+       
+        if (!foundUser) {
+            console.log('User not Found');
+        } else {
+            console.log('user Found') 
+
 
         const secret = 'devLink$auth123';
 
         const token = await jwt.sign({ name: foundUser.name, email: foundUser.email }, secret, { expiresIn: "7d" });
 
-
-
-        if (!foundUser) {
-            throw new Error('User not Found');
-        } else {
-            console.log('user Found')
+        if(!token) {
+            console.log('unknown token ')
         }
-
         return { token };
+
+          }
+       }
+        catch (error) {
+        console.log(error)
+       }
     }
 }
