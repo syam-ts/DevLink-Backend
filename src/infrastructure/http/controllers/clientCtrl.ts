@@ -23,7 +23,7 @@ export const ClientController = {
         loginClient: async (req: any, res: any) => {
             try{
                  const client = await loginUseCase.execute(req.body);
-                 console.log('the return cookie ', client);
+                 
                  res.cookie("token", client);
                 res.json({message: "successfully login", type: 'success'});
             }catch(err: any) {

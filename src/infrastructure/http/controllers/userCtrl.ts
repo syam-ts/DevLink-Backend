@@ -33,7 +33,13 @@ export const userController = {
                     res.json({message: 'user not found', type: 'error'})
                  } else {
 
-                     res.cookie("token", user.token);
+                    res.cookie("token", user.token, {
+                        httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
+                        secure: false, // Use secure cookies in production
+                        sameSite: "lax", // Ensures cookies are sent only to same-site requests
+                        maxAge: 24 * 60 * 60 * 1000
+                    }
+                    );
                      res.json({message: "successfully login", type: 'success'});
                }
             }catch(err: any) {

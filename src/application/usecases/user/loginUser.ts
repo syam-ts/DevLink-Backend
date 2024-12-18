@@ -18,7 +18,7 @@ export class LoginUser {
         }  
 
         const secret = 'devLink$auth123';
-        const token = await jwt.sign({ name: foundUser.name, email: foundUser.email }, secret, { expiresIn: "7d" });
+        const token = await jwt.sign({ name: foundUser.name, email: foundUser.email }, secret, { expiresIn: "1d" });
 
         if(!token) {
             throw new Error('unknown token ')

@@ -2,10 +2,10 @@ import jwt from "jsonwebtoken";
 
 export const userAuth = async (req: any, res: any, next: any) => {
 
-  try { 
-
+  try {  
     
     const { token } = req.cookies; 
+    console.log('ente', req.cookies.token)
 
     if (!token) {  
       throw new Error("Token not valid");
@@ -21,8 +21,10 @@ export const userAuth = async (req: any, res: any, next: any) => {
 
     console.log('THe curr user', currentUser);
 
+    console.log('tge re', req.user)
 
-    // req.user = currentUser;
+     req.user = currentUser;
+     console.log('after re', req.user)
     next();
   } catch (err: any) {
     res.status(404).send(err.message);
