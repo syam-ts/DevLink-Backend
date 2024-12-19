@@ -6,6 +6,7 @@ import { ClientRepositary } from '../../../application/usecases/client/signupCli
 import {ClientModel} from './ClientRepositoryMongoose';
 import bcrypt from 'bcrypt';
 import validator from 'validator';
+import nodemailer from 'nodemailer'
  
 interface UserDocument extends Document {
   name: string;
@@ -39,6 +40,40 @@ const ClientSchema = new Schema<ClientDocument>({
  
 const UserModel: Model<UserDocument> = mongoose.model<UserDocument>('User', UserSchema);
 
+//nodemailar
+const html = `
+  <h1> OTP Recieved </h1>
+  <p> 1124 </p>
+`;
+
+ async function  main () {
+  try {
+    const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'syamnandhu3@gmail.com',
+            pass: process.env.GMAIL_APP_PASSWORD
+        }
+    });
+
+    console.log('The pass', process.env.GMAIL_APP_PASSWORD)
+
+    const info = await transporter.sendMail({
+        from: 'syamnandhu3@gmail.com',
+        to: 'syampro333@gmail.com',
+        subject: 'Testing for now',
+        text: 'This is a test email',
+    });
+
+    console.log('OTP sent', info.messageId);
+} catch (error) {
+    console.error('Error sending email:', error);
+}
+
+} 
+
+
+
 export class UserRepositoryMongoose implements UserRepositary {
   async createUser(user: User | any): Promise<User> {
 
@@ -59,6 +94,11 @@ export class UserRepositoryMongoose implements UserRepositary {
       throw new Error('Please enter a strong password');
   }
 
+
+  main().catch(console.error);
+
+
+  console.log('success message')
 
     const salt: number = 10;
     const hashedPassword = await bcrypt.hash(user.password, salt);

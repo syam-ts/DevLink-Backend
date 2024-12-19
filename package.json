@@ -5,11 +5,13 @@
   "repository": "https://github.com/syam-ts/DevLink-Backend.git",
   "author": "<syamnandhu3@gmail.com>",
   "scripts": {
-    "dev": "npx nodemon --exec ts-node --transpile-only src/app.ts"
+    "dev": "npx nodemon --exec ts-node --transpile-only src/app.ts",
+    "start": "nodemon src/app.ts"
   },
   "license": "MIT",
   "dependencies": {
     "@react-oauth/google": "^0.12.1",
+    "@types/nodemailer": "^6.4.17",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -17,6 +19,7 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.4",
+    "nodemailer": "^6.9.16",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
     "validator": "^13.12.0"
