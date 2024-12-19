@@ -6,6 +6,7 @@ const userRouter = express.Router();
 
  
 userRouter.post('/signup', userController.signupUser);
+userRouter.post('/verify-otp', userController.verifyOtp);
 userRouter.post('/login', userController.loginUser);
 userRouter.post('/googleLogin', userController.googleLogin);
 userRouter.get('/getHome',userAuth, userController.getHomeUser);

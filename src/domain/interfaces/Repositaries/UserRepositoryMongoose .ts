@@ -6,7 +6,9 @@ import { ClientRepositary } from '../../../application/usecases/client/signupCli
 import {ClientModel} from './ClientRepositoryMongoose';
 import bcrypt from 'bcrypt';
 import validator from 'validator';
-import nodemailer from 'nodemailer'
+import { sendMail } from '../../../utils/send-mail';
+
+
  
 interface UserDocument extends Document {
   name: string;
@@ -40,65 +42,11 @@ const ClientSchema = new Schema<ClientDocument>({
  
 const UserModel: Model<UserDocument> = mongoose.model<UserDocument>('User', UserSchema);
 
-//nodemailar
-const html = `
-  <h1> OTP Recieved </h1>
-  <p> 1124 </p>
-`;
-
- async function  main () {
-  try {
-    const transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-            user: 'syamnandhu3@gmail.com',
-            pass: process.env.GMAIL_APP_PASSWORD
-        }
-    });
-
-    console.log('The pass', process.env.GMAIL_APP_PASSWORD)
-
-    const info = await transporter.sendMail({
-        from: 'syamnandhu3@gmail.com',
-        to: 'syampro333@gmail.com',
-        subject: 'Testing for now',
-        text: 'This is a test email',
-    });
-
-    console.log('OTP sent', info.messageId);
-} catch (error) {
-    console.error('Error sending email:', error);
-}
-
-} 
-
 
 
 export class UserRepositoryMongoose implements UserRepositary {
-  async createUser(user: User | any): Promise<User> {
 
-    if (!user.name || !user.email || !user.password) {
-      throw new Error('Name, email, and password are required');
-  }
-
-  if(user.name.length < 4 || user.name.length > 20) {
-     throw new Error('Name should be between 4 to 20 characters');
-  }
-
-  
-  if (!validator.isEmail(user.email)) {
-      throw new Error('Invalid email format');
-  }
-
-  if (!validator.isStrongPassword(user.password)) {
-      throw new Error('Please enter a strong password');
-  }
-
-
-  main().catch(console.error);
-
-
-  console.log('success message')
+  async createUser(user: User | any): Promise<User | any> {
 
     const salt: number = 10;
     const hashedPassword = await bcrypt.hash(user.password, salt);
@@ -118,18 +66,88 @@ export class UserRepositoryMongoose implements UserRepositary {
       password: savedUser.password,
       mobile: savedUser.mobile,
     } as User;
+
+
+ 
+   
   }
+
+
+  async signupUser(user: User | any): Promise<User | any> {
+    
+
+    if (!user.name || !user.email || !user.password) {
+      throw new Error('Name, email, and password are required');
+  }
+
+  if(user.name.length < 4 || user.name.length > 20) {
+     throw new Error('Name should be between 4 to 20 characters');
+  }
+  
+  if (!validator.isEmail(user.email)) {
+      throw new Error('Invalid email format');
+  }
+
+  if (!validator.isStrongPassword(user.password)) {
+      throw new Error('Please enter a strong password');
+  }
+
+  const foundUser: any = this.findUserByEmail(user.email);
+   
+      if(foundUser) {
+            return foundUser
+      } else {
+           return null
+      }  
+  };
+  
+  
+
+  async verifyOtp( user: any): Promise<User | null> {
+ 
+    const { name, email, password, mobile } = user.user;
+   
+  if(user.mailOtp === parseInt(user.userOtp.otp)) {
+
+
+    const salt: number = 10;
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const createdUser = new UserModel({
+      name: name, 
+      email: email,
+      password: hashedPassword,
+      mobile: mobile,
+    });
+
+    const savedUser = await createdUser.save();
+
+    return { 
+      name: savedUser.name,
+      email: savedUser.email,
+      password: savedUser.password,
+      mobile: savedUser.mobile,
+    } as User;
+  } else {
+    throw new Error ('incorrect OTP');
+    }
+  }
+
 
   async findUserByEmail(email: string): Promise<User | null> {
     const user = await UserModel.findOne({ email }).exec();
-    if (!user) return null;
-   
-    return { 
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      mobile: user.mobile,
-    } as User;
+    if (!user) {
+      return null
+    } else {
+
+      return { 
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        mobile: user.mobile,
+      } as User;
+    };
+    
   }
 
 

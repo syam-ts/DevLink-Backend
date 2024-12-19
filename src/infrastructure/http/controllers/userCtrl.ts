@@ -3,6 +3,7 @@ import { LoginUser } from '../../../application/usecases/user/loginUser';
 import { GoogleLoginUser } from '../../../application/usecases/user/GoogleLoginUser';
 import { getHomeUser } from '../../../application/usecases/user/getHomeUser';
 import { LogoutUser } from '../../../application/usecases/user/logoutUser';
+import { verifyOtp } from '../../../application/usecases/user/otpUser';
 import { UserRepositoryMongoose } from '../../../domain/interfaces/Repositaries/UserRepositoryMongoose ';  
 import jwt from 'jsonwebtoken';
 
@@ -11,19 +12,40 @@ const signupUseCase = new SignupUser(userRepository);
 const loginUseCase = new LoginUser(userRepository);
 const getHomeUseCase = new getHomeUser(userRepository);
 const logoutUserUseCase = new LogoutUser(userRepository);
+const verifyUserUseCase = new verifyOtp(userRepository);
 const GoogleLoginUserUseCase = new GoogleLoginUser(userRepository);
 
 export const userController = {
       signupUser: async (req: any, res: any) => {
             try {
                 // console.log('req.body : ', req.body);
-                const user = await signupUseCase.execute(req.body);
-                res.status(201).json({message: 'Registration successed', type: 'success'});
+                const otp = await signupUseCase.execute(req.body);
+               
+                if(otp) {
+                    res.status(201).json({message: 'Registration successed', data: req.body, otp, type: 'success'});
+
+                }  
+                
             } catch (err: any) {
                 res.status(400).json({message: err.message, type: 'error'});
             }
         },
 
+
+        verifyOtp : async (req: any, res: any ) => {
+          try{
+
+            console.log('req body', req.body)
+            const user = await verifyUserUseCase.execute(req.body);
+
+            
+                res.json({message: 'OTP verified successfully', type: 'success'})
+           
+          } catch(err: any) {
+              res.json({message: err.message, type: 'error'})
+          }
+
+        },
 
         loginUser: async (req: any, res: any) => {
             try{

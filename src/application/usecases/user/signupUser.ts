@@ -1,20 +1,33 @@
 import { User } from '../../../domain/entities/User';
+import { sendMail } from '../../../utils/send-mail';
 
 export interface UserRepositary {
     createUser(user: User): Promise<User>;
-    findUserByEmail(email: string): Promise<User | null>;
+    signupUser(email: string): Promise<User | null>;
 }
 
 export class SignupUser {
     constructor(private userRepositary: UserRepositary) {}
 
-    async execute(user: User) {   
-        const existigUser = await this.userRepositary.findUserByEmail(user.email);
+    async execute(user: User | any) {   
+        
 
-        if(existigUser) {
-            throw new Error('Email already Exists');
+        const existingUser:any = await this.userRepositary.signupUser(user)
+
+        
+        if(existingUser) {
+            throw new Error('User already exists');
+        } else {
+             
+            console.log('the mail', user.email)
+            const otp = await sendMail(user.email);
+
+             
+            console.log('the opt',otp)
+
+            return otp;
         }
-
-        return this.userRepositary.createUser(user);
+ 
+      
     }
 }
