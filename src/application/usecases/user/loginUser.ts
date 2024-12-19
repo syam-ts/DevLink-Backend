@@ -13,6 +13,7 @@ export class LoginUser {
         
         const foundUser: any = await this.userRepositary.findUserByEmailAndPassword(user.email, user.password);
 
+        console.log('the user', foundUser)
         if (!foundUser) {
             throw new Error('User not Found');
         }  
@@ -23,7 +24,7 @@ export class LoginUser {
         if(!token) {
             throw new Error('unknown token ')
         }
-        return { token };
+        return { user: foundUser, token: token };
  
         
         

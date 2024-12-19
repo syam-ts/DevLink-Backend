@@ -56,18 +56,16 @@ export const userController = {
                  } else {
 
                     res.cookie("token", user.token, {
-                        httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-                        secure: false, // Use secure cookies in production
-                        sameSite: "lax", // Ensures cookies are sent only to same-site requests
+                        httpOnly: true, 
+                        secure: false, 
+                        sameSite: "lax", 
                         maxAge: 24 * 60 * 60 * 1000
-                    }
+                      }
                     );
-                     res.json({message: "successfully login", type: 'success'});
+                     res.json({message: "successfully login",user: user, type: 'success'});
                }
-            }catch(err: any) {
-                console.log('er' ,err.message)
-                res.json({message: err.message, type: 'error'})
-                // console.log({message: err, type: 'error'});
+            }catch(err: any) { 
+                res.json({message: err.message, type: 'error'}); 
             }
         },
 

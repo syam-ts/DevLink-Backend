@@ -80,8 +80,12 @@ export class UserRepositoryMongoose implements UserRepositary {
       throw new Error('Name, email, and password are required');
   }
 
-  if(user.name.length < 4 || user.name.length > 20) {
+  if(user.name.length <= 4 || user.name.length > 20) {
      throw new Error('Name should be between 4 to 20 characters');
+  }
+
+  if(user.mobile.length < 10 || user.mobile.length > 12) {
+     throw new Error('invalid Mobile Number');
   }
   
   if (!validator.isEmail(user.email)) {
