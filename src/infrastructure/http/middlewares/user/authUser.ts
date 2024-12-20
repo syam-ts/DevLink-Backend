@@ -1,30 +1,44 @@
-import jwt from "jsonwebtoken"; 
+import jwt from "jsonwebtoken";
 
 export const userAuth = async (req: any, res: any, next: any) => {
 
-  try {  
-    console.log('First')
-    
-    const { token } = await req.cookies;  
-    console.log('the main token  : ', token)
-    
-    if (!token) {  
-      throw new Error('Invalid Token');
+  try{
+
+    const refreshToken = req.cookies.jwt;
+
+    console.log('The Refresh Token : ', refreshToken);
+
+    const USER_REFRESH_TOKEN: any = process.env.USER_REFRESH_TOKEN;
+    const USER_ACCESS_TOKEN: any = process.env.USER_ACCESS_TOKEN; 
+
+    if (!refreshToken) {
+        return res.status(401).json({ message: "No token provided", type: "error" });
     }
 
-    const secret = 'devLink$auth123';
+    jwt.verify(refreshToken, USER_REFRESH_TOKEN, (err: any, decoded: any) => {
+      if (err) {
+          console.error('JWT Verification Error:', err.message);
+          return res.status(403).json({ message: "Invalid Token", type: "error" });
+      }
 
-    const currentUser = await jwt.verify(token, secret);
+      // Create a new access token
+      const accessToken = jwt.sign(
+          { name: decoded.name, email: decoded.email },
+              USER_REFRESH_TOKEN,
+          { expiresIn: '15m' }
+      );
 
-    if(!currentUser) {
-      throw new Error('Invalid Token');
-    }; 
+      // Send the new access token
+      req.user = { accessToken }; 
+       next()
+  });
 
-     req.user = currentUser; 
+  } catch(err: any) {
 
-    next();
-  } catch (err: any) {
-    console.log('auth error', err.message)
-    return res.status(400).json({message: err.message , type: 'error'});
+    console.error('Unexpected Error:', err.message);
+    res.status(500).json({ message: "Internal Server Error", type: "error" });
   }
+   
+                // req.user = { accessToken };
+ 
 };

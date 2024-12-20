@@ -31,6 +31,9 @@ export const userController = {
             }
         },
 
+        // jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiU3lhbSIsImVtYWlsIjoic3lhbW5hbmRodTNAZ21haWwuY29tIiwiaWF0IjoxNzM0Njc0NjQzLCJleHAiOjE3MzQ3NjEwNDN9.jQQ4grxILIC-ja6nCnAJsR7r3TO711oyNDqBx1RIXj4; 
+        // Path=/; Secure; HttpOnly; Expires=Sat, 21 Dec 2024 06:04:03 GMT;
+
        
 
         verifyOtp : async (req: any, res: any ) => {
@@ -45,8 +48,7 @@ export const userController = {
             //     mailOtp: 1111,
             //     userOtp: { otp: '1111' }
             //   }
-
-       console.log('the otp from ctrl : ', req.body);
+ 
             const user = await verifyUserUseCase.execute(req.body);
 
             
@@ -60,20 +62,21 @@ export const userController = {
 
         loginUser: async (req: any, res: any) => {
             try{
-                console.log('req body from ctrl : ', req.body)
+               
                  const user = await loginUseCase.execute(req.body); 
+
                  if(!user) {
                     res.json({message: 'user not found', type: 'error'})
                  } else {
 
-                    res.cookie("token", user.token, {
+                    res.cookie("jwt", user.jwt, {
                         httpOnly: true, 
-                        secure: false, 
-                        sameSite: "lax", 
+                        sameSite: "None", 
+                        secure: true, 
                         maxAge: 24 * 60 * 60 * 1000
                       }
                     );
-                     res.json({message: "successfully login",user: user, type: 'success'});
+                    return res.json({message: "successfully login",user: user, type: 'success'});
                }
             }catch(err: any) { 
                 res.json({message: err.message, type: 'error'}); 
@@ -86,7 +89,6 @@ export const userController = {
                 const user = await GoogleLoginUserUseCase.execute(req.body);
                 res.json({message: "successfully login", type: 'success'});
 
-
             } catch (err: any) {
                 res.json({message: err.message, type: 'error'});
             }
@@ -95,10 +97,20 @@ export const userController = {
 
         getHomeUser: async (req: any, res: any) => {
             try{
-               
 
+                console.log('the token from ctrl : ', req.user.accessToken)
+               
                const clients = await getHomeUseCase.execute();
-               res.json({message: 'successfully loaded clients', data: clients, type: 'success'});
+
+               res.cookie("jwt", req.user.accessToken, {
+                httpOnly: true, 
+                sameSite: "None", 
+                secure: true, 
+                maxAge: 24 * 60 * 60 * 1000
+              }
+            );
+            return res.json({message: "successfully login",data: clients, type: 'success'});
+              
 
             }catch(err: any) {
                 res.json({message: err.message, type: 'error'})
