@@ -67,9 +67,6 @@ export class UserRepositoryMongoose implements UserRepositary {
       mobile: savedUser.mobile,
     } as User;
 
-
- 
-   
   }
 
 
@@ -79,8 +76,8 @@ export class UserRepositoryMongoose implements UserRepositary {
     if (!user.name || !user.email || !user.password) {
       throw new Error('Name, email, and password are required');
   }
-
-  if(user.name.length <= 4 || user.name.length > 20) {
+  
+  if(user.name.length < 4 || user.name.length > 20) {
      throw new Error('Name should be between 4 to 20 characters');
   }
 
@@ -110,6 +107,7 @@ export class UserRepositoryMongoose implements UserRepositary {
   async verifyOtp( user: any): Promise<User | null> {
  
     const { name, email, password, mobile } = user.user;
+    console.log('name', user.user)
    
   if(user.mailOtp === parseInt(user.userOtp.otp)) {
 

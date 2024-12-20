@@ -3,12 +3,13 @@ import jwt from "jsonwebtoken";
 export const userAuth = async (req: any, res: any, next: any) => {
 
   try {  
+    console.log('First')
     
-    const { token } = req.cookies; 
-    console.log('ente', req.cookies.token)
-
+    const { token } = await req.cookies;  
+    console.log('the main token  : ', token)
+    
     if (!token) {  
-      throw new Error("Token not valid");
+      throw new Error('Invalid Token');
     }
 
     const secret = 'devLink$auth123';
@@ -16,17 +17,14 @@ export const userAuth = async (req: any, res: any, next: any) => {
     const currentUser = await jwt.verify(token, secret);
 
     if(!currentUser) {
-      throw new Error('Token Invalid')
-    }
+      throw new Error('Invalid Token');
+    }; 
 
-    console.log('THe curr user', currentUser);
+     req.user = currentUser; 
 
-    console.log('tge re', req.user)
-
-     req.user = currentUser;
-     console.log('after re', req.user)
     next();
   } catch (err: any) {
-    res.status(404).send(err.message);
+    console.log('auth error', err.message)
+    return res.status(400).json({message: err.message , type: 'error'});
   }
 };

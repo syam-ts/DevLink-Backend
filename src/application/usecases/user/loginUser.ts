@@ -8,12 +8,10 @@ export interface UserRepositary {
 export class LoginUser {
     constructor(private userRepositary: UserRepositary) {}
 
-    async execute(user: any) { 
-       
+    async execute(user: any) {  
         
         const foundUser: any = await this.userRepositary.findUserByEmailAndPassword(user.email, user.password);
-
-        console.log('the user', foundUser)
+ 
         if (!foundUser) {
             throw new Error('User not Found');
         }  

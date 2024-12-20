@@ -31,11 +31,22 @@ export const userController = {
             }
         },
 
+       
 
         verifyOtp : async (req: any, res: any ) => {
           try{
+            // POST otp =  {
+            //     user: {
+            //       name: 'Syam',
+            //       password: 'syamWnanddhu3@gmail.com',
+            //       email: 'syamnanddhu3@gmail.com',
+            //       mobile: '8848700346'
+            //     },
+            //     mailOtp: 1111,
+            //     userOtp: { otp: '1111' }
+            //   }
 
-            console.log('req body', req.body)
+       console.log('the otp from ctrl : ', req.body);
             const user = await verifyUserUseCase.execute(req.body);
 
             
@@ -49,8 +60,8 @@ export const userController = {
 
         loginUser: async (req: any, res: any) => {
             try{
-                 const user = await loginUseCase.execute(req.body);
-                 console.log('use',user)
+                console.log('req body from ctrl : ', req.body)
+                 const user = await loginUseCase.execute(req.body); 
                  if(!user) {
                     res.json({message: 'user not found', type: 'error'})
                  } else {
