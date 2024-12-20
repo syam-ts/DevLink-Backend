@@ -1,20 +1,29 @@
 import { Client } from '../../../domain/entities/Client';
+import { sendMail } from '../../../utils/send-mail';
 
 export interface ClientRepositary {
     createClient(client: Client): Promise<Client>;
-    findClientByEmail(email: string): Promise<Client | null>;
+    signupClient(email: string): Promise<Client | null>;
 }
 
 export class SignupClient {
-    constructor(private ClientRepositary: ClientRepositary) {}
+    constructor(private clientRepositary: ClientRepositary) {}
 
-    async execute(client: Client) {   
-        const existigClient = await this.ClientRepositary.findClientByEmail(client.email);
+    async execute(client: Client | any) {   
+        
 
-        if(existigClient) {
-            throw new Error('Email already Exists');
-        }
+        const existingClient:any = await this.clientRepositary.signupClient(client)
 
-        return this.ClientRepositary.createClient(client);
+        
+        if(existingClient) {
+            throw new Error('Client already exists');
+        } else {
+             
+            console.log('the mail', client.email)
+            const otp = await sendMail(client.email);  
+            console.log('the opt',otp)
+
+            return otp;
+        } 
     }
 }

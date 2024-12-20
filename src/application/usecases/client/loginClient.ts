@@ -6,24 +6,42 @@ export interface ClientRepositary {
 }
 
 export class LoginClient {
-    constructor(private ClientRepositary: ClientRepositary) {}
+    constructor(private clientRepositary: ClientRepositary) {}
 
-    async execute(client: Client) {
-        const { email, password }: any = client;
-        
-        const foundClient: any = await this.ClientRepositary.findClientByEmailAndPassword(email, password);
+    async execute(client: any) {   
 
-        const secret = 'devLink$auth123';
-  
-       
-        const token = await jwt.sign({name: foundClient.name, email: foundClient.email}, secret, { expiresIn: "7d"});
+        const CLIENT_ACCESS_TOKEN: any = process.env.CLIENT_ACCESS_TOKEN;
+        const CLIENT_REFRESH_TOKEN: any = process.env.CLIENT_REFRESH_TOKEN;
         
-        if(!foundClient) {
+        const foundClient: any = await this.clientRepositary.findClientByEmailAndPassword(client.email, client.password);
+ 
+        if (!foundClient) {
             throw new Error('Client not Found');
-        } else {
-            console.log('Client Found')
-        }
+        }  
 
-        return { token };
+
+        const accessToken = await jwt.sign({
+             name: foundClient.name, email: foundClient.email 
+            }, 
+              CLIENT_ACCESS_TOKEN,
+             { expiresIn: "10m" }
+            );
+
+            
+            const refreshToken = await jwt.sign({
+                name: foundClient.name, email: foundClient.email
+            },
+             CLIENT_REFRESH_TOKEN,
+            { expiresIn: '7d'}        
+          )
+
+
+        if(!accessToken) {
+            throw new Error('unknown token ')
+        }
+        return { client: foundClient, jwt: refreshToken };
+ 
+        
+        
     }
 }

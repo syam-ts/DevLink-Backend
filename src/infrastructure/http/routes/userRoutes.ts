@@ -9,7 +9,7 @@ userRouter.post('/signup', userController.signupUser);
 userRouter.post('/verify-otp', userController.verifyOtp);
 userRouter.post('/login', userController.loginUser);
 userRouter.post('/googleLogin', userController.googleLogin);
-userRouter.get('/getHome',userAuth, userController.getHomeUser);
-userRouter.post('/logout', userController.logoutUser);
+userRouter.get('/getHome', userAuth, userController.getHomeUser);
+userRouter.post('/logout', userAuth, userController.logoutUser);
 
 export default userRouter;

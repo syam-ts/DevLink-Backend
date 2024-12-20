@@ -1,8 +1,7 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 import { User } from '../../entities/User';
 import { Client } from '../../entities/Client';
-import { UserRepositary } from '../../../application/usecases/user/signupUser';
-import { ClientRepositary } from '../../../application/usecases/client/signupClient';
+import { UserRepositary } from '../../../application/usecases/user/signupUser'; 
 import {ClientModel} from './ClientRepositoryMongoose';
 import bcrypt from 'bcrypt';
 import validator from 'validator';
@@ -40,7 +39,7 @@ const ClientSchema = new Schema<ClientDocument>({
 
 
  
-const UserModel: Model<UserDocument> = mongoose.model<UserDocument>('User', UserSchema);
+export const UserModel: Model<UserDocument> = mongoose.model<UserDocument>('User', UserSchema);
 
 
 

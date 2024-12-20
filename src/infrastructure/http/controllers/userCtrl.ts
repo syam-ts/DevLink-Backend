@@ -5,7 +5,7 @@ import { getHomeUser } from '../../../application/usecases/user/getHomeUser';
 import { LogoutUser } from '../../../application/usecases/user/logoutUser';
 import { verifyOtp } from '../../../application/usecases/user/otpUser';
 import { UserRepositoryMongoose } from '../../../domain/interfaces/Repositaries/UserRepositoryMongoose ';  
-import jwt from 'jsonwebtoken';
+ 
 
 const userRepository = new UserRepositoryMongoose();
 const signupUseCase = new SignupUser(userRepository); 
@@ -97,8 +97,7 @@ export const userController = {
 
         getHomeUser: async (req: any, res: any) => {
             try{
-
-                console.log('the token from ctrl : ', req.user.accessToken)
+ 
                
                const clients = await getHomeUseCase.execute();
 
@@ -120,8 +119,10 @@ export const userController = {
 
         logoutUser: async (req: any, res: any) => {
             try{
+
+                console.log('the jwt ',req.cookies )
                
-                res.clearCookie("token", { path: '/'}); 
+                res.clearCookie("jwt", { path: '/'}); 
                res.json({message: 'successfully loggedout', type: 'success'});
 
             }catch(err: any) {

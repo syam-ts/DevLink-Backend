@@ -1,12 +1,15 @@
 import express from 'express';
-import { ClientController } from '../controllers/clientCtrl'
+import { clientController } from '../controllers/clientCtrl'
+import { clientAuth } from '../middlewares/client/authClient'
 
 const clientRouter = express.Router();
 
  
-clientRouter.post('/signup', ClientController.signupClient);
-clientRouter.post('/login', ClientController.loginClient);
-clientRouter.post('/googleLogin', ClientController.googleLogin);
-clientRouter.post('/logout', ClientController.logoutUser);
+clientRouter.post('/signup', clientController.signupClient);
+clientRouter.post('/verify-otp', clientController.verifyOtp);
+clientRouter.post('/login', clientController.loginClient);
+clientRouter.post('/googleLogin', clientController.googleLogin);
+clientRouter.get('/getHome', clientAuth, clientController.getHomeClient);
+clientRouter.post('/logout', clientAuth, clientController.logoutClient);
 
 export default clientRouter;

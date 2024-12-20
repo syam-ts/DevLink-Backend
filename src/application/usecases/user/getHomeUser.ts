@@ -9,12 +9,10 @@ export interface UserRepositary {
 export class getHomeUser {
     constructor(private userRepositary: UserRepositary) { }
 
-    async execute() {
-        
+    async execute() { 
 
         const foundClients: any = await this.userRepositary.findAllClients();
- 
-        
+  
 
         if (!foundClients) {
             throw new Error('No Clients are there');

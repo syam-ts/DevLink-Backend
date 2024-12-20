@@ -6,19 +6,19 @@ export interface ClientRepositary {
 }
 
 export class GoogleLoginClient {
-    constructor(private ClientRepositary: ClientRepositary) {}
+    constructor(private clientRepositary: ClientRepositary) {}
 
     async execute(client: Client) {  
         const {email, name} = client;  
-        const existigClient = await this.ClientRepositary.findClientByOnlyEmail(email, name);
+        const existingClient = await this.clientRepositary.findClientByOnlyEmail(email, name);
 
-        if(existigClient) {
-            console.log('Client Found')
+        if(existingClient) {
+            console.log('client Found')
             return (
-                existigClient
+                existingClient
             )
         }
 
-        return this.ClientRepositary.createClient(client);
+        return this.clientRepositary.createClient(client);
     }
 }
