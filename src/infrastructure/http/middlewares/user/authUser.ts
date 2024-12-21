@@ -5,7 +5,7 @@ export const userAuth = async (req: any, res: any, next: any) => {
   try{
     console.log('The token from the auth api : ', req.cookies);
 
-    const refreshToken = req.cookies.jwt;
+    const refreshToken = req.cookies.jwtU;
 
     console.log('The Refresh Token : ', refreshToken);
 

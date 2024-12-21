@@ -4,13 +4,12 @@ export const clientAuth = async (req: any, res: any, next: any) => {
 
   try{
     
-    console.log('The refresh token : ', req.cookies.jwt);
+    console.log('The refresh token : ', req.cookies.jwtC);
 
-    const refreshToken = req.cookies.jwt;
+    const refreshToken = req.cookies.jwtC;
  
 
-    const CLIENT_REFRESH_TOKEN: any = process.env.CLIENT_REFRESH_TOKEN;
-    const CLIENT_ACCESS_TOKEN: any = process.env.CLIENT_ACCESS_TOKEN; 
+    const CLIENT_REFRESH_TOKEN: any = process.env.CLIENT_REFRESH_TOKEN; 
 
     if (!refreshToken) {
         return res.status(401).json({ message: "No token provided", type: "error" });

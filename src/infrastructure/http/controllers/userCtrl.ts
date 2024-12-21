@@ -69,7 +69,7 @@ export const userController = {
                     res.json({message: 'user not found', type: 'error'})
                  } else {
 
-                    res.cookie("jwt", user.jwt, {
+                    res.cookie("jwtU", user.jwt, {
                         httpOnly: true, 
                         sameSite: "None", 
                         secure: true, 
@@ -101,7 +101,7 @@ export const userController = {
                
                const clients = await getHomeUseCase.execute();
 
-               res.cookie("jwt", req.user.accessToken, {
+               res.cookie("jwtU", req.user.accessToken, {
                 httpOnly: true, 
                 sameSite: "None", 
                 secure: true, 
@@ -120,9 +120,8 @@ export const userController = {
         logoutUser: async (req: any, res: any) => {
             try{
 
-                console.log('the jwt ',req.cookies )
                
-                res.clearCookie("jwt", { path: '/'}); 
+                res.clearCookie("jwtU", { path: '/'}); 
                res.json({message: 'successfully loggedout', type: 'success'});
 
             }catch(err: any) {
