@@ -1,6 +1,6 @@
 import express from 'express';
 import { clientController } from '../controllers/clientCtrl'
-import { clientAuth } from '../middlewares/client/authClient'
+import { clientAuth } from '../middlewares/auth/authClient'
 
 const clientRouter = express.Router();
 
