@@ -1,11 +1,12 @@
 import express from 'express';
 import { adminController } from '../controllers/adminCtrl'
-import { userAuth } from '../middlewares/auth/authUser'
+import { adminAuth } from '../middlewares/auth/authAdmin'
 
 const adminRouter = express.Router();
 
   
 adminRouter.post('/login', adminController.loginAdmin); 
+adminRouter.get('/dashboard',adminAuth, adminController.getDashboard);
 adminRouter.post('/logout', adminController.logoutAdmin); 
 
 export default adminRouter;

@@ -66,22 +66,35 @@ export class AdminRepository implements AdminRepositary {
         name: name
     }
     
-  }
- 
- 
-
+  } 
  
 
   async findAllUsers(): Promise<User | any> {
      const users: any = await UserModel.find().exec();
      if (users) { 
- 
-     
+   
     return { 
       ...users
     } as User;
-         } 
+         } else {
+          throw new Error('Users not Found')
+         }
      }
+
+ 
+
+  async findAllClients(): Promise<Client | any> {
+     const clients: any = await ClientModel.find().exec();
+     if (clients) { 
+ 
+      console.log('All clients : ', clients);
      
+    return { 
+      ...clients
+    } as Client;
+         } else {
+          throw new Error('Clients not Found')
+         }
+     } 
   }
 

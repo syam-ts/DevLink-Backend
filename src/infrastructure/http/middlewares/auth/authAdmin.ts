@@ -4,8 +4,7 @@ export const adminAuth = async (req: any, res: any, next: any) => {
 
   try{ 
     const refreshToken = req.cookies.jwtA;
-
-    console.log('The Refresh Token : ', refreshToken);
+ 
 
     const ADMIN_REFRESH_TOKEN: any = process.env.ADMIN_REFRESH_TOKEN;
     const ADMIN_ACCESS_TOKEN: any = process.env.ADMIN_ACCESS_TOKEN; 
