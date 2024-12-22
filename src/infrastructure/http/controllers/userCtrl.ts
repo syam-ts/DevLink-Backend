@@ -60,6 +60,19 @@ export const userController = {
 
         },
 
+        
+        resendOtp: async(req: any, res: any) => {
+            try{
+
+                const user =  await signupUseCase.execute(req.body);
+
+                res.json({ message: 'OTP resend successfully',newOtp:user, type: 'success'});
+
+            }catch(err: any) {
+                res.json({message: err.message, type: 'error'});
+            }
+        },
+
         loginUser: async (req: any, res: any) => {
             try{
                

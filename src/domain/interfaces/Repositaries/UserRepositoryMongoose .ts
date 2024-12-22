@@ -103,13 +103,12 @@ export class UserRepositoryMongoose implements UserRepositary {
   
   
 
-  async verifyOtp( user: any): Promise<User | null> {
+  async verifyOtp( user: any): Promise<User> {
  
     const { name, email, password, mobile } = user.user;
     console.log('name', user.user)
    
   if(user.mailOtp === parseInt(user.userOtp.otp)) {
-
 
     const salt: number = 10;
     const hashedPassword = await bcrypt.hash(password, salt);

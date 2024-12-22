@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
-import { otp } from './otp-gen';
+import generateOtp  from './otp-gen'; 
 
+ 
 
 export const sendMail = async (toMail: string) => {
   try {
@@ -12,7 +13,9 @@ export const sendMail = async (toMail: string) => {
             pass: process.env.GMAIL_APP_PASSWORD
         }
     });
- 
+
+    //generates new otp's
+    const otp = generateOtp(); 
 
     const info = await transporter.sendMail({
         from: 'syamnandhu3@gmail.com',
