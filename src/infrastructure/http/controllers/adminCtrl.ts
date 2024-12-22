@@ -10,23 +10,24 @@ export const adminController = {
      
 
         loginAdmin: async (req: any, res: any) => {
-            try{
-                console.log('Hit this')
-               
+            try{ 
                  const admin = await loginUseCase.execute(req.body); 
+
+                 console.log('Finally ', admin)
 
                  if(!admin) {
                     res.json({message: 'admin not found', type: 'error'})
-                 } else {
+                 } else { 
 
                     res.cookie("jwtA", admin.jwt, {
                         httpOnly: true, 
                         sameSite: "None", 
                         secure: true, 
                         maxAge: 24 * 60 * 60 * 1000
-                      }
-                    );
+                      })
+
                     return res.json({message: "successfully login",admin: admin, type: 'success'});
+                
                }
             }catch(err: any) { 
                 res.json({message: err.message, type: 'error'}); 
@@ -57,16 +58,22 @@ export const adminController = {
 
 
 
-        // logoutAdmin: async (req: any, res: any) => {
-        //     try{
-
+        logoutAdmin: async (req: any, res: any) => {
+            try{
+ 
                
-        //         res.clearCookie("jwtU", { path: '/'}); 
-        //        res.json({message: 'successfully loggedout', type: 'success'});
+                console.log('Before', req.cookies.jwtA);  
+                
+                res.clearCookie("jwtA", { path: '/'}); 
+                  
 
-        //     }catch(err: any) {
-        //         res.json({message: err.message, type: 'error'})
-        //     }
-        // },
+                console.log('Cookies after clear:', req.cookies.jwtA);
+                
+               res.json({message: 'successfully loggedout', type: 'success'});
+
+            }catch(err: any) {
+                res.json({message: err.message, type: 'error'})
+            }
+        },
         
     }

@@ -60,7 +60,7 @@ export class AdminRepository implements AdminRepositary {
     if(password !== process.env.ADMIN_PASSWORD) {
         throw new Error('Password is incorrect');
 
-    }
+    } 
       
     return {
         name: name
