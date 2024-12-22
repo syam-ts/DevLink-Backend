@@ -41,6 +41,21 @@ const GoogleLoginClientUseCase = new GoogleLoginClient(ClientRepository);
                res.json({message: err.message, type: 'error'})
            } 
          },
+
+         resendOtp: async(req: any, res: any) => {
+            try{
+
+                const client =  await signupUseCase.execute(req.body);
+
+                console.log('new otp ', client)
+
+                res.json({ message: 'OTP resend successfully',newOtp: client, type: 'success'});
+
+            }catch(err: any) {
+                res.json({message: err.message, type: 'error'});
+            }
+        },
+        
  
          loginClient: async (req: any, res: any) => {
              try{

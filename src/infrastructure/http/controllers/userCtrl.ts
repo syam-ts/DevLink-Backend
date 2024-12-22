@@ -72,6 +72,7 @@ export const userController = {
                 res.json({message: err.message, type: 'error'});
             }
         },
+        
 
         loginUser: async (req: any, res: any) => {
             try{

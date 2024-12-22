@@ -7,6 +7,7 @@ const clientRouter = express.Router();
  
 clientRouter.post('/signup', clientController.signupClient);
 clientRouter.post('/verify-otp', clientController.verifyOtp);
+clientRouter.post('/resend-otp', clientController.resendOtp);
 clientRouter.post('/login', clientController.loginClient);
 clientRouter.post('/googleLogin', clientController.googleLogin);
 clientRouter.get('/getHome', clientAuth, clientController.getHomeClient);

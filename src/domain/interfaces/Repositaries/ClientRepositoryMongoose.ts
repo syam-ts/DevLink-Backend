@@ -101,7 +101,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   
   
 
-  async verifyOtp( client: any): Promise<Client | null> {
+  async verifyOtp( client: any): Promise<Client> {
  
  
     const { name, email, password, mobile } = client.client;
