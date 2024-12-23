@@ -14,6 +14,10 @@ interface UserDocument extends Document {
   email: string;
   password: string;
   mobile: number;
+  isBlocked: boolean;
+  profilePicture?: string;
+  location?:string;
+  skills?: [string];
 }
  
 const UserSchema = new Schema<UserDocument>({
@@ -21,6 +25,10 @@ const UserSchema = new Schema<UserDocument>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: false },
   mobile: { type: Number, required: false },
+  isBlocked: { type: Boolean, required: false },
+  profilePicture: { type: String, required: false },
+  location: { type: String, required: false },
+  skills: { type: [String], required: false },
 });
 
 
@@ -55,6 +63,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       email: user.email,
       password: hashedPassword,
       mobile: user.mobile,
+      isBlocked: false
     });
 
     const savedUser = await createdUser.save()
@@ -64,6 +73,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       email: savedUser.email,
       password: savedUser.password,
       mobile: savedUser.mobile,
+      isBlocked: false
     } as User;
 
   }
@@ -118,6 +128,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       email: email,
       password: hashedPassword,
       mobile: mobile,
+      isBlocked: false
     });
 
     const savedUser = await createdUser.save();

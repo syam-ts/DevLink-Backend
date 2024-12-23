@@ -96,5 +96,37 @@ export class AdminRepository implements AdminRepositary {
           throw new Error('Clients not Found')
          }
      } 
+
+
+     async blockUser(userId: any): Promise< any > {
+
+      const user = await UserModel.findByIdAndUpdate(userId, 
+        {isBlocked: true}, {new: true}
+      ).exec();
+
+
+      if(!user) {
+        throw new Error('User not Found')
+      }
+
+        return user;
+
+     }
+
+
+     async unBlockUser(userId: any): Promise< any > {
+
+      const user = await UserModel.findByIdAndUpdate(userId, 
+        {isBlocked: false}, {new: true}
+      ).exec();
+
+
+      if(!user) {
+        throw new Error('User not Found')
+      }
+
+        return user;
+
+     }
   }
 

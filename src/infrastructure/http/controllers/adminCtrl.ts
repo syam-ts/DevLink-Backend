@@ -2,7 +2,9 @@ import { LoginAdmin } from '../../../application/usecases/admin/loginAdmin';
 import { AdminRepository } from '../../../domain/interfaces/Repositaries/AdminRepository'
 import { GetDashboard } from '../../../application/usecases/admin/getDashboard';
 import { GetAllUsers } from '../../../application/usecases/admin/getUsers'
-import { GetAllClients } from '../../../application/usecases/admin/getAllClients'
+import { GetAllClients } from '../../../application/usecases/admin/getAllClients';
+import { BlockUser } from '../../../application/usecases/admin/blockUser'
+import { UnBlockUser } from '../../../application/usecases/admin/unBlockUser'
 
 
 const adminRepositary = new AdminRepository();
@@ -10,6 +12,8 @@ const loginUseCase = new LoginAdmin(adminRepositary);
 const getDashboardUseCase = new GetDashboard(adminRepositary);
 const getAllUsersUseCase = new GetAllUsers(adminRepositary);
 const getAllClientsUseCase = new GetAllClients(adminRepositary);
+const blockUserUseCase = new BlockUser(adminRepositary);
+const unBlockUserUseCase = new UnBlockUser(adminRepositary);
 
 
 export const adminController = {
@@ -86,6 +90,36 @@ export const adminController = {
                 res.json({message: err.message , type: 'error'});
             }
         },
+
+        blockUser: async(req: any, res: any) => {
+            try{
+
+                 const user = await blockUserUseCase.execute(req.params);
+
+                 if(user) {
+                    res.json({message: 'User blocked successfully ', type: 'success'})
+                 }
+
+            }catch(err: any) {
+                res.json({message: err.message, type: 'error'})
+            }
+        },
+        
+
+        unBlockUser: async(req: any, res: any) => {
+            try{
+
+                 const user = await unBlockUserUseCase.execute(req.params);
+
+                 if(user) {
+                    res.json({message: 'User unblocked successfully ', type: 'success'})
+                 }
+
+            }catch(err: any) {
+                res.json({message: err.message, type: 'error'})
+            }
+        },
+        
 
         logoutAdmin: async (req: any, res: any) => {
             try{

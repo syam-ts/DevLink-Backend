@@ -7,6 +7,10 @@ export interface User extends mongoose.Document{
     password?: string;
     mobile?: number;
     email: string;
+    isBlocked: boolean;
+    profilePicture?: string;
+    location?:string;
+    skills?: [string];
 }
 
 //User Schema
@@ -38,7 +42,12 @@ const UserSchema: mongoose.Schema = new mongoose.Schema({
         }
         }
       },
-    mobile: { type: Number, required: false }
+    mobile: { type: Number, required: false },
+    isBlocked: { type: Boolean, required: false },
+    profilePicture: { type: String, required: false },
+    location: { type: String, required: false },
+    skills: { type: [String], required: false }
+   
 });
 
 //user model
