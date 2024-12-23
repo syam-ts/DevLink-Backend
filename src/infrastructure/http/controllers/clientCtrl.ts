@@ -4,6 +4,8 @@ import { GoogleLoginClient } from '../../../application/usecases/client/GoogleLo
 import { ClientRepositoryMongoose } from '../../../domain/interfaces/Repositaries/ClientRepositoryMongoose';  
 import { getHomeClient } from '../../../application/usecases/client/getHomeClient';
 import { LogoutClient } from '../../../application/usecases/client/logoutClient';
+import { VerifyEmail } from '../../../application/usecases/client/verifyEmail';
+import { ResetPassword } from '../../../application/usecases/client/resetPassword';
 import { verifyOtp } from '../../../application/usecases/client/otpClient';
 
 
@@ -13,6 +15,8 @@ const loginUseCase = new LoginClient(ClientRepository);
 const getHomeUseCase = new getHomeClient(ClientRepository);
 const logoutClientUseCase = new LogoutClient(ClientRepository);
 const verifyClientUseCase = new verifyOtp(ClientRepository);
+const verifyEmailUseCase = new VerifyEmail(ClientRepository);
+const resetPasswordUseCase = new ResetPassword(ClientRepository);
 const GoogleLoginClientUseCase = new GoogleLoginClient(ClientRepository);
  
 
@@ -56,7 +60,36 @@ const GoogleLoginClientUseCase = new GoogleLoginClient(ClientRepository);
             }
         },
         
+
+        verifyEmail: async (req: any, res: any) => {
+            try {
+                const response = await verifyEmailUseCase.execute(req.body.email);
  
+                res.json({message: "successfully sended", data: response ,type: 'success'})
+            } catch (err: any) {
+                 res.json({message: err.message, type: 'error'});
+            }
+        },
+        
+
+        resetPassword: async (req: any, res: any) => {
+           try{
+ 
+            const { clientId } = req.params;
+            const { password } = req.body;
+
+            console.log('The toal ', clientId, 'pass', password)
+
+              const response = await resetPasswordUseCase.execute(clientId, password);
+ 
+               res.json({message: 'Password Reset Successfully', type: 'success'});
+
+           }catch(err: any) {
+            res.json({message: err.message, type: 'error'});
+           }
+        },
+ 
+        
          loginClient: async (req: any, res: any) => {
              try{
                 

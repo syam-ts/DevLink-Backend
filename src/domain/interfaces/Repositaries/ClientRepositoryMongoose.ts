@@ -140,6 +140,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     } else {
 
       return {
+        _id: client._id,
         name: client.name,
         email: client.email,
         password: client.password,
@@ -228,5 +229,18 @@ export class ClientRepositoryMongoose implements ClientRepositary {
          } 
      }
      
+
+
+     async resetPassword(clientId: string, password: string): Promise< User | any> {
+
+      const updatedClient = await ClientModel.findByIdAndUpdate( clientId, {password: password}, {new: true}).exec();
+
+      if (!updatedClient) {
+        throw new Error("Client not found or password update failed.");
+      }
+
+      return "Password reset successfully!";
+
+     }
   }
 
