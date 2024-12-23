@@ -4,6 +4,8 @@ import { GoogleLoginUser } from '../../../application/usecases/user/GoogleLoginU
 import { getHomeUser } from '../../../application/usecases/user/getHomeUser';
 import { LogoutUser } from '../../../application/usecases/user/logoutUser';
 import { verifyOtp } from '../../../application/usecases/user/otpUser';
+import { VerifyEmail } from '../../../application/usecases/user/verifyEmail';
+import { ResetPassword } from '../../../application/usecases/user/resetPassword';
 import { UserRepositoryMongoose } from '../../../domain/interfaces/Repositaries/UserRepositoryMongoose ';  
  
 
@@ -12,6 +14,8 @@ const signupUseCase = new SignupUser(userRepository);
 const loginUseCase = new LoginUser(userRepository);
 const getHomeUseCase = new getHomeUser(userRepository);
 const logoutUserUseCase = new LogoutUser(userRepository);
+const verifyEmailUseCase = new VerifyEmail(userRepository);
+const resetPasswordUseCase = new ResetPassword(userRepository);
 const verifyUserUseCase = new verifyOtp(userRepository);
 const GoogleLoginUserUseCase = new GoogleLoginUser(userRepository);
 
@@ -72,7 +76,35 @@ export const userController = {
                 res.json({message: err.message, type: 'error'});
             }
         },
+
+        verifyEmail: async (req: any, res: any) => {
+            try {
+                const response = await verifyEmailUseCase.execute(req.body.email);
+ 
+                res.json({message: "successfully sended", data: response ,type: 'success'})
+            } catch (err: any) {
+                 res.json({message: err.message, type: 'error'});
+            }
+        },
         
+
+        resetPassword: async (req: any, res: any) => {
+           try{
+
+            console.log('The params', req.params)
+            console.log('The pass', req.body)
+
+            const { userId } = req.params;
+            const { password } = req.body;
+
+              const response = await resetPasswordUseCase.execute(userId, password);
+ 
+               res.json({message: 'Password Reset Successfully', type: 'success'});
+
+           }catch(err: any) {
+            res.json({message: err.message, type: 'error'});
+           }
+        },
 
         loginUser: async (req: any, res: any) => {
             try{

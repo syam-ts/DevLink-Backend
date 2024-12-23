@@ -139,8 +139,10 @@ export class UserRepositoryMongoose implements UserRepositary {
     if (!user) {
       return null
     } else {
+      console.log('The whole user', user)
 
       return { 
+        _id: user._id,
         name: user.name,
         email: user.email,
         password: user.password,
@@ -223,13 +225,23 @@ export class UserRepositoryMongoose implements UserRepositary {
   async findAllClients(): Promise<Client | any> {
      const clients: any = await ClientModel.find().exec();
      if (clients) { 
- 
-     
-    return { 
-      ...clients
-    } as Client;
-  }
+  
+        return { 
+          ...clients
+        } as Client;
+        } 
+     }
 
+  
+     async resetPassword(userId: string, password: string): Promise< User | any> {
+
+      const updatedUser = await UserModel.findByIdAndUpdate( userId, {password: password}, {new: true}).exec();
+
+      if (!updatedUser) {
+        throw new Error("User not found or password update failed.");
+      }
+
+      return "Password reset successfully!";
 
      }
      
