@@ -9,6 +9,7 @@ userRouter.post('/signup', userController.signupUser);
 userRouter.post('/verify-otp', userController.verifyOtp);
 userRouter.post('/resend-otp', userController.resendOtp);
 userRouter.post('/verify-email', userController.verifyEmail);
+// user patch 
 userRouter.post('/resetPassword/:userId', userController.resetPassword);
 userRouter.post('/login', userController.loginUser);
 userRouter.post('/googleLogin', userController.googleLogin);

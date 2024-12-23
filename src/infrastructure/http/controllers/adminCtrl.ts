@@ -1,11 +1,15 @@
 import { LoginAdmin } from '../../../application/usecases/admin/loginAdmin';
 import { AdminRepository } from '../../../domain/interfaces/Repositaries/AdminRepository'
 import { GetDashboard } from '../../../application/usecases/admin/getDashboard';
+import { GetAllUsers } from '../../../application/usecases/admin/getUsers'
+import { GetAllClients } from '../../../application/usecases/admin/getAllClients'
 
 
 const adminRepositary = new AdminRepository();
 const loginUseCase = new LoginAdmin(adminRepositary);
 const getDashboardUseCase = new GetDashboard(adminRepositary);
+const getAllUsersUseCase = new GetAllUsers(adminRepositary);
+const getAllClientsUseCase = new GetAllClients(adminRepositary);
 
 
 export const adminController = {
@@ -58,7 +62,30 @@ export const adminController = {
         },
 
 
+        getAllUsers: async(req: any, res: any) => {
+            try{
 
+                const users = await getAllUsersUseCase.execute(); 
+
+                res.json({message: "Successfully fetched all the users", data: users, type: 'success'});
+                
+            }catch(err: any) {
+                res.json({message: err.message , type: 'error'});
+            }
+        },
+
+
+        getAllClients: async(req: any, res: any) => {
+            try{
+
+                const clients = await getAllClientsUseCase.execute(); 
+
+                res.json({message: "Successfully fetched all the clients", data: clients, type: 'success'});
+                
+            }catch(err: any) {
+                res.json({message: err.message , type: 'error'});
+            }
+        },
 
         logoutAdmin: async (req: any, res: any) => {
             try{
