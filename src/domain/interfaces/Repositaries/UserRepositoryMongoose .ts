@@ -144,6 +144,22 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
+  async findUserById(_id: string): Promise<User | null> {
+      const user = await UserModel.findById(_id);
+
+      if(!user) {
+        throw new Error('User not found');
+      }
+
+      return {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        mobile: user.mobile
+      } as User
+  }
+
 
   async findUserByEmail(email: string): Promise<User | null> {
     const user = await UserModel.findOne({ email }).exec();
@@ -195,6 +211,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     
 
     return { 
+      _id:user._id,
       name: user.name,
       email: user.email,
       mobile: user.mobile,
@@ -254,6 +271,20 @@ export class UserRepositoryMongoose implements UserRepositary {
 
       return "Password reset successfully!";
 
+     }
+
+
+     async editUserProfile(userId: string, userData: any): Promise< any > {
+ 
+      console.log('The final data',userId, 'whole data', userData )
+
+      const user = await UserModel.findByIdAndUpdate(userId, userData , { update: true }).exec();
+
+        console.log('data updated', user);
+
+        if(!user) throw new Error('User not found');
+
+        return { user }
      }
      
   }

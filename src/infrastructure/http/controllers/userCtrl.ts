@@ -6,7 +6,9 @@ import { LogoutUser } from '../../../application/usecases/user/logoutUser';
 import { verifyOtp } from '../../../application/usecases/user/otpUser';
 import { VerifyEmail } from '../../../application/usecases/user/verifyEmail';
 import { ResetPassword } from '../../../application/usecases/user/resetPassword';
-import { UserRepositoryMongoose } from '../../../domain/interfaces/Repositaries/UserRepositoryMongoose ';  
+import { UserRepositoryMongoose } from '../../../domain/interfaces/Repositaries/UserRepositoryMongoose '; 
+import { EditUserProfile } from '../../../application/usecases/user/editProfile' 
+import { GetUserProfile } from '../../../application/usecases/user/getProfile' 
  
 
 const userRepository = new UserRepositoryMongoose();
@@ -18,6 +20,8 @@ const verifyEmailUseCase = new VerifyEmail(userRepository);
 const resetPasswordUseCase = new ResetPassword(userRepository);
 const verifyUserUseCase = new verifyOtp(userRepository);
 const GoogleLoginUserUseCase = new GoogleLoginUser(userRepository);
+const editProfileUseCase = new EditUserProfile(userRepository);
+const getProfileUseCase = new GetUserProfile(userRepository);
 
 export const userController = {
       signupUser: async (req: any, res: any) => {
@@ -159,6 +163,36 @@ export const userController = {
 
             }catch(err: any) {
                 res.json({message: err.message, type: 'error'})
+            }
+        },
+
+        getProfile: async(req: any, res: any) => {
+            try{
+
+                const { userId } = req.params;
+          
+                const user = await getProfileUseCase.execute(userId);
+
+                res.json({message: 'successfully loaded user data', data: user,  type: 'success'})
+
+
+            }catch(err: any) {
+                res.json({message: err.message, type: 'error'})
+            }
+        },
+
+
+        editProfile: async(req: any, res: any) => {
+            try{ 
+
+                const { userId } = req.params; 
+
+             const updated = await editProfileUseCase.execute(userId, req.body);
+          
+             res.json({message: 'Profile successfully edited', type: 'success'});
+
+            }catch(err: any) {
+                res.json({message: err.message, type: 'error'});
             }
         },
 
