@@ -4,13 +4,16 @@ import validator from 'validator';
 export interface User extends mongoose.Document{
     id?: string;
     name: string;
+    age?: number,
     password?: string;
     mobile?: number;
     email: string;
     isBlocked: boolean;
     profilePicture?: string;
     location?:string;
+    description?:string,
     skills?: [string];
+    budget:number,
 }
 
 //User Schema
@@ -33,6 +36,10 @@ const UserSchema: mongoose.Schema = new mongoose.Schema({
           message: 'Invalid email address',
         },
       },
+      age: {
+        type: String,
+        require: false
+      },
       password: {
         type: String,
         required: false ,
@@ -46,7 +53,9 @@ const UserSchema: mongoose.Schema = new mongoose.Schema({
     isBlocked: { type: Boolean, required: false },
     profilePicture: { type: String, required: false },
     location: { type: String, required: false },
-    skills: { type: [String], required: false }
+    description: {type: String, required: false},
+    skills: { type: [String], required: false },
+    budget: {type: Number, required: false}
    
 });
 

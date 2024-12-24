@@ -184,6 +184,7 @@ export const userController = {
 
         editProfile: async(req: any, res: any) => {
             try{ 
+                console.log('The whole body : ', req.body)
 
                 const { userId } = req.params; 
 

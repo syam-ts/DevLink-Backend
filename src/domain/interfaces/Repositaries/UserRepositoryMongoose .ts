@@ -15,20 +15,26 @@ interface UserDocument extends Document {
   password: string;
   mobile: number;
   isBlocked: boolean;
+  age: number,
   profilePicture?: string;
+  description: string,
   location?:string;
   skills?: [string];
+  budget: number
 }
  
 const UserSchema = new Schema<UserDocument>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: false },
+  age: { type: Number, required: false},
   mobile: { type: Number, required: false },
   isBlocked: { type: Boolean, required: false },
   profilePicture: { type: String, required: false },
+  description: { type: String, required: false},
   location: { type: String, required: false },
   skills: { type: [String], required: false },
+  budget: { type: Number, require: false}
 });
 
 
@@ -128,7 +134,12 @@ export class UserRepositoryMongoose implements UserRepositary {
       email: email,
       password: hashedPassword,
       mobile: mobile,
-      isBlocked: false
+      isBlocked: false,
+      age: '',
+      location:'',
+      description:'',
+      skills:'',
+      budget: ''
     });
 
     const savedUser = await createdUser.save();
