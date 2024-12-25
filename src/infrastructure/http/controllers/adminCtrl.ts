@@ -6,6 +6,7 @@ import { GetAllClients } from '../../../application/usecases/admin/getAllClients
 import { BlockUser } from '../../../application/usecases/admin/blockUser'
 import { UnBlockUser } from '../../../application/usecases/admin/unBlockUser'
 import { Create } from '../../../application/usecases/admin/create'
+import { VerifyAccept } from '../../../application/usecases/admin/verifyAccept'
 
 
 const adminRepositary = new AdminRepository();
@@ -15,6 +16,7 @@ const getAllUsersUseCase = new GetAllUsers(adminRepositary);
 const getAllClientsUseCase = new GetAllClients(adminRepositary);
 const blockUserUseCase = new BlockUser(adminRepositary);
 const unBlockUserUseCase = new UnBlockUser(adminRepositary);
+const verifyAcceptUseCase = new VerifyAccept(adminRepositary);
 // const create = new Create(adminRepositary);
 
 
@@ -148,4 +150,16 @@ export const adminController = {
             }
         },
         
+
+        verifyAccept: async (req: any, res: any) => {
+            try{
+                  const response = await verifyAcceptUseCase.execute(req.body);
+                  
+                  console.log('The final response ', response);
+
+                  res.json({ message: 'client verified ', type: 'success'});
+            }catch(err: any) {
+                res.json({ message: err.message, type: 'error'})
+            }
+        }
     }

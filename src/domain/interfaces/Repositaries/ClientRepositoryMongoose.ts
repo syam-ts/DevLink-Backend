@@ -21,6 +21,7 @@ interface ClientDocument extends Document {
   domain?: string;
   since?: number,
   totalJobs?: number
+  isVerified?:boolean,
   isGoogle?: boolean
 };
  
@@ -35,6 +36,7 @@ const ClientSchema = new Schema<ClientDocument>({
     domain: {type: String, required: false},
     since: {type: Number, required: false },
     totalJobs: { type: Number, required: false},
+    isVerified: {type: Boolean, required: false},
     isGoogle: { type: Boolean, required: false}
 });
 
@@ -119,8 +121,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     const { name, email, password } = client.client;
    
   if(client.mailOtp === parseInt(client.clientOtp.otp)) { 
-
-    console.log('Reached here', client.client.password)
+ 
     const salt: number = 10;
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -136,6 +137,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       domain: '',
       since: '',
       totalJobs: '',
+      isVerified: false,
       isGoogle: false
     });
 
@@ -181,8 +183,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
             throw new Error('Invalid email format');
         }
  
-      const client = await ClientModel.findOne({ email }).exec();
-     console.log('the client ', client);
+      const client = await ClientModel.findOne({ email }).exec(); 
 
      if (!client) {
        throw new Error('client not Found');
@@ -210,8 +211,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async findClientByOnlyEmail(email: string, name: string): Promise<Client | null> {
      const client = await ClientModel.findOne({ email }).exec();
-     if (client) {
-       console.log('the client ', client)
+     if (client) { 
 
        return { 
         name: client.name,
@@ -275,7 +275,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
             return client;
      }
 
-     
+
      async editClientProfile(clientId: string, editData: any): Promise<any > {
 
       const updatedClient = await ClientModel.findByIdAndUpdate(clientId, editData,{
@@ -290,5 +290,26 @@ export class ClientRepositoryMongoose implements ClientRepositary {
      }
 
 
+     async profileVerification(clientId: string, editData: any): Promise<any > {
+       const adminId: string = '676bfa326c2e4c9fc3afba8e'
+      
+      const admin = await AdminModel.findById(adminId).exec();
+
+         const request = {
+           type: 'Profile Verification Reqest',
+           clientId: clientId,
+           status: 'pending'
+         }
+
+      const updatedAdmin = await AdminModel.findByIdAndUpdate(
+        adminId,
+        { $push: { request: request } },  
+        { new: true }  
+      );
+
+      
+         return null;                
   }
 
+
+}

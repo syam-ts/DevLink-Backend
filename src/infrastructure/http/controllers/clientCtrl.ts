@@ -9,6 +9,7 @@ import { ResetPassword } from '../../../application/usecases/client/resetPasswor
 import { verifyOtp } from '../../../application/usecases/client/otpClient';
 import { EditClientProfile } from '../../../application/usecases/client/EditClientProfile';
 import { GetClientProfile } from '../../../application/usecases/client/getProfile';
+import { ProfileVerification } from '../../../application/usecases/client/profileVerification';
 
 
 const ClientRepository = new ClientRepositoryMongoose();
@@ -22,6 +23,7 @@ const resetPasswordUseCase = new ResetPassword(ClientRepository);
 const GoogleLoginClientUseCase = new GoogleLoginClient(ClientRepository);
 const editClientProfileUseCase = new EditClientProfile(ClientRepository);
 const getClientProfileUseCase = new GetClientProfile(ClientRepository);
+const profileVerificationUseCase = new ProfileVerification(ClientRepository);
  
 
  
@@ -156,6 +158,18 @@ const getClientProfileUseCase = new GetClientProfile(ClientRepository);
             }
          },
 
+         profileVerification: async (req: any, res: any) => {
+            try{
+
+                const { clientId } = req.params;
+                console.log('The userIf', req.body)
+                 const response = await profileVerificationUseCase.execute(clientId, req.body)
+                 res.json({message: 'successfully sended', type:'successs'})
+
+            }catch(err: any) {
+                res.json({ message: err.message, type: 'error'});
+            }
+         },
 
          editProfile: async (req: any, res: any) => {
             try{ 

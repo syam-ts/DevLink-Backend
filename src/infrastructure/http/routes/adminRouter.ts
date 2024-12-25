@@ -15,6 +15,8 @@ adminRouter.post('/login', adminController.loginAdmin);
 adminRouter.post('/logout', adminController.logoutAdmin); 
 
 
+adminRouter.put('/verifyClient/accept',adminController.verifyAccept);
+
 adminRouter.patch('/blockUser/:userId', adminController.blockUser);
 adminRouter.patch('/unBlockUser/:userId', adminController.unBlockUser);
 

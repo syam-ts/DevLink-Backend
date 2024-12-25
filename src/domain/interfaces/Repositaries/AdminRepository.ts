@@ -211,6 +211,21 @@ export class AdminRepository implements AdminRepositary {
 
      }
 
+     async verifyAccept(data: any): Promise<any> {
+       console.log('The req.body ', data)
+      const { clientId, editData} = data;
+      editData.isVerified = true;
+
+      const updatedClient: any = await ClientModel.findByIdAndUpdate(clientId, editData, {
+        update: true
+      }).exec();
+
+       if(!updatedClient) {
+        throw new Error('Client not found')
+       }
+          return updatedClient;
+
+     }
 
    
   }

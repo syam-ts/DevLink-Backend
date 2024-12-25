@@ -11,7 +11,8 @@ export interface Client extends mongoose.Document{
     totalEmployees: number,
     domain?: string;
     since?: number,
-    totalJobs?: number
+    totalJobs?: number,
+    isVerified:boolean,
     isGoogle?: boolean
 }
 
@@ -27,6 +28,7 @@ const ClientSchema: mongoose.Schema = new mongoose.Schema({
     domain: {type: String, required: false},
     since: {type: Number, required: false },
     totalJobs: { type: Number, required: false},
+    isVerified: { type: Boolean, required: false},
     isGoogle: { type: Boolean, required: false}
    
 });
