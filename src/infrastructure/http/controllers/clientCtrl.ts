@@ -7,6 +7,8 @@ import { LogoutClient } from '../../../application/usecases/client/logoutClient'
 import { VerifyEmail } from '../../../application/usecases/client/verifyEmail';
 import { ResetPassword } from '../../../application/usecases/client/resetPassword';
 import { verifyOtp } from '../../../application/usecases/client/otpClient';
+import { EditClientProfile } from '../../../application/usecases/client/EditClientProfile';
+import { GetClientProfile } from '../../../application/usecases/client/getProfile';
 
 
 const ClientRepository = new ClientRepositoryMongoose();
@@ -18,6 +20,8 @@ const verifyClientUseCase = new verifyOtp(ClientRepository);
 const verifyEmailUseCase = new VerifyEmail(ClientRepository);
 const resetPasswordUseCase = new ResetPassword(ClientRepository);
 const GoogleLoginClientUseCase = new GoogleLoginClient(ClientRepository);
+const editClientProfileUseCase = new EditClientProfile(ClientRepository);
+const getClientProfileUseCase = new GetClientProfile(ClientRepository);
  
 
  
@@ -138,6 +142,34 @@ const GoogleLoginClientUseCase = new GoogleLoginClient(ClientRepository);
                  res.json({message: err.message, type: 'error'})
              }
          }, 
+
+         getProfile: async (req: any, res: any) => {
+            try{
+                const { clientId } = req.params;
+
+               const client = await getClientProfileUseCase.execute(clientId);
+
+               res.json({message: 'successfully loaded client ', data: client, type: 'success'});
+
+            } catch(err: any) {
+                res.json({ message: err.messge , type: 'error' });
+            }
+         },
+
+
+         editProfile: async (req: any, res: any) => {
+            try{
+                console.log('The params', req.params);
+                console.log('The body ', req.body);
+                const { clientId } = req.params;
+                const editClient = await editClientProfileUseCase.execute(clientId, req.body);
+
+                console.log('The cntrl result ', editClient)
+            }catch(err: any) {
+                res.json({message: err.message, type: 'error'});
+            }
+         },
+
  
          logoutClient: async (req: any, res: any) => {
              try{
