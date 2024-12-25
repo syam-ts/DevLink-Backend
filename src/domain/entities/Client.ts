@@ -5,9 +5,14 @@ export interface Client extends mongoose.Document{
     name: string;
     password?: string;
     email: string;
+    companyName?:string;
+    description?:string;
     location?: string;
+    totalEmployees: number,
     domain?: string;
-    companyFoundYear?: number
+    since?: number,
+    totalJobs?: number
+    isGoogle?: boolean
 }
 
 //Client Schema
@@ -16,9 +21,13 @@ const ClientSchema: mongoose.Schema = new mongoose.Schema({
     password: { type: String, required: false },
     email: { type: String, required: true, unique: true },
     location: { type: String, required: false },
+    companyName: { type: String, required: false },
+    description: { type: String, required: false },
+    totalEmployees: { type: Number, required: false },
     domain: {type: String, required: false},
     since: {type: Number, required: false },
-    totalJobs: { type: Number, required: false}
+    totalJobs: { type: Number, required: false},
+    isGoogle: { type: Boolean, required: false}
    
 });
 

@@ -9,16 +9,30 @@ import validator from 'validator';
  
 interface ClientDocument extends Document {
   name: string;
+  password?: string;
   email: string;
-  password: string;
-  mobile: number;
+  companyName?:string;
+  description?:string;
+  location?: string;
+  totalEmployees: number,
+  domain?: string;
+  since?: number,
+  totalJobs?: number
+  isGoogle?: boolean
 };
  
 const ClientSchema = new Schema<ClientDocument>({
   name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: false },
-  mobile: { type: Number, required: false },
+    password: { type: String, required: false },
+    email: { type: String, required: true, unique: true },
+    location: { type: String, required: false },
+    companyName: { type: String, required: false },
+    description: { type: String, required: false },
+    totalEmployees: { type: Number, required: false },
+    domain: {type: String, required: false},
+    since: {type: Number, required: false },
+    totalJobs: { type: Number, required: false},
+    isGoogle: { type: Boolean, required: false}
 });
 
 
@@ -51,8 +65,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     const createdClient = new ClientModel({
       name: client.name, 
       email: client.email,
-      password: hashedPassword,
-      mobile: client.mobile,
+      password: hashedPassword
     });
 
     const savedClient = await createdClient.save()
@@ -60,8 +73,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return {
       name: savedClient.name,
       email: savedClient.email,
-      password: savedClient.password,
-      mobile: savedClient.mobile,
+      password: savedClient.password
     } as unknown as Client;
 
   }
@@ -77,10 +89,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   if(client.name.length < 4 || client.name.length > 20) {
      throw new Error('Name should be between 4 to 20 characters');
   }
-
-  if(client.mobile.length < 10 || client.mobile.length > 12) {
-     throw new Error('invalid Mobile Number');
-  }
+ 
   
   if (!validator.isEmail(client.email)) {
       throw new Error('Invalid email format');
@@ -104,7 +113,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   async verifyOtp( client: any): Promise<Client> {
  
  
-    const { name, email, password, mobile } = client.client;
+    const { name, email, password } = client.client;
    
   if(client.mailOtp === parseInt(client.clientOtp.otp)) { 
 
@@ -117,7 +126,14 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       name: name, 
       email: email,
       password: hashedPassword,
-      mobile: mobile,
+      companyName: '',
+      description: '',
+      totalEmployees: '',
+      location: '',
+      domain: '',
+      since: '',
+      totalJobs: '',
+      isGoogle: false
     });
 
     const savedClient = await createdClient.save();
@@ -127,6 +143,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       email: savedClient.email,
       password: savedClient.password
     } as Client;
+
   } else {
     throw new Error ('incorrect OTP');
     }
@@ -259,14 +276,14 @@ export class ClientRepositoryMongoose implements ClientRepositary {
      }
 
 
-     async getClientProfile(clientId: string): Promise< Client > {
+     async getClientProfile(clientId: string): Promise< any > {
             const client = await ClientModel.findById(clientId);
 
             if(!client) {
               throw new Error('Client not found')
             }
 
-            return client as Client;
+            return client;
      }
   }
 
