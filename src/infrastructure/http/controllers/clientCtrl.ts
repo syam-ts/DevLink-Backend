@@ -10,6 +10,7 @@ import { verifyOtp } from '../../../application/usecases/client/otpClient';
 import { EditClientProfile } from '../../../application/usecases/client/EditClientProfile';
 import { GetClientProfile } from '../../../application/usecases/client/getProfile';
 import { ProfileVerification } from '../../../application/usecases/client/profileVerification';
+import { CreateJobPost } from '../../../application/usecases/client/createJobPost';
 
 
 const ClientRepository = new ClientRepositoryMongoose();
@@ -24,6 +25,7 @@ const GoogleLoginClientUseCase = new GoogleLoginClient(ClientRepository);
 const editClientProfileUseCase = new EditClientProfile(ClientRepository);
 const getClientProfileUseCase = new GetClientProfile(ClientRepository);
 const profileVerificationUseCase = new ProfileVerification(ClientRepository);
+const createJobPostUseCase = new CreateJobPost(ClientRepository);
  
 
  
@@ -194,6 +196,22 @@ const profileVerificationUseCase = new ProfileVerification(ClientRepository);
                  res.json({message: err.message, type: 'error'})
              }
          },
+
+ 
+         postJob: async (req: any, res: any) => {
+             try{
+                
+                console.log('The body', req.body);
+                const jobPost = await createJobPostUseCase.execute(req.body);
+
+                res.json({message: 'successfully loggedout', type: 'success'});
+ 
+             }catch(err: any) {
+                 res.json({message: err.message, type: 'error'})
+             }
+         },
+
+
          
      }
 

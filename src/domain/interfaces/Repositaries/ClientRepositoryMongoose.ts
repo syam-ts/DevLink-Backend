@@ -38,7 +38,45 @@ const ClientSchema = new Schema<ClientDocument>({
     totalJobs: { type: Number, required: false},
     isVerified: {type: Boolean, required: false},
     isGoogle: { type: Boolean, required: false}
-});
+  });    
+  
+  export const ClientModel: Model<ClientDocument> = mongoose.model<ClientDocument>('Client', ClientSchema);
+
+ 
+interface JobPostDocument extends Document {
+  title: string; 
+  description: string;
+  keyResponsiblities: [string],
+  requiredSkills: [string],
+  paymentType: 'hourly' | 'fixed',
+  ifFixed?: {
+    is: boolean,
+    amount: number
+  };
+  ifHourly?: {
+    is: boolean,
+    amount: number
+  };
+  estimateTime: Date;
+  status: 'on progress' | 'finished';
+  payment: boolean;
+  jobProposals?: mongoose.Types.ObjectId;
+};
+ 
+const JobPostSchema = new Schema<JobPostDocument>({
+  title: { type: String, required: true }, 
+  description: { type: String, required: true }, 
+  keyResponsiblities: { type: [String], required: true }, 
+  requiredSkills: { type: [String], required: true }, 
+  paymentType: { type: String, required: true }, 
+  ifFixed: { type: String, required: false }, 
+  ifHourly: { type: String, required: false }, 
+  estimateTime: { type: Date, required: false }, 
+  status: { type: String, required: true }, 
+  payment: { type: Boolean, required: true }, 
+  });    
+  
+  export const JobPostModel: Model<JobPostDocument> = mongoose.model<JobPostDocument>('JobPost', JobPostSchema);
 
 
 //user
@@ -46,18 +84,16 @@ interface UserDocument extends Document {
   name: string;
   email: string;
   password: string;
-}
+}  
 
 const UserSchema = new Schema<UserDocument>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: false }
-});
+});  
 
 
  
-export const ClientModel: Model<ClientDocument> = mongoose.model<ClientDocument>('Client', ClientSchema);
-
 
 
 export class ClientRepositoryMongoose implements ClientRepositary {
@@ -311,5 +347,31 @@ export class ClientRepositoryMongoose implements ClientRepositary {
          return null;                
   }
 
+
+     async createJobPost(jobPost: any): Promise< any > {
+        
+      const createdJobPost = new JobPostModel({
+        title: jobPost.title,
+        description: jobPost.description,
+        keyResponsiblities: jobPost.keyResponsiblities,
+        requiredSkills: jobPost.requiredSkills,
+        paymentType: jobPost.paymentType,
+        estimateTime: jobPost.date,
+        status: jobPost.status,
+        payment: jobPost.payment, 
+      });
+  
+      const savedJobPost = await createdJobPost.save();
+  
+      return {
+        name: savedJobPost.title,
+        email: savedJobPost.description,
+        password: savedJobPost.payment
+      };
+               
+  }
+
+
+  
 
 }

@@ -16,7 +16,7 @@ clientRouter.post('/resetPassword/:clientId',clientController.resetPassword);
 clientRouter.post('/googleLogin', clientController.googleLogin);
 clientRouter.post('/logout', clientAuth, clientController.logoutClient);
 clientRouter.post('/profile/verification/:clientId', clientController.profileVerification);
-
+clientRouter.post('/jobPost', clientController.postJob)
 
 clientRouter.put('/profile/edit/:clientId', clientController.editProfile);
 
