@@ -3,6 +3,9 @@ import { Client } from '../../entities/Client';
 import { User } from '../../entities/User';
 import { ClientRepositary } from '../../../application/usecases/client/signupClient'; 
 import { UserModel } from './UserRepositoryMongoose '
+import { Admin } from '../../entities/Admin';
+import { AdminRepositary } from '../../../application/usecases/admin/loginAdmin';
+import { AdminModel } from '../Repositaries/AdminRepository'
 import bcrypt from 'bcrypt';
 import validator from 'validator'; 
 
@@ -262,6 +265,17 @@ export class ClientRepositoryMongoose implements ClientRepositary {
      }
 
 
+     async getClientProfile(clientId: string): Promise< any > {
+            const client = await ClientModel.findById(clientId);
+
+            if(!client) {
+              throw new Error('Client not found')
+            }
+
+            return client;
+     }
+
+     
      async editClientProfile(clientId: string, editData: any): Promise<any > {
 
       const updatedClient = await ClientModel.findByIdAndUpdate(clientId, editData,{
@@ -276,14 +290,5 @@ export class ClientRepositoryMongoose implements ClientRepositary {
      }
 
 
-     async getClientProfile(clientId: string): Promise< any > {
-            const client = await ClientModel.findById(clientId);
-
-            if(!client) {
-              throw new Error('Client not found')
-            }
-
-            return client;
-     }
   }
 

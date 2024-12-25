@@ -158,13 +158,12 @@ const getClientProfileUseCase = new GetClientProfile(ClientRepository);
 
 
          editProfile: async (req: any, res: any) => {
-            try{
-                console.log('The params', req.params);
-                console.log('The body ', req.body);
+            try{ 
                 const { clientId } = req.params;
                 const editClient = await editClientProfileUseCase.execute(clientId, req.body);
 
-                console.log('The cntrl result ', editClient)
+               
+                res.json({ message: 'successfully edited', type: 'success'});
             }catch(err: any) {
                 res.json({message: err.message, type: 'error'});
             }

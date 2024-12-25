@@ -5,6 +5,7 @@ import { GetAllUsers } from '../../../application/usecases/admin/getUsers'
 import { GetAllClients } from '../../../application/usecases/admin/getAllClients';
 import { BlockUser } from '../../../application/usecases/admin/blockUser'
 import { UnBlockUser } from '../../../application/usecases/admin/unBlockUser'
+import { Create } from '../../../application/usecases/admin/create'
 
 
 const adminRepositary = new AdminRepository();
@@ -14,10 +15,24 @@ const getAllUsersUseCase = new GetAllUsers(adminRepositary);
 const getAllClientsUseCase = new GetAllClients(adminRepositary);
 const blockUserUseCase = new BlockUser(adminRepositary);
 const unBlockUserUseCase = new UnBlockUser(adminRepositary);
+// const create = new Create(adminRepositary);
 
 
 export const adminController = {
      
+    
+    // signUpAdmin: async(req: any, res: any) => {
+    //     try{
+    //         const adminId: string = '676bfa326c2e4c9fc3afba8e'
+
+    //         const users = await create.execute(adminId); 
+
+    //         res.json({message: "Successfully fetched all the users", data: users, type: 'success'});
+            
+    //     }catch(err: any) {
+    //         res.json({message: err.message , type: 'error'});
+    //     }
+    // },
 
         loginAdmin: async (req: any, res: any) => {
             try{ 

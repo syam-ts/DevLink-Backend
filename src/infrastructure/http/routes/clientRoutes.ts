@@ -16,6 +16,6 @@ clientRouter.post('/resetPassword/:clientId',clientController.resetPassword);
 clientRouter.post('/googleLogin', clientController.googleLogin);
 clientRouter.post('/logout', clientAuth, clientController.logoutClient);
 
-clientRouter.put('/profile/edit/clientId', clientController.editProfile);
+clientRouter.put('/profile/edit/:clientId', clientController.editProfile);
 
 export default clientRouter;

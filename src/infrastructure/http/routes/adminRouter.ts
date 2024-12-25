@@ -4,6 +4,7 @@ import { adminAuth } from '../middlewares/auth/authAdmin'
 
 const adminRouter = express.Router();
 
+// adminRouter.post('/signup', adminController.signUpAdmin);
   
 adminRouter.get('/dashboard',adminAuth, adminController.getDashboard);
 adminRouter.get('/getAllUsers', adminController.getAllUsers);
