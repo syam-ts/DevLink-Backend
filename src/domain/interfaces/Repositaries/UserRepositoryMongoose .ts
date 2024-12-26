@@ -167,7 +167,10 @@ export class UserRepositoryMongoose implements UserRepositary {
         name: user.name,
         email: user.email,
         password: user.password,
-        mobile: user.mobile
+        mobile: user.mobile,
+        location: user.location,
+        description: user.description,
+        budget: user.budget
       } as User
   }
 

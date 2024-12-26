@@ -203,6 +203,7 @@ const createJobPostUseCase = new CreateJobPost(ClientRepository);
                 
                 console.log('The body', req.body);
                 const jobPost = await createJobPostUseCase.execute(req.body);
+                console.log('Final conrtoller jobpost', jobPost)
 
                 res.json({message: 'successfully loggedout', type: 'success'});
  

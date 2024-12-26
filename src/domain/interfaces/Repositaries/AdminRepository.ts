@@ -227,6 +227,20 @@ export class AdminRepository implements AdminRepositary {
 
      }
 
+     async getAllRequests(): Promise<any> {
+      
+       const adminId = process.env.ADMIN_OBJECT_ID; 
+
+      const admin: any = await AdminModel.findById(adminId).exec(); 
+      
+       if(!admin) {
+        throw new Error('Admin not found')
+       }
+          return admin.request;
+
+     }
+
+
    
   }
 

@@ -9,6 +9,7 @@ const adminRouter = express.Router();
 adminRouter.get('/dashboard',adminAuth, adminController.getDashboard);
 adminRouter.get('/getAllUsers', adminController.getAllUsers);
 adminRouter.get('/getAllClients', adminController.getAllClients);
+adminRouter.get('/getRequests', adminController.getRequests);
 
 
 adminRouter.post('/login', adminController.loginAdmin); 
