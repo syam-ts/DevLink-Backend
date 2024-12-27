@@ -6,6 +6,7 @@ const clientRouter = express.Router();
 
 clientRouter.get('/getHome', clientAuth, clientController.getHomeClient);
 clientRouter.get('/profile/view/:clientId', clientController.getProfile);
+clientRouter.get('/profile/notifications/:clientId', clientController.getAllNotifications);
  
 clientRouter.post('/signup', clientController.signupClient);
 clientRouter.post('/verify-otp', clientController.verifyOtp);

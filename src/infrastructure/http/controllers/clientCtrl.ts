@@ -11,6 +11,7 @@ import { EditClientProfile } from '../../../application/usecases/client/EditClie
 import { GetClientProfile } from '../../../application/usecases/client/getProfile';
 import { ProfileVerification } from '../../../application/usecases/client/profileVerification';
 import { CreateJobPost } from '../../../application/usecases/client/createJobPost';
+import { GetAllNotifications } from '../../../application/usecases/client/getAllNotifications';
 
 
 const ClientRepository = new ClientRepositoryMongoose();
@@ -26,6 +27,7 @@ const editClientProfileUseCase = new EditClientProfile(ClientRepository);
 const getClientProfileUseCase = new GetClientProfile(ClientRepository);
 const profileVerificationUseCase = new ProfileVerification(ClientRepository);
 const createJobPostUseCase = new CreateJobPost(ClientRepository);
+const getAllNotificationsUseCase = new GetAllNotifications(ClientRepository);
  
 
  
@@ -206,6 +208,23 @@ const createJobPostUseCase = new CreateJobPost(ClientRepository);
                 console.log('Final conrtoller jobpost', jobPost)
 
                 res.json({message: 'successfully loggedout', type: 'success'});
+ 
+             }catch(err: any) {
+                 res.json({message: err.message, type: 'error'})
+             }
+         },
+
+ 
+         getAllNotifications: async (req: any, res: any) => {
+             try{
+                
+                const {  clientId }= req.params;
+                const response = await getAllNotificationsUseCase.execute( clientId);
+
+
+                console.log('Final conrtoller jobpost', response)
+
+                res.json({message: 'successfully list all notifications', type: 'success'});
  
              }catch(err: any) {
                  res.json({message: err.message, type: 'error'})

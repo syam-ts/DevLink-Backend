@@ -4,17 +4,17 @@ export interface Notification extends mongoose.Document{
     id?: string;
     type: string;
     message: string;
-    sender: mongoose.Schema.Types.ObjectId;
-    reciever: mongoose.Schema.Types.ObjectId;
-    createdAt: Date;
+    sender_id: string;
+    reciever_id: string;
+    createdAt?: Date;
 }
 
 //Notification Schema
 const NotificationSchema: mongoose.Schema = new mongoose.Schema({
     type: {type: String, required: false},
     message: {type: String, required: false},
-    sender: {type: mongoose.Schema.Types.ObjectId, required: false},
-    reciever: {type: mongoose.Schema.Types.ObjectId, required: false},
+    sender_id: {type: String, required: false},
+    reciever_id: {type: String, required: false},
     createdAt: {type: Date, required: false}, 
 });
 
