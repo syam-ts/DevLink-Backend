@@ -4,6 +4,7 @@ import { User } from '../../entities/User';
 import { UserModel } from '../../entities/User'
 import { Notification } from '../../entities/Notification'
 import { NotificationModel } from '../../entities/Notification'
+import { Post } from '../../entities/Post'
 import { UserRepositary } from '../../../application/usecases/user/signupUser';
 import { Client } from '../../entities/Client';
 import { ClientModel } from './ClientRepositoryMongoose';
@@ -17,6 +18,7 @@ interface IRequest {
   type: string;
   clientId: string;
   status: string;
+  data?: Post
 }
 
 // Define the interface for Admin
@@ -31,6 +33,7 @@ const RequestSchema = new Schema<IRequest>({
   type: { type: String, required: false },
   clientId: { type: String, required: false },
   status: { type: String, required: false },
+    data: { type: mongoose.Schema.Types.Mixed, required: false }
 });
 
 // Create the schema for Admin

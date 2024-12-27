@@ -163,6 +163,7 @@ export const adminController = {
                 res.json({ message: err.message, type: 'error'})
             }
         },
+        
 
         getRequests: async (req: any, res: any) => {
             try{

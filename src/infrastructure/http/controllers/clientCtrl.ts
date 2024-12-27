@@ -165,8 +165,7 @@ const getAllNotificationsUseCase = new GetAllNotifications(ClientRepository);
          profileVerification: async (req: any, res: any) => {
             try{
 
-                const { clientId } = req.params;
-                console.log('The userIf', req.body)
+                const { clientId } = req.params; 
                  const response = await profileVerificationUseCase.execute(clientId, req.body)
                  res.json({message: 'successfully sended', type:'successs'})
 

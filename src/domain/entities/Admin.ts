@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Post } from '../entities/Post'
 
 export interface Admin extends mongoose.Document{ 
     name: string;
@@ -6,7 +7,8 @@ export interface Admin extends mongoose.Document{
     request: [{
         type: string,
         clientId: mongoose.Types.ObjectId,
-        status: 'pending' | 'approved' | 'rejected'
+        status: 'pending' | 'approved' | 'rejected',
+        data?: Post
     } ]
 }
 
@@ -17,7 +19,8 @@ const AdminSchema: mongoose.Schema = new mongoose.Schema({
     request: [{
         type: {type: String, required: false},
         clientId: {type: mongoose.Types.ObjectId, required: false},
-        status: {type: String, required: false},
+        status: {type: String, required: false}, 
+        data: { type: mongoose.Schema.Types.Mixed, required: false }
     }]
 });
 

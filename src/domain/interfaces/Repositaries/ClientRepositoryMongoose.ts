@@ -5,6 +5,7 @@ import { ClientRepositary } from '../../../application/usecases/client/signupCli
 import { UserModel } from '../../entities/User'
 import { Notification } from '../../entities/Notification'
 import { NotificationModel } from '../../entities/Notification'
+import { Post } from '../../entities/Post'
 import { Admin } from '../../entities/Admin';
 import { AdminRepositary } from '../../../application/usecases/admin/loginAdmin';
 import { AdminModel } from '../Repositaries/AdminRepository'
@@ -328,15 +329,17 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
 
-  async profileVerification(clientId: string, editData: any): Promise<any> {
+  async profileVerification(clientId: string, data: any): Promise<any> {
     const adminId: string = '676bfa326c2e4c9fc3afba8e'
 
     const admin = await AdminModel.findById(adminId).exec();
+ 
 
     const request = {
       type: 'Profile Verification Reqest',
       clientId: clientId,
-      status: 'pending'
+      status: 'pending',
+      data: data.editData
     }
 
     const updatedAdmin = await AdminModel.findByIdAndUpdate(
@@ -344,6 +347,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       { $push: { request: request } },
       { new: true }
     );
+
+    console.log('The updated Admin req : ', updatedAdmin)
 
 
     return null;
