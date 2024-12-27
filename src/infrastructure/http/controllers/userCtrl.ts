@@ -55,7 +55,7 @@ export const userController = {
             //     },
             //     mailOtp: 1111,
             //     userOtp: { otp: '1111' }
-            //   }
+            //   } 
  
             const user = await verifyUserUseCase.execute(req.body);
 

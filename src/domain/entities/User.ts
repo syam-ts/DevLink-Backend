@@ -17,7 +17,7 @@ export interface User extends mongoose.Document{
 }
 
 //User Schema
-const UserSchema: mongoose.Schema = new mongoose.Schema({
+export const UserSchema: mongoose.Schema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'Name is required'],

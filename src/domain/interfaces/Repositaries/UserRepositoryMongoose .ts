@@ -1,42 +1,13 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
-import { User } from '../../entities/User';
+import { User } from '../../entities/User'; 
+import { UserModel } from '../../entities/User'
 import { Client } from '../../entities/Client';
 import { UserRepositary } from '../../../application/usecases/user/signupUser'; 
 import {ClientModel} from './ClientRepositoryMongoose';
 import bcrypt from 'bcrypt';
 import validator from 'validator';
 import { sendMail } from '../../../utils/send-mail';
-
-
  
-interface UserDocument extends Document {
-  name: string;
-  email: string;
-  password: string;
-  mobile: number;
-  isBlocked: boolean;
-  age: number,
-  profilePicture?: string;
-  description: string,
-  location?:string;
-  skills?: [string];
-  budget: number
-}
- 
-const UserSchema = new Schema<UserDocument>({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: false },
-  age: { type: Number, required: false},
-  mobile: { type: Number, required: false },
-  isBlocked: { type: Boolean, required: false },
-  profilePicture: { type: String, required: false },
-  description: { type: String, required: false},
-  location: { type: String, required: false },
-  skills: { type: [String], required: false },
-  budget: { type: Number, require: false}
-});
-
 
 //client
 interface ClientDocument extends Document {
@@ -51,10 +22,7 @@ const ClientSchema = new Schema<ClientDocument>({
   password: { type: String, required: false }
 });
 
-
  
-export const UserModel: Model<UserDocument> = mongoose.model<UserDocument>('User', UserSchema);
-
 
 
 export class UserRepositoryMongoose implements UserRepositary {
@@ -121,8 +89,8 @@ export class UserRepositoryMongoose implements UserRepositary {
 
   async verifyOtp( user: any): Promise<User> {
  
+    console.log('name', user)
     const { name, email, password, mobile } = user.user;
-    console.log('name', user.user)
    
   if(user.mailOtp === parseInt(user.userOtp.otp)) {
 
@@ -194,9 +162,9 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
 
-  async findUserByEmailAndPassword(email: string, password: string): Promise<User | any> {
+  async findUserByEmailAndPassword(email: string, passwordUser: string): Promise<User | any> {
    
-          if ( !email || !password) {
+          if ( !email || !passwordUser) {
             throw new Error('Email, and password are required');
         }
       
@@ -215,9 +183,9 @@ export class UserRepositoryMongoose implements UserRepositary {
      if (!user.password) {
       throw new Error('Password is wrong');
   }
-     
+     const { password }: any = user
 
-     const isValidPassword = await bcrypt.compare(password, user.password);
+     const isValidPassword = await bcrypt.compare(passwordUser, password);
       
      if(!isValidPassword) {
       throw new Error('wrong password')
