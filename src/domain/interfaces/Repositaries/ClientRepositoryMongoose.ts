@@ -338,12 +338,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async profileVerification(clientId: string, data: any): Promise<any> {
-    
+ 
     const adminId = process.env.ADMIN_OBJECT_ID;  
     const admin: any = await AdminModel.findById(adminId);
  
     const existingClient: any = await ClientModel.findById(clientId);
-    console.log('The admin ', existingClient)
 
     if(existingClient.isVerified) {
 
@@ -351,13 +350,13 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       for(let x of admin?.request) { 
         if(x.clientId === clientId) {
               throw new Error('Request already send');
-       }  }
+           }}
 
       const request = {
         type: 'Profile Updation Request',
         clientId: clientId,
         status: 'pending',
-        data: data.editData
+        data: data
       }
 
       const existingRequest = await AdminModel.find(request)
@@ -370,9 +369,6 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   
     } else {
 
-
-    
-   
       for(let x of admin?.request) { 
           if(x.clientId === clientId) {
                 throw new Error('Request already send');
@@ -382,7 +378,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         type: 'Profile Verification Request',
         clientId: clientId,
         status: 'pending',
-        data: data.editData
+        data: data
       }
   
       const updatedAdmin = await AdminModel.findByIdAndUpdate(
@@ -390,8 +386,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         { $push: { request: request } },
         { new: true }
       ); 
-  
-  
+   
       return null;
     }
  
@@ -431,7 +426,17 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
   }
 
+  async findAllJobs(): Promise< any> {
+    const allJobs = await JobPostModel.find().exec();
 
+    console.log('The all jobs ', allJobs);
+
+    if(!allJobs) {
+      throw new Error('No job found');
+    } else {
+      return allJobs;
+    }
+  }
 
 
 }

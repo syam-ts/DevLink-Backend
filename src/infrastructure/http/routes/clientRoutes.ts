@@ -7,6 +7,7 @@ const clientRouter = express.Router();
 clientRouter.get('/getHome', clientAuth, clientController.getHomeClient);
 clientRouter.get('/profile/view/:clientId', clientController.getProfile);
 clientRouter.get('/profile/notifications/:clientId', clientController.getAllNotifications);
+clientRouter.get('/listAllJobs',clientController.listAllJobs);
  
 clientRouter.post('/signup', clientController.signupClient);
 clientRouter.post('/verify-otp', clientController.verifyOtp);
@@ -18,7 +19,10 @@ clientRouter.post('/googleLogin', clientController.googleLogin);
 clientRouter.post('/logout', clientAuth, clientController.logoutClient);
 clientRouter.put('/profile/edit/:clientId', clientController.editProfile);
 clientRouter.post('/profile/verification/:clientId', clientController.profileVerification);
-clientRouter.post('/jobPost', clientController.postJob);
+
+
+clientRouter.post('/createJobPost', clientController.postJob);
+
 
 clientRouter.put('/profile/edit/:clientId', clientController.editProfile);
 

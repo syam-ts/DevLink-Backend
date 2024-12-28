@@ -10,8 +10,7 @@ export class GetClientProfile {
 
     async execute(clientId: string) {
         const client = await this.clientRepository.getClientProfile(clientId);
-
-        console.log('The result from usecase', client)
+ 
         return client;
     }
 }
