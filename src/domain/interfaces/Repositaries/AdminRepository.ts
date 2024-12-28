@@ -167,8 +167,8 @@ export class AdminRepository implements AdminRepositary {
   }
 
   async verifyAccept(data: any): Promise<any> {
-    
-    console.log("the real one")
+     
+    console.log('The final ', data)
     const { clientId, editData } = data;
     editData.isVerified = true;
 

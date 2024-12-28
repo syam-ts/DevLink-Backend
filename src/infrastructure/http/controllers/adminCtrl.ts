@@ -155,6 +155,7 @@ export const adminController = {
 
         verifyAccept: async (req: any, res: any) => {
             try{
+                console.log('The body', req.body)
                   const response = await verifyAcceptUseCase.execute(req.body);
                    
 
