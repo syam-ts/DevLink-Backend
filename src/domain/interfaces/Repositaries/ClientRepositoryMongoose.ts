@@ -144,6 +144,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
 
     const foundClient: any = this.findClientByEmail(client.email);
+   
 
     if (foundClient) {
       return foundClient
@@ -196,6 +197,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async findClientByEmail(email: string): Promise<Client | null> {
     const client = await ClientModel.findOne({ email }).exec();
+
     if (!client) {
       return null
     } else {
@@ -241,6 +243,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
     return {
+      _id: client._id,
       name: client.name,
       email: client.email
     } as Client;

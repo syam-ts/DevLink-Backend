@@ -15,6 +15,7 @@ export class LoginClient {
         
         const foundClient: any = await this.clientRepositary.findClientByEmailAndPassword(client.email, client.password);
  
+        
         if (!foundClient) {
             throw new Error('Client not Found');
         }  

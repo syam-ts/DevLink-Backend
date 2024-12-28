@@ -115,6 +115,7 @@ const getAllNotificationsUseCase = new GetAllNotifications(ClientRepository);
                          maxAge: 24 * 60 * 60 * 1000
                        }
                      );
+                     console.log("The whole data : ", client)
                      return res.json({message: "successfully login",client: client, type: 'success'});
                 }
              }catch(err: any) { 
