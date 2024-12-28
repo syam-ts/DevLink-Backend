@@ -123,8 +123,7 @@ export class AdminRepository implements AdminRepositary {
   async findAllClients(): Promise<Client | any> {
     const clients: any = await ClientModel.find().exec();
     if (clients) {
-
-      console.log('All clients : ', clients);
+ 
 
       return {
         ...clients
@@ -168,10 +167,23 @@ export class AdminRepository implements AdminRepositary {
 
   async verifyAccept(data: any): Promise<any> {
      
-    console.log('The final ', data)
     const { clientId, editData } = data;
+     
+    console.log('The data ', data)
+ 
+    const adminId = process.env.ADMIN_OBJECT_ID;
     editData.isVerified = true;
+ 
 
+    const result = await AdminModel.updateOne(
+      { "request.clientId": clientId },  
+      {
+        $pull: {
+          request: { clientId: clientId },  
+        },
+      })
+
+        
     const updatedClient: any = await ClientModel.findByIdAndUpdate(clientId, editData, {
       update: true
     }).exec();
@@ -198,6 +210,13 @@ export class AdminRepository implements AdminRepositary {
             email: savedNotification.message,
             password: savedNotification.date
           } ;
+  
+
+   
+ 
+    
+
+       
   }
 
 
@@ -212,9 +231,10 @@ export class AdminRepository implements AdminRepositary {
     }
     return admin.request;
 
+    }
   }
 
 
 
-}
+ 
 

@@ -318,8 +318,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
 
+
+  
   async editClientProfile(clientId: string, editData: any): Promise<any> {
 
+ 
     const updatedClient = await ClientModel.findByIdAndUpdate(clientId, editData, {
       update: true
     }).exec();
@@ -332,29 +335,66 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
 
+
+
   async profileVerification(clientId: string, data: any): Promise<any> {
-    const adminId: string = '676bfa326c2e4c9fc3afba8e'
-
-    const admin = await AdminModel.findById(adminId).exec();
+    
+    const adminId = process.env.ADMIN_OBJECT_ID;  
+    const admin: any = await AdminModel.findById(adminId);
  
+    const existingClient: any = await ClientModel.findById(clientId);
+    console.log('The admin ', existingClient)
 
-    const request = {
-      type: 'Profile Verification Reqest',
-      clientId: clientId,
-      status: 'pending',
-      data: data.editData
+    if(existingClient.isVerified) {
+
+       
+      for(let x of admin?.request) { 
+        if(x.clientId === clientId) {
+              throw new Error('Request already send');
+       }  }
+
+      const request = {
+        type: 'Profile Updation Request',
+        clientId: clientId,
+        status: 'pending',
+        data: data.editData
+      }
+
+      const existingRequest = await AdminModel.find(request)
+  
+      const updatedAdmin = await AdminModel.findByIdAndUpdate(
+        adminId,
+        { $push: { request: request } },
+        { new: true }
+      ); 
+  
+    } else {
+
+
+    
+   
+      for(let x of admin?.request) { 
+          if(x.clientId === clientId) {
+                throw new Error('Request already send');
+         }  }
+
+      const request = {
+        type: 'Profile Verification Request',
+        clientId: clientId,
+        status: 'pending',
+        data: data.editData
+      }
+  
+      const updatedAdmin = await AdminModel.findByIdAndUpdate(
+        adminId,
+        { $push: { request: request } },
+        { new: true }
+      ); 
+  
+  
+      return null;
     }
-
-    const updatedAdmin = await AdminModel.findByIdAndUpdate(
-      adminId,
-      { $push: { request: request } },
-      { new: true }
-    );
-
-    console.log('The updated Admin req : ', updatedAdmin)
-
-
-    return null;
+ 
   }
 
 

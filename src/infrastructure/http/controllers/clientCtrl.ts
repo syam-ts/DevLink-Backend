@@ -165,6 +165,7 @@ const getAllNotificationsUseCase = new GetAllNotifications(ClientRepository);
 
          profileVerification: async (req: any, res: any) => {
             try{
+ 
 
                 const { clientId } = req.params; 
                  const response = await profileVerificationUseCase.execute(clientId, req.body)
@@ -177,6 +178,7 @@ const getAllNotificationsUseCase = new GetAllNotifications(ClientRepository);
 
          editProfile: async (req: any, res: any) => {
             try{ 
+                
                 const { clientId } = req.params;
                 const editClient = await editClientProfileUseCase.execute(clientId, req.body);
 

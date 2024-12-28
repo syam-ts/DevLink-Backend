@@ -145,8 +145,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     const user = await UserModel.findOne({ email }).exec();
     if (!user) {
       return null
-    } else {
-      console.log('The whole user', user)
+    } else { 
 
       return { 
         _id: user._id,
@@ -172,7 +171,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         }
  
       const user = await UserModel.findOne({ email }).exec();
-     console.log('the user ', user);
+ 
 
      if (!user) {
        throw new Error('User not Found');
@@ -205,20 +204,17 @@ export class UserRepositoryMongoose implements UserRepositary {
 
      const user = await UserModel.findOne({ email }).exec();
      if (user) {
-
-      console.log('User fournd')
+ 
        return { 
         _id: user._id,
         name: user.name,
         email: user.email
       } as User;
      } else {
-
-      try{
+ 
         const salt: number = 10;
         const hashedPassword = await bcrypt.hash(password, salt);
- 
-        console.log("Ne user cerating")
+  
 
         const createdUser = new UserModel({
              name: name, 
@@ -243,10 +239,7 @@ export class UserRepositoryMongoose implements UserRepositary {
        email: savedUser.email,
        mobile: savedUser.mobile,
      } as User;
-
-      }catch(err: any) {
-        console.log('The error ', err.message)
-      }
+ 
      
   }
 
@@ -279,12 +272,9 @@ export class UserRepositoryMongoose implements UserRepositary {
 
 
      async editUserProfile(userId: string, userData: any): Promise< any > {
- 
-      console.log('The final data',userId, 'whole data', userData )
-
+  
       const user = await UserModel.findByIdAndUpdate(userId, userData , { update: true }).exec();
-
-        console.log('data updated', user);
+ 
 
         if(!user) throw new Error('User not found');
 

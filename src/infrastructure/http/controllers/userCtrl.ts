@@ -124,10 +124,16 @@ export const userController = {
 
     googleLogin: async (req: any, res: any) => {
         try {
-            const user = await GoogleLoginUserUseCase.execute(req.body);  
-            res.json({ message: "successfully login", type: "success" });
+            const user = await GoogleLoginUserUseCase.execute(req.body); 
+            res.cookie("jwtU", user.jwt, {
+                httpOnly: true,
+                sameSite: "None",
+                secure: true,
+                maxAge: 24 * 60 * 60 * 1000,
+            }); 
+            res.json({ message: "successfully login",user: user,  success: true });
         } catch (err: any) {
-            res.json({ message: err.message, type: "error" });
+            res.json({ message: err.message, success: false});
         }
     },
 

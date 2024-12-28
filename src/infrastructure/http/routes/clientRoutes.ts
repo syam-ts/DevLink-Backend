@@ -1,6 +1,6 @@
 import express from 'express';
-import { clientController } from '../controllers/clientCtrl'
-import { clientAuth } from '../middlewares/auth/authClient'
+import { clientController } from '../controllers/clientCtrl';
+import { clientAuth } from '../middlewares/auth/authClient';
 
 const clientRouter = express.Router();
 
@@ -16,8 +16,9 @@ clientRouter.post('/verify-email',clientController.verifyEmail);
 clientRouter.post('/resetPassword/:clientId',clientController.resetPassword);
 clientRouter.post('/googleLogin', clientController.googleLogin);
 clientRouter.post('/logout', clientAuth, clientController.logoutClient);
+clientRouter.put('/profile/edit/:clientId', clientController.editProfile);
 clientRouter.post('/profile/verification/:clientId', clientController.profileVerification);
-clientRouter.post('/jobPost', clientController.postJob)
+clientRouter.post('/jobPost', clientController.postJob);
 
 clientRouter.put('/profile/edit/:clientId', clientController.editProfile);
 
