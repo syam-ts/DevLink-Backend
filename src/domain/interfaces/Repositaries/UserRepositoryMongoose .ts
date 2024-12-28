@@ -88,8 +88,7 @@ export class UserRepositoryMongoose implements UserRepositary {
   
 
   async verifyOtp( user: any): Promise<User> {
- 
-    console.log('name', user)
+  
     const { name, email, password, mobile } = user.user;
    
   if(user.mailOtp === parseInt(user.userOtp.otp)) {
@@ -115,7 +114,6 @@ export class UserRepositoryMongoose implements UserRepositary {
     return { 
       name: savedUser.name,
       email: savedUser.email,
-      password: savedUser.password,
       mobile: savedUser.mobile,
     } as User;
   } else {
@@ -202,30 +200,54 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
 
-  async findUserByOnlyEmail(email: string, name: string): Promise<User | null> {
+  async findUserByOnlyEmail(email: string, name: string, password: any): Promise<any | null> {
+
+
      const user = await UserModel.findOne({ email }).exec();
      if (user) {
-       console.log('the user ', user)
 
+      console.log('User fournd')
        return { 
+        _id: user._id,
         name: user.name,
         email: user.email
       } as User;
      } else {
 
-       const createdUser = new UserModel({
-         name: name, 
-         email: email
-        });
-       
+      try{
+        const salt: number = 10;
+        const hashedPassword = await bcrypt.hash(password, salt);
+ 
+        console.log("Ne user cerating")
 
-    const savedUser = await createdUser.save();
+        const createdUser = new UserModel({
+             name: name, 
+             email: email,
+             password: hashedPassword,
+             mobile: "",
+             isBlocked: false,
+             age: '',
+             location:'',
+             description:'',
+             skills:'',
+             budget: ''
+         });
+        
+ 
+     const savedUser = await createdUser.save();
+ 
+    
+      
+     return { 
+       name: savedUser.name,
+       email: savedUser.email,
+       mobile: savedUser.mobile,
+     } as User;
 
+      }catch(err: any) {
+        console.log('The error ', err.message)
+      }
      
-    return { 
-      name: savedUser.name,
-      email: savedUser.email
-    } as User;
   }
 
 

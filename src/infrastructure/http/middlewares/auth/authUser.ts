@@ -2,12 +2,9 @@ import jwt from "jsonwebtoken";
 
 export const userAuth = async (req: any, res: any, next: any) => {
 
-  try{
-    console.log('The token from the auth api : ', req.cookies);
+  try{ 
 
-    const refreshToken = req.cookies.jwtU;
-
-    console.log('The Refresh Token : ', refreshToken);
+    const refreshToken = req.cookies.jwtU; 
 
     const USER_REFRESH_TOKEN: any = process.env.USER_REFRESH_TOKEN;
     const USER_ACCESS_TOKEN: any = process.env.USER_ACCESS_TOKEN; 
@@ -17,8 +14,7 @@ export const userAuth = async (req: any, res: any, next: any) => {
     }
 
     jwt.verify(refreshToken, USER_REFRESH_TOKEN, (err: any, decoded: any) => {
-      if (err) {
-          console.error('JWT Verification Error:', err.message);
+      if (err) { 
           return res.status(403).json({ message: "Invalid Token", type: "error" });
       }
 
