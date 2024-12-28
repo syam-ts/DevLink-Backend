@@ -124,7 +124,7 @@ export const userController = {
 
     googleLogin: async (req: any, res: any) => {
         try {
-            const user = await GoogleLoginUserUseCase.execute(req.body);
+            const user = await GoogleLoginUserUseCase.execute(req.body);  
             res.json({ message: "successfully login", type: "success" });
         } catch (err: any) {
             res.json({ message: err.message, type: "error" });
