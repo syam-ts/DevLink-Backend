@@ -157,13 +157,13 @@ export const adminController = {
 
         verifyAccept: async (req: any, res: any) => {
             try{
-                
+          
                   const response = await verifyAcceptUseCase.execute(req.body);
                    
 
-                  res.json({ message: 'client verified ', type: 'success'});
+                  res.json({ message: 'client verified ', success: true });
             }catch(err: any) {
-                res.json({ message: err.message, type: 'error'})
+                res.json({ message: err.message, success: false })
             }
         },
         

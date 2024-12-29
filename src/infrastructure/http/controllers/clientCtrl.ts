@@ -183,9 +183,9 @@ const listAllJobsUseCase = new ListAllJobs(ClientRepository);
                 const { clientId } = req.params;
                 const editClient = await editClientProfileUseCase.execute(clientId, req.body);
                
-                res.json({ message: 'successfully edited', type: 'success'});
+                res.json({ message: 'successfully edited', success: true });
             }catch(err: any) {
-                res.json({message: err.message, type: 'error'});
+                res.json({message: err.message, success: false });
             }
          },
 

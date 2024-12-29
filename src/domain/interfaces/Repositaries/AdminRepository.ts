@@ -88,7 +88,16 @@ export class AdminRepository implements AdminRepositary {
     const { clientId, editData } = data;
  
     const adminId = process.env.ADMIN_OBJECT_ID;
+
     editData.isVerified = true;
+    editData.isEditRequest = false;
+
+    // const client = await ClientModel.findByIdAndUpdate(clientId, {
+    //   isVerified: true,
+    //   isEditRequest: false
+    // }, {
+    //   update: true
+    // });
  
 
     const result = await AdminModel.updateOne(
@@ -107,7 +116,7 @@ export class AdminRepository implements AdminRepositary {
 
     const createNotification = new NotificationModel({ 
                type: 'Empty',
-               message: 'Your profile verifued successfully',
+               message: 'Your profile verified successfully',
                sender_id:  process.env.ADMIN_OBJECT_ID,
                reciever_id: clientId
           });
