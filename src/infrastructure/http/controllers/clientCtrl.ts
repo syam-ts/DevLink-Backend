@@ -166,14 +166,14 @@ const listAllJobsUseCase = new ListAllJobs(ClientRepository);
          },
 
          profileVerification: async (req: any, res: any) => {
+            try{ 
 
-            try{
                 const { clientId } = req.params; 
                  const response = await profileVerificationUseCase.execute(clientId, req.body); 
 
-                 res.json({message: 'successfully sended', type:'successs'});
+                 res.json({message: 'successfully sended', success: true });
             }catch(err: any) {
-                res.json({ message: err.message, type: 'error'});
+                res.json({ message: err.message, success: false });
             }
          },
 

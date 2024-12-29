@@ -19,7 +19,7 @@ clientRouter.post('/googleLogin', clientController.googleLogin);
 clientRouter.post('/logout', clientAuth, clientController.logoutClient);
 
 
-clientRouter.put('/profile/edit/:clientId', clientController.editProfile);
+clientRouter.post('/profile/edit/:clientId', clientController.editProfile);
 clientRouter.post('/profile/verification/:clientId', clientController.profileVerification);
 
 

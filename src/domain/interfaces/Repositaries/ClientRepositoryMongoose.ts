@@ -238,31 +238,13 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   
   async editClientProfile(clientId: string, editData: any): Promise<any> {
 
- 
-    const updatedClient = await ClientModel.findByIdAndUpdate(clientId, editData, {
-      update: true
-    }).exec();
-
-    if (!updatedClient) {
-      throw new Error("Client not found or password update failed.");
-    }
-
-    return "Data updated successfully!";
-  }
-
-
-
-
-  async profileVerification(clientId: string, data: any): Promise<any> {
- 
     const adminId = process.env.ADMIN_OBJECT_ID;  
     const admin: any = await AdminModel.findById(adminId);
- 
+    
     const existingClient: any = await ClientModel.findById(clientId);
 
-    if(existingClient.isVerified) {
+    
 
-       
       for(let x of admin?.request) { 
         if(x.clientId === clientId) {
               throw new Error('Request already send');
@@ -272,25 +254,30 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         type: 'Profile Updation Request',
         clientId: clientId,
         status: 'pending',
-        data: data
+        data: editData
       }
 
-      const existingRequest = await AdminModel.find(request)
-  
+      const existingRequest = await AdminModel.find(request);
       const updatedAdmin = await AdminModel.findByIdAndUpdate(
         adminId,
         { $push: { request: request } },
         { new: true }
       ); 
 
-      return updatedAdmin
-  
-    } else {
+      return updatedAdmin;
+   
 
-      for(let x of admin?.request) { 
-          if(x.clientId === clientId) {
-                throw new Error('Request already send');
-         }  }
+  }
+
+
+  async profileVerification(clientId: any, data: any): Promise<any> {
+ 
+    const adminId = process.env.ADMIN_OBJECT_ID;   
+    const existingClient: any = await ClientModel.findById(clientId);
+ 
+    if(existingClient.isEditRequest) {
+      throw new Error('Request already sended');
+    }
 
       const request = {
         type: 'Profile Verification Request',
@@ -304,10 +291,16 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         { $push: { request: request } },
         { new: true }
       ); 
+      
+      const editclientRequest = await ClientModel.findByIdAndUpdate(clientId,
+        {isEditRequest : true },
+        { update : true }
+      );
+
+     
    
       return updatedAdmin;
-    }
- 
+   
   }
 
 
@@ -344,11 +337,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
   }
 
+
   async findAllJobs(): Promise< any> {
     const allJobs = await JobPostModel.find().exec();
 
     console.log('The all jobs ', allJobs);
-
     if(!allJobs) {
       throw new Error('No job found');
     } else {

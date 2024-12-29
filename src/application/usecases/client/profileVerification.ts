@@ -10,9 +10,9 @@ export class ProfileVerification {
 
     async execute(clientId: string, clientData: any) { 
 
-        const { companyName, location, description, totalEmployees, domain, since } = clientData.editData
+        const { companyName, location, description, totalEmployees, since } = clientData;
       
-           if(!companyName || !location || !description || !totalEmployees || !domain || !since) {
+           if(!companyName || !location || !description || !totalEmployees || !since) {
                  throw new Error('All the fields need to be filled')
            }
      
@@ -37,7 +37,7 @@ export class ProfileVerification {
         } 
 
         const verify = await this.clientRepository.profileVerification(clientId, clientData);
-        
+
         return verify;
     }
 
