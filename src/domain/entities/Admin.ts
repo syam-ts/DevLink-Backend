@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Post } from '../entities/Post'
+import { Post } from './JobPost'
 
 export interface Admin extends mongoose.Document{ 
     name: string;
@@ -13,7 +13,7 @@ export interface Admin extends mongoose.Document{
 }
 
 //Admin Schema
-const AdminSchema: mongoose.Schema = new mongoose.Schema({
+export const AdminSchema: mongoose.Schema = new mongoose.Schema({
     name: { type: String, required: false },
     password: { type: String, required: false },
     request: [{

@@ -1,100 +1,16 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
-import { Client } from '../../entities/Client';
+import { Client, ClientModel } from '../../entities/Client';
 import { User } from '../../entities/User';
 import { ClientRepositary } from '../../../application/usecases/client/signupClient';
-import { UserModel } from '../../entities/User'
-import { Notification } from '../../entities/Notification'
+import { UserModel } from '../../entities/User' 
 import { NotificationModel } from '../../entities/Notification'
-import { Post } from '../../entities/Post'
-import { Admin } from '../../entities/Admin';
-import { AdminRepositary } from '../../../application/usecases/admin/loginAdmin';
-import { AdminModel } from '../Repositaries/AdminRepository'
+import { JobPostModel } from '../../entities/JobPost' 
+import { AdminModel } from '../../entities/Admin'
 import bcrypt from 'bcrypt';
 import validator from 'validator';
 
 
-interface ClientDocument extends Document {
-  name: string;
-  password?: string;
-  email: string;
-  companyName?: string;
-  description?: string;
-  location?: string;
-  totalEmployees: number,
-  domain?: string;
-  since?: number,
-  totalJobs?: number
-  isVerified?: boolean,
-  isGoogle?: boolean
-};
-
-const ClientSchema = new Schema<ClientDocument>({
-  name: { type: String, required: true },
-  password: { type: String, required: false },
-  email: { type: String, required: true, unique: true },
-  location: { type: String, required: false },
-  companyName: { type: String, required: false },
-  description: { type: String, required: false },
-  totalEmployees: { type: Number, required: false },
-  domain: { type: String, required: false },
-  since: { type: Number, required: false },
-  totalJobs: { type: Number, required: false },
-  isVerified: { type: Boolean, required: false },
-  isGoogle: { type: Boolean, required: false }
-});
-
-export const ClientModel: Model<ClientDocument> = mongoose.model<ClientDocument>('Client', ClientSchema);
-
-
-interface JobPostDocument extends Document {
-  title: string;
-  description: string;
-  keyResponsiblities: [string],
-  requiredSkills: [string],
-  paymentType: 'hourly' | 'fixed',
-  ifFixed?: {
-    is: boolean,
-    amount: number
-  };
-  ifHourly?: {
-    is: boolean,
-    amount: number
-  };
-  estimateTime: Date;
-  status: 'on progress' | 'finished';
-  payment: boolean;
-  jobProposals?: mongoose.Types.ObjectId;
-};
-
-const JobPostSchema = new Schema<JobPostDocument>({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  keyResponsiblities: { type: [String], required: true },
-  requiredSkills: { type: [String], required: true },
-  paymentType: { type: String, required: true },
-  ifFixed: { type: String, required: false },
-  ifHourly: { type: String, required: false },
-  estimateTime: { type: Date, required: false },
-  status: { type: String, required: true },
-  payment: { type: Boolean, required: true },
-});
-
-export const JobPostModel: Model<JobPostDocument> = mongoose.model<JobPostDocument>('JobPost', JobPostSchema);
-
-
-//user
-interface UserDocument extends Document {
-  name: string;
-  email: string;
-  password: string;
-}
-
-const UserSchema = new Schema<UserDocument>({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: false }
-});
-
+  
 
 
 
@@ -235,7 +151,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
 
 
-    const isValidPassword = await bcrypt.compare(password, client.password);
+    const isValidPassword = await bcrypt.compare(password, client.password as string);
 
     if (!isValidPassword) {
       throw new Error('wrong password')
