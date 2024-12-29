@@ -17,11 +17,13 @@ clientRouter.post('/verify-email',clientController.verifyEmail);
 clientRouter.post('/resetPassword/:clientId',clientController.resetPassword);
 clientRouter.post('/googleLogin', clientController.googleLogin);
 clientRouter.post('/logout', clientAuth, clientController.logoutClient);
+
+
 clientRouter.put('/profile/edit/:clientId', clientController.editProfile);
 clientRouter.post('/profile/verification/:clientId', clientController.profileVerification);
 
 
-clientRouter.post('/createJobPost', clientController.postJob);
+clientRouter.post('/createJobPost', clientController.createJobPost);
 
 
 clientRouter.put('/profile/edit/:clientId', clientController.editProfile);

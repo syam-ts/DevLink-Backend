@@ -166,25 +166,22 @@ const listAllJobsUseCase = new ListAllJobs(ClientRepository);
          },
 
          profileVerification: async (req: any, res: any) => {
+
             try{
-  
-
-
                 const { clientId } = req.params; 
-                 const response = await profileVerificationUseCase.execute(clientId, req.body)
-                 res.json({message: 'successfully sended', type:'successs'})
+                 const response = await profileVerificationUseCase.execute(clientId, req.body); 
 
+                 res.json({message: 'successfully sended', type:'successs'});
             }catch(err: any) {
                 res.json({ message: err.message, type: 'error'});
             }
          },
 
          editProfile: async (req: any, res: any) => {
-            try{ 
-                
+
+            try{     
                 const { clientId } = req.params;
                 const editClient = await editClientProfileUseCase.execute(clientId, req.body);
-
                
                 res.json({ message: 'successfully edited', type: 'success'});
             }catch(err: any) {
@@ -194,8 +191,8 @@ const listAllJobsUseCase = new ListAllJobs(ClientRepository);
 
  
          logoutClient: async (req: any, res: any) => {
-             try{
-                
+
+             try{    
                  res.clearCookie("jwtC", { path: '/'}); 
                 res.json({message: 'successfully loggedout', type: 'success'});
  
@@ -205,15 +202,13 @@ const listAllJobsUseCase = new ListAllJobs(ClientRepository);
          },
 
  
-         postJob: async (req: any, res: any) => {
-             try{
-                
-                console.log('The body', req.body);
+         createJobPost: async (req: any, res: any) => {
+
+             try{     
                 const jobPost = await createJobPostUseCase.execute(req.body);
                 console.log('Final conrtoller jobpost', jobPost)
 
-                res.json({message: 'successfully loggedout', type: 'success'});
- 
+                res.json({message: 'Created Job Post', success: true});
              }catch(err: any) {
                  res.json({message: err.message, type: 'error'})
              }

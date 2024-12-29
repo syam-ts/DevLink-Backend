@@ -282,6 +282,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         { $push: { request: request } },
         { new: true }
       ); 
+
+      return updatedAdmin
   
     } else {
 
@@ -303,7 +305,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         { new: true }
       ); 
    
-      return null;
+      return updatedAdmin;
     }
  
   }
