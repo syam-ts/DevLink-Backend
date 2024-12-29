@@ -8,6 +8,7 @@ import { UnBlockUser } from '../../../application/usecases/admin/unBlockUser'
 import { Create } from '../../../application/usecases/admin/create'
 import { VerifyAccept } from '../../../application/usecases/admin/verifyAccept'
 import { GetAllRequests } from '../../../application/usecases/admin/getAllRequests'
+import { GetRequestedClient } from '../../../application/usecases/admin/getRequestedClient'
 
 
 const adminRepositary = new AdminRepository();
@@ -19,6 +20,7 @@ const blockUserUseCase = new BlockUser(adminRepositary);
 const unBlockUserUseCase = new UnBlockUser(adminRepositary);
 const verifyAcceptUseCase = new VerifyAccept(adminRepositary);
 const getAllRequestsUseCase = new GetAllRequests(adminRepositary);
+const getRequestedClientUseCase = new GetRequestedClient(adminRepositary);
 // const create = new Create(adminRepositary);
 
 
@@ -173,6 +175,19 @@ export const adminController = {
                   res.json({ message: 'Successfully loaded all requests ',data: response, type: 'success'});
             }catch(err: any) {
                 res.json({ message: err.message, type: 'error'})
+            }
+        },
+        
+
+        getRequestedClient: async (req: any, res: any) => {
+            try{
+                const { clientId } = req.params;
+                console.log('para', req.params)
+                  const response = await getRequestedClientUseCase.execute(clientId); 
+
+                  res.json({ message: 'Successfully loaded all requests ',data: response, success: true});
+            }catch(err: any) {
+                res.json({ message: err.message, success: false })
             }
         },
 

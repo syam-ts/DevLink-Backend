@@ -233,45 +233,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return client;
   }
 
-
-
-  
-  async editClientProfile(clientId: string, editData: any): Promise<any> {
-
-    const adminId = process.env.ADMIN_OBJECT_ID;  
-    const admin: any = await AdminModel.findById(adminId);
-    
-    const existingClient: any = await ClientModel.findById(clientId);
-
-    
-
-      for(let x of admin?.request) { 
-        if(x.clientId === clientId) {
-              throw new Error('Request already send');
-           }}
-
-      const request = {
-        type: 'Profile Updation Request',
-        clientId: clientId,
-        status: 'pending',
-        data: editData
-      }
-
-      const existingRequest = await AdminModel.find(request);
-      const updatedAdmin = await AdminModel.findByIdAndUpdate(
-        adminId,
-        { $push: { request: request } },
-        { new: true }
-      ); 
-
-      return updatedAdmin;
-   
-
-  }
-
+ 
 
   async profileVerification(clientId: any, data: any): Promise<any> {
- 
     const adminId = process.env.ADMIN_OBJECT_ID;   
     const existingClient: any = await ClientModel.findById(clientId);
  
@@ -297,10 +261,37 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         { update : true }
       );
 
-     
-   
       return updatedAdmin;
-   
+  }
+
+  async editClientProfile(clientId: string, editData: any): Promise<any> {
+
+    const adminId = process.env.ADMIN_OBJECT_ID;   
+    const existingClient: any = await ClientModel.findById(clientId);
+    
+    if(existingClient.isEditRequest) {
+      throw new Error('Request already sended');
+    }
+ 
+      const request = {
+        type: 'Profile Updation Request',
+        clientId: clientId,
+        status: 'pending',
+        data: editData
+      }
+ 
+      const updatedAdmin = await AdminModel.findByIdAndUpdate(
+        adminId,
+        { $push: { request: request } },
+        { new: true }
+      ); 
+      
+      const editclientRequest = await ClientModel.findByIdAndUpdate(clientId,
+        {isEditRequest : true },
+        { update : true }
+      );
+
+      return updatedAdmin;
   }
 
 

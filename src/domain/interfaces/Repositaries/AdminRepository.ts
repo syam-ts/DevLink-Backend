@@ -136,6 +136,18 @@ export class AdminRepository implements AdminRepositary {
     }
     return admin.request;
     }
+
+
+  async findClient(clientId: any): Promise<any> {
+
+    
+    const client: any = await ClientModel.findById(clientId).exec();
+
+    if (!client) {
+      throw new Error('Client not found')
+    }
+    return client;
+    }
   }
 
 

@@ -35,14 +35,12 @@ export class EditClientProfile {
 
        
       if(since) {
-        if(since < 1950 || since > 2024 ) {
-            console.log("The date : ", since)
+        if(since < 1950 || since > 2024 ) { 
             throw new Error("Date need to be valid", )
         } 
       }
         
         const client = await this.clientRepository.editClientProfile(clientId, clientData);
-
-        console.log('The result from usecase', client)
+ 
     }
 }
