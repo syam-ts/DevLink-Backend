@@ -296,6 +296,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async createJobPost(jobPost: any): Promise<any> {
+    console.log("The finalche", jobPost)
 
     const createdJobPost = new JobPostModel({
       title: jobPost.title,
@@ -304,8 +305,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       requiredSkills: jobPost.requiredSkills,
       paymentType: jobPost.paymentType,
       estimateTime: jobPost.date,
-      status: jobPost.status,
-      payment: jobPost.payment,
+      status: "pending",
+      payment: false,
     });
 
     const savedJobPost = await createdJobPost.save();
@@ -313,7 +314,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return {
       name: savedJobPost.title,
       email: savedJobPost.description,
-      password: savedJobPost.payment
+      payment: savedJobPost.payment
     };
   }
 

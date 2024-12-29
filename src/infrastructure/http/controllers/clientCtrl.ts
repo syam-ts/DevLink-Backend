@@ -205,6 +205,7 @@ const listAllJobsUseCase = new ListAllJobs(ClientRepository);
          createJobPost: async (req: any, res: any) => {
 
              try{     
+                console.log('The body : ', req.body)
                 const jobPost = await createJobPostUseCase.execute(req.body);
                 console.log('Final conrtoller jobpost', jobPost)
 
