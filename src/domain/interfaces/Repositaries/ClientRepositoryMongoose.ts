@@ -296,26 +296,45 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async createJobPost(jobPost: any): Promise<any> {
-    console.log("The finalche", jobPost)
+ 
 
-    const createdJobPost = new JobPostModel({
-      title: jobPost.title,
-      description: jobPost.description,
-      keyResponsiblities: jobPost.keyResponsiblities,
-      requiredSkills: jobPost.requiredSkills,
-      paymentType: jobPost.paymentType,
-      estimateTime: jobPost.date,
-      status: "pending",
-      payment: false,
-    });
+    if(jobPost.paymentType === 'hourly') {
 
-    const savedJobPost = await createdJobPost.save();
+      const minWorkingHours: number = jobPost.estimateTime * 8;
+      const finalDate: number = (jobPost.estimateTime * 24 ) - minWorkingHours;
 
-    return {
-      name: savedJobPost.title,
-      email: savedJobPost.description,
-      payment: savedJobPost.payment
-    };
+      const totalAmount = finalDate * jobPost.amount;
+
+      jobPost.amount = totalAmount; //updatig the total amount
+      
+      return jobPost; 
+
+
+    } else {
+      
+      return jobPost; 
+
+
+    }
+
+    // const createdJobPost = new JobPostModel({
+    //   title: jobPost.title,
+    //   description: jobPost.description,
+    //   keyResponsiblities: jobPost.keyResponsiblities,
+    //   requiredSkills: jobPost.requiredSkills,
+    //   paymentType: jobPost.paymentType,
+    //   estimateTime: jobPost.estimateTime,
+    //   status: "pending",
+    //   payment: false,
+    // });
+
+    // const savedJobPost = await createdJobPost.save();
+
+    // return {
+    //   name: savedJobPost.title,
+    //   email: savedJobPost.description,
+    //   payment: savedJobPost.payment
+    // };
   }
 
 

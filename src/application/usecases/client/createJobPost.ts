@@ -8,10 +8,9 @@ export interface ClientRepository {
 export class CreateJobPost {
     constructor( private clientRepository: ClientRepository) {};
 
-    async execute(postData: any) {
+    async execute(postData: any) { 
 
-        
-          const client = await this.clientRepository.createJobPost(postData);
-          return client;
+          const jobPost = await this.clientRepository.createJobPost(postData);
+          return jobPost;
     }
 }

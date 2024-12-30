@@ -20,6 +20,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.4",
     "nodemailer": "^6.9.16",
+    "stripe": "^17.5.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
     "validator": "^13.12.0"

@@ -13,6 +13,7 @@ import { ProfileVerification } from '../../../application/usecases/client/profil
 import { CreateJobPost } from '../../../application/usecases/client/createJobPost';
 import { GetAllNotifications } from '../../../application/usecases/client/getAllNotifications';
 import { ListAllJobs } from '../../../application/usecases/client/listAllJobs';
+import { MakePayment } from '../../../application/usecases/client/makePayment';
 
 
 const ClientRepository = new ClientRepositoryMongoose();
@@ -30,6 +31,7 @@ const profileVerificationUseCase = new ProfileVerification(ClientRepository);
 const createJobPostUseCase = new CreateJobPost(ClientRepository);
 const getAllNotificationsUseCase = new GetAllNotifications(ClientRepository);
 const listAllJobsUseCase = new ListAllJobs(ClientRepository);
+const makePaymentUseCase = new MakePayment();
  
 
  
@@ -204,12 +206,11 @@ const listAllJobsUseCase = new ListAllJobs(ClientRepository);
  
          createJobPost: async (req: any, res: any) => {
 
-             try{     
-                console.log('The body : ', req.body)
+             try{      
                 const jobPost = await createJobPostUseCase.execute(req.body);
-                console.log('Final conrtoller jobpost', jobPost)
+    
 
-                res.json({message: 'Created Job Post', success: true});
+                res.json({message: 'Redirecting to payment page',data: jobPost, success: true});
              }catch(err: any) {
                  res.json({message: err.message, type: 'error'})
              }
@@ -242,6 +243,20 @@ const listAllJobsUseCase = new ListAllJobs(ClientRepository);
                  res.json({message: err.message, success: false})
              }
          },
+
+         
+         makePayment: async (req: any, res: any) => {
+             try{
+                 
+                const response = await makePaymentUseCase.execute(req.body); 
+
+                res.json({message: 'successfully list all notifications',data: response, success: true}); 
+             }catch(err: any) {
+                 res.json({message: err.message, success: false})
+             }
+         },
+
+
  
          
      }
