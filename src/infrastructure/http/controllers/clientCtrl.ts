@@ -14,6 +14,7 @@ import { CreateJobPost } from '../../../application/usecases/client/createJobPos
 import { GetAllNotifications } from '../../../application/usecases/client/getAllNotifications';
 import { ListAllJobs } from '../../../application/usecases/client/listAllJobs';
 import { MakePayment } from '../../../application/usecases/client/makePayment';
+import { GetUserProfile } from '../../../application/usecases/client/getUserProfile';
 
 
 const ClientRepository = new ClientRepositoryMongoose();
@@ -32,6 +33,7 @@ const createJobPostUseCase = new CreateJobPost(ClientRepository);
 const getAllNotificationsUseCase = new GetAllNotifications(ClientRepository);
 const listAllJobsUseCase = new ListAllJobs(ClientRepository);
 const makePaymentUseCase = new MakePayment();
+const getUserProfileUseCase = new GetUserProfile(ClientRepository);
  
 
  
@@ -249,6 +251,21 @@ const makePaymentUseCase = new MakePayment();
              try{
                  
                 const response = await makePaymentUseCase.execute(req.body); 
+                
+                res.status(200).json({ response }); 
+             }catch(err: any) {
+                 res.json({message: err.message, success: false})
+             }
+         },
+
+
+ 
+         getUserProfile: async (req: any, res: any) => {
+             try{
+                 
+                const { userId } = req.params;
+
+                const response = await getUserProfileUseCase.execute(userId); 
                 
                 res.status(200).json({ response }); 
              }catch(err: any) {

@@ -361,4 +361,16 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
 
+  async getUserProfile(userId: string): Promise< any> {
+    const userProfile = await UserModel.findById(userId).exec();
+
+    
+    if(!userProfile) {
+      throw new Error('User not found');
+    } else {
+      return userProfile;
+    }
+  }
+
+
 }

@@ -8,6 +8,7 @@ clientRouter.get('/getHome', clientAuth, clientController.getHomeClient);
 clientRouter.get('/profile/view/:clientId', clientController.getProfile);
 clientRouter.get('/profile/notifications/:clientId', clientController.getAllNotifications);
 clientRouter.get('/listAllJobs',clientController.listAllJobs);
+clientRouter.get('/userProfile/view/:userId', clientController.getUserProfile);
  
 clientRouter.post('/signup', clientController.signupClient);
 clientRouter.post('/verify-otp', clientController.verifyOtp);
@@ -28,5 +29,6 @@ clientRouter.post('/createJobPost', clientController.createJobPost);
 
 
 clientRouter.put('/profile/edit/:clientId', clientController.editProfile);
+
 
 export default clientRouter;
