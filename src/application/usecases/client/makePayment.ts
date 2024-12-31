@@ -9,16 +9,39 @@ export class MakePayment {
     async execute(data: any) {
        
         const { amount } = data;
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount: amount * 100,
-            currency: 'inr',
-            payment_method_types: ['card']
-        });
 
-        return({
-            clientSecret: paymentIntent.client_secret
+
+     const product = await stripe.products.create({
+         name: 'Job-Post'
+     })
+
+
+     if(product) {}
+        const price = await stripe.prices.create({
+            product: `${product.id}`,
+            unit_amount: 300 * 100,
+            currency: 'inr'
         })
-        
+
+
+        if(price.id) {
+           var session = await stripe.checkout.sessions.create({
+              line_items: [
+                {
+                    price: `${price.id}`,
+                    quantity: 1
+                }
+              ],
+              mode: 'payment',
+              success_url: 'http://localhost:5173/client/draftJobPost/payment-success',
+              cancel_url: 'http://localhost:5173/client/draftJobPost/payment-failure',
+              customer_email: 'samplemail@gmai.com'
+
+
+           })
+           return session;
+        }
+
 
     }
 }

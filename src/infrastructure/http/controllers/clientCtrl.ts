@@ -249,8 +249,8 @@ const makePaymentUseCase = new MakePayment();
              try{
                  
                 const response = await makePaymentUseCase.execute(req.body); 
-
-                res.json({message: 'successfully list all notifications',data: response, success: true}); 
+                
+                res.status(200).json({ response }); 
              }catch(err: any) {
                  res.json({message: err.message, success: false})
              }
