@@ -1,8 +1,8 @@
 import express from 'express';
+const clientRouter = express.Router();
 import { clientController } from '../controllers/clientCtrl';
 import { clientAuth } from '../middlewares/auth/authClient';
 
-const clientRouter = express.Router();
 
 clientRouter.get('/getHome', clientAuth, clientController.getHomeClient);
 clientRouter.get('/profile/view/:clientId', clientController.getProfile);
@@ -19,12 +19,9 @@ clientRouter.post('/resetPassword/:clientId',clientController.resetPassword);
 clientRouter.post('/googleLogin', clientController.googleLogin);
 clientRouter.post('/logout', clientAuth, clientController.logoutClient);
 
-
 clientRouter.post('/profile/edit/:clientId', clientController.editProfile);
 clientRouter.post('/profile/verification/:clientId', clientController.profileVerification);
-
 clientRouter.post('/jobPost/payment-stripe', clientController.makePayment)
-
 clientRouter.post('/createJobPost', clientController.createJobPost);
 
 

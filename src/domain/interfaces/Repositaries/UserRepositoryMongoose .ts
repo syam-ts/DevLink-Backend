@@ -2,6 +2,7 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 import { User } from '../../entities/User'; 
 import { UserModel } from '../../entities/User'
 import { Client, ClientModel } from '../../entities/Client';
+import { JobPostModel } from '../../entities/JobPost' 
 import { UserRepositary } from '../../../application/usecases/user/signupUser';  
 import bcrypt from 'bcrypt';
 import validator from 'validator'; 
@@ -237,5 +238,19 @@ export class UserRepositoryMongoose implements UserRepositary {
         if(!user) throw new Error('User not found');
         return { user }
      }
+
+
+
+     
+       async findAllJobs(): Promise< any> {
+         const allJobs = await JobPostModel.find().exec();
+     
+         console.log('The all jobs ', allJobs);
+         if(!allJobs) {
+           throw new Error('No job found');
+         } else {
+           return allJobs;
+         }
+       }
   }
 

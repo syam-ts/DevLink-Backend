@@ -297,17 +297,38 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async createJobPost(jobPost: any): Promise<any> {
  
+    console.log("The body ", jobPost)
 
-    if(jobPost.paymentType === 'hourly') {
+    if(jobPost.formData.paymentType === 'hourly') {
 
       const minWorkingHours: number = jobPost.estimateTime * 8;
       const finalDate: number = (jobPost.estimateTime * 24 ) - minWorkingHours;
 
-      const totalAmount = finalDate * jobPost.amount;
+      const totalAmount = finalDate * jobPost.payment;
 
-      jobPost.amount = totalAmount; //updatig the total amount
+      // jobPost.amount = totalAmount; //updatig the total amount
+      console.log('The body ', jobPost)
       
-      return jobPost; 
+      
+    const createdJobPost = new JobPostModel({
+      title: jobPost.formData.title,
+      description: jobPost.formData.description,
+      keyResponsiblities: jobPost.formData.keyResponsiblities,
+      requiredSkills: jobPost.formData.requiredSkills,
+      paymentType: jobPost.formData.paymentType,
+      estimateTime: jobPost.formData.estimateTime,
+      amount: jobPost.formData.payment,
+      status: "pending",
+      isPayment: true,
+    });
+
+    const savedJobPost = await createdJobPost.save();
+    
+
+    return {
+      name: savedJobPost.title,
+      email: savedJobPost.description
+    };
 
 
     } else {
@@ -317,24 +338,6 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
     }
 
-    // const createdJobPost = new JobPostModel({
-    //   title: jobPost.title,
-    //   description: jobPost.description,
-    //   keyResponsiblities: jobPost.keyResponsiblities,
-    //   requiredSkills: jobPost.requiredSkills,
-    //   paymentType: jobPost.paymentType,
-    //   estimateTime: jobPost.estimateTime,
-    //   status: "pending",
-    //   payment: false,
-    // });
-
-    // const savedJobPost = await createdJobPost.save();
-
-    // return {
-    //   name: savedJobPost.title,
-    //   email: savedJobPost.description,
-    //   payment: savedJobPost.payment
-    // };
   }
 
 

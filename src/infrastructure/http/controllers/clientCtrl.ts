@@ -32,7 +32,7 @@ const profileVerificationUseCase = new ProfileVerification(ClientRepository);
 const createJobPostUseCase = new CreateJobPost(ClientRepository);
 const getAllNotificationsUseCase = new GetAllNotifications(ClientRepository);
 const listAllJobsUseCase = new ListAllJobs(ClientRepository);
-const makePaymentUseCase = new MakePayment();
+const makePaymentUseCase = new MakePayment(ClientRepository);
 const getUserProfileUseCase = new GetUserProfile(ClientRepository);
  
 

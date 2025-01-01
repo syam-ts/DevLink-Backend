@@ -9,6 +9,7 @@ import { ResetPassword } from "../../../application/usecases/user/resetPassword"
 import { UserRepositoryMongoose } from "../../../domain/interfaces/Repositaries/UserRepositoryMongoose ";
 import { EditUserProfile } from "../../../application/usecases/user/editProfile";
 import { GetUserProfile } from "../../../application/usecases/user/getProfile";
+import { ListAllJobs } from "../../../application/usecases/user/listAllJobs";
 
 const userRepository = new UserRepositoryMongoose();
 const signupUseCase = new SignupUser(userRepository);
@@ -21,6 +22,7 @@ const verifyUserUseCase = new verifyOtp(userRepository);
 const GoogleLoginUserUseCase = new GoogleLoginUser(userRepository);
 const editProfileUseCase = new EditUserProfile(userRepository);
 const getProfileUseCase = new GetUserProfile(userRepository);
+const listAllJobsUseCase = new ListAllJobs(userRepository);
 
 export const userController = {
 
@@ -193,6 +195,19 @@ export const userController = {
             res.json({ message: "successfully loggedout", type: "success" });
         } catch (err: any) {
             res.json({ message: err.message, type: "error" });
+        }
+    },
+
+
+    
+    listAllJobs: async (req: any, res: any) => {
+        try{
+            
+           const response = await listAllJobsUseCase.execute(); 
+
+           res.json({message: 'successfully list all notifications',data: response, success: true}); 
+        }catch(err: any) {
+            res.json({message: err.message, success: false})
         }
     },
 };

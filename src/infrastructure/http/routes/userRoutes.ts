@@ -1,11 +1,12 @@
 import express from 'express';
+const userRouter = express.Router();
 import { userController } from '../controllers/userCtrl'
 import { userAuth } from '../middlewares/auth/authUser'
 
-const userRouter = express.Router();
 
 userRouter.get('/getHome', userAuth, userController.getHomeUser);
 userRouter.get('/profile/view/:userId', userController.getProfile);
+userRouter.get('/listAllJobs',userController.listAllJobs);
  
  
 userRouter.post('/signup', userController.signupUser);

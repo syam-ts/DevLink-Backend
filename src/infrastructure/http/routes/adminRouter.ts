@@ -1,8 +1,8 @@
 import express from 'express';
+const adminRouter = express.Router();
 import { adminController } from '../controllers/adminCtrl'
 import { adminAuth } from '../middlewares/auth/authAdmin'
 
-const adminRouter = express.Router();
 
 // adminRouter.post('/signup', adminController.signUpAdmin);
   
