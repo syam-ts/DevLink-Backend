@@ -31,8 +31,7 @@ export class ProfileVerification {
         }
 
        
-        if(since < 1950 || since > 2024 ) {
-            console.log("The date : ", since)
+        if(since < 1950 || since > 2024 ) { 
             throw new Error("Date need to be valid", )
         } 
 

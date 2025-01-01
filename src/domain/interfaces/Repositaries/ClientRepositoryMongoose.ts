@@ -268,7 +268,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
     const adminId = process.env.ADMIN_OBJECT_ID;   
     const existingClient: any = await ClientModel.findById(clientId);
-    
+
+     
     if(existingClient.isEditRequest) {
       throw new Error('Request already sended');
     }
@@ -297,7 +298,6 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async createJobPost(jobPost: any): Promise<any> {
  
-    console.log("The body ", jobPost)
 
     if(jobPost.formData.paymentType === 'hourly') {
 
@@ -307,7 +307,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       const totalAmount = finalDate * jobPost.payment;
 
       // jobPost.amount = totalAmount; //updatig the total amount
-      console.log('The body ', jobPost)
+   
       
       
     const createdJobPost = new JobPostModel({
@@ -354,8 +354,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async findAllJobs(): Promise< any> {
     const allJobs = await JobPostModel.find().exec();
-
-    console.log('The all jobs ', allJobs);
+ 
     if(!allJobs) {
       throw new Error('No job found');
     } else {

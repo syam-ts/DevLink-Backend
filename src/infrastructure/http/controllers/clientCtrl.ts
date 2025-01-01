@@ -65,9 +65,7 @@ const getUserProfileUseCase = new GetUserProfile(ClientRepository);
          resendOtp: async(req: any, res: any) => {
             try{
 
-                const client =  await signupUseCase.execute(req.body);
-
-                console.log('new otp ', client)
+                const client =  await signupUseCase.execute(req.body); 
 
                 res.json({ message: 'OTP resend successfully',newOtp: client, type: 'success'});
 
@@ -93,8 +91,7 @@ const getUserProfileUseCase = new GetUserProfile(ClientRepository);
  
             const { clientId } = req.params;
             const { password } = req.body;
-
-            console.log('The toal ', clientId, 'pass', password)
+ 
 
               const response = await resetPasswordUseCase.execute(clientId, password);
  
@@ -121,7 +118,7 @@ const getUserProfileUseCase = new GetUserProfile(ClientRepository);
                          maxAge: 24 * 60 * 60 * 1000
                        }
                      );
-                     console.log("The whole data : ", client)
+                     
                      return res.json({message: "successfully login",client: client, type: 'success'});
                 }
              }catch(err: any) { 
@@ -224,10 +221,7 @@ const getUserProfileUseCase = new GetUserProfile(ClientRepository);
                 
                 const {  clientId }= req.params;
                 const response = await getAllNotificationsUseCase.execute( clientId);
-
-
-                console.log('Final conrtoller jobpost', response)
-
+  
                 res.json({message: 'successfully list all notifications', type: 'success'});
  
              }catch(err: any) {

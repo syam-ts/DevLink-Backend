@@ -10,8 +10,7 @@ export class EditUserProfile {
     constructor(private userRepositary: UserRepositary) {}
 
     async execute(userId: string, editData: any) { 
-           const updatedUser = await this.userRepositary.editUserProfile(userId, editData);
-           console.log('The usepaged user', updatedUser)
+           const updatedUser = await this.userRepositary.editUserProfile(userId, editData); 
            if(!updatedUser) {
             throw new Error('Profile editing failed');
            }

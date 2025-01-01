@@ -48,9 +48,8 @@ export class MakePayment {
 
            })
            const jobPost = await this.clientRepository.createJobPost(data);
-           console.log("Done")
-
-           return session;
+ 
+         return session;
         }
 
 

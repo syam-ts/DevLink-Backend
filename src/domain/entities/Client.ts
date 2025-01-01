@@ -28,7 +28,6 @@ const ClientSchema: mongoose.Schema = new mongoose.Schema({
     description: { type: String, required: false },
     requiredSkills: { type: [String], required: false },
     totalEmployees: { type: Number, required: false },
-    domain: {type: String, required: false},
     since: {type: Number, required: false },
     totalJobs: { type: Number, required: false},
     isVerified: { type: Boolean, required: false},

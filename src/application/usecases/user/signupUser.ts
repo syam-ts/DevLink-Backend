@@ -18,12 +18,9 @@ export class SignupUser {
         if(existingUser) {
             throw new Error('User already exists');
         } else {
-             
-            console.log('the mail', user.email)
+              
             const otp = await sendMail(user.email);
-
-             
-            console.log('the opt',otp)
+ 
 
             return otp;
         }

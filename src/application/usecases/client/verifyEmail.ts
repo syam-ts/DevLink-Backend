@@ -29,8 +29,7 @@ export interface ClientRepositary {
           subject: 'Verified Email for password changing',
           text: `http://localhost:5173/client/resetPassword/${clientId}`,
       });
-  
-      console.log('Veficatio send sent', info.messageId);
+   
        
   } catch (error) {
       console.error('Error sending email:', error);
@@ -41,8 +40,7 @@ export class VerifyEmail {
      constructor(private clientRepositary: ClientRepositary) {}
        
     async execute(email: string) {
-        const foundClient = await this.clientRepositary.findClientByEmail(email);
-        console.log('The founded Client', foundClient)
+        const foundClient = await this.clientRepositary.findClientByEmail(email); 
 
         if(!foundClient) {
             throw new Error('client not founded');

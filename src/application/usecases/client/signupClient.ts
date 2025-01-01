@@ -18,10 +18,8 @@ export class SignupClient {
         if(existingClient) {
             throw new Error('Client already exists');
         } else {
-             
-            console.log('the mail', client.email)
-            const otp = await sendMail(client.email);  
-            console.log('the opt',otp)
+              
+            const otp = await sendMail(client.email);   
 
             return otp;
         } 

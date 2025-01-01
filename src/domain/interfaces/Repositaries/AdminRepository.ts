@@ -106,7 +106,8 @@ export class AdminRepository implements AdminRepositary {
         $pull: {
           request: { clientId: clientId },  
         },
-      })
+      });
+ 
 
         
     const updatedClient: any = await ClientModel.findByIdAndUpdate(clientId, editData, {

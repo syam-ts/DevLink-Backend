@@ -66,8 +66,7 @@ export const adminController = {
 
 
         getDashboard: async (req: any, res: any) => {
-            try{ 
-               console.log('Teh resf token', req.cookies)
+            try{  
                const clientsAndUsers = await getDashboardUseCase.execute();
  
 
@@ -181,8 +180,7 @@ export const adminController = {
 
         getRequestedClient: async (req: any, res: any) => {
             try{
-                const { clientId } = req.params;
-                console.log('para', req.params)
+                const { clientId } = req.params; 
                   const response = await getRequestedClientUseCase.execute(clientId); 
 
                   res.json({ message: 'Successfully loaded all requests ',data: response, success: true});
