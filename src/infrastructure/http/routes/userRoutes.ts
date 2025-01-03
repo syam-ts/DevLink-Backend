@@ -18,6 +18,10 @@ userRouter.post('/resetPassword/:userId', userController.resetPassword);
 userRouter.post('/login', userController.loginUser);
 userRouter.post('/googleLogin', userController.googleLogin);
 userRouter.put('/profile/edit/:userId',MulterMiddlware, userController.editProfile);
+
+userRouter.post('/jobs/createProposal/:userId/:clientId', userController.createProposal);
+
+
 userRouter.post('/logout', userAuth, userController.logoutUser);
 
 export default userRouter;

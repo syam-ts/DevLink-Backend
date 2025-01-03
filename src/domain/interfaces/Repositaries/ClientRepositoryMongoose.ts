@@ -74,13 +74,25 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   async verifyOtp(client: any): Promise<Client> {
 
 
-    const { name, email, password } = client.client;
+    const { name, email, password } = client;
 
     if (client.mailOtp === parseInt(client.clientOtp.otp)) {
 
       const salt: number = 10;
       const hashedPassword = await bcrypt.hash(password, salt);
 
+      let wallet = {
+        balance: {type: ""}, 
+        transactions: [
+            {
+                type: "",
+                amount: "",
+                from: "",
+                fromId: "",
+                date: ""
+            }
+        ]
+    }
 
       const createdClient = new ClientModel({
         name: name,
@@ -94,7 +106,12 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         since: '',
         totalJobs: '',
         isVerified: false,
-        isGoogle: false
+        isGoogle: false,
+        request: [{
+                    type: "string",
+                    UserId: "mongoose.Types.ObjectId",
+                    description: "string"
+                }]
       });
 
       const savedClient = await createdClient.save();

@@ -15,7 +15,24 @@ export interface Client extends mongoose.Document{
     totalJobs?: number,
     isVerified:boolean,
     isEditRequest: boolean,
-    isGoogle?: boolean
+    isGoogle?: boolean,
+      request: [{
+            type: string,
+            UserId: mongoose.Types.ObjectId,
+            description?: string
+        }],
+        wallet: {
+            balance: {type: Number, required: false}, 
+            transactions: [
+                {
+                    type: String,
+                    amount: Number,
+                    from: String,
+                    fromId: mongoose.Types.ObjectId,
+                    date: Date
+                }
+            ]
+        }
 }
 
 //Client Schema
@@ -32,7 +49,26 @@ const ClientSchema: mongoose.Schema = new mongoose.Schema({
     totalJobs: { type: Number, required: false},
     isVerified: { type: Boolean, required: false},
     isEditRequest: { type: Boolean, required: false},
-    isGoogle: { type: Boolean, required: false}
+    isGoogle: { type: Boolean, required: false},
+    request: [
+              {
+            type: {type: String, required: false},
+            userId: {type: mongoose.Types.ObjectId, required: false}, 
+            description: { type: String, required: false }
+             }
+        ],
+        wallet: {
+            balance: {type: Number, required: false}, 
+            transactions: [
+                {
+                    type: String,
+                    amount: Number,
+                    from: String,
+                    fromId: mongoose.Types.ObjectId,
+                    date: Date
+                }
+            ]
+        }
    
 });
 

@@ -53,6 +53,7 @@ const getUserProfileUseCase = new GetUserProfile(ClientRepository);
  
          verifyOtp : async (req: any, res: any ) => {
            try{ 
+            console.log('The body ', req.body)
 
              const client = await verifyClientUseCase.execute(req.body); 
                  res.json({message: 'OTP verified successfully', type: 'success'})

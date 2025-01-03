@@ -10,6 +10,7 @@ import { UserRepositoryMongoose } from "../../../domain/interfaces/Repositaries/
 import { EditUserProfile } from "../../../application/usecases/user/editProfile";
 import { GetUserProfile } from "../../../application/usecases/user/getProfile";
 import { ListAllJobs } from "../../../application/usecases/user/listAllJobs";
+import { CreateProposal } from "../../../application/usecases/user/createProposal";
 
 const userRepository = new UserRepositoryMongoose();
 const signupUseCase = new SignupUser(userRepository);
@@ -23,6 +24,7 @@ const GoogleLoginUserUseCase = new GoogleLoginUser(userRepository);
 const editProfileUseCase = new EditUserProfile(userRepository);
 const getProfileUseCase = new GetUserProfile(userRepository);
 const listAllJobsUseCase = new ListAllJobs(userRepository);
+const createProposalUseCase = new CreateProposal(userRepository);
 
 export const userController = {
 
@@ -204,6 +206,20 @@ export const userController = {
         try{
             
            const response = await listAllJobsUseCase.execute(); 
+
+           res.json({message: 'successfully list all notifications',data: response, success: true}); 
+        }catch(err: any) {
+            res.json({message: err.message, success: false})
+        }
+    },
+
+    
+    createProposal: async (req: any, res: any) => {
+        try{
+            const {userId, clientId}= req.params;
+            const { description }= req.body;
+            
+           const response = await createProposalUseCase.execute(userId, clientId, description); 
 
            res.json({message: 'successfully list all notifications',data: response, success: true}); 
         }catch(err: any) {
