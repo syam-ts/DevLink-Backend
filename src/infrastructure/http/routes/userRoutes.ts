@@ -8,6 +8,9 @@ import MulterMiddlware from '../middlewares/multer/multerMiddleware' //Pending
 userRouter.get('/getHome', userAuth, userController.getHomeUser);
 userRouter.get('/profile/view/:userId', userController.getProfile);
 userRouter.get('/listAllJobs',userController.listAllJobs);
+
+
+// userRouter.get('/jobs/proposals/:clientId',userController.getAllProposals);
  
  
 userRouter.post('/signup', userController.signupUser);

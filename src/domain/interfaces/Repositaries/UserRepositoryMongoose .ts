@@ -251,13 +251,10 @@ export class UserRepositoryMongoose implements UserRepositary {
 
      
        async createProposal( clientId: string, userId: string, description: string): Promise< any> {
-
-        console.log('The userid from repo : ', userId, 'Client: ', clientId, 'description : ', description);
-         
-
+ 
          const request = {
                  type: 'New Job Proposal ',
-                 userId: clientId,
+                 userId: userId,
                  description: description 
                }
               //  const proposal = await ClientModel.findById(clientId)
@@ -268,7 +265,7 @@ export class UserRepositoryMongoose implements UserRepositary {
                  { new: true }
                ); 
                
-               console.log('The proposal : ', proposal)
+             
       
         //  if(!allJobs) {
         //    throw new Error('No job found');
