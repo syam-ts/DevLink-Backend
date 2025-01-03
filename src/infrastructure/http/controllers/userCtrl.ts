@@ -216,10 +216,12 @@ export const userController = {
     
     createProposal: async (req: any, res: any) => {
         try{
+            
             const {userId, clientId}= req.params;
             const { description }= req.body;
+            console.log('The user : ', req.params)
             
-           const response = await createProposalUseCase.execute(userId, clientId, description); 
+           const response = await createProposalUseCase.execute(clientId, userId, description); 
 
            res.json({message: 'successfully list all notifications',data: response, success: true}); 
         }catch(err: any) {

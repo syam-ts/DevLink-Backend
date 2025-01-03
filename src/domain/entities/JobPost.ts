@@ -3,6 +3,7 @@ import mongoose, { Schema , Model} from 'mongoose';
 
 interface JobPostDocument extends Document {
     title: string;
+    clientId: mongoose.Types.ObjectId;
     description: string;
     keyResponsiblities: [string],
     requiredSkills: [string],
@@ -16,6 +17,7 @@ interface JobPostDocument extends Document {
   
   const JobPostSchema = new Schema<JobPostDocument>({
     title: { type: String, required: true },
+    clientId: {type: mongoose.Types.ObjectId, required: true},
     description: { type: String, required: true },
     keyResponsiblities: { type: [String], required: true },
     requiredSkills: { type: [String], required: true },

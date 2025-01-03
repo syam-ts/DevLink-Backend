@@ -171,6 +171,7 @@ const getUserProfileUseCase = new GetUserProfile(ClientRepository);
             try{ 
 
                 const { clientId } = req.params; 
+                
                  const response = await profileVerificationUseCase.execute(clientId, req.body); 
 
                  res.json({message: 'successfully sended', success: true });
@@ -207,7 +208,9 @@ const getUserProfileUseCase = new GetUserProfile(ClientRepository);
          createJobPost: async (req: any, res: any) => {
 
              try{      
-                const jobPost = await createJobPostUseCase.execute(req.body);
+                const { clientId } = req.params;
+                console.log('The path', clientId)
+                const jobPost = await createJobPostUseCase.execute(clientId, req.body);
     
 
                 res.json({message: 'Redirecting to payment page',data: jobPost, success: true});
@@ -244,8 +247,8 @@ const getUserProfileUseCase = new GetUserProfile(ClientRepository);
          
          makePayment: async (req: any, res: any) => {
              try{
-                 
-                const response = await makePaymentUseCase.execute(req.body); 
+                 const { clientId } = req.params; 
+                const response = await makePaymentUseCase.execute(clientId, req.body); 
                 
                 res.status(200).json({ response }); 
              }catch(err: any) {

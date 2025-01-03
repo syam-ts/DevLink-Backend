@@ -74,7 +74,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   async verifyOtp(client: any): Promise<Client> {
 
 
-    const { name, email, password } = client;
+    const { name, email, password } = client.client;
 
     if (client.mailOtp === parseInt(client.clientOtp.otp)) {
 
@@ -313,7 +313,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
 
-  async createJobPost(jobPost: any): Promise<any> {
+  async createJobPost(clientId: string, jobPost: any): Promise<any> {
+    
  
 
     if(jobPost.formData.paymentType === 'hourly') {
@@ -329,6 +330,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       
     const createdJobPost = new JobPostModel({
       title: jobPost.formData.title,
+      clientId: clientId,
       description: jobPost.formData.description,
       keyResponsiblities: jobPost.formData.keyResponsiblities,
       requiredSkills: jobPost.formData.requiredSkills,

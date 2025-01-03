@@ -1,16 +1,16 @@
 
 
 export interface ClientRepository {
-    createJobPost(postData: any): Promise <any>
+    createJobPost(clientId: string,postData: any): Promise <any>
 };
 
 
 export class CreateJobPost {
     constructor( private clientRepository: ClientRepository) {};
 
-    async execute(postData: any) { 
+    async execute(clientId: string, postData: any) { 
 
-          const jobPost = await this.clientRepository.createJobPost(postData);
+          const jobPost = await this.clientRepository.createJobPost(clientId, postData);
           return jobPost;
     }
 }

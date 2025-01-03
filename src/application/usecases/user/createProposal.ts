@@ -9,9 +9,10 @@ export interface UserRepositary {
 export class CreateProposal {
     constructor(private userRepositary: UserRepositary) {}
 
-    async execute(userId: string, clientId: string, description: string) {  
+    async execute(clientId: string, userId: string, description: string) {  
+        console.log('The usecase  : ', clientId, userId)
 
-           const result = await this.userRepositary.createProposal(userId, clientId, description); 
+           const result = await this.userRepositary.createProposal( clientId, userId, description); 
             
 
            return {   };

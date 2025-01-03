@@ -2,7 +2,7 @@ import Stripe from 'stripe';
 
 
 export interface ClientRepository {
-    createJobPost(postData: any): Promise <any>
+    createJobPost(clientId: string, postData: any): Promise <any>
 };
 
 
@@ -11,7 +11,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 export class MakePayment {
      constructor( private clientRepository: ClientRepository) {};
 
-    async execute(data: any) { 
+    async execute(clientId: string,data: any) { 
        
         const minWorkingHours: number = data.formData.estimateTime * 8;
       const finalDate: number = (data.formData.estimateTime * 24 ) - minWorkingHours;
@@ -47,7 +47,7 @@ export class MakePayment {
 
 
            })
-           const jobPost = await this.clientRepository.createJobPost(data);
+           const jobPost = await this.clientRepository.createJobPost(clientId, data);
  
          return session;
         }

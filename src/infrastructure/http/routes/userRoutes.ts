@@ -19,7 +19,7 @@ userRouter.post('/login', userController.loginUser);
 userRouter.post('/googleLogin', userController.googleLogin);
 userRouter.put('/profile/edit/:userId',MulterMiddlware, userController.editProfile);
 
-userRouter.post('/jobs/createProposal/:userId/:clientId', userController.createProposal);
+userRouter.post('/job/createProposal/:clientId/:userId', userController.createProposal);
 
 
 userRouter.post('/logout', userAuth, userController.logoutUser);
