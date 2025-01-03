@@ -1,7 +1,8 @@
 import express from 'express';
 const userRouter = express.Router();
 import { userController } from '../controllers/userCtrl'
-import { userAuth } from '../middlewares/auth/authUser'
+import { userAuth } from '../middlewares/auth/authUser';
+import MulterMiddlware from '../middlewares/multer/multerMiddleware' //Pending
 
 
 userRouter.get('/getHome', userAuth, userController.getHomeUser);
@@ -16,7 +17,7 @@ userRouter.post('/verify-email', userController.verifyEmail);
 userRouter.post('/resetPassword/:userId', userController.resetPassword);
 userRouter.post('/login', userController.loginUser);
 userRouter.post('/googleLogin', userController.googleLogin);
-userRouter.put('/profile/edit/:userId', userController.editProfile);
+userRouter.put('/profile/edit/:userId',MulterMiddlware, userController.editProfile);
 userRouter.post('/logout', userAuth, userController.logoutUser);
 
 export default userRouter;

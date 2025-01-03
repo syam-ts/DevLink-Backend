@@ -111,11 +111,12 @@ export class UserRepositoryMongoose implements UserRepositary {
         _id: user._id,
         name: user.name,
         email: user.email,
-        password: user.password,
+        profilePicture: user.profilePicture,
         mobile: user.mobile,
         location: user.location,
-        description: user.description,
-        budget: user.budget
+        skills: user.skills,
+        budget: user.budget,
+        isBlocked: user.isBlocked,
       } as User
   }
 
@@ -164,12 +165,19 @@ export class UserRepositoryMongoose implements UserRepositary {
      if(!isValidPassword) {
       throw new Error('wrong password')
      }
+     console.log('The whole data : ', user)
 
     return { 
       _id:user._id,
       name: user.name,
       email: user.email,
+      profilePicture: user.profilePicture,
       mobile: user.mobile,
+      description: user.description,
+      location: user.locaiton,
+      isBlocked: user.isBlocked,
+      budget: user.budget,
+      skills: user.skills
     } as User;
   }
 

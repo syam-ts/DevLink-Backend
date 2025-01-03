@@ -45,8 +45,7 @@ export class EditClientProfile {
             clientData.editData[value] = clientData.unhangedData[value]
           }
       }
-
-      console.log("The final clientData", clientData);
+ 
       
         const client = await this.clientRepository.editClientProfile(clientId, clientData.editData);
   
