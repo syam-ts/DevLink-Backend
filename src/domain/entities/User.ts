@@ -52,6 +52,7 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
     mobile: { type: Number, required: false },
     isBlocked: { type: Boolean, required: false },
     profilePicture: { type: String, required: false },
+    key: { type: String, required: false },
     location: { type: String, required: false },
     description: {type: String, required: false},
     skills: { type: [String], required: false },

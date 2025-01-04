@@ -1,7 +1,12 @@
 import express from 'express';
 const userRouter = express.Router();
 import { userController } from '../controllers/userCtrl'
-import { userAuth } from '../middlewares/auth/authUser';
+import { userAuth } from '../middlewares/auth/authUser'; 
+
+ 
+
+
+
 import MulterMiddlware from '../middlewares/multer/multerMiddleware' //Pending
 
 
@@ -14,13 +19,15 @@ userRouter.get('/listAllJobs',userController.listAllJobs);
  
  
 userRouter.post('/signup', userController.signupUser);
-userRouter.post('/verify-otp', userController.verifyOtp);
+userRouter.post('/verify-otp',userController.verifyOtp);
 userRouter.post('/resend-otp', userController.resendOtp);
 userRouter.post('/verify-email', userController.verifyEmail); 
 userRouter.post('/resetPassword/:userId', userController.resetPassword);
 userRouter.post('/login', userController.loginUser);
 userRouter.post('/googleLogin', userController.googleLogin);
-userRouter.put('/profile/edit/:userId',MulterMiddlware, userController.editProfile);
+
+
+userRouter.put('/profile/edit/:userId', userController.editProfile);
 
 userRouter.post('/job/createProposal/:clientId/:userId', userController.createProposal);
 

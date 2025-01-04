@@ -10,7 +10,8 @@ import { UserRepositoryMongoose } from "../../../domain/interfaces/Repositaries/
 import { EditUserProfile } from "../../../application/usecases/user/editProfile";
 import { GetUserProfile } from "../../../application/usecases/user/getProfile";
 import { ListAllJobs } from "../../../application/usecases/user/listAllJobs";
-import { CreateProposal } from "../../../application/usecases/user/createProposal";
+import { CreateProposal } from "../../../application/usecases/user/createProposal"; 
+
 
 const userRepository = new UserRepositoryMongoose();
 const signupUseCase = new SignupUser(userRepository);
@@ -50,6 +51,7 @@ export const userController = {
     
     verifyOtp: async (req: any, res: any) => {
         try {
+          
             const user = await verifyUserUseCase.execute(req.body);
 
             res.json({ message: "OTP verified successfully", type: "success" });
@@ -181,8 +183,12 @@ export const userController = {
 
     editProfile: async (req: any, res: any) => {
         try {
+   
+            console.log('The whole data : ', req.body.profilePicture)
             const { userId } = req.params;
-            const updated = await editProfileUseCase.execute(userId, req.body);
+            const profileData = req.body; 
+  
+              const updated = await editProfileUseCase.execute(userId, profileData);
 
             res.json({ message: "Profile successfully edited", type: "success" });
         } catch (err: any) {
