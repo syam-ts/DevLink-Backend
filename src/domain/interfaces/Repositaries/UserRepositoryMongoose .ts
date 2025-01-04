@@ -251,17 +251,22 @@ export class UserRepositoryMongoose implements UserRepositary {
 
      
        async createProposal( clientId: string, userId: string, description: string): Promise< any> {
+        const user = await UserModel.findById(userId);
+        if(!user) {
+          throw new Error('User not found');
+        }
  
-         const request = {
+         const newProposal = {
                  type: 'New Job Proposal ',
                  userId: userId,
+                 userData: user,
                  description: description 
                }
               //  const proposal = await ClientModel.findById(clientId)
            
                const proposal = await ClientModel.findByIdAndUpdate(
                  clientId,
-                 { $push: { request: request } },
+                 { $push: { proposals: newProposal } },
                  { new: true }
                ); 
                

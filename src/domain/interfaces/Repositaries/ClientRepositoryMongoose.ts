@@ -400,7 +400,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
             throw new Error('Client not found');
           }
 
-          const proposals = client.request;
+          const proposals = client.proposals;
           return proposals;
   }
 

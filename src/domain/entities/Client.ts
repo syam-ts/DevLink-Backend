@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { User } from './User'
 
 export interface Client extends mongoose.Document{
     id?: string;
@@ -16,9 +17,10 @@ export interface Client extends mongoose.Document{
     isVerified:boolean,
     isEditRequest: boolean,
     isGoogle?: boolean,
-      request: [{
+    proposals: [{
             type: string,
             UserId: mongoose.Types.ObjectId,
+            userData: User,
             description?: string
         }],
         wallet: {
@@ -50,10 +52,13 @@ const ClientSchema: mongoose.Schema = new mongoose.Schema({
     isVerified: { type: Boolean, required: false},
     isEditRequest: { type: Boolean, required: false},
     isGoogle: { type: Boolean, required: false},
-    request: [
+    proposals: [
               {
             type: {type: String, required: false},
             userId: {type: mongoose.Types.ObjectId, required: false}, 
+            userData: {
+               
+            },
             description: { type: String, required: false }
              }
         ],
