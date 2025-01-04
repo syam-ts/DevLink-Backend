@@ -394,4 +394,14 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
 
+  async getProposals(clientId: string): Promise< any > {
+          const client: any = await ClientModel.findById(clientId);
+          if(!client) {
+            throw new Error('Client not found');
+          }
+
+          const proposals = client.request;
+          return proposals;
+  }
+
 }

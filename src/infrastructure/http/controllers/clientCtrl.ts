@@ -15,6 +15,7 @@ import { GetAllNotifications } from '../../../application/usecases/client/getAll
 import { ListAllJobs } from '../../../application/usecases/client/listAllJobs';
 import { MakePayment } from '../../../application/usecases/client/makePayment';
 import { GetUserProfile } from '../../../application/usecases/client/getUserProfile';
+import { GetProposals } from '../../../application/usecases/client/getProposals';
 
 
 const ClientRepository = new ClientRepositoryMongoose();
@@ -34,6 +35,7 @@ const getAllNotificationsUseCase = new GetAllNotifications(ClientRepository);
 const listAllJobsUseCase = new ListAllJobs(ClientRepository);
 const makePaymentUseCase = new MakePayment(ClientRepository);
 const getUserProfileUseCase = new GetUserProfile(ClientRepository);
+const getProposalsUseCase = new GetProposals(ClientRepository);
  
 
  
@@ -270,7 +272,18 @@ const getUserProfileUseCase = new GetUserProfile(ClientRepository);
                  res.json({message: err.message, success: false})
              }
          },
+         
 
+         getProposals: async(req: any, res: any) => {
+            try{
+                const { clientId } = req.params;
+                const response = await getProposalsUseCase.execute(clientId);
+                
+                res.status(200).json({message: 'Loading propsals', data: response, success: true});
+            }catch(err: any) {
+                res.status(500).json({message: err.message, success: false});
+            }
+         }
 
  
          
