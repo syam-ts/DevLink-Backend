@@ -14,6 +14,7 @@ export interface User extends mongoose.Document{
     description?:string,
     skills?: [string];
     budget:number,
+    refreshToken: string
 }
 
 //User Schema
@@ -56,7 +57,8 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
     location: { type: String, required: false },
     description: {type: String, required: false},
     skills: { type: [String], required: false },
-    budget: {type: Number, required: false}
+    budget: {type: Number, required: false},
+    refreshToken: {type: String, required: false},
    
 });
 

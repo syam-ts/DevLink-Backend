@@ -32,6 +32,6 @@ userRouter.put('/profile/edit/:userId', userController.editProfile);
 userRouter.post('/job/createProposal/:clientId/:userId', userController.createProposal);
 
 
-userRouter.post('/logout', userAuth, userController.logoutUser);
+userRouter.post('/logout', userController.logoutUser);
 
 export default userRouter;

@@ -105,23 +105,20 @@ export const userController = {
 
     loginUser: async (req: any, res: any) => {
         try {
-            const user = await loginUseCase.execute(req.body);
+            const theUser = await loginUseCase.execute(req.body);
 
-            if (!user) {
-                res.json({ message: "user not found", type: "error" });
-            } else {
-                res.cookie("jwtU", user.jwt, {
-                    httpOnly: true,
-                    sameSite: "None",
-                    secure: true,
-                    maxAge: 24 * 60 * 60 * 1000,
-                });
-                return res.json({
-                    message: "successfully login",
-                    user: user,
-                    type: "success",
-                });
-            }
+            const { user, refreshToken, accessToken} = theUser;
+
+            res.cookie("jwtU", refreshToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production", // Ensure HTTPS in production
+                sameSite: "strict", // Adjust as needed
+                maxAge: 24 * 60 * 60 * 1000, // 1 day
+            });
+            
+                          res.cookie("accessTokenU", accessToken, { httpOnly: true, secure: true, sameSite: "strict" });
+        
+            return res.status(200).json({ message: "Login successful", user, accessToken, type: "success" });
         } catch (err: any) {
             res.json({ message: err.message, type: "error" });
         }
@@ -146,14 +143,10 @@ export const userController = {
 
     getHomeUser: async (req: any, res: any) => {
         try {
+            console.log('The acces token from home : ', req.cookies)
             const clients = await getHomeUseCase.execute();
 
-            res.cookie("jwtU", req.user.accessToken, {
-                httpOnly: true,
-                sameSite: "None",
-                secure: true,
-                maxAge: 24 * 60 * 60 * 1000,
-            });
+          
             return res.json({
                 message: "successfully login",
                 data: clients,
@@ -184,7 +177,7 @@ export const userController = {
     editProfile: async (req: any, res: any) => {
         try {
    
-            console.log('The whole data : ', req.body.profilePicture)
+            console.log('The whole data : ', req.body)
             const { userId } = req.params;
             const profileData = req.body; 
   

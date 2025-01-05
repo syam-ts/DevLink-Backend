@@ -6,6 +6,7 @@ import { JobPostModel } from '../../entities/JobPost'
 import { UserRepositary } from '../../../application/usecases/user/signupUser';  
 import bcrypt from 'bcrypt';
 import validator from 'validator'; 
+import jwt from 'jsonwebtoken';
   
 
 export class UserRepositoryMongoose implements UserRepositary {
@@ -85,7 +86,8 @@ export class UserRepositoryMongoose implements UserRepositary {
       location:'',
       description:'',
       skills:'',
-      budget: ''
+      budget: '',
+      refreshToken: ""
     });
 
     const savedUser = await createdUser.save();
@@ -140,8 +142,7 @@ export class UserRepositoryMongoose implements UserRepositary {
 
 
   async findUserByEmailAndPassword(email: string, passwordUser: string): Promise<User | any> {
-   
-          if ( !email || !passwordUser) {
+        if ( !email || !passwordUser) {
             throw new Error('Email, and password are required');
            }
       
@@ -164,11 +165,21 @@ export class UserRepositoryMongoose implements UserRepositary {
       
      if(!isValidPassword) {
       throw new Error('wrong password')
-     }
-     console.log('The whole data : ', user)
+     } 
+
+     const USER_ACCESS_TOKEN: any = process.env.USER_ACCESS_TOKEN;
+     const USER_REFRESH_TOKEN: any = process.env.USER_REFRESH_TOKEN;
+
+     const refreshToken = jwt.sign({id: user._id, email: user.email},USER_REFRESH_TOKEN, {expiresIn: "7d"});
+             const accessToken = jwt.sign({id: user._id, email: user.email},USER_ACCESS_TOKEN, {expiresIn: "15m"});
+     
+          
+             user.refreshToken = refreshToken;
+             await user.save();
+       
 
     return { 
-      _id:user._id,
+      _id: user._id,
       name: user.name,
       email: user.email,
       profilePicture: user.profilePicture,
@@ -177,8 +188,10 @@ export class UserRepositoryMongoose implements UserRepositary {
       location: user.locaiton,
       isBlocked: user.isBlocked,
       budget: user.budget,
-      skills: user.skills
-    } as User;
+      skills: user.skills,
+      accessToken, 
+      refreshToken
+    };
   }
 
 
