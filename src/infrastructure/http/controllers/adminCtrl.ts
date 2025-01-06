@@ -10,6 +10,7 @@ import { VerifyAccept } from '../../../application/usecases/admin/verifyAccept';
 import { GetAllRequests } from '../../../application/usecases/admin/getAllRequests';
 import { GetRequestedClient } from '../../../application/usecases/admin/getRequestedClient';
 import { ViewRoleInfo } from '../../../application/usecases/admin/viewRoleInfo';
+import { GetWallet } from '../../../application/usecases/admin/getWallet';
 
 
 const adminRepositary = new AdminRepository();
@@ -22,6 +23,7 @@ const unBlockUserUseCase = new UnBlockUser(adminRepositary);
 const blockClientUseCase = new BlockClient(adminRepositary);
 const unBlockClientUseCase = new UnBlockClient(adminRepositary);
 const viewRoleInfoUseCase = new ViewRoleInfo(adminRepositary);
+const getWalletUseCase = new GetWallet(adminRepositary);
 
 
 
@@ -234,6 +236,17 @@ export const adminController = {
                   const response = await viewRoleInfoUseCase.execute(roleId, roleInfo); 
 
                   res.json({ message: 'Successfully loaded all requests ',data: response, success: true});
+            }catch(err: any) {
+                res.json({ message: err.message, success: false })
+            }
+        },
+
+        getWallet: async (req: any, res: any) => {
+            try{
+                 
+                  const response = await getWalletUseCase.execute(); 
+
+                  res.json({ message: 'Successfully loaded all requests ', data: response, success: true});
             }catch(err: any) {
                 res.json({ message: err.message, success: false })
             }

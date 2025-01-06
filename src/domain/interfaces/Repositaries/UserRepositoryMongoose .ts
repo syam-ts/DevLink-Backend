@@ -292,6 +292,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         //  } else {
         //    return allJobs;
         //  }
+        return proposal;
        }
 
 

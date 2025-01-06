@@ -211,6 +211,18 @@ export class AdminRepository implements AdminRepositary {
         return null;
       }
     } 
+
+  async getWallet(adminId: string): Promise<any> {
+
+    
+      const admin: any = await AdminModel.findById(adminId).exec();
+  
+      if (!admin) {
+        throw new Error('Wallet not found')
+      }
+      return admin.wallet;
+      
+    } 
   }
 
 

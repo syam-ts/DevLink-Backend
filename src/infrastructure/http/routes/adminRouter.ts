@@ -12,6 +12,7 @@ adminRouter.get('/getAllClients', adminController.getAllClients);
 adminRouter.get('/getRequests', adminController.getRequests);
 adminRouter.get('/request/getRequestedClient/:clientId', adminController.getRequestedClient);
 adminRouter.get('/viewRole/:roleId/:roleInfo', adminController.viewRoleInfo);
+adminRouter.get('/getWallet', adminController.getWallet);
 
 
 adminRouter.post('/login', adminController.loginAdmin); 
