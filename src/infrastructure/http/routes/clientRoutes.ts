@@ -22,8 +22,12 @@ clientRouter.post('/logout', clientAuth, clientController.logoutClient);
 
 clientRouter.post('/profile/edit/:clientId', clientController.editProfile);
 clientRouter.post('/profile/verification/:clientId', clientController.profileVerification);
+
+
 clientRouter.post('/jobPost/payment-stripe/:clientId', clientController.makePayment)
-clientRouter.post('/createJobPost', clientController.createJobPost);
+ 
+
+clientRouter.post('/payment/success/:clientId/:data', clientController.createJobPost);
 
 
 clientRouter.put('/profile/edit/:clientId', clientController.editProfile);

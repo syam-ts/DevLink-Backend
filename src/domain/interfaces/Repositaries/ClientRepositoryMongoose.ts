@@ -315,45 +315,45 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async createJobPost(clientId: string, jobPost: any): Promise<any> {
     
+    const data = JSON.parse(jobPost);
  
+             
 
-    if(jobPost.formData.paymentType === 'hourly') {
+    if(data.paymentType === 'hourly') {
+          console.log('ENER HERE : ',data)
+      const minWorkingHours: number = data.estimateTime * 8;
+      const finalDate: number = (data.estimateTime * 24 ) - minWorkingHours;
 
-      const minWorkingHours: number = jobPost.estimateTime * 8;
-      const finalDate: number = (jobPost.estimateTime * 24 ) - minWorkingHours;
+      const totalAmount = finalDate * data.payment;
 
-      const totalAmount = finalDate * jobPost.payment;
-
-      // jobPost.amount = totalAmount; //updatig the total amount
+        data.amount = totalAmount; //updatig the total amount
    
       
       
     const createdJobPost = new JobPostModel({
-      title: jobPost.formData.title,
+      title: data.title,
       clientId: clientId,
-      description: jobPost.formData.description,
-      keyResponsiblities: jobPost.formData.keyResponsiblities,
-      requiredSkills: jobPost.formData.requiredSkills,
-      paymentType: jobPost.formData.paymentType,
-      estimateTime: jobPost.formData.estimateTime,
-      amount: jobPost.formData.payment,
+      description: data.description,
+      keyResponsiblities: data.keyResponsiblities,
+      requiredSkills: data.requiredSkills,
+      paymentType: data.paymentType,
+      estimateTime: data.estimateTime,
+      amount: data.payment,
       status: "pending",
       isPayment: true,
-    });
+      date: new Date()
+    })
 
-    const savedJobPost = await createdJobPost.save();
+      const savedJobPost = await createdJobPost.save();
     
 
     return {
-      name: savedJobPost.title,
-      email: savedJobPost.description
+      savedJobPost
     };
 
 
     } else {
-      
       return jobPost; 
-
 
     }
 
@@ -402,6 +402,32 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
           const proposals = client.proposals;
           return proposals;
+  }
+
+  async addMoneyToAdminWallet(role: string, roleId: any, amount: number): Promise< any > {
+    
+    const adminId = process.env.ADMIN_OBJECT_ID;
+          const admin: any = await AdminModel.findById(adminId);
+          if(!admin) throw new Error('Unknown Error Occured');
+
+        const walletEntry = {
+          type: 'credit',
+          amount: amount,
+          from: role,
+          fromId: roleId,
+          date: new Date()
+        }
+        console.log(walletEntry, typeof walletEntry);
+
+
+        await AdminModel.findByIdAndUpdate(adminId, {
+          $inc: {"wallet.balance": amount},
+          $push: {"wallet.transactions": walletEntry}
+        }, {
+          new: true, upsert: false
+        })
+          
+          return 'success';
   }
 
 }

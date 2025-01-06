@@ -12,8 +12,10 @@ export class MakePayment {
      constructor( private clientRepository: ClientRepository) {};
 
     async execute(clientId: string,data: any) { 
+
        
-        const minWorkingHours: number = data.formData.estimateTime * 8;
+       
+      const minWorkingHours: number = data.formData.estimateTime * 8;
       const finalDate: number = (data.formData.estimateTime * 24 ) - minWorkingHours;
 
       const totalAmount = finalDate * data.formData.payment;
@@ -24,13 +26,15 @@ export class MakePayment {
      })
 
 
-     if(product) {}
+     if(product) {
         const price = await stripe.prices.create({
             product: `${product.id}`,
             unit_amount: totalAmount * 100,
             currency: 'inr'
         })
 
+        
+    
 
         if(price.id) {
            var session = await stripe.checkout.sessions.create({
@@ -41,17 +45,22 @@ export class MakePayment {
                 }
               ],
               mode: 'payment',
-              success_url: 'http://localhost:5173/client/draftJobPost/payment-success',
+              success_url: `http://localhost:5173/client/draftJobPost/payment-success/${encodeURIComponent(clientId)}/${encodeURIComponent(JSON.stringify(data.formData))}`,
               cancel_url: 'http://localhost:5173/client/draftJobPost/payment-failure',
               customer_email: 'samplemail@gmai.com'
 
 
            })
-           const jobPost = await this.clientRepository.createJobPost(clientId, data);
- 
+
+         
+
+        
+           
+            
+            
          return session;
         }
 
-
+    }
     }
 }

@@ -210,11 +210,14 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
          createJobPost: async (req: any, res: any) => {
 
              try{      
-                const { clientId } = req.params;
-                console.log('The path', clientId)
-                const jobPost = await createJobPostUseCase.execute(clientId, req.body);
+
+                 console.log('TEH PARAMS : ', req.params)
+                const { clientId, data } = req.params;
+              
+                const jobPost = await createJobPostUseCase.execute(clientId, data);
     
 
+             
                 res.json({message: 'Redirecting to payment page',data: jobPost, success: true});
              }catch(err: any) {
                  res.json({message: err.message, type: 'error'})
@@ -249,11 +252,14 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
          
          makePayment: async (req: any, res: any) => {
              try{
+                 
                  const { clientId } = req.params; 
                 const response = await makePaymentUseCase.execute(clientId, req.body); 
+            
                 
                 res.status(200).json({ response }); 
              }catch(err: any) {
+                console.log('THE ERROR : ', err.message)
                  res.json({message: err.message, success: false})
              }
          },
