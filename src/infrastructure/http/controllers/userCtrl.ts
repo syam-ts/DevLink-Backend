@@ -108,6 +108,7 @@ export const userController = {
             const theUser = await loginUseCase.execute(req.body);
 
             const { user, refreshToken, accessToken} = theUser;
+            console.log('The user : ', user)
 
             res.cookie("jwtU", refreshToken, {
                 httpOnly: true,

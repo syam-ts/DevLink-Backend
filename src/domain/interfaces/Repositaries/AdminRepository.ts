@@ -83,6 +83,35 @@ export class AdminRepository implements AdminRepositary {
     return user;
   }
 
+
+  async blockClient(clientId: any): Promise<any> {
+
+    const client = await ClientModel.findByIdAndUpdate(clientId,
+      { isBlocked: true }, { new: true }
+    ).exec();
+
+    if (!client) {
+      throw new Error('Client not Found')
+    }
+
+    return client;
+  }
+
+
+  async unBlockClient(clientId: any): Promise<any> {
+
+    const client = await ClientModel.findByIdAndUpdate(clientId,
+      { isBlocked: false }, { new: true }
+    ).exec();
+
+
+    if (!client) {
+      throw new Error('Client not Found')
+    }
+
+    return client;
+  }
+
   async verifyAccept(data: any): Promise<any> {
      
     const { clientId, editData } = data;
@@ -158,6 +187,30 @@ export class AdminRepository implements AdminRepositary {
     }
     return client;
     }
+
+
+  async viewRoleInfo(roleId: string, roleInfo: string): Promise<any> {
+
+    if(roleInfo === 'user') {
+      const user = await UserModel.findById(roleId).exec();
+
+      if(!user) {
+        throw new Error('User not found');
+      }
+
+      return user
+    } else if(roleInfo = 'client') {
+
+      const client: any = await ClientModel.findById(roleId).exec();
+  
+      if (!client) {
+        throw new Error('Client not found')
+      }
+      return client;
+      } else {
+        return null;
+      }
+    } 
   }
 
 

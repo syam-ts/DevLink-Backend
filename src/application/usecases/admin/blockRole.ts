@@ -1,7 +1,8 @@
-import { User } from '../../../domain/entities/User';
+ 
 
 export interface AdminRepositary {
     blockUser(userId: string): Promise< any >;
+    blockClient(clientId: string): Promise< any >;
 }
 
 
@@ -15,5 +16,18 @@ export class BlockUser {
  
         
         return blockedUser
+   }
+};
+
+
+export class BlockClient {
+
+    constructor(private adminRepositary: AdminRepositary) {}
+
+   async execute (client: any) {
+    const { clientId } = client;
+        const blockedClient = await this.adminRepositary.blockClient(clientId); 
+  
+        return blockedClient
    }
 }

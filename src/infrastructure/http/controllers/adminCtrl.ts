@@ -1,14 +1,15 @@
 import { LoginAdmin } from '../../../application/usecases/admin/loginAdmin';
-import { AdminRepository } from '../../../domain/interfaces/Repositaries/AdminRepository'
+import { AdminRepository } from '../../../domain/interfaces/Repositaries/AdminRepository';
 import { GetDashboard } from '../../../application/usecases/admin/getDashboard';
-import { GetAllUsers } from '../../../application/usecases/admin/getUsers'
+import { GetAllUsers } from '../../../application/usecases/admin/getUsers';
 import { GetAllClients } from '../../../application/usecases/admin/getAllClients';
-import { BlockUser } from '../../../application/usecases/admin/blockUser'
-import { UnBlockUser } from '../../../application/usecases/admin/unBlockUser'
-import { Create } from '../../../application/usecases/admin/create'
-import { VerifyAccept } from '../../../application/usecases/admin/verifyAccept'
-import { GetAllRequests } from '../../../application/usecases/admin/getAllRequests'
-import { GetRequestedClient } from '../../../application/usecases/admin/getRequestedClient'
+import { BlockUser, BlockClient } from '../../../application/usecases/admin/blockRole';
+import { UnBlockUser, UnBlockClient } from '../../../application/usecases/admin/unBlockRole';
+import { Create } from '../../../application/usecases/admin/create';
+import { VerifyAccept } from '../../../application/usecases/admin/verifyAccept';
+import { GetAllRequests } from '../../../application/usecases/admin/getAllRequests';
+import { GetRequestedClient } from '../../../application/usecases/admin/getRequestedClient';
+import { ViewRoleInfo } from '../../../application/usecases/admin/viewRoleInfo';
 
 
 const adminRepositary = new AdminRepository();
@@ -18,6 +19,12 @@ const getAllUsersUseCase = new GetAllUsers(adminRepositary);
 const getAllClientsUseCase = new GetAllClients(adminRepositary);
 const blockUserUseCase = new BlockUser(adminRepositary);
 const unBlockUserUseCase = new UnBlockUser(adminRepositary);
+const blockClientUseCase = new BlockClient(adminRepositary);
+const unBlockClientUseCase = new UnBlockClient(adminRepositary);
+const viewRoleInfoUseCase = new ViewRoleInfo(adminRepositary);
+
+
+
 const verifyAcceptUseCase = new VerifyAccept(adminRepositary);
 const getAllRequestsUseCase = new GetAllRequests(adminRepositary);
 const getRequestedClientUseCase = new GetRequestedClient(adminRepositary);
@@ -141,6 +148,37 @@ export const adminController = {
         },
         
 
+        blockClient: async(req: any, res: any) => {
+            try{
+ 
+
+                 const client = await blockClientUseCase.execute(req.params);
+
+                 if(client) {
+                    res.json({message: 'Client blocked successfully ', type: 'success'})
+                 }
+
+            }catch(err: any) {
+                res.json({message: err.message, type: 'error'})
+            }
+        },
+        
+
+        unBlockClient: async(req: any, res: any) => {
+            try{
+
+                 const client = await unBlockClientUseCase.execute(req.params);
+
+                 if(client) {
+                    res.json({message: 'client unblocked successfully ', type: 'success'})
+                 }
+
+            }catch(err: any) {
+                res.json({message: err.message, type: 'error'})
+            }
+        },
+        
+
         logoutAdmin: async (req: any, res: any) => {
             try{
    
@@ -182,6 +220,18 @@ export const adminController = {
             try{
                 const { clientId } = req.params; 
                   const response = await getRequestedClientUseCase.execute(clientId); 
+
+                  res.json({ message: 'Successfully loaded all requests ',data: response, success: true});
+            }catch(err: any) {
+                res.json({ message: err.message, success: false })
+            }
+        },
+        
+
+        viewRoleInfo: async (req: any, res: any) => {
+            try{
+                const { roleId, roleInfo } = req.params; 
+                  const response = await viewRoleInfoUseCase.execute(roleId, roleInfo); 
 
                   res.json({ message: 'Successfully loaded all requests ',data: response, success: true});
             }catch(err: any) {

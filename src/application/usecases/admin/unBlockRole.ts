@@ -1,6 +1,7 @@
  
 export interface AdminRepositary {
     unBlockUser(userId: string): Promise< any >;
+    unBlockClient(clientId: string): Promise< any >;
 }
 
 
@@ -14,5 +15,19 @@ export class UnBlockUser {
  
         
         return blockedUser
+   }
+}
+
+
+export class UnBlockClient {
+
+    constructor(private adminRepositary: AdminRepositary) {}
+
+   async execute (client: any) {
+    const { clientId } = client;
+        const blockedClient = await this.adminRepositary.unBlockClient(clientId); 
+ 
+        
+        return blockedClient
    }
 }

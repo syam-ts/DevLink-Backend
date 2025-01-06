@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from "express";
  
     export const userAuth = async (req: any, res: any, next: NextFunction) => {
       try {
+        console.log('Reched here')
         const refreshToken = req.cookies.jwtU;
         const accessToken = req.cookies.accessTokenU;
         

@@ -179,7 +179,8 @@ export class UserRepositoryMongoose implements UserRepositary {
        
 
     return { 
-      _id: user._id,
+      user:{
+        _id: user._id,
       name: user.name,
       email: user.email,
       profilePicture: user.profilePicture,
@@ -189,6 +190,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       isBlocked: user.isBlocked,
       budget: user.budget,
       skills: user.skills,
+      },
       accessToken, 
       refreshToken
     };
