@@ -10,7 +10,8 @@ export class ProfileVerification {
 
     async execute(clientId: string, clientData: any) { 
 
-        const { companyName, location, description, totalEmployees, since } = clientData;
+        
+        const { companyName, location, description, totalEmployees, since } = clientData.editData;
       
            if(!companyName || !location || !description || !totalEmployees || !since) {
                  throw new Error('All the fields need to be filled')

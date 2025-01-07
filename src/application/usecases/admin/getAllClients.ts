@@ -11,7 +11,7 @@ export class GetAllClients {
 
    async execute () {
         const clients = await this.adminRepositary.findAllClients();
-        console.log('The clients', clients)
-        return clients
+ 
+        return clients;
    }
 }

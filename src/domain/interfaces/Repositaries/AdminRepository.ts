@@ -99,6 +99,7 @@ export class AdminRepository implements AdminRepositary {
 
 
   async unBlockClient(clientId: any): Promise<any> {
+ 
 
     const client = await ClientModel.findByIdAndUpdate(clientId,
       { isBlocked: false }, { new: true }

@@ -169,18 +169,21 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
             }
          },
 
+
          profileVerification: async (req: any, res: any) => {
             try{ 
 
                 const { clientId } = req.params; 
                 
                  const response = await profileVerificationUseCase.execute(clientId, req.body); 
+                 console.log('The response ', response)
 
                  res.json({message: 'successfully sended', success: true });
             }catch(err: any) {
                 res.json({ message: err.message, success: false });
             }
          },
+
 
          editProfile: async (req: any, res: any) => {
 
