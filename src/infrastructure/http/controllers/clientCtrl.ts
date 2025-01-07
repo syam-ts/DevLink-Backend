@@ -109,12 +109,16 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
          loginClient: async (req: any, res: any) => {
              try{
                 
-                  const client = await loginUseCase.execute(req.body);  
+                  const response: any = await loginUseCase.execute(req.body);  
+
+                  const { client, refreshToken, accessToken} = response.client;
+
+                   
                   if(!client) {
                      res.json({message: 'client not found', type: 'error'})
                   } else {
  
-                     res.cookie("jwtC", client.jwt, {
+                     res.cookie("jwtC", refreshToken, {
                          httpOnly: true, 
                          sameSite: "None", 
                          secure: true, 
@@ -122,7 +126,9 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
                        }
                      );
                      
-                     return res.json({message: "successfully login",client: client, type: 'success'});
+                     res.cookie("accessTokenC", accessToken, { httpOnly: true, secure: true, sameSite: "strict" });
+                     
+                     return res.json({message: "successfully login",data: response, type: 'success'});
                 }
              }catch(err: any) { 
                  res.json({message: err.message, type: 'error'}); 

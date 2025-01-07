@@ -8,11 +8,9 @@ import { JobPostModel } from '../../entities/JobPost'
 import { AdminModel } from '../../entities/Admin'
 import bcrypt from 'bcrypt';
 import validator from 'validator';
+import jwt from 'jsonwebtoken';
 
-
-  
-
-
+   
 
 
 export class ClientRepositoryMongoose implements ClientRepositary {
@@ -175,11 +173,25 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     };
 
 
-    return {
-      _id: client._id,
-      name: client.name,
-      email: client.email
-    } as Client;
+    const CLIENT_ACCESS_TOKEN: any = process.env.CLIENT_ACCESS_TOKEN;
+         const CLIENT_REFRESH_TOKEN: any = process.env.CLIENT_REFRESH_TOKEN;
+    
+         const refreshToken = jwt.sign({id: client._id, email: client.email},CLIENT_REFRESH_TOKEN, {expiresIn: "7d"});
+         const accessToken = jwt.sign({id: client._id, email: client.email},CLIENT_ACCESS_TOKEN, {expiresIn: "15m"});
+         
+              
+                 client.refreshToken = refreshToken;
+                 await client.save();
+
+  
+                 return { 
+                  client:{
+                  client
+                  },
+                  accessToken, 
+                  refreshToken
+                };
+ 
 
   }
 
