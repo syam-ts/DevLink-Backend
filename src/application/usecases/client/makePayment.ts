@@ -14,7 +14,7 @@ export class MakePayment {
     async execute(clientId: string,data: any) { 
 
         const { title, description, keyResponsiblities, requiredSkills,payment, paymentType, estimateTime} = data.formData;
-        console.log('THE TIME : ', data)
+ 
 
         if(!title || !description || !keyResponsiblities || !requiredSkills || !payment || !paymentType || !estimateTime ) {
             throw new Error('All Fields need to be filled');

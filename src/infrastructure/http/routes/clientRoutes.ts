@@ -7,7 +7,7 @@ import { ClientModel } from '../../../domain/entities/Client'
 
 
 clientRouter.get('/getHome', clientAuth, clientController.getHomeClient);
-clientRouter.get('/profile/view/:clientId',clientAuth, clientController.getProfile);
+clientRouter.get('/profile/view/:clientId', clientController.getProfile); //ADD CLIENTAUTH
 clientRouter.get('/profile/notifications/:clientId',clientAuth, clientController.getAllNotifications);
 clientRouter.get('/listAllJobs', clientAuth,clientController.listAllJobs);
 clientRouter.get('/userProfile/view/:userId',clientAuth, clientController.getUserProfile);
@@ -22,7 +22,7 @@ clientRouter.post('/resetPassword/:clientId',clientController.resetPassword);
 clientRouter.post('/googleLogin', clientController.googleLogin);
 clientRouter.post('/logout', clientAuth, clientController.logoutClient);
 
-clientRouter.post('/profile/edit/:clientId', clientAuth, clientController.editProfile);
+clientRouter.post('/profile/edit/:clientId', clientController.editProfile); //ADD CLIENTAUTH
 clientRouter.post('/profile/verification/:clientId', clientAuth, clientController.profileVerification);
 clientRouter.post('/jobPost/payment-stripe/:clientId',clientController.makePayment);
 // clientRouter.post('/jobPost/payment-stripe/:clientId', clientAuth,clientController.makePayment);

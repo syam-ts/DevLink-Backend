@@ -176,16 +176,15 @@ export const userController = {
 
 
     editProfile: async (req: any, res: any) => {
+
         try {
-   
-            console.log('The whole data : ', req.body)
             const { userId } = req.params;
             const profileData = req.body; 
-  
-              const updated = await editProfileUseCase.execute(userId, profileData);
+            const response = await editProfileUseCase.execute(userId, profileData);
 
             res.json({ message: "Profile successfully edited", type: "success" });
         } catch (err: any) {
+            console.log('ERROF: ',err)
             res.json({ message: err.message, type: "error" });
         }
     },

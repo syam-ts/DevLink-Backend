@@ -8,12 +8,13 @@ export interface User extends mongoose.Document{
     password?: string;
     mobile?: number;
     email: string;
-    isBlocked: boolean;
     profilePicture?: string;
-    location?:string;
     description?:string,
+    location?:string;
     skills?: [string];
     budget:number,
+    isEditRequest: boolean,
+    isBlocked: boolean;
     refreshToken: string
 }
 
@@ -51,13 +52,14 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
         }
       },
     mobile: { type: Number, required: false },
-    isBlocked: { type: Boolean, required: false },
     profilePicture: { type: String, required: false },
     key: { type: String, required: false },
     location: { type: String, required: false },
     description: {type: String, required: false},
     skills: { type: [String], required: false },
     budget: {type: Number, required: false},
+    isBlocked: { type: Boolean, required: false },
+    isEditRequest: { type: Boolean, required: false},
     refreshToken: {type: String, required: false},
    
 });

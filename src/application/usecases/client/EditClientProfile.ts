@@ -8,11 +8,8 @@ export interface ClientRepository {
 export class EditClientProfile {
     constructor( private clientRepository: ClientRepository) {};
 
-    async execute(clientId: string, clientData: any) {
-
+    async execute(clientId: string, clientData: any) { 
       
-        
-         
         if(clientData.editData.companyName) {
            if(clientData.editData.companyName.length > 20 || clientData.editData.companyName.length < 4 ) {
             throw new Error("Company name Should be between atleast 4 to 20 characters", )
@@ -44,11 +41,8 @@ export class EditClientProfile {
           if(clientData.editData[value] == '') {
             clientData.editData[value] = clientData.unhangedData[value]
           }
-      }
- 
+      } 
       
-        const client = await this.clientRepository.editClientProfile(clientId, clientData.editData);
-  
- 
+        const client = await this.clientRepository.editClientProfile(clientId, clientData.editData); 
     }
 }

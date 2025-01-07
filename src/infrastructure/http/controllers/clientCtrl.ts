@@ -186,10 +186,10 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
 
 
          editProfile: async (req: any, res: any) => {
-
             try{     
+               
                 const { clientId } = req.params;
-                const editClient = await editClientProfileUseCase.execute(clientId, req.body);
+                const response = await editClientProfileUseCase.execute(clientId, req.body);
                
                 res.json({ message: 'successfully edited', success: true });
             }catch(err: any) {
@@ -258,12 +258,10 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
                  
                  const { clientId } = req.params; 
                 const response = await makePaymentUseCase.execute(clientId, req.body); 
-            
-                
+             
                 res.status(200).json({ response, success: true }); 
-             }catch(err: any) {
-                console.log('THE ERROR : ', err.message)
-                 res.json({message: err.message, success: false})
+             }catch(err: any) { 
+                 res.json({message: err.message, success: false});
              }
          },
 

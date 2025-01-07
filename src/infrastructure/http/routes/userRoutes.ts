@@ -12,7 +12,7 @@ import jwt from "jsonwebtoken";
 
 
 userRouter.get('/getHome', userAuth, userController.getHomeUser);
-userRouter.get('/profile/view/:userId', userAuth, userController.getProfile);
+userRouter.get('/profile/view/:userId', userController.getProfile); //ADD USERAUTH
 userRouter.get('/listAllJobs',userAuth, userController.listAllJobs);
 
 
@@ -30,7 +30,8 @@ userRouter.post('/logout', userController.logoutUser);
 
 
 userRouter.post('/job/createProposal/:clientId/:userId',userAuth, userController.createProposal);
-userRouter.put('/profile/edit/:userId', userAuth,userController.editProfile);
+userRouter.put('/profile/edit/:userId',userController.editProfile); // ADD USERAUTH
+ 
 
 
 
