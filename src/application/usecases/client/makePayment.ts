@@ -13,6 +13,42 @@ export class MakePayment {
 
     async execute(clientId: string,data: any) { 
 
+        const { title, description, keyResponsiblities, requiredSkills, paymentType, estimateTime} = data;
+        console.log('THE TIME : ', data)
+
+        if(!title || !description || !keyResponsiblities || !requiredSkills || !paymentType || !estimateTime ) {
+            throw new Error('All Fields need to be filled');
+        } 
+
+        if(title.length < 5  || title.length > 20) {
+            throw new Error('Title should have atleset 5 characters');
+        }
+ 
+
+        if(description.length < 15) {
+            throw new Error('Description should have 15 words');
+        }
+
+
+        if(keyResponsiblities.length < 10) {
+            throw new Error('KeyResponsiblities should have 10 words');
+        }
+
+        //FIX IT WITH ARRAY
+        // if(requiredSkills.length < 10) {
+        //     throw new Error('Minimum 2 skills are mandatory');
+        // }
+
+
+        if(!paymentType) {
+            throw new Error('Chose one payment Type');
+        }
+      
+
+        if(!estimateTime) {
+            throw new Error('Chose the estimate time');
+        }
+      
        
        
       const minWorkingHours: number = data.formData.estimateTime * 8;

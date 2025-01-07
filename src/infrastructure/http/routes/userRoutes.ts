@@ -8,8 +8,7 @@ import { UserModel } from '../../../domain/entities/User'
 import jwt from "jsonwebtoken";
 
 
-
-import MulterMiddlware from '../middlewares/multer/multerMiddleware' //Pending
+ 
 
 
 userRouter.get('/getHome', userAuth, userController.getHomeUser);
@@ -27,14 +26,13 @@ userRouter.post('/verify-email', userController.verifyEmail);
 userRouter.post('/resetPassword/:userId', userController.resetPassword);
 userRouter.post('/login', userController.loginUser);
 userRouter.post('/googleLogin', userController.googleLogin);
-
-
-userRouter.put('/profile/edit/:userId', userController.editProfile);
-
-userRouter.post('/job/createProposal/:clientId/:userId', userController.createProposal);
-
-
 userRouter.post('/logout', userController.logoutUser);
+
+
+userRouter.post('/job/createProposal/:clientId/:userId',userAuth, userController.createProposal);
+userRouter.put('/profile/edit/:userId', userAuth,userController.editProfile);
+
+
 
 
 userRouter.get('/refresh-token', async (req: any, res: any) => {
