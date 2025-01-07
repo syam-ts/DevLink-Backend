@@ -260,7 +260,7 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
                 const response = await makePaymentUseCase.execute(clientId, req.body); 
             
                 
-                res.status(200).json({ response }); 
+                res.status(200).json({ response, success: true }); 
              }catch(err: any) {
                 console.log('THE ERROR : ', err.message)
                  res.json({message: err.message, success: false})
