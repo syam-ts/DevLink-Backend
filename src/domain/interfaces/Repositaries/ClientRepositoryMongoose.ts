@@ -451,14 +451,12 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async getMyJobs(clientId: string): Promise< any > {
-    console.log('CLCIENT ID ', clientId)
-    const jobs: any = await JobPostModel.find({ clientId: clientId});
-    console.log('THE JOBS FROM CLEINT REPO : ', jobs);
+ 
+    const jobs: any = await JobPostModel.find({ clientId: clientId}); 
     if(!jobs) {
       throw new Error('No job found');
     }
-
-    
+ 
     return jobs;
 }
 

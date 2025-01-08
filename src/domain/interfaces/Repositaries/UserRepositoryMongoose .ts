@@ -308,5 +308,29 @@ export class UserRepositoryMongoose implements UserRepositary {
            return allJobs;
          }
        }
+
+
+     
+       async bestMatches(userId: string): Promise< any> {
+
+        const user: any = await UserModel.findById(userId).exec();
+
+        if (!user || !user.skills || user.skills.length === 0) {
+          throw new Error('User has no skills or does not exist.');
+        }
+
+        const userSkills = user.skills;
+
+        const matchJobs = await JobPostModel.find({
+          requiredSkills: { $elemMatch: { $in: userSkills } },
+        }).exec();
+      
+         if(!matchJobs || matchJobs.length === 0) {
+           throw new Error('No matched job found ');
+         } else {
+           return matchJobs;
+         }
+
+       }
   }
 
