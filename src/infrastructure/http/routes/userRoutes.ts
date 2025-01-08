@@ -30,7 +30,7 @@ userRouter.post('/googleLogin', userController.googleLogin);
 userRouter.post('/logout', userController.logoutUser);
 
 
-userRouter.post('/job/createProposal/:clientId/:userId',userAuth, userController.createProposal);
+userRouter.post('/job/createProposal/:clientId/:userId', userController.createProposal); // ADD USERAUTH
 userRouter.put('/profile/edit/:userId',userController.editProfile); // ADD USERAUTH
  
 

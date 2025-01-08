@@ -35,7 +35,8 @@ export interface Client extends mongoose.Document{
                     date: Date
                 }
             ]
-        }
+        },
+    date: Date
 }
 
 //Client Schema
@@ -75,8 +76,8 @@ const ClientSchema: mongoose.Schema = new mongoose.Schema({
                     date: Date
                 }
             ]
-        }
-   
+        },
+    date: {type: Date, required: false}
 });
 
 //Cliet model

@@ -17,6 +17,8 @@ import { MakePayment } from '../../../application/usecases/client/makePayment';
 import { GetUserProfile } from '../../../application/usecases/client/getUserProfile';
 import { GetProposals } from '../../../application/usecases/client/getProposals';
 import { GetMyJobs } from '../../../application/usecases/client/getMyJobs';
+import { LatestJobs } from '../../../application/usecases/client/latestJobs';
+import { CreateContract } from '../../../application/usecases/client/createContract';
 
 
 const ClientRepository = new ClientRepositoryMongoose();
@@ -38,6 +40,8 @@ const makePaymentUseCase = new MakePayment(ClientRepository);
 const getUserProfileUseCase = new GetUserProfile(ClientRepository);
 const getProposalsUseCase = new GetProposals(ClientRepository);
 const getMyJobsUseCase = new GetMyJobs(ClientRepository);
+const latestJobsUseCase = new LatestJobs(ClientRepository);
+const createContractUseCase = new CreateContract(ClientRepository);
  
 
  
@@ -286,6 +290,29 @@ const getMyJobsUseCase = new GetMyJobs(ClientRepository);
             try{
                 const { clientId } = req.params;
                 const response = await getMyJobsUseCase.execute(clientId);
+                
+                res.status(200).json({message: 'Loading propsals', data: response, success: true});
+            }catch(err: any) {
+                res.status(500).json({message: err.message, success: false});
+            }
+         },
+
+         latestJobs: async(req: any, res: any) => {
+            try{
+                
+                const response = await latestJobsUseCase.execute();
+                
+                res.status(200).json({message: 'Loading propsals', data: response, success: true});
+            }catch(err: any) {
+                res.status(500).json({message: err.message, success: false});
+            }
+         },
+
+         createContract: async(req: any, res: any) => {
+            try{
+                const { clientId } = req.params;
+                const { data , userId } = req.body
+                const response = await createContractUseCase.execute(clientId, userId, data);
                 
                 res.status(200).json({message: 'Loading propsals', data: response, success: true});
             }catch(err: any) {
