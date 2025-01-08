@@ -331,8 +331,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
  
              
 
-    if(data.paymentType === 'hourly') {
-          console.log('ENER HERE : ',data)
+    if(data.paymentType === 'hourly') { 
       const minWorkingHours: number = data.estimateTime * 8;
       const finalDate: number = (data.estimateTime * 24 ) - minWorkingHours;
 
@@ -417,9 +416,12 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
   async addMoneyToAdminWallet(role: string, roleId: any, amount: number): Promise< any > {
+
+ 
     
     const adminId = process.env.ADMIN_OBJECT_ID;
           const admin: any = await AdminModel.findById(adminId);
+         
           if(!admin) throw new Error('Unknown Error Occured');
 
         const walletEntry = {
@@ -429,15 +431,22 @@ export class ClientRepositoryMongoose implements ClientRepositary {
           fromId: roleId,
           date: new Date()
         }
-        console.log(walletEntry, typeof walletEntry);
+        
+        
 
-
-        await AdminModel.findByIdAndUpdate(adminId, {
+       const updateAdminWallet = await AdminModel.findByIdAndUpdate(adminId, {
           $inc: {"wallet.balance": amount},
           $push: {"wallet.transactions": walletEntry}
         }, {
           new: true, upsert: false
-        })
+        }).exec();
+
+        if (!updateAdminWallet) {
+          console.error('Update failed. Admin Wallet was not updated.');
+          throw new Error('Admin wallet update failed.');
+        }
+
+        
           
           return 'success';
   }

@@ -13,11 +13,7 @@ export interface Admin extends mongoose.Document{
         balance: {type: Number, required: false}, 
         transactions: [
             {
-                type: String,
-                amount: Number,
-                from: String,
-                fromId: String,
-                date: Date
+                type: []
             }
         ]
     }
@@ -39,12 +35,8 @@ export const AdminSchema: mongoose.Schema = new mongoose.Schema({
         balance: {type: Number, required: false}, 
         transactions: [
             {
-                type: { type: String },
-                amount: { type: Number },
-                from: { type: String },
-                fromId: { type: mongoose.Types.ObjectId },
-                date: { type: Date },
-              },
+                type: Array
+            }
         ]
     }
 });

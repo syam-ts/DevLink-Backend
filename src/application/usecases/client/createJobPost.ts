@@ -13,15 +13,12 @@ export class CreateJobPost {
 
          const data = JSON.parse(postData)
 
-         const payment = parseInt(data.amount)
+         const payment = parseInt(data.payment)
 
-         console.log('THE DATA : ', payment)
-
-      
-        
+         
           const jobPost = await this.clientRepository.createJobPost(clientId, postData);
 
-          const trasferToAdmin = await this.clientRepository.addMoneyToAdminWallet('client', clientId, data.payment);
+          const trasferToAdmin = await this.clientRepository.addMoneyToAdminWallet('client', clientId,  payment);
           return jobPost;
     }
 }

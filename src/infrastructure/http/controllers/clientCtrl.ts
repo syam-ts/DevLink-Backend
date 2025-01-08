@@ -54,8 +54,7 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
          }, 
  
          verifyOtp : async (req: any, res: any ) => {
-           try{ 
-            console.log('The body ', req.body)
+           try{  
 
              const client = await verifyClientUseCase.execute(req.body); 
                  res.json({message: 'OTP verified successfully', type: 'success'})
@@ -182,8 +181,7 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
                 const { clientId } = req.params; 
                 
                  const response = await profileVerificationUseCase.execute(clientId, req.body); 
-                 console.log('The response ', response)
-
+               
                  res.json({message: 'successfully sended', success: true });
             }catch(err: any) {
                 res.json({ message: err.message, success: false });
@@ -219,8 +217,8 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
          createJobPost: async (req: any, res: any) => {
 
              try{      
-
-                 console.log('TEH PARAMS : ', req.params)
+ 
+                console.log('THe id ', req.params)
                 const { clientId, data } = req.params;
               
                 const jobPost = await createJobPostUseCase.execute(clientId, data);

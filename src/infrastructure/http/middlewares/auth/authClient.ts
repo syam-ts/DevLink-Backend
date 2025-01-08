@@ -4,8 +4,7 @@ import { ClientModel } from '../../../../domain/entities/Client';
 
 export const clientAuth = async (req: any, res: any, next: any) => {
   try{
-    
-    console.log('Reched here')
+     
            const refreshToken = req.cookies.jwtC;
            const accessToken = req.cookies.accessTokenC;
            
@@ -49,14 +48,14 @@ export const clientAuth = async (req: any, res: any, next: any) => {
                if (err) {
                  return res.status(403).json({ message: "Access token expired", type: "error" });
                }
-               console.log('id : ', decoded)
+              //  console.log('id : ', decoded)
        
                req.user = { id: decoded.id, email: decoded.email };
                next();
              });
            }
          } catch (error) {
-           console.error("Auth Middleware Error:", error);
+          //  console.error("Auth Middleware Error:", error);
            res.status(500).json({ message: "Internal Server Error", type: "error" });
          }
 };

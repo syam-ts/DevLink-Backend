@@ -12,15 +12,15 @@ export class MakePayment {
      constructor( private clientRepository: ClientRepository) {};
 
     async execute(clientId: string,data: any) { 
-
         const { title, description, keyResponsiblities, requiredSkills,payment, paymentType, estimateTime} = data.formData;
+ 
  
 
         if(!title || !description || !keyResponsiblities || !requiredSkills || !payment || !paymentType || !estimateTime ) {
             throw new Error('All Fields need to be filled');
         } 
 
-        if(title.length < 5  || title.length > 20) {
+        if(title.length < 5  || title.length > 100) {
             throw new Error('Title should have atleset 5 characters');
         }
         
@@ -33,11 +33,11 @@ export class MakePayment {
         if(description.length < 15) {
             throw new Error('Description should have 15 words');
         }
-
-        //FIX IT WITH ARRAY
-        // if(requiredSkills.length < 10) {
-        //     throw new Error('Minimum 2 skills are mandatory');
-        // }
+  
+     
+        if(requiredSkills.length < 2) {
+            throw new Error('Minimum 2 skills are mandatory');
+        }
 
 
         if(payment < 100) {
@@ -56,11 +56,13 @@ export class MakePayment {
       
        
        
-      const minWorkingHours: number = data.formData.estimateTime * 8;
-      const finalDate: number = (data.formData.estimateTime * 24 ) - minWorkingHours;
+    //   const minWorkingHours: number = data.formData.estimateTime * 8;
+    //   const finalDate: number = (data.formData.estimateTime * 24 ) - minWorkingHours;
+    // const timeInHours = data.formData.estimateTime * 60
 
-      const totalAmount = finalDate * data.formData.payment;
+      const totalAmount = data.formData.estimateTime * data.formData.payment;
  
+      data.formData.payment = totalAmount;
 
      const product = await stripe.products.create({
          name: 'Job-Post'
@@ -75,7 +77,7 @@ export class MakePayment {
         })
 
         
-    
+    console.log('THE CLIENT ID FROM MAKE PAYEMTN USECSE : ', clientId)
 
         if(price.id) {
            var session = await stripe.checkout.sessions.create({
@@ -87,7 +89,7 @@ export class MakePayment {
               ],
               mode: 'payment',
               success_url: `http://localhost:5173/client/draftJobPost/payment-success/${encodeURIComponent(clientId)}/${encodeURIComponent(JSON.stringify(data.formData))}`,
-              cancel_url: 'http://localhost:5173/client/draftJobPost/payment-failure',
+              cancel_url: 'http://localhost:5173/client/draftJobPost/payment-failed',
               customer_email: 'samplemail@gmai.com'
 
 
