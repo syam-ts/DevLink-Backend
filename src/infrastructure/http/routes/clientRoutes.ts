@@ -12,6 +12,7 @@ clientRouter.get('/profile/notifications/:clientId',clientAuth, clientController
 clientRouter.get('/listAllJobs', clientAuth,clientController.listAllJobs);
 clientRouter.get('/userProfile/view/:userId',clientAuth, clientController.getUserProfile);
 clientRouter.get('/job/proposals/:clientId',clientAuth, clientController.getProposals);
+clientRouter.get('/job/myJobs/:clientId',clientAuth, clientController.getMyJobs);
  
 clientRouter.post('/signup', clientController.signupClient);
 clientRouter.post('/verify-otp', clientController.verifyOtp);

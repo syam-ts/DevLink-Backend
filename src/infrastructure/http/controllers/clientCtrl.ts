@@ -16,6 +16,7 @@ import { ListAllJobs } from '../../../application/usecases/client/listAllJobs';
 import { MakePayment } from '../../../application/usecases/client/makePayment';
 import { GetUserProfile } from '../../../application/usecases/client/getUserProfile';
 import { GetProposals } from '../../../application/usecases/client/getProposals';
+import { GetMyJobs } from '../../../application/usecases/client/getMyJobs';
 
 
 const ClientRepository = new ClientRepositoryMongoose();
@@ -36,6 +37,7 @@ const listAllJobsUseCase = new ListAllJobs(ClientRepository);
 const makePaymentUseCase = new MakePayment(ClientRepository);
 const getUserProfileUseCase = new GetUserProfile(ClientRepository);
 const getProposalsUseCase = new GetProposals(ClientRepository);
+const getMyJobsUseCase = new GetMyJobs(ClientRepository);
  
 
  
@@ -90,15 +92,11 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
 
         resetPassword: async (req: any, res: any) => {
            try{
+                const { clientId } = req.params;
+                const { password } = req.body;
+                const response = await resetPasswordUseCase.execute(clientId, password);
  
-            const { clientId } = req.params;
-            const { password } = req.body;
- 
-
-              const response = await resetPasswordUseCase.execute(clientId, password);
- 
-               res.json({message: 'Password Reset Successfully', type: 'success'});
-
+                res.json({message: 'Password Reset Successfully', type: 'success'});
            }catch(err: any) {
             res.json({message: err.message, type: 'error'});
            }
@@ -109,14 +107,11 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
              try{
                 
                   const response: any = await loginUseCase.execute(req.body);  
-
                   const { client, refreshToken, accessToken} = response.client;
-
                    
                   if(!client) {
                      res.json({message: 'client not found', type: 'error'})
                   } else {
- 
                      res.cookie("jwtC", refreshToken, {
                          httpOnly: true, 
                          sameSite: "None", 
@@ -126,7 +121,6 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
                      );
                      
                      res.cookie("accessTokenC", accessToken, { httpOnly: true, secure: true, sameSite: "strict" });
-                     
                      return res.json({message: "successfully login",data: response, type: 'success'});
                 }
              }catch(err: any) { 
@@ -215,15 +209,10 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
 
  
          createJobPost: async (req: any, res: any) => {
-
              try{      
- 
-                console.log('THe id ', req.params)
+  
                 const { clientId, data } = req.params;
-              
                 const jobPost = await createJobPostUseCase.execute(clientId, data);
-    
-
              
                 res.json({message: 'Redirecting to payment page',data: jobPost, success: true});
              }catch(err: any) {
@@ -239,7 +228,6 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
                 const response = await getAllNotificationsUseCase.execute( clientId);
   
                 res.json({message: 'successfully list all notifications', type: 'success'});
- 
              }catch(err: any) {
                  res.json({message: err.message, type: 'error'})
              }
@@ -247,7 +235,6 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
  
          listAllJobs: async (req: any, res: any) => {
              try{
-                 
                 const response = await listAllJobsUseCase.execute(); 
 
                 res.json({message: 'successfully list all notifications',data: response, success: true}); 
@@ -259,7 +246,7 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
          
          makePayment: async (req: any, res: any) => {
              try{
-                 
+
                  const { clientId } = req.params; 
                 const response = await makePaymentUseCase.execute(clientId, req.body); 
              
@@ -275,7 +262,6 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
              try{
                  
                 const { userId } = req.params;
-
                 const response = await getUserProfileUseCase.execute(userId); 
                 
                 res.status(200).json({ response }); 
@@ -289,6 +275,17 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
             try{
                 const { clientId } = req.params;
                 const response = await getProposalsUseCase.execute(clientId);
+                
+                res.status(200).json({message: 'Loading propsals', data: response, success: true});
+            }catch(err: any) {
+                res.status(500).json({message: err.message, success: false});
+            }
+         },
+
+         getMyJobs: async(req: any, res: any) => {
+            try{
+                const { clientId } = req.params;
+                const response = await getMyJobsUseCase.execute(clientId);
                 
                 res.status(200).json({message: 'Loading propsals', data: response, success: true});
             }catch(err: any) {

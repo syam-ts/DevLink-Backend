@@ -76,8 +76,7 @@ export class MakePayment {
             currency: 'inr'
         })
 
-        
-    console.log('THE CLIENT ID FROM MAKE PAYEMTN USECSE : ', clientId)
+ 
 
         if(price.id) {
            var session = await stripe.checkout.sessions.create({

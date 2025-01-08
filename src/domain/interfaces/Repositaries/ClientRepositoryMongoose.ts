@@ -445,10 +445,21 @@ export class ClientRepositoryMongoose implements ClientRepositary {
           console.error('Update failed. Admin Wallet was not updated.');
           throw new Error('Admin wallet update failed.');
         }
-
-        
-          
+ 
           return 'success';
   }
+
+
+  async getMyJobs(clientId: string): Promise< any > {
+    console.log('CLCIENT ID ', clientId)
+    const jobs: any = await JobPostModel.find({ clientId: clientId});
+    console.log('THE JOBS FROM CLEINT REPO : ', jobs);
+    if(!jobs) {
+      throw new Error('No job found');
+    }
+
+    
+    return jobs;
+}
 
 }
