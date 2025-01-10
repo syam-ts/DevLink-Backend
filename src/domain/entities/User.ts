@@ -14,6 +14,11 @@ export interface User extends mongoose.Document{
     skills?: [string];
     budget:number,
     isEditRequest: boolean,
+    request: [{
+            type: string,
+            contractInfo: mongoose.Schema.Types.Mixed,
+            created: Date
+        } ],
     isBlocked: boolean;
     refreshToken: string
 }
@@ -58,6 +63,13 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
     description: {type: String, required: false},
     skills: { type: [String], required: false },
     budget: {type: Number, required: false},
+     request: [
+              {
+            type: {type: String, required: false},
+            contractInfo: {type: mongoose.Schema.Types.Mixed, required: false},
+            date: {type: Date, required: false}
+             }
+        ],
     isBlocked: { type: Boolean, required: false },
     isEditRequest: { type: Boolean, required: false},
     refreshToken: {type: String, required: false},

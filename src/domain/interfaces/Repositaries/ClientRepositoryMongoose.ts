@@ -9,6 +9,8 @@ import { ContractModel } from '../../entities/Contract';
 import bcrypt from 'bcrypt';
 import validator from 'validator';
 import jwt from 'jsonwebtoken';
+import allCronJobs from '../../../helper/cron-jobs/index'
+import { ObjectId, Schema } from 'mongoose';
 
    
 
@@ -345,6 +347,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
           requiredSkills: data.requiredSkills,
           paymentType: data.paymentType,
           estimateTime: data.estimateTime,
+          estimateTimeinHours: data.estimateTimeinHours,
           amount: data.payment,
           status: "pending",
           isPayment: true,
@@ -480,7 +483,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
     const currentJobPost: any = await JobPostModel.findById(jobPostId).exec();
 
-
+ 
     const deduction = currentJobPost.amount % 10;
 
      const newContract = new ContractModel({
@@ -493,9 +496,15 @@ export class ClientRepositoryMongoose implements ClientRepositary {
        deadline: currentJobPost.estimateTime,
        active: true,
        status: 'on progress'
-     });
+     } );
 
      const savedContract = await newContract.save();
+
+     const timer = currentJobPost.estimateTimeinHours;
+     const contractId: any = savedContract._id;
+ 
+     await allCronJobs.startContractHelperFn(timer, jobPostId, userId, contractId);
+
 
      return savedContract;
  

@@ -319,7 +319,7 @@ const createContractUseCase = new CreateContract(ClientRepository);
 
                 const response = await createContractUseCase.execute(clientId, userId, jobPostId);
                 
-                res.status(200).json({message: 'new contract created successfully', success: true});
+                res.status(200).json({message: 'new contract created successfully',data: response, success: true});
             }catch(err: any) {
                 res.status(500).json({message: err.message, success: false});
             }

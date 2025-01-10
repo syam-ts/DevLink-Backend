@@ -10,6 +10,7 @@ interface JobPostDocument extends Document {
     paymentType: 'hourly' | 'fixed',
     amount: number,
     estimateTime: Date;
+    estimateTimeinHours: Number;
     status: 'on progress' | 'finished';
     isPayment: boolean;
     date: Date;
@@ -25,6 +26,7 @@ interface JobPostDocument extends Document {
     paymentType: { type: String, required: true },
     amount: { type: Number, required: true },
     estimateTime: { type: Date, required: false },
+    estimateTimeinHours: { type: Number, required: false },
     status: { type: String, required: true },
     date: { type: Date, required: true },
     isPayment: { type: Boolean, required: true },

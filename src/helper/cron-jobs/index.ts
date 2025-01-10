@@ -1,8 +1,8 @@
-import { startContract } from "./startContract";
+import { startContractHelperFn } from "./startContract";
 
 
 const allCronJobs = {
-    startContract
+    startContractHelperFn
 }
 
 export default allCronJobs
