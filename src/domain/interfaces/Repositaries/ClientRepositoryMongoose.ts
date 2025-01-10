@@ -1,11 +1,11 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
 import { Client, ClientModel } from '../../entities/Client';
 import { User } from '../../entities/User';
 import { ClientRepositary } from '../../../application/usecases/client/signupClient';
-import { UserModel } from '../../entities/User' 
-import { NotificationModel } from '../../entities/Notification'
-import { JobPostModel } from '../../entities/JobPost' 
-import { AdminModel } from '../../entities/Admin'
+import { UserModel } from '../../entities/User'; 
+import { NotificationModel } from '../../entities/Notification';
+import { JobPostModel } from '../../entities/JobPost'; 
+import { AdminModel } from '../../entities/Admin';
+import { ContractModel } from '../../entities/Contract';
 import bcrypt from 'bcrypt';
 import validator from 'validator';
 import jwt from 'jsonwebtoken';
@@ -16,7 +16,6 @@ import jwt from 'jsonwebtoken';
 export class ClientRepositoryMongoose implements ClientRepositary {
 
   async createClient(client: Client | any): Promise<Client | any> {
-
     const salt: number = 10;
     const hashedPassword = await bcrypt.hash(client.password, salt);
 
@@ -35,6 +34,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     } as unknown as Client;
 
   }
+
+
 
 
   async signupClient(client: Client | any): Promise<Client | any> {
@@ -58,7 +59,6 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
 
     const foundClient: any = this.findClientByEmail(client.email);
-   
 
     if (foundClient) {
       return foundClient
@@ -70,10 +70,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async verifyOtp(client: any): Promise<Client> {
-
-
     const { name, email, password } = client.client;
-
     if (client.mailOtp === parseInt(client.clientOtp.otp)) {
 
       const salt: number = 10;
@@ -90,7 +87,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
                 date: ""
             }
         ]
-    }
+    };
 
       const createdClient = new ClientModel({
         name: name,
@@ -119,11 +116,13 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         email: savedClient.email,
         password: savedClient.password
       } as Client;
-
     } else {
       throw new Error('incorrect OTP');
     }
   }
+
+
+
 
 
   async findClientByEmail(email: string): Promise<Client | null> {
@@ -142,6 +141,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     };
 
   }
+
+
+
 
 
   async findClientByEmailAndPassword(email: string, password: string): Promise<Client | any> {
@@ -163,43 +165,32 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
     if (!client.password) {
       throw new Error('Password is wrong');
-    }
-
+    } 
 
     const isValidPassword = await bcrypt.compare(password, client.password as string);
 
     if (!isValidPassword) {
       throw new Error('wrong password')
-    };
-
+    }; 
 
     const CLIENT_ACCESS_TOKEN: any = process.env.CLIENT_ACCESS_TOKEN;
          const CLIENT_REFRESH_TOKEN: any = process.env.CLIENT_REFRESH_TOKEN;
     
          const refreshToken = jwt.sign({id: client._id, email: client.email},CLIENT_REFRESH_TOKEN, {expiresIn: "7d"});
          const accessToken = jwt.sign({id: client._id, email: client.email},CLIENT_ACCESS_TOKEN, {expiresIn: "15m"});
-         
               
-                 client.refreshToken = refreshToken;
-                 await client.save();
+         client.refreshToken = refreshToken;
+         await client.save();
 
-  
-                 return { 
-                  client:{
-                  client
-                  },
-                  accessToken, 
-                  refreshToken
-                };
- 
+     return { client:{ client }, accessToken, refreshToken };
+        };
 
-  }
+
 
 
   async findClientByOnlyEmail(email: string, name: string): Promise<Client | null> {
     const client = await ClientModel.findOne({ email }).exec();
     if (client) {
-
       return {
         name: client.name,
         email: client.email
@@ -211,30 +202,29 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         email: email
       });
 
-
       const savedClient = await createdClient.save();
-
 
       return {
         name: savedClient.name,
         email: savedClient.email
       } as Client;
     }
-
-
   }
+
+
 
 
   async findAllUsers(): Promise<User | any> {
     const users: any = await UserModel.find().exec();
     if (users) {
-
-
+      
       return {
         ...users
       } as User;
     }
   }
+
+
 
 
 
@@ -252,6 +242,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
 
+
+
+
   async getClientProfile(clientId: string): Promise<any> {
     const client = await ClientModel.findById(clientId);
 
@@ -263,6 +256,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
  
+
+
 
   async profileVerification(clientId: any, data: any): Promise<any> {
     const adminId = process.env.ADMIN_OBJECT_ID;   
@@ -293,11 +288,13 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       return updatedAdmin;
   }
 
-  async editClientProfile(clientId: string, editData: any): Promise<any> {
 
+
+
+
+  async editClientProfile(clientId: string, editData: any): Promise<any> {
     const adminId = process.env.ADMIN_OBJECT_ID;   
     const existingClient: any = await ClientModel.findById(clientId);
-
      
     if(existingClient.isEditRequest) {
       throw new Error('Request already sended');
@@ -325,50 +322,43 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
 
+
+
+
+
   async createJobPost(clientId: string, jobPost: any): Promise<any> {
-    
     const data = JSON.parse(jobPost);
- 
              
-
     if(data.paymentType === 'hourly') { 
-      const minWorkingHours: number = data.estimateTime * 8;
-      const finalDate: number = (data.estimateTime * 24 ) - minWorkingHours;
+        const minWorkingHours: number = data.estimateTime * 8;
+        const finalDate: number = (data.estimateTime * 24 ) - minWorkingHours;
 
-      const totalAmount = finalDate * data.payment;
+        const totalAmount = finalDate * data.payment;
 
-        data.amount = totalAmount; //updatig the total amount
-   
+        data.amount = totalAmount; //updatig the total amount 
       
-      
-    const createdJobPost = new JobPostModel({
-      title: data.title,
-      clientId: clientId,
-      description: data.description,
-      keyResponsiblities: data.keyResponsiblities,
-      requiredSkills: data.requiredSkills,
-      paymentType: data.paymentType,
-      estimateTime: data.estimateTime,
-      amount: data.payment,
-      status: "pending",
-      isPayment: true,
-      date: new Date()
-    })
+        const createdJobPost = new JobPostModel({
+          title: data.title,
+          clientId: clientId,
+          description: data.description,
+          keyResponsiblities: data.keyResponsiblities,
+          requiredSkills: data.requiredSkills,
+          paymentType: data.paymentType,
+          estimateTime: data.estimateTime,
+          amount: data.payment,
+          status: "pending",
+          isPayment: true,
+          date: new Date()
+        });
 
-      const savedJobPost = await createdJobPost.save();
-    
-
-    return {
-      savedJobPost
-    };
-
-
-    } else {
-      return jobPost; 
-
-    }
-
+        const savedJobPost = await createdJobPost.save(); 
+        return { savedJobPost };  
+      } else {
+        return jobPost; 
+      }
   }
+
+
 
 
   async getAllNotifications(clientId: any): Promise<any> {
@@ -382,6 +372,10 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
 
+
+
+
+
   async findAllJobs(): Promise< any> {
     const allJobs = await JobPostModel.find().exec();
  
@@ -391,6 +385,10 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       return allJobs;
     }
   }
+
+  
+
+
 
 
   async getUserProfile(userId: string): Promise< any> {
@@ -405,6 +403,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
 
+
+
+
   async getProposals(clientId: string): Promise< any > {
           const client: any = await ClientModel.findById(clientId);
           if(!client) {
@@ -415,43 +416,41 @@ export class ClientRepositoryMongoose implements ClientRepositary {
           return proposals;
   }
 
-  async addMoneyToAdminWallet(role: string, roleId: any, amount: number): Promise< any > {
 
- 
-    
+
+
+
+  async addMoneyToAdminWallet(role: string, roleId: any, amount: number): Promise< any > { 
     const adminId = process.env.ADMIN_OBJECT_ID;
           const admin: any = await AdminModel.findById(adminId);
          
-          if(!admin) throw new Error('Unknown Error Occured');
+          if(!admin) throw new Error('Unknown Error Occured'); 
+          const walletEntry = {
+            type: 'credit',
+            amount: amount,
+            from: role,
+            fromId: roleId,
+            date: new Date()
+          };
 
-        const walletEntry = {
-          type: 'credit',
-          amount: amount,
-          from: role,
-          fromId: roleId,
-          date: new Date()
-        }
-        
-        
+          const updateAdminWallet = await AdminModel.findByIdAndUpdate(adminId, {
+              $inc: {"wallet.balance": amount},
+              $push: {"wallet.transactions": walletEntry}
+            }, {
+              new: true, upsert: false
+            }).exec();
 
-       const updateAdminWallet = await AdminModel.findByIdAndUpdate(adminId, {
-          $inc: {"wallet.balance": amount},
-          $push: {"wallet.transactions": walletEntry}
-        }, {
-          new: true, upsert: false
-        }).exec();
-
-        if (!updateAdminWallet) {
-          console.error('Update failed. Admin Wallet was not updated.');
-          throw new Error('Admin wallet update failed.');
-        }
- 
+            if (!updateAdminWallet) {
+              console.error('Update failed. Admin Wallet was not updated.');
+              throw new Error('Admin wallet update failed.');
+            }
           return 'success';
-  }
+      }
+
+
 
 
   async getMyJobs(clientId: string): Promise< any > {
- 
     const jobs: any = await JobPostModel.find({ clientId: clientId}); 
     if(!jobs) {
       throw new Error('No job found');
@@ -460,24 +459,47 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return jobs;
 }
 
+
+
+
+
   async latestJobs(): Promise< any > {
  
     const jobs: any = await JobPostModel.find().sort({date: 'desc'}); 
-
     if(!jobs) {
       throw new Error('No job found');
     }
- 
     return jobs;
 }
 
-  async createContract(clientId: string, userId: string, data: any): Promise< any > {
- 
-    // const constact: any = new ContractModel({
-    //)}
 
-  
-    // return contract;
+
+
+
+  async createContract(clientId: string, userId: string, jobPostId: string): Promise< any > {
+
+    const currentJobPost: any = await JobPostModel.findById(jobPostId).exec();
+
+
+    const deduction = currentJobPost.amount % 10;
+
+     const newContract = new ContractModel({
+       userId: userId,
+       clientId: clientId,
+       jobPostId: currentJobPost._id,
+       amount: currentJobPost.amount,
+       deduction: deduction,
+       created: new Date(),
+       deadline: currentJobPost.estimateTime,
+       active: true,
+       status: 'on progress'
+     });
+
+     const savedContract = await newContract.save();
+
+     return savedContract;
+ 
+    
   }
 
 }

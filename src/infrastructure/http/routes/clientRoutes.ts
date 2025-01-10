@@ -32,7 +32,7 @@ clientRouter.post('/payment/success/:clientId/:data', clientAuth,clientControlle
 clientRouter.post('/payment/success/:clientId/:data', clientAuth,clientController.createJobPost);
 
 
-clientRouter.post('/job/createContract', clientAuth,clientController.createContract);
+clientRouter.post('/job/createContract',clientController.createContract);
 
 
 clientRouter.put('/profile/edit/:clientId', clientAuth, clientController.editProfile);

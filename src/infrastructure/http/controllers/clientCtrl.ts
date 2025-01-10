@@ -310,11 +310,16 @@ const createContractUseCase = new CreateContract(ClientRepository);
 
          createContract: async(req: any, res: any) => {
             try{
-                const { clientId } = req.params;
-                const { data , userId } = req.body
-                const response = await createContractUseCase.execute(clientId, userId, data);
+             
+                const { userId, clientId, jobPostId } = req.body;
+
+                if(!userId || !clientId || !jobPostId ) {
+                   return res.status(400).json({ message: 'Missing informations ', success: false });
+                }
+
+                const response = await createContractUseCase.execute(clientId, userId, jobPostId);
                 
-                res.status(200).json({message: 'Loading propsals', data: response, success: true});
+                res.status(200).json({message: 'new contract created successfully', success: true});
             }catch(err: any) {
                 res.status(500).json({message: err.message, success: false});
             }

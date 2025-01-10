@@ -3,12 +3,13 @@ import mongoose, { Schema , Model} from 'mongoose';
 
 interface ContractDocument extends Document {
     userId?: mongoose.Types.ObjectId;
-    clientId?: mongoose.Types.ObjectId
+    clientId?: mongoose.Types.ObjectId;
     jobPostId?: mongoose.Types.ObjectId; 
-    amount: number,
-    deduction: number,
+    amount: number;
+    deduction: number;
     created: Date;
     deadline: Date; 
+    active: Boolean;
     status: 'on progress' | 'finished'; 
   };
   
@@ -20,8 +21,9 @@ interface ContractDocument extends Document {
     deduction: {type: Number, required: true}, 
     created: { type: Date, required: true },
     deadline: { type: Date, required: true },
-    status: { type: String, required: true },
+    active: { type: Boolean, required: true, default: true },
+    status: { type: String, required: true , default: 'on progress'},
   });
   
-  export const ContractModel: Model<ContractDocument> = mongoose.model<ContractDocument>('JobPost', ContractSchema);
+  export const ContractModel: Model<ContractDocument> = mongoose.model<ContractDocument>('Contract', ContractSchema);
   
