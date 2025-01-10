@@ -4,7 +4,6 @@ import routes from './infrastructure/http/routes'
 import cookieparser from 'cookie-parser';
 require('dotenv').config();
 import cors from 'cors';
-import allCronJobs from './helper/cron-jobs/index'
 
 const app = express(); 
 
@@ -18,14 +17,13 @@ app.use(
   );
 app.use('/', routes);
 
-const PORT: number = 3000; // process.env.PORT
+
+const PORT: number = process.env.PORT as any || 3000;
 (async () => {
     await connectDB();
 
-   
     app.listen(PORT, () => {
-        console.log(`Server running on ${PORT}`);
-        allCronJobs.startContract;
+        console.log(`Server running on port ${PORT}`);
     })
 })();
  

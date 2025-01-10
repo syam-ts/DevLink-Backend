@@ -1,7 +1,7 @@
 import { startContract } from "./startContract";
 
 
-const allCronJobs =  {
+const allCronJobs = {
     startContract
 }
 
