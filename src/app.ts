@@ -4,6 +4,7 @@ import routes from './infrastructure/http/routes'
 import cookieparser from 'cookie-parser';
 require('dotenv').config();
 import cors from 'cors';
+import allCronJobs from './helper/cron-jobs/index'
 
 const app = express(); 
 
@@ -23,7 +24,8 @@ const PORT: number = 3000; // process.env.PORT
 
    
     app.listen(PORT, () => {
-        console.log(`Server running on ${PORT}`)
+        console.log(`Server running on ${PORT}`);
+        allCronJobs.startContract;
     })
 })();
  
