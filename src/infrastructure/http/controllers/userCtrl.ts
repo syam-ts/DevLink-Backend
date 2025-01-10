@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import { SignupUser } from "../../../application/usecases/user/signupUser";
 import { LoginUser } from "../../../application/usecases/user/loginUser";
 import { GoogleLoginUser } from "../../../application/usecases/user/GoogleLoginUser";
@@ -12,6 +13,7 @@ import { GetUserProfile } from "../../../application/usecases/user/getProfile";
 import { ListAllJobs } from "../../../application/usecases/user/listAllJobs";
 import { BestMatches } from "../../../application/usecases/user/bestMatches";
 import { CreateProposal } from "../../../application/usecases/user/createProposal"; 
+import { CloseContract } from "../../../application/usecases/user/closeContract"; 
 
 
 const userRepository = new UserRepositoryMongoose();
@@ -28,10 +30,12 @@ const getProfileUseCase = new GetUserProfile(userRepository);
 const listAllJobsUseCase = new ListAllJobs(userRepository);
 const bestMatchesUseCase = new BestMatches(userRepository);
 const createProposalUseCase = new CreateProposal(userRepository);
+const closeContractUseCase = new CloseContract(userRepository);
+
 
 export const userController = {
 
-    signupUser: async (req: any, res: any) => {
+    signupUser: async (req: Request, res: Response) => {
         try { 
             const otp = await signupUseCase.execute(req.body);
 
@@ -51,7 +55,7 @@ export const userController = {
     },
 
     
-    verifyOtp: async (req: any, res: any) => {
+    verifyOtp: async (req: Request, res: Response) => {
         try {
           
             const user = await verifyUserUseCase.execute(req.body);
@@ -63,7 +67,7 @@ export const userController = {
     },
 
 
-    resendOtp: async (req: any, res: any) => {
+    resendOtp: async (req: Request, res: Response) => {
         try {
             const user = await signupUseCase.execute(req.body);
 
@@ -78,7 +82,7 @@ export const userController = {
     },
 
 
-    verifyEmail: async (req: any, res: any) => {
+    verifyEmail: async (req: Request, res: Response) => {
         try {
             const response = await verifyEmailUseCase.execute(req.body.email);
 
@@ -93,7 +97,7 @@ export const userController = {
     },
 
 
-    resetPassword: async (req: any, res: any) => {
+    resetPassword: async (req: Request, res: Response) => {
         try {  
             let { userId } = req.params, { password } = req.body; 
             const response = await resetPasswordUseCase.execute(userId, password);
@@ -105,7 +109,7 @@ export const userController = {
     },
 
 
-    loginUser: async (req: any, res: any) => {
+    loginUser: async (req: Request, res: any) => {
         try {
             const theUser = await loginUseCase.execute(req.body);
 
@@ -128,7 +132,7 @@ export const userController = {
     },
 
 
-    googleLogin: async (req: any, res: any) => {
+    googleLogin: async (req: Request, res: any) => {
         try {
             const user = await GoogleLoginUserUseCase.execute(req.body); 
             res.cookie("jwtU", user.jwt, {
@@ -144,9 +148,9 @@ export const userController = {
     },
 
 
-    getHomeUser: async (req: any, res: any) => {
+    getHomeUser: async (req: Request, res: any) => {
         try {
-            console.log('The acces token from home : ', req.cookies)
+      
             const clients = await getHomeUseCase.execute();
 
           
@@ -161,7 +165,7 @@ export const userController = {
     },
 
 
-    getProfile: async (req: any, res: any) => {
+    getProfile: async (req: Request, res: Response) => {
         try {
             const { userId } = req.params;
             const user = await getProfileUseCase.execute(userId);
@@ -177,7 +181,7 @@ export const userController = {
     },
 
 
-    editProfile: async (req: any, res: any) => {
+    editProfile: async (req: Request, res: Response) => {
 
         try {
             const { userId } = req.params;
@@ -192,7 +196,7 @@ export const userController = {
     },
 
 
-    logoutUser: async (req: any, res: any) => {
+    logoutUser: async (req: Request, res: Response) => {
         try {
             res.clearCookie("jwtU", { path: "/" });
             res.json({ message: "successfully loggedout", type: "success" });
@@ -203,7 +207,7 @@ export const userController = {
 
 
     
-    listAllJobs: async (req: any, res: any) => {
+    listAllJobs: async (req: Request, res: Response) => {
         try{
             
            const response = await listAllJobsUseCase.execute(); 
@@ -215,7 +219,7 @@ export const userController = {
     },
 
     
-    bestMatches: async (req: any, res: any) => {
+    bestMatches: async (req: Request, res: Response) => {
         try{
             const { userId } = req.params;
            const response = await bestMatchesUseCase.execute(userId); 
@@ -227,7 +231,7 @@ export const userController = {
     },
 
     
-    createProposal: async (req: any, res: any) => {
+    createProposal: async (req: Request, res: Response) => {
         try{ 
             
             const {userId, clientId}= req.params;
@@ -239,6 +243,19 @@ export const userController = {
             res.json({message: err.message, success: false})
         }
     },
+
+
+    closingContract: async (req: Request, res: Response) => {
+        try{
+              const { contractId, description, progress} = req.body;
+              console.log('THE BODY : ', req.body);
+            const closedContract = await closeContractUseCase.execute(contractId, description, progress);
+
+            res.status(200).json({message: 'successfully closed the contract', success: true});
+        }catch(err: any) {
+            res.status(500).json({message: err.message, success: false});
+        }
+    }
 };
 
 // POST otp =  {

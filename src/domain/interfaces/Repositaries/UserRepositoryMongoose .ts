@@ -7,6 +7,8 @@ import { UserRepositary } from '../../../application/usecases/user/signupUser';
 import bcrypt from 'bcrypt';
 import validator from 'validator'; 
 import jwt from 'jsonwebtoken';
+import { ContractModel } from '../../entities/Contract';
+import { AdminModel } from '../../entities/Admin';
   
 
 export class UserRepositoryMongoose implements UserRepositary {
@@ -330,6 +332,57 @@ export class UserRepositoryMongoose implements UserRepositary {
          } else {
            return matchJobs;
          }
+       }
+
+
+
+       async closeContract(contractId: string, description: string, progress: any): Promise< any> {
+
+       
+        const currentContract: any= await ContractModel.findById(contractId).exec();
+
+        if(!currentContract) {
+          throw new Error('Contract not found')
+        }
+
+        const finalAmount = currentContract - (currentContract.amount % 10);
+
+        const adminId = process.env.ADMIN_OBJECT_ID;
+        const admin = await AdminModel.findById(adminId).exec();
+
+
+        const walletEntryUser = {
+          type: 'credit',
+          amount: finalAmount,
+          from: admin,
+          fromId: adminId,
+          date: new Date()
+        };
+
+        const updateUserWallet = await UserModel.findByIdAndUpdate(currentContract.userId, {
+            $inc: {"wallet.balance": finalAmount},
+            $push: {"wallet.transactions": walletEntryUser}
+          }, {
+            new: true, upsert: false
+          }).exec();
+
+
+        const walletEntryAdmin = {
+          type: 'debit',
+          amount: finalAmount,
+          from: admin,
+          fromId: null,
+          date: new Date()
+        };
+
+        const updateAdminWallet = await AdminModel.findByIdAndUpdate(adminId, {
+            $dec: {"wallet.balance": finalAmount},
+            $push: {"wallet.transactions": walletEntryAdmin}
+          }, {
+            new: true, upsert: false
+          }).exec();
+
+            return { updateUserWallet, updateAdminWallet};
 
        }
   }
