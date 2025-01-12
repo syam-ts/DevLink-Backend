@@ -310,14 +310,15 @@ const createContractUseCase = new CreateContract(ClientRepository);
 
          createContract: async(req: any, res: any) => {
             try{
-             
+               
                 const { userId, clientId, jobPostId } = req.body;
 
-                if(!userId || !clientId || !jobPostId ) {
+                if(!userId && !clientId && !jobPostId ) {
                    return res.status(400).json({ message: 'Missing informations ', success: false });
                 }
 
                 const response = await createContractUseCase.execute(clientId, userId, jobPostId);
+                console.log('THE REPSONE FROM CTRL : ', response)
                 
                 res.status(200).json({message: 'new contract created successfully',data: response, success: true});
             }catch(err: any) {

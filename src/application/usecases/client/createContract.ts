@@ -14,7 +14,6 @@ export class CreateContract
     async execute(clientId: string, userId: string , jobPostId: string) { 
  
 
-         
           const createdContract = await this.clientRepository.createContract(clientId, userId, jobPostId);
           if(!createdContract) {
             throw new Error('Something went wrong')

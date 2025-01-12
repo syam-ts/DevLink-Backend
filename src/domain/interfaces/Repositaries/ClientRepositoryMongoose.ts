@@ -481,6 +481,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async createContract(clientId: string, userId: string, jobPostId: string): Promise< any > {
 
+    console.log('THTE CURRURENT POST : ', jobPostId)
     const currentJobPost: any = await JobPostModel.findById(jobPostId).exec();
 
  
