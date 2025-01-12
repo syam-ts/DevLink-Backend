@@ -19,6 +19,14 @@ export interface User extends mongoose.Document{
             contractInfo: mongoose.Schema.Types.Mixed,
             created: Date
         } ],
+        wallet: {
+          balance: {type: Number, required: false}, 
+          transactions: [
+              {
+                  type: []
+              }
+          ]
+      };
     isBlocked: boolean;
     refreshToken: string
 }
@@ -70,6 +78,14 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
             date: {type: Date, required: false}
              }
         ],
+        wallet: {
+          balance: {type: Number, required: false}, 
+          transactions: [
+              {
+                  type: Array
+              }
+          ]
+      },
     isBlocked: { type: Boolean, required: false },
     isEditRequest: { type: Boolean, required: false},
     refreshToken: {type: String, required: false},

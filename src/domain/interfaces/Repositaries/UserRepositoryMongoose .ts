@@ -331,7 +331,7 @@ export class UserRepositoryMongoose implements UserRepositary {
 
        async allNotifications(userId: Id): Promise< any> {
          const user: any = await UserModel.findById(userId).exec();
-         console.log('THE CURENT USER : ', user)
+        //  console.log('THE CURENT USER : ', user)
       
          if(!user) {
            throw new Error('User not found');
@@ -371,14 +371,22 @@ export class UserRepositoryMongoose implements UserRepositary {
 
        async closeContract(contractId: string, description: string, progress: any): Promise< any> {
 
-       
-        const currentContract: any= await ContractModel.findById(contractId).exec();
+         const currentContract: any= await ContractModel.findByIdAndUpdate(contractId, {
+          active: false, status: 'closed'
+            }, { update: true }); 
+      
+          if(!currentContract) {
+            throw new Error('Contract not found')
+          }
 
-        if(!currentContract) {
-          throw new Error('Contract not found')
-        }
+        currentContract.active = false;
 
-        const finalAmount = currentContract - (currentContract.amount % 10);
+
+
+
+        const finalAmount = Math.round(currentContract.amount - (currentContract.amount * 10) / 100);
+
+         
 
         const adminId = process.env.ADMIN_OBJECT_ID;
         const admin = await AdminModel.findById(adminId).exec();
@@ -387,7 +395,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         const walletEntryUser = {
           type: 'credit',
           amount: finalAmount,
-          from: admin,
+          from: 'admin',
           fromId: adminId,
           date: new Date()
         };
@@ -403,13 +411,13 @@ export class UserRepositoryMongoose implements UserRepositary {
         const walletEntryAdmin = {
           type: 'debit',
           amount: finalAmount,
-          from: admin,
-          fromId: null,
+          from: 'admin',
+          fromId: process.env.ADMIN_OBJECT_ID,
           date: new Date()
         };
 
         const updateAdminWallet = await AdminModel.findByIdAndUpdate(adminId, {
-            $dec: {"wallet.balance": finalAmount},
+            $inc: {"wallet.balance": -finalAmount},
             $push: {"wallet.transactions": walletEntryAdmin}
           }, {
             new: true, upsert: false

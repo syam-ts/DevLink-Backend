@@ -10,7 +10,7 @@ interface ContractDocument extends Document {
     created: Date;
     deadline: Date; 
     active: Boolean;
-    status: 'on progress' | 'finished'; 
+    status: 'on progress' | 'pending' | 'closed'; 
   };
   
   const ContractSchema = new Schema<ContractDocument>({

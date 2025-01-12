@@ -118,7 +118,7 @@ export const userController = {
             const theUser = await loginUseCase.execute(req.body);
 
             const { user, refreshToken, accessToken} = theUser;
-            console.log('The user : ', user)
+       
 
             res.cookie("jwtU", refreshToken, {
                 httpOnly: true,
@@ -194,7 +194,7 @@ export const userController = {
 
             res.json({ message: "Profile successfully edited", type: "success" });
         } catch (err: any) {
-            console.log('ERROF: ',err)
+         
             res.json({ message: err.message, type: "error" });
         }
     },
@@ -237,7 +237,7 @@ export const userController = {
     
     createProposal: async (req: Request, res: Response) => {
         try{ 
-            console.log('THE BODY : ',req.params);
+        
             
             const {userId, clientId, jobPostId}= req.params;
             const { description }= req.body; 
@@ -249,27 +249,15 @@ export const userController = {
         }
     },
 
-
-    closingContract: async (req: Request, res: Response) => {
-        try{
-              const { contractId, description, progress} = req.body;
-              console.log('THE BODY : ', req.body);
-            const closedContract = await closeContractUseCase.execute(contractId, description, progress);
-
-            res.status(200).json({message: 'successfully closed the contract', success: true});
-        }catch(err: any) {
-            res.status(500).json({message: err.message, success: false});
-        }
-    },
-
-
+    
+    
     allContracts: async (req: Request, res: Response) => {
         try{
-              const { userId } = req.params;
+            const { userId } = req.params;
             
             const allContracts = await allContractsUseCase.execute(userId);
 
-            console.log('THE RESPONSE FROM CTRL OF ALL-CONTRACTS : ',allContracts )
+          
 
             res.status(200).json({message: 'successfully closed the contract',contracts: allContracts, success: true});
         }catch(err: any) {
@@ -279,24 +267,40 @@ export const userController = {
 
 
 
-
+    
     allNotifications: async (req: Request, res: Response) => {
         try{
               const { userId } = req.params;
             
             const allNotifications = await allNotificationsUseCase.execute(userId);
 
-            console.log('THE RESPONSE FROM CTRL OF ALL-NOTIFICATIONS : ',allNotifications )
+            // console.log('THE RESPONSE FROM CTRL OF ALL-NOTIFICATIONS : ',allNotifications )
 
             res.status(200).json({message: 'successfully loaded all notifications',notifications: allNotifications, success: true});
         }catch(err: any) {
             res.status(500).json({message: err.message, success: false});
         }
-    }
+    },
+
+
+
+    
+        closingContract: async (req: Request, res: Response) => {
+            try{
+                  const { contractId, description, progress } = req.body;
+            
+                   
+                const closedContract = await closeContractUseCase.execute(contractId, description, progress);
+    
+                res.status(200).json({message: 'successfully closed the contract', success: true});
+            }catch(err: any) {
+                res.status(500).json({message: err.message, success: false});
+            }
+        },
 };
 
 // POST otp =  {
-//     user: {
+    //     user: {
 //       name: 'Syam',
 //       password: 'syamWnanddhu3@gmail.com',
 //       email: 'syamnanddhu3@gmail.com',
