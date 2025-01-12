@@ -317,8 +317,7 @@ const createContractUseCase = new CreateContract(ClientRepository);
                    return res.status(400).json({ message: 'Missing informations ', success: false });
                 }
 
-                const response = await createContractUseCase.execute(clientId, userId, jobPostId);
-                console.log('THE REPSONE FROM CTRL : ', response)
+                const response = await createContractUseCase.execute(clientId, userId, jobPostId); 
                 
                 res.status(200).json({message: 'new contract created successfully',data: response, success: true});
             }catch(err: any) {

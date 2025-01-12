@@ -15,6 +15,7 @@ userRouter.get('/getHome', userAuth, userController.getHomeUser);
 userRouter.get('/profile/view/:userId', userController.getProfile); //ADD USERAUTH
 userRouter.get('/listAllJobs',userAuth, userController.listAllJobs);
 userRouter.get('/listJobs/bestMatches/:userId', userController.bestMatches);
+userRouter.get('/all-contracts/:userId', userController.allContracts);
 
 
 // userRouter.get('/jobs/proposals/:clientId',userController.getAllProposals);

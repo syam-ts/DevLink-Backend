@@ -314,6 +314,19 @@ export class UserRepositoryMongoose implements UserRepositary {
        }
 
 
+
+     
+       async allContracts(userId: Id): Promise< any> {
+         const contract = await ContractModel.find({userId: userId}).exec();
+      
+         if(!contract) {
+           throw new Error('Contract not found');
+         } else {
+           return contract;
+         }
+       }
+
+
      
        async bestMatches(userId: string): Promise< any> {
 

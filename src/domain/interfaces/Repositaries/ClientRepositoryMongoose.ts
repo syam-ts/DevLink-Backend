@@ -480,8 +480,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async createContract(clientId: string, userId: string, jobPostId: string): Promise< any > {
-
-    console.log('THTE CURRURENT POST : ', jobPostId)
+ 
     const currentJobPost: any = await JobPostModel.findById(jobPostId).exec();
 
  
@@ -504,7 +503,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
      const timer = currentJobPost.estimateTimeinHours;
      const contractId: any = savedContract._id;
  
-     await allCronJobs.startContractHelperFn(timer, jobPostId, userId, contractId);
+   // await allCronJobs.startContractHelperFn(timer, jobPostId, userId, contractId);
 
 
      return savedContract;
