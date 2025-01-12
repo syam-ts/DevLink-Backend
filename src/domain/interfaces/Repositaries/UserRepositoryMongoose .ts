@@ -274,30 +274,32 @@ export class UserRepositoryMongoose implements UserRepositary {
         if(!user) {
           throw new Error('User not found');
         }
- 
-         const newProposal = {
-                 type: 'New Job Proposal ',
-                 userId: userId,
-                 jobPostId:  jobPostId,
-                 userData: user,
-                 description: description 
-               }
-              //  const proposal = await ClientModel.findById(clientId)
-           
-               const proposal = await ClientModel.findByIdAndUpdate(
-                 clientId,
-                 { $push: { proposals: newProposal } },
-                 { new: true }
-               ); 
-               
-             
+
+        const existingProposal = await ClientModel.find({"proposals.jobPostId": jobPostId})
+        console.log('THE EXISTING : ', existingProposal.length);
+        if(existingProposal.length !== 0) {
+          throw new Error('Proposal alredy send')
+        } else {
+          console.log('WORK THIS THEN')
+          const newProposal = {
+            type: 'New Job Proposal ',
+            userId: userId,
+            jobPostId:  jobPostId,
+            userData: user,
+            description: description 
+          }
+         //  const proposal = await ClientModel.findById(clientId)
       
-        //  if(!allJobs) {
-        //    throw new Error('No job found');
-        //  } else {
-        //    return allJobs;
-        //  }
-        return proposal;
+          const proposal = await ClientModel.findByIdAndUpdate(
+            clientId,
+            { $push: { proposals: newProposal } },
+            { new: true }
+          ); 
+          
+         
+            return proposal;
+        } 
+         
        }
 
 
@@ -380,18 +382,9 @@ export class UserRepositoryMongoose implements UserRepositary {
           }
 
         currentContract.active = false;
-
-
-
-
         const finalAmount = Math.round(currentContract.amount - (currentContract.amount * 10) / 100);
-
-         
-
+          
         const adminId = process.env.ADMIN_OBJECT_ID;
-        const admin = await AdminModel.findById(adminId).exec();
-
-
         const walletEntryUser = {
           type: 'credit',
           amount: finalAmount,
@@ -406,7 +399,6 @@ export class UserRepositoryMongoose implements UserRepositary {
           }, {
             new: true, upsert: false
           }).exec();
-
 
         const walletEntryAdmin = {
           type: 'debit',

@@ -19,14 +19,12 @@ export const adminAuth = async (req: any, res: any, next: any) => {
           return res.status(403).json({ message: "Invalid Token", type: "error" });
       }
 
-      // Create a new access token
       const accessToken = jwt.sign(
           { name: decoded.name },
                ADMIN_REFRESH_TOKEN,
           { expiresIn: '15m' }
       );
 
-      // Send the new access token
       req.admin = { accessToken }; 
        next()
   });
