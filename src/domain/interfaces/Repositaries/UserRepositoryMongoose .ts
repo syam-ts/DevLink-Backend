@@ -10,6 +10,7 @@ import jwt from 'jsonwebtoken';
 import { ContractModel } from '../../entities/Contract';
 import { AdminModel } from '../../entities/Admin';
   
+type Id = string
 
 export class UserRepositoryMongoose implements UserRepositary {
 
@@ -268,7 +269,7 @@ export class UserRepositoryMongoose implements UserRepositary {
 
 
      
-       async createProposal( clientId: string, userId: string, description: string): Promise< any> {
+       async createProposal( clientId: Id, userId: Id, jobPostId: Id, description: string): Promise< any> {
         const user = await UserModel.findById(userId);
         if(!user) {
           throw new Error('User not found');
@@ -277,6 +278,7 @@ export class UserRepositoryMongoose implements UserRepositary {
          const newProposal = {
                  type: 'New Job Proposal ',
                  userId: userId,
+                 jobPostId:  jobPostId,
                  userData: user,
                  description: description 
                }

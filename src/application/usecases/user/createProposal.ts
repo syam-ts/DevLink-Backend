@@ -1,7 +1,6 @@
-
-
+type Id = string;
 export interface UserRepositary {
-    createProposal(userId: string, clientId: string, description: string): Promise< any >
+    createProposal(userId: Id, clientId: Id, jobPostId: Id, description: string): Promise< any >
 } 
 
 
@@ -9,10 +8,10 @@ export interface UserRepositary {
 export class CreateProposal {
     constructor(private userRepositary: UserRepositary) {}
 
-    async execute(clientId: string, userId: string, description: string) {  
+    async execute(clientId: Id, userId: Id,  jobPostId: Id, description: string) {  
         console.log('The usecase  : ', clientId, userId)
 
-           const result = await this.userRepositary.createProposal( clientId, userId, description); 
+           const result = await this.userRepositary.createProposal( clientId, userId, jobPostId,  description); 
             
 
            return {   };
