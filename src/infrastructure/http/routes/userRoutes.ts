@@ -16,6 +16,7 @@ userRouter.get('/profile/view/:userId', userController.getProfile); //ADD USERAU
 userRouter.get('/listAllJobs',userAuth, userController.listAllJobs);
 userRouter.get('/listJobs/bestMatches/:userId', userController.bestMatches);
 userRouter.get('/all-contracts/:userId', userController.allContracts);
+userRouter.get('/notifications/:userId', userController.allNotifications);
 
 
 // userRouter.get('/jobs/proposals/:clientId',userController.getAllProposals);

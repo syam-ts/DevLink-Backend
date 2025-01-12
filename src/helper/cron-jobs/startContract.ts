@@ -5,7 +5,6 @@ import { UserModel } from '../../domain/entities/User';
 type Id = string;
 
 const sendingContractFinishRequest = async (jobPostId: Id, userId: Id, contractId: Id) => {
-
      const currentContract = await ContractModel.findById(contractId).exec();
 
      if(!currentContract?.active) {
@@ -29,10 +28,12 @@ const sendingContractFinishRequest = async (jobPostId: Id, userId: Id, contractI
 
 
 export const startContractHelperFn = async (timer: any, jobPostId: Id, userId: Id, contractId: Id) => {
- 
-   // const schedule: string = `*/1 * * * * *`;  // This will run every second
+   console.log('THE TIMER : ', timer)
 
-      const schedule: string = `0 */${timer} * * *`; 
+ 
+   const schedule: string = `*/${timer} * * * * *`;  // This will run every second
+
+      // const schedule: string = `0 */${timer} * * *`; 
 
      cron.schedule(schedule, () => { 
         sendingContractFinishRequest(jobPostId, userId, contractId);

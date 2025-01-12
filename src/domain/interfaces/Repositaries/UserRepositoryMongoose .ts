@@ -326,6 +326,24 @@ export class UserRepositoryMongoose implements UserRepositary {
          }
        }
 
+ 
+
+
+       async allNotifications(userId: Id): Promise< any> {
+         const user: any = await UserModel.findById(userId).exec();
+         console.log('THE CURENT USER : ', user)
+      
+         if(!user) {
+           throw new Error('User not found');
+         } else {
+        
+
+
+
+           return user?.request;
+         }
+       }
+
 
      
        async bestMatches(userId: string): Promise< any> {

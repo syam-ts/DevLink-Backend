@@ -332,10 +332,12 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     const data = JSON.parse(jobPost);
              
     if(data.paymentType === 'hourly') { 
-        const minWorkingHours: number = data.estimateTime * 8;
-        const finalDate: number = (data.estimateTime * 24 ) - minWorkingHours;
+        // const minWorkingHours: number = data.estimateTime * 8;
+        // const finalDate: number = (data.estimateTime * 24 ) - minWorkingHours;
+ 
+ 
 
-        const totalAmount = finalDate * data.payment;
+        const totalAmount = data.estimateTime * data.payment;
 
         data.amount = totalAmount; //updatig the total amount 
       
@@ -347,7 +349,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
           requiredSkills: data.requiredSkills,
           paymentType: data.paymentType,
           estimateTime: data.estimateTime,
-          estimateTimeinHours: data.estimateTimeinHours,
+          estimateTimeinHours: data.estimateTime,
           amount: data.payment,
           status: "pending",
           isPayment: true,
@@ -480,6 +482,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async createContract(clientId: string, userId: string, jobPostId: string): Promise< any > {
+
+    console.log('THE OJOB POST I D: ', jobPostId)
  
     const currentJobPost: any = await JobPostModel.findById(jobPostId).exec();
 
@@ -488,8 +492,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
      const newContract = new ContractModel({
        userId: userId,
-       clientId: clientId,
-       jobPostId: currentJobPost._id,
+       clientId: clientId, 
+       jobPostData: currentJobPost,
        amount: currentJobPost.amount,
        deduction: deduction,
        created: new Date(),
@@ -499,11 +503,12 @@ export class ClientRepositoryMongoose implements ClientRepositary {
      } );
 
      const savedContract = await newContract.save();
+     console.log('JOB POST : ', currentJobPost)
 
      const timer = currentJobPost.estimateTimeinHours;
      const contractId: any = savedContract._id;
  
-   // await allCronJobs.startContractHelperFn(timer, jobPostId, userId, contractId);
+    //  await allCronJobs.startContractHelperFn(timer, jobPostId, userId, contractId);
 
 
      return savedContract;

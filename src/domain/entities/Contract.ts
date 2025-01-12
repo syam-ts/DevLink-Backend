@@ -3,8 +3,8 @@ import mongoose, { Schema , Model} from 'mongoose';
 
 interface ContractDocument extends Document {
     userId?: mongoose.Types.ObjectId;
-    clientId?: mongoose.Types.ObjectId;
-    jobPostId?: mongoose.Types.ObjectId; 
+    clientId?: mongoose.Types.ObjectId; 
+    jobPostData: Schema.Types.Mixed;
     amount: number;
     deduction: number;
     created: Date;
@@ -15,8 +15,8 @@ interface ContractDocument extends Document {
   
   const ContractSchema = new Schema<ContractDocument>({
     userId: {type: mongoose.Types.ObjectId, required: true},
-    clientId: {type:mongoose.Types.ObjectId, required: true},
-    jobPostId: {type:mongoose.Types.ObjectId, required: true},
+    clientId: {type:mongoose.Types.ObjectId, required: true}, 
+    jobPostData: {type: Schema.Types.Mixed, required: true},
     amount: {type: Number, required: true},
     deduction: {type: Number, required: true}, 
     created: { type: Date, required: true },

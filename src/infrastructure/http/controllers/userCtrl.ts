@@ -15,6 +15,7 @@ import { BestMatches } from "../../../application/usecases/user/bestMatches";
 import { CreateProposal } from "../../../application/usecases/user/createProposal"; 
 import { CloseContract } from "../../../application/usecases/user/closeContract"; 
 import { AllContracts } from "../../../application/usecases/user/allContracts"; 
+import { AllNotifications } from "../../../application/usecases/user/allNotifications"; 
 
 
 const userRepository = new UserRepositoryMongoose();
@@ -33,6 +34,7 @@ const bestMatchesUseCase = new BestMatches(userRepository);
 const createProposalUseCase = new CreateProposal(userRepository);
 const closeContractUseCase = new CloseContract(userRepository);
 const allContractsUseCase = new AllContracts(userRepository);
+const allNotificationsUseCase = new AllNotifications(userRepository);
 
 
 export const userController = {
@@ -270,6 +272,23 @@ export const userController = {
             console.log('THE RESPONSE FROM CTRL OF ALL-CONTRACTS : ',allContracts )
 
             res.status(200).json({message: 'successfully closed the contract',contracts: allContracts, success: true});
+        }catch(err: any) {
+            res.status(500).json({message: err.message, success: false});
+        }
+    },
+
+
+
+
+    allNotifications: async (req: Request, res: Response) => {
+        try{
+              const { userId } = req.params;
+            
+            const allNotifications = await allNotificationsUseCase.execute(userId);
+
+            console.log('THE RESPONSE FROM CTRL OF ALL-NOTIFICATIONS : ',allNotifications )
+
+            res.status(200).json({message: 'successfully loaded all notifications',notifications: allNotifications, success: true});
         }catch(err: any) {
             res.status(500).json({message: err.message, success: false});
         }
