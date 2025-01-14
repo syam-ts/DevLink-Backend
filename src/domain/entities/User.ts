@@ -28,6 +28,7 @@ export interface User extends mongoose.Document{
           ]
       };
     isBlocked: boolean;
+    isBoosted: boolean;
     refreshToken: string
 }
 
@@ -86,6 +87,7 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
               }
           ]
       },
+      isBoosted: { type: Boolean, required: false },
     isBlocked: { type: Boolean, required: false },
     isEditRequest: { type: Boolean, required: false},
     refreshToken: {type: String, required: false},

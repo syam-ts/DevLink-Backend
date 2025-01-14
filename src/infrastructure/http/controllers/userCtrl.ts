@@ -16,6 +16,7 @@ import { CreateProposal } from "../../../application/usecases/user/createProposa
 import { CloseContract } from "../../../application/usecases/user/closeContract"; 
 import { AllContracts } from "../../../application/usecases/user/allContracts"; 
 import { AllNotifications } from "../../../application/usecases/user/allNotifications"; 
+import { BoostAccount } from "../../../application/usecases/user/boostAccount"; 
 
 
 const userRepository = new UserRepositoryMongoose();
@@ -35,6 +36,7 @@ const createProposalUseCase = new CreateProposal(userRepository);
 const closeContractUseCase = new CloseContract(userRepository);
 const allContractsUseCase = new AllContracts(userRepository);
 const allNotificationsUseCase = new AllNotifications(userRepository);
+const boostAccountUseCase = new BoostAccount(userRepository);
 
 
 export const userController = {
@@ -293,6 +295,21 @@ export const userController = {
                 const closedContract = await closeContractUseCase.execute(contractId, description, progress);
     
                 res.status(200).json({message: 'successfully closed the contract', success: true});
+            }catch(err: any) {
+                res.status(500).json({message: err.message, success: false});
+            }
+        },
+
+
+    
+        boostAccount: async (req: Request, res: Response) => {
+            try{
+                  const { userId } = req.params;
+            
+                   
+                const paymentUrl = await boostAccountUseCase.execute(userId);
+    
+                res.status(200).json({message: 'successfully closed the contract',url: paymentUrl, success: true});
             }catch(err: any) {
                 res.status(500).json({message: err.message, success: false});
             }
