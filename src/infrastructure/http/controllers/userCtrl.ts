@@ -220,7 +220,7 @@ export const userController = {
             
            const response = await listAllJobsUseCase.execute(); 
 
-           res.json({message: 'successfully list all notifications',data: response, success: true}); 
+           res.json({message: 'successfully list all jobs',data: response, success: true}); 
         }catch(err: any) {
             res.json({message: err.message, success: false})
         }
@@ -247,7 +247,7 @@ export const userController = {
             const { description }= req.body; 
            const response = await createProposalUseCase.execute(clientId, userId, jobPostId, description); 
 
-           res.json({message: 'successfully list all notifications',data: response, success: true}); 
+           res.json({message: 'proposal successfully send ',data: response, success: true}); 
         }catch(err: any) {
             res.json({message: err.message, success: false})
         }

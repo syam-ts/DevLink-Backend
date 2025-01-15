@@ -165,6 +165,10 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       throw new Error('client not Found');
     }
 
+    if(client.isBlocked) {
+      throw new Error('Client not Authenticated');
+    }
+
     if (!client.password) {
       throw new Error('Password is wrong');
     } 
@@ -482,12 +486,25 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async createContract(clientId: string, userId: string, jobPostId: string): Promise< any > {
+  
 
- 
- 
-    const currentJobPost: any = await JobPostModel.findById(jobPostId).exec();
+    // updating job post status 
+    const currentJobPost: any = await JobPostModel.findByIdAndUpdate(jobPostId, {
+      status: 'on progress'
+    }, {
+      update: true
+    }).exec();
+    
+   // reomove all the proposals for this jobpost
+   const client = await ClientModel.findByIdAndUpdate(clientId, {
+    $unset: {"proposals.jobPostId": jobPostId}
+   }, {
+    update: true
+   });
 
- 
+   console.log('UPDATED CLIENT ', client)
+
+    
     const deduction = currentJobPost.amount % 10;
 
      const newContract = new ContractModel({

@@ -149,6 +149,10 @@ export class UserRepositoryMongoose implements UserRepositary {
       throw new Error('User not Found');
     }
 
+    if(user.isBlocked) {
+      throw new Error('User not Authenticated');
+    }
+
     if (!user.password) {
       throw new Error('Password is wrong');
     }
@@ -275,7 +279,8 @@ export class UserRepositoryMongoose implements UserRepositary {
       throw new Error('User not found');
     }
 
-    const existingProposal = await ClientModel.find({ "proposals.userId": userId })
+    const existingProposal = await ClientModel.find({ "proposals.userId": userId });
+    console.log('THE EXISTIND ONE : ',existingProposal)
  
     if (existingProposal.length !== 0) {
       throw new Error('Proposal alredy send');

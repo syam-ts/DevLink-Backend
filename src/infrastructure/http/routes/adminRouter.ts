@@ -16,7 +16,7 @@ adminRouter.get('/getRequests', adminController.getRequests);
 adminRouter.get('/request/getRequestedClient/:clientId', adminController.getRequestedClient);
 adminRouter.get('/viewRole/:roleId/:roleInfo', adminController.viewRoleInfo);
 adminRouter.get('/getWallet', adminController.getWallet);
-
+adminRouter.get('/logout', adminController.logoutAdmin); 
 
 adminRouter.post('/login', adminController.loginAdmin); 
 adminRouter.post('/logout', adminController.logoutAdmin); 
