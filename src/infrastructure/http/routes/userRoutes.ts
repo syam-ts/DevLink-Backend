@@ -37,6 +37,7 @@ userRouter.post('/account/boost/:userId', userController.boostAccount);
 
 userRouter.post('/job/createProposal/:clientId/:userId/:jobPostId', userController.createProposal); // ADD USERAUTH
 userRouter.put('/profile/edit/:userId',userController.editProfile); // ADD USERAUTH
+userRouter.patch('/profile/boost/success/:userId',userController.bosstSuccess); // ADD USERAUTH
  
 
 

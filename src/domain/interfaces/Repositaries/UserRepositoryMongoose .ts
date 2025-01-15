@@ -420,8 +420,10 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
 
+ 
 
-  async boostAccount(userId: Id): Promise<any> {
+
+  async bosstSuccess (userId: Id): Promise<any> {
     const user: any = await UserModel.findByIdAndUpdate(userId, {
       isBoosted: true }, {
          update: true }

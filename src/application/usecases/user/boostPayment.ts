@@ -1,13 +1,12 @@
 import Stripe from "stripe";
 
 type Id = string;
-export interface UserRepositary {
-  boostAccount(userId: Id): Promise<any>;
+export interface UserRepositary { 
 }
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
-export class BoostAccount {
+export class BoostPayment {
   constructor(private userRepositary: UserRepositary) {}
 
   async execute(userId: Id) {
@@ -37,15 +36,11 @@ export class BoostAccount {
             },
           ],
           mode: "payment",
-          success_url: `http://localhost:5173/user/profile/profile`, // show message of success
+          success_url: `http://localhost:5173/user/profile/boost/success/${encodeURIComponent(userId)}`, // show message of success
           cancel_url: "http://localhost:5173/user/payment-failed",
           customer_email: "samplemail@gmai.com",
-        });
-
-
-        const updatedUser = await this.userRepositary.boostAccount(userId);
-
-        console.log('SUCCESSFULLY DONE THE USER UPDATE BOOST PART')
+        }); 
+ 
         return session;
 
    
