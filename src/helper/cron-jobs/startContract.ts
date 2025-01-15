@@ -31,9 +31,9 @@ export const startContractHelperFn = async (timer: any, jobPostId: Id, userId: I
  
 
  
-   const schedule: string = `*/${timer} * * * * *`;  // This will run every second
+  // const schedule: string = `*/${timer} * * * * *`;  // This will run every second
 
-      // const schedule: string = `0 */${timer} * * *`; 
+      const schedule: string = `0 */${timer} * * *`; // hour timer
 
      cron.schedule(schedule, () => { 
         sendingContractFinishRequest(jobPostId, userId, contractId);

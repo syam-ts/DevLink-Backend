@@ -22,6 +22,7 @@ export interface Client extends mongoose.Document{
             type: string,
             UserId: mongoose.Types.ObjectId,
             jobPostId: mongoose.Types.ObjectId,
+            jobPostInfo: string,
             userData: User,
             description?: string
         }],
@@ -61,6 +62,7 @@ const ClientSchema: mongoose.Schema = new mongoose.Schema({
             type: {type: String, required: false},
             userId: {type: mongoose.Types.ObjectId, required: false}, 
             jobPostId: {type: mongoose.Types.ObjectId, required: false}, 
+            jobPostInfo: {type: String, required: false}, 
             userData: {
                
             },

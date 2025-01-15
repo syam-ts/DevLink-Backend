@@ -279,17 +279,22 @@ export class UserRepositoryMongoose implements UserRepositary {
       throw new Error('User not found');
     }
 
-    const existingProposal = await ClientModel.find({ "proposals.userId": userId });
-    console.log('THE EXISTIND ONE : ',existingProposal)
+    const existingProposal = await ClientModel.find({ $and: [{"proposals.userId": userId}, {"proposals.jobPostId": jobPostId}] });
+    
  
     if (existingProposal.length !== 0) {
       throw new Error('Proposal alredy send');
     } else {
+
+      const jobpost: any = await JobPostModel.findById(jobPostId);
+
+
   
       const newProposal = {
         type: 'New Job Proposal ',
         userId: userId,
         jobPostId: jobPostId,
+        jobPostInfo: jobpost.title,
         userData: user,
         description: description
       }

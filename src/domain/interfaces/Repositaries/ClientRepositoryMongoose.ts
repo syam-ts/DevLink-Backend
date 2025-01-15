@@ -494,15 +494,28 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }, {
       update: true
     }).exec();
+    console.log('THE JOB POST ID : ', jobPostId)
     
    // reomove all the proposals for this jobpost
-   const client = await ClientModel.findByIdAndUpdate(clientId, {
-    $unset: {"proposals.jobPostId": jobPostId}
-   }, {
-    update: true
-   });
+   const client = await ClientModel.findByIdAndUpdate(
+    clientId, // Ensure this is the correct `_id` value
+    {
+      $pull: {
+        proposals: { jobPostId: jobPostId }
+      }
+    },
+    {
+      new: true // Return the updated document
+    }
+  );
+ 
+  
+  
 
-   console.log('UPDATED CLIENT ', client)
+   // send notification to rejectd and accepted user
+  //  const notification = new NotificationModel({
+
+  //  })
 
     
     const deduction = currentJobPost.amount % 10;
