@@ -277,9 +277,7 @@ export const userController = {
               const { userId } = req.params;
             
             const allNotifications = await allNotificationsUseCase.execute(userId);
-
-            // console.log('THE RESPONSE FROM CTRL OF ALL-NOTIFICATIONS : ',allNotifications )
-
+   
             res.status(200).json({message: 'successfully loaded all notifications',notifications: allNotifications, success: true});
         }catch(err: any) {
             res.status(500).json({message: err.message, success: false});

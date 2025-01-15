@@ -11,10 +11,7 @@ export class Create {
  
          
         const foundAdmin = await this.adminRepositary.create(adminId);
- 
-        console.log('The admin usecase : ', foundAdmin)
-
-         
+  
         return { foundAdmin}; 
         
     }

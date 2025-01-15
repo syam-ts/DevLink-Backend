@@ -28,7 +28,7 @@ const sendingContractFinishRequest = async (jobPostId: Id, userId: Id, contractI
 
 
 export const startContractHelperFn = async (timer: any, jobPostId: Id, userId: Id, contractId: Id) => {
-   console.log('THE TIMER : ', timer)
+ 
 
  
    const schedule: string = `*/${timer} * * * * *`;  // This will run every second

@@ -275,12 +275,12 @@ export class UserRepositoryMongoose implements UserRepositary {
       throw new Error('User not found');
     }
 
-    const existingProposal = await ClientModel.find({ "proposals.jobPostId": jobPostId })
-    console.log('THE EXISTING : ', existingProposal.length);
+    const existingProposal = await ClientModel.find({ "proposals.userId": userId })
+ 
     if (existingProposal.length !== 0) {
-      throw new Error('Proposal alredy send')
+      throw new Error('Proposal alredy send');
     } else {
-      console.log('WORK THIS THEN')
+  
       const newProposal = {
         type: 'New Job Proposal ',
         userId: userId,
@@ -333,7 +333,7 @@ export class UserRepositoryMongoose implements UserRepositary {
 
   async allNotifications(userId: Id): Promise<any> {
     const user: any = await UserModel.findById(userId).exec();
-    //  console.log('THE CURENT USER : ', user)
+  
 
     if (!user) {
       throw new Error('User not found');

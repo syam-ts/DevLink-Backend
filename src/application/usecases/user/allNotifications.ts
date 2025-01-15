@@ -9,12 +9,10 @@ export interface UserRepositary {
 export class AllNotifications {
     constructor(private userRepositary: UserRepositary) {}
 
-    async execute( userId: string ) {  
-        console.log('The usecase USER ID : ', userId)
+    async execute( userId: string ) {   
 
            const response = await this.userRepositary.allNotifications(userId); 
-            
-         console.log('THE RESPONSE FORM USECSE', response)
+             
 
            return response;
     }

@@ -9,9 +9,7 @@ export class EditUserProfile {
     constructor(private userRepositary: UserRepositary) {}
 
     async execute(userId: string, profileData: any) { 
-
-        console.log('THE NEW SET OF DATA : ', profileData);
-         
+ 
        
         if(profileData.editData.name) {
             if(profileData.editData.name.length <= 3 || profileData.editData.name.length > 20) {
@@ -33,8 +31,7 @@ export class EditUserProfile {
                 }
             }
         }
-
-    console.log('MOBNILE ', profileData.editData)
+ 
      
         if(profileData.editData.mobile) {
 
@@ -62,8 +59,7 @@ export class EditUserProfile {
                 throw new Error('Description should atlest need 15 words');
             }
         }
-
-        console.log('SKILL LENGTH : ', profileData.editData.skills)
+  
         if(!profileData.editData.skills) { 
             if(profileData.editData.skills.length < 2) {
                 throw new Error('Add atlest 2 skills');
@@ -80,8 +76,7 @@ export class EditUserProfile {
                 }
             }
         }
-
-     console.log('THE NAME : ', profileData.editData.profilePicture)
+ 
        
 
         for(let value in profileData.editData) {

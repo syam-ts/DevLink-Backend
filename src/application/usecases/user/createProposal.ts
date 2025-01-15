@@ -9,7 +9,7 @@ export class CreateProposal {
     constructor(private userRepositary: UserRepositary) {}
 
     async execute(clientId: Id, userId: Id,  jobPostId: Id, description: string) {  
-        console.log('The usecase  : ', clientId, userId)
+        
 
            const result = await this.userRepositary.createProposal( clientId, userId, jobPostId,  description); 
             

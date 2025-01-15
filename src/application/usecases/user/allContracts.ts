@@ -9,8 +9,7 @@ export interface UserRepositary {
 export class AllContracts {
     constructor(private userRepositary: UserRepositary) {}
 
-    async execute( userId: string ) {  
-        console.log('The usecase USER ID : ', userId)
+    async execute( userId: string ) {   
 
            const response = await this.userRepositary.allContracts(userId); 
             

@@ -152,9 +152,7 @@ export const adminController = {
 
         blockClient: async(req: any, res: any) => {
             try{
- 
-                console.log('ENTER BLOCK USER ', req.params)
-
+   
                  const client = await blockClientUseCase.execute(req.params);
 
                  if(client) {

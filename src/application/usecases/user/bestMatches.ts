@@ -10,12 +10,10 @@ export interface UserRepositary {
 export class BestMatches {
     constructor(private userRepositary: UserRepositary) {}
 
-    async execute( userId: string ) {  
-        console.log('The usecase USER ID : ', userId)
+    async execute( userId: string ) {   
 
            const response = await this.userRepositary.bestMatches(userId); 
-            
-           console.log('THE RESULT FROM CTRL : ', response)
+             
 
            return response;
     }

@@ -13,9 +13,7 @@ export class ViewRoleInfo {
  
          
         const roleInformation= await this.adminRepositary.viewRoleInfo(roleId, roleInfo);
- 
-        console.log('The admin usecase : ',roleInformation)
-
+   
          
         return {roleInformation}; 
         
