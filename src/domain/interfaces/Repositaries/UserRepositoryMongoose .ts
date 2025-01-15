@@ -316,7 +316,7 @@ export class UserRepositoryMongoose implements UserRepositary {
 
 
   async findAllJobs(): Promise<any> {
-    const allJobs = await JobPostModel.find().exec();
+    const allJobs = await JobPostModel.find({status: 'pending'}).exec();
 
     if (!allJobs) {
       throw new Error('No job found');

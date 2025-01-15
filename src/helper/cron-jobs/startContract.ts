@@ -5,9 +5,9 @@ import { UserModel } from '../../domain/entities/User';
 type Id = string;
 
 const sendingContractFinishRequest = async (jobPostId: Id, userId: Id, contractId: Id) => {
-     const currentContract = await ContractModel.findById(contractId).exec();
+     const currentContract: any = await ContractModel.findById(contractId).exec();
 
-     if(!currentContract?.active) {
+     if(currentContract.status === 'closed') {
         console.log('Contract alredy finished!');
      } else {
          const request = {
@@ -28,12 +28,11 @@ const sendingContractFinishRequest = async (jobPostId: Id, userId: Id, contractI
 
 
 export const startContractHelperFn = async (timer: any, jobPostId: Id, userId: Id, contractId: Id) => {
- 
+  console.log('TIMER : ', timer)
 
- 
-  // const schedule: string = `*/${timer} * * * * *`;  // This will run every second
+   const schedule: string = `*/${timer} * * * * *`;  // This will run every second
 
-      const schedule: string = `0 */${timer} * * *`; // hour timer
+      // const schedule: string = `0 */${timer} * * *`; // hour timer
 
      cron.schedule(schedule, () => { 
         sendingContractFinishRequest(jobPostId, userId, contractId);

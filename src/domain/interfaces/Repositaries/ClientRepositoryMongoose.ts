@@ -494,30 +494,28 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }, {
       update: true
     }).exec();
-    console.log('THE JOB POST ID : ', jobPostId)
+ 
     
    // reomove all the proposals for this jobpost
    const client = await ClientModel.findByIdAndUpdate(
-    clientId, // Ensure this is the correct `_id` value
+    clientId,  
     {
       $pull: {
         proposals: { jobPostId: jobPostId }
       }
     },
     {
-      new: true // Return the updated document
+      new: true  
     }
   );
  
-  
-  
 
    // send notification to rejectd and accepted user
   //  const notification = new NotificationModel({
 
   //  })
 
-    
+   
     const deduction = currentJobPost.amount % 10;
 
      const newContract = new ContractModel({
@@ -538,8 +536,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
      const contractId: any = savedContract._id;
  
    await allCronJobs.startContractHelperFn(timer, jobPostId, userId, contractId);
-
-
+ 
      return savedContract;
  
     
