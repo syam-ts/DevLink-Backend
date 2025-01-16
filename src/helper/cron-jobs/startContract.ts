@@ -1,11 +1,18 @@
 import cron from 'node-cron';
 import { ContractModel } from '../../domain/entities/Contract';
 import { UserModel } from '../../domain/entities/User';
+import { JobPostModel } from '../../domain/entities/JobPost';
 
 type Id = string;
 
 const sendingContractFinishRequest = async (jobPostId: Id, userId: Id, contractId: Id) => {
      const currentContract: any = await ContractModel.findById(contractId).exec();
+     const updateJobPost: any = await JobPostModel.findByIdAndUpdate(jobPostId, {
+      status: 'finished'
+     }, {
+      update: true
+     });
+     
 
      if(currentContract.status === 'closed') {
         console.log('Contract alredy finished!');

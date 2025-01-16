@@ -12,7 +12,7 @@ export const clientAuth = async (req: any, res: any, next: any) => {
            const CLIENT_REFRESH_TOKEN: any = process.env.CLIENT_REFRESH_TOKEN;
            const CLIENT_ACCESS_TOKEN: any = process.env.CLIENT_ACCESS_TOKEN;
            
-           if (!accessToken) {
+           if (!accessToken) {// fix
              if (!refreshToken) {
                return res.status(401).json({ message: "No tokens provided", type: "error" });
              }

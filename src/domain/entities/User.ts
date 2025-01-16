@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
+import { JobPostDocument, JobPostSchema } from './JobPost'; 
+
 
 export interface User extends mongoose.Document{
-    id?: string;
     name: string;
     age?: number,
     password?: string;
@@ -12,7 +13,17 @@ export interface User extends mongoose.Document{
     description?:string,
     location?:string;
     skills?: [string];
+    experience: number,
+    experienceDescription: string, 
     budget:number,
+    rating: number,  
+    totalJobs: number,//
+    totalHours: number,//
+    domain: string,//,
+    whyHireMe: string,//
+    completedJobs: number,//
+    inProgress: number,//
+    workHistory: [JobPostDocument],//
     isEditRequest: boolean,
     request: [{
             type: string,
@@ -71,21 +82,27 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
     location: { type: String, required: false },
     description: {type: String, required: false},
     skills: { type: [String], required: false },
+    experience: { type: Number, required: false },
+    experienceDescription: { type: String, required: false },
     budget: {type: Number, required: false},
-     request: [
-              {
+    rating: {type: Number, required: false}, 
+    totalJobs: {type: Number, required: false},
+    totalHours: {type: Number, required: false},
+    domain: {type: String, required: false},
+    whyHireMe: {type: String, required: false},
+    completedJobs: {type: Number, required: false},
+    inProgress: {type: Number, required: false},
+    workHistory: {type: [JobPostSchema], required: false},   
+     request: [{
             type: {type: String, required: false},
             contractInfo: {type: mongoose.Schema.Types.Mixed, required: false},
             date: {type: Date, required: false}
-             }
-        ],
+             }],
         wallet: {
           balance: {type: Number, required: false}, 
-          transactions: [
-              {
+          transactions: [{
                   type: Array
-              }
-          ]
+              }]
       },
       isBoosted: { type: Boolean, required: false },
     isBlocked: { type: Boolean, required: false },

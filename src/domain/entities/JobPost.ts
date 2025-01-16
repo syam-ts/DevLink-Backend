@@ -1,7 +1,7 @@
 import mongoose, { Schema , Model} from 'mongoose';
 
 
-interface JobPostDocument extends Document {
+export interface JobPostDocument extends Document {
     title: string;
     clientId: string
     description: string;
@@ -17,7 +17,7 @@ interface JobPostDocument extends Document {
     jobProposals?: mongoose.Types.ObjectId;
   };
   
-  const JobPostSchema = new Schema<JobPostDocument>({
+  export const JobPostSchema = new Schema<JobPostDocument>({
     title: { type: String, required: true },
     clientId: {type: String, required: true},
     description: { type: String, required: true },

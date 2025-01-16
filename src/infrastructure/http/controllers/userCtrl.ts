@@ -15,6 +15,7 @@ import { BestMatches } from "../../../application/usecases/user/bestMatches";
 import { CreateProposal } from "../../../application/usecases/user/createProposal"; 
 import { CloseContract } from "../../../application/usecases/user/closeContract"; 
 import { AllContracts } from "../../../application/usecases/user/allContracts"; 
+import { ViewContract } from "../../../application/usecases/user/viewContract"; 
 import { AllNotifications } from "../../../application/usecases/user/allNotifications"; 
 import { BoostPayment } from "../../../application/usecases/user/boostPayment"; 
 import { BosstSuccess } from "../../../application/usecases/user/bosstSuccess"; 
@@ -36,6 +37,7 @@ const bestMatchesUseCase = new BestMatches(userRepository);
 const createProposalUseCase = new CreateProposal(userRepository);
 const closeContractUseCase = new CloseContract(userRepository);
 const allContractsUseCase = new AllContracts(userRepository);
+const viewContractUseCase = new ViewContract(userRepository);
 const allNotificationsUseCase = new AllNotifications(userRepository);
 const boostAccountUseCase = new BoostPayment(userRepository);
 const bosstSuccessUseCase = new BosstSuccess(userRepository);
@@ -126,8 +128,8 @@ export const userController = {
 
             res.cookie("jwtU", refreshToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === "production", // Ensure HTTPS in production
-                sameSite: "strict", // Adjust as needed
+                secure: process.env.NODE_ENV === "production",  
+                sameSite: "strict", 
                 maxAge: 24 * 60 * 60 * 1000, // 1 day
             });
             
@@ -269,6 +271,22 @@ export const userController = {
         }
     },
 
+    
+    
+    viewContract: async (req: Request, res: Response) => {
+        try{
+            const { contractId } = req.params;
+            
+            const viewContract = await viewContractUseCase.execute(contractId);
+ 
+            console.log('THE CON', viewContract)
+
+            res.status(200).json({message: 'successfully closed the contract',contract: viewContract, success: true});
+        }catch(err: any) {
+            res.status(500).json({message: err.message, success: false});
+        }
+    },
+
 
 
     
@@ -293,8 +311,9 @@ export const userController = {
             
                    
                 const closedContract = await closeContractUseCase.execute(contractId, description, progress);
+                console.log('CLOSED CONTRCAT SUCCESS!')
     
-                res.status(200).json({message: 'successfully closed the contract', success: true});
+                res.status(200).json({message: 'Contract closed successfully', success: true});
             }catch(err: any) {
                 res.status(500).json({message: err.message, success: false});
             }
