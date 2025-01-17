@@ -86,6 +86,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         budget: "",
         rating: "",
         domain: "",
+        githubLink: "",
         totalJobs: "",
         totalHours: "",
         whyHireMe: "",

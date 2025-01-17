@@ -178,7 +178,9 @@ export const userController = {
     getProfile: async (req: Request, res: Response) => {
         try {
             const { userId } = req.params;
+            console.log('THE PARMA S; ',userId)
             const user = await getProfileUseCase.execute(userId);
+            console.log('THE RESPONSE : ', user)
 
             res.json({
                 message: "successfully loaded user data",
@@ -196,8 +198,9 @@ export const userController = {
         try {
             const { userId } = req.params;
             const profileData = req.body; 
+            console.log('THE EXPOERIN: ', req.body.editData)
       
-            // const response = await editProfileUseCase.execute(userId, profileData);
+            const response = await editProfileUseCase.execute(userId, profileData);
 
             res.json({ message: "Profile successfully edited", type: "success" });
         } catch (err: any) {

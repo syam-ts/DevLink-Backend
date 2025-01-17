@@ -11,11 +11,25 @@ export class GetUserProfile {
     constructor(private userRepositary: UserRepositary) {}
 
    async execute(userId: string) {
-        const user = await this.userRepositary.findUserById(userId); 
+        const {user} = await this.userRepositary.findUserById(userId); 
         if(!user) {
             throw new Error('User not found')
         }
+        console.log('THE USER FROM USECASE : ',user)
 
-        return user;
+        return {
+            name: user.name,
+            budget: user.budget,
+            location: user.location,
+            mobile: user.mobile,
+            skills: user.skills,
+            profilePicture: user.profilePicture,
+            domain: user.domain,
+            githugLink: user.githubLink,
+            description: user.description,
+            whyHireMe: user.whyHireMe,
+            experience: user.experience,
+            education: user.education
+        };
     }
 }
