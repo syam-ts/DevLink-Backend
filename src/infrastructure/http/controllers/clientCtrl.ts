@@ -214,7 +214,7 @@ const createContractUseCase = new CreateContract(ClientRepository);
  
          createJobPost: async (req: any, res: any) => {
              try{      
-                  console.log('THE DATA FROM POST CREATE : ', req.params.data)
+                  
                 const { clientId, data } = req.params;
                 const jobPost = await createJobPostUseCase.execute(clientId, data);
              
@@ -249,12 +249,11 @@ const createContractUseCase = new CreateContract(ClientRepository);
 
          
          makePayment: async (req: any, res: any) => {
-             try{
-
+             try{ 
                  const { clientId } = req.params; 
-                const response = await makePaymentUseCase.execute(clientId, req.body); 
+                  const response = await makePaymentUseCase.execute(clientId, req.body); 
              
-                res.status(200).json({ response, success: true }); 
+                  res.status(200).json({ response, success: true }); 
              }catch(err: any) { 
                  res.json({message: err.message, success: false});
              }

@@ -79,11 +79,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       const hashedPassword = await bcrypt.hash(password, salt);
 
       let wallet = {
-        balance: {type: ""}, 
+        balance: 0, 
         transactions: [
             {
                 type: "",
-                amount: "",
+                amount: 0,
                 from: "",
                 fromId: "",
                 date: ""
@@ -97,18 +97,18 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         password: hashedPassword,
         companyName: '',
         description: '',
-        totalEmployees: '',
+        numberOfEmployees: '',
         location: '',
         domain: '',
         since: '',
         totalJobs: '',
         isVerified: false,
         isGoogle: false,
-        request: [{
-                    type: "string",
-                    UserId: "mongoose.Types.ObjectId",
-                    description: "string"
-                }]
+        totalSpend: 0,
+        totalHours: 0,
+        wallet: {wallet},
+        request: [],
+        createdAt: new Date()
       });
 
       const savedClient = await createdClient.save();
@@ -334,6 +334,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async createJobPost(clientId: string, jobPost: any): Promise<any> {
     const data = JSON.parse(jobPost);
+
+    const client: any = await ClientModel.findById(clientId);
              
     if(data.paymentType === 'hourly') { 
         // const minWorkingHours: number = data.estimateTime * 8;
@@ -345,9 +347,10 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
         data.amount = totalAmount; //updatig the total amount 
       
+
+        //ADD REST OF THE FIELDS
         const createdJobPost = new JobPostModel({
           title: data.title,
-          clientId: clientId,
           description: data.description,
           keyResponsiblities: data.keyResponsiblities,
           requiredSkills: data.requiredSkills,
@@ -355,12 +358,27 @@ export class ClientRepositoryMongoose implements ClientRepositary {
           estimateTime: data.estimateTime,
           estimateTimeinHours: data.estimateTime,
           amount: data.payment,
+          expertLevel: data.expertLevel,
+          location: data.location,
+          projectType: data.projectType,
+          totalProposals: 0,
+          proposalCount: 0,
+          aboutClient: {
+            location: client.location,
+            totalSpend: client.totalSpend,
+            totalHours: client.totalHours,
+            domain: client.domain,
+            numberOfEmployees: client.numberOfEmployees,
+            joined: client.createdAt
+          },
           status: "pending",
           isPayment: true,
+          clientId: clientId,
           date: new Date()
         });
 
         const savedJobPost = await createdJobPost.save(); 
+
         return { savedJobPost };  
       } else {
         return jobPost; 

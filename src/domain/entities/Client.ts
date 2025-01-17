@@ -10,7 +10,7 @@ export interface Client extends mongoose.Document{
     description?:string;
     location?: string;
     requiredSkills?: [string],
-    totalEmployees: number,
+    numberOfEmployees: number,
     domain?: string;
     since?: number,
     totalJobs?: number,
@@ -27,7 +27,7 @@ export interface Client extends mongoose.Document{
             description?: string
         }],
         wallet: {
-            balance: {type: Number, required: false}, 
+            balance: number, 
             transactions: [
                 {
                     type: String,
@@ -38,7 +38,9 @@ export interface Client extends mongoose.Document{
                 }
             ]
         },
-    date: Date
+        totalSpend: number,
+        totalHours: number,
+    createdAt: Date
 }
 
 //Client Schema
@@ -47,10 +49,11 @@ const ClientSchema: mongoose.Schema = new mongoose.Schema({
     password: { type: String, required: false },
     email: { type: String, required: true, unique: true },
     location: { type: String, required: false },
+    domain: { type: String, required: false },
     companyName: { type: String, required: false },
     description: { type: String, required: false },
     requiredSkills: { type: [String], required: false },
-    totalEmployees: { type: Number, required: false },
+    numberOfEmployees: { type: Number, required: false },
     since: {type: Number, required: false },
     totalJobs: { type: Number, required: false},
     isBlocked: { type: Boolean, required: false},
@@ -81,8 +84,11 @@ const ClientSchema: mongoose.Schema = new mongoose.Schema({
                 }
             ]
         },
-    date: {type: Date, required: false}
+        totalSpend: {type: Number, required: false},
+        totalHours: {type: Number, required: false},
+        createdAt: {type: Date, required: false}
 });
+
 
 //Cliet model
 export const ClientModel = mongoose.model("Client", ClientSchema);

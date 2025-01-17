@@ -10,7 +10,7 @@ export interface JobPostDocument extends Document {
     estimateTimeinHours: Number;
     paymentType: 'hourly' | 'fixed',
     amount: number,
-    expertLevel: string;
+    expertLevel: 'beginner' | 'intermediate' | 'advanced';
     location: string;
     projectType: 'ongoing project' | 'project updation';
     totalProposals: number;
@@ -18,7 +18,7 @@ export interface JobPostDocument extends Document {
     aboutClient: {
       location: string,
       totalSpend: number,
-      hours: number,
+      totalHours: number,
       domain: string,
       numberOfEmployees: number,
       joined: Date
