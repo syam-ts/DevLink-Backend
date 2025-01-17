@@ -13,17 +13,16 @@ export interface User extends mongoose.Document{
     description?:string,
     location?:string;
     skills?: [string];
-    experience: number,
-    experienceDescription: string, 
+    experience: string,//
     budget:number,
     rating: number,  
-    totalJobs: number,//
-    totalHours: number,//
-    domain: string,//,
-    whyHireMe: string,//
-    completedJobs: number,//
-    inProgress: number,//
-    workHistory: [JobPostDocument],//
+    totalJobs: number,
+    totalHours: number,
+    domain: string,
+    whyHireMe: string,
+    completedJobs: number,
+    inProgress: number,
+    workHistory: [JobPostDocument],
     isEditRequest: boolean,
     request: [{
             type: string,
@@ -40,7 +39,7 @@ export interface User extends mongoose.Document{
       };
     isBlocked: boolean;
     isBoosted: boolean;
-    refreshToken: string
+    createdAt: Date;
 }
 
 //User Schema
@@ -107,7 +106,7 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
       isBoosted: { type: Boolean, required: false },
     isBlocked: { type: Boolean, required: false },
     isEditRequest: { type: Boolean, required: false},
-    refreshToken: {type: String, required: false},
+    createdAt: {type: Date, required: false},
    
 });
 

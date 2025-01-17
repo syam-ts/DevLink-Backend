@@ -196,7 +196,8 @@ export const userController = {
         try {
             const { userId } = req.params;
             const profileData = req.body; 
-            const response = await editProfileUseCase.execute(userId, profileData);
+      
+            // const response = await editProfileUseCase.execute(userId, profileData);
 
             res.json({ message: "Profile successfully edited", type: "success" });
         } catch (err: any) {
