@@ -91,6 +91,73 @@ export class AdminRepository implements AdminRepositary {
 
 
 
+  async sortUser(sortingType: string): Promise<User | any> {
+ 
+ 
+    const page = 1;
+    const PAGE_SIZE: number = 3;
+    const skip: number = (page - 1) * PAGE_SIZE;
+    const totalUsers: number = await UserModel.countDocuments({});
+
+    if(sortingType === 'blocked') {
+
+      const users: any = await UserModel.aggregate([
+        { $match: {} }, 
+        {$sort: {isBlocked: 1}},
+        { $skip: skip },
+        { $limit: PAGE_SIZE }
+      ]);  
+      const totalPages: number = Math.floor(totalUsers / PAGE_SIZE)
+      if (users) {
+        return {
+          ...users, totalPages
+        } as User;
+
+
+    } 
+  }else if(sortingType === 'unBlocked') {
+
+      const users: any = await UserModel.aggregate([
+        { $match: {} }, 
+        {$sort: {isBlocked: -1}},
+        { $skip: skip },
+        { $limit: PAGE_SIZE }
+      ]);  
+      const totalPages: number = Math.floor(totalUsers / PAGE_SIZE)
+      if (users) {
+        return {
+          ...users, totalPages
+        } as User;
+
+
+    }
+   } else if(sortingType === 'latest') {
+
+
+
+      const users: any = await UserModel.aggregate([
+        { $match: {} }, 
+        {$sort: {createdAt: 1}},
+        { $skip: skip },
+        { $limit: PAGE_SIZE }
+      ]);  
+      const totalPages: number = Math.floor(totalUsers / PAGE_SIZE)
+      if (users) {
+        return {
+          ...users, totalPages
+        } as User;
+    } else {
+      return;
+    }
+    
+ 
+    } else {
+      throw new Error('Users not Found')
+    }
+  }
+
+
+
   async findAllClients(): Promise<Client | any> {
     const clients: any = await ClientModel.find().exec();
 
