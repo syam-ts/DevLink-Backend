@@ -44,30 +44,46 @@ export class AdminRepository implements AdminRepositary {
 
   async getAllUsers(page: number): Promise<User | any> {
 
-    console.log('THE PAGE , :', page)
     const PAGE_SIZE: number = 3;
-
     const skip: number = (page - 1) * PAGE_SIZE;
-
     const totalUsers: number = await UserModel.countDocuments({});
-    console.log('THE SKIP : ', skip)
-
+ 
     const users: any = await UserModel.aggregate([
       { $match: {} }, 
       { $skip: skip },
       { $limit: PAGE_SIZE }
-    ]);
-
-    console.log('THE SPERCIFIC USER : ', users)
-    
-    // find({}).skip(skip).limit(PAGE_SIZE).exec();
-
+    ]);  
     const totalPages: number = totalUsers / PAGE_SIZE
-
     if (users) {
       return {
         ...users, totalPages
       } as User;
+    } else {
+      throw new Error('Users not Found')
+    }
+  }
+
+
+
+  async searchUser(inputData: string): Promise<User | any> {
+ 
+ 
+    const page = 1;
+    const PAGE_SIZE: number = 3;
+    const skip: number = (page - 1) * PAGE_SIZE;
+    const totalUsers: number = await UserModel.countDocuments({name: {$regex: inputData, $options: 'i'}});
+ 
+    const users: any = await UserModel.aggregate([
+      { $match: {name: {$regex: inputData}} }, 
+      { $skip: skip },
+      { $limit: PAGE_SIZE }
+    ]);  
+    const totalPages: number = Math.floor(totalUsers / PAGE_SIZE)
+    if (users) {
+      return {
+        ...users, totalPages
+      } as User;
+ 
     } else {
       throw new Error('Users not Found')
     }

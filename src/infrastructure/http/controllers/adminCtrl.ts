@@ -11,6 +11,7 @@ import { GetAllRequests } from '../../../application/usecases/admin/getAllReques
 import { GetRequestedClient } from '../../../application/usecases/admin/getRequestedClient';
 import { ViewRoleInfo } from '../../../application/usecases/admin/viewRoleInfo';
 import { GetWallet } from '../../../application/usecases/admin/getWallet';
+import { SearchUser } from '../../../application/usecases/admin/searchUser';
 
 
 const adminRepositary = new AdminRepository();
@@ -24,6 +25,7 @@ const blockClientUseCase = new BlockClient(adminRepositary);
 const unBlockClientUseCase = new UnBlockClient(adminRepositary);
 const viewRoleInfoUseCase = new ViewRoleInfo(adminRepositary);
 const getWalletUseCase = new GetWallet(adminRepositary);
+const searchUserUseCase = new SearchUser(adminRepositary);
 
 
 
@@ -248,6 +250,18 @@ export const adminController = {
                   const response = await getWalletUseCase.execute(); 
 
                   res.json({ message: 'Successfully loaded all requests ', data: response, success: true});
+            }catch(err: any) {
+                res.json({ message: err.message, success: false })
+            }
+        },
+
+        searchUser: async (req: any, res: any) => {
+            try{
+                const { inputData } = req.query; 
+                 
+                  const response = await searchUserUseCase.execute(inputData); 
+
+                  res.json({ message: 'Successfully loaded search user ', data: response, success: true});
             }catch(err: any) {
                 res.json({ message: err.message, success: false })
             }

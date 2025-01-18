@@ -23,6 +23,7 @@ adminRouter.get('/logout', adminController.logoutAdmin);
 
 adminRouter.post('/login', adminController.loginAdmin); 
 adminRouter.post('/logout', adminController.logoutAdmin); 
+adminRouter.post('/getAllUsers/search?', adminController.searchUser); 
 
 
 adminRouter.put('/verifyClient/accept',adminController.verifyAccept);
