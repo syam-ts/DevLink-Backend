@@ -65,6 +65,30 @@ export class AdminRepository implements AdminRepositary {
 
 
 
+
+  async getAllClients(page: number): Promise<Client | any> {
+
+    const PAGE_SIZE: number = 3;
+    const skip: number = (page - 1) * PAGE_SIZE;
+    const totalClients: number = await ClientModel.countDocuments({});
+ 
+    const clients: any = await ClientModel.aggregate([
+      { $match: {} }, 
+      { $skip: skip },
+      { $limit: PAGE_SIZE }
+    ]);  
+    const totalPages: number = totalClients / PAGE_SIZE
+    if (clients) {
+      return {
+        ...clients, totalPages
+      } as Client;
+    } else {
+      throw new Error('Clients not Found')
+    }
+  }
+
+
+
   async searchUser(inputData: string): Promise<User | any> {
  
  
@@ -153,6 +177,99 @@ export class AdminRepository implements AdminRepositary {
  
     } else {
       throw new Error('Users not Found')
+    }
+  }
+
+
+
+
+  async searchClients(inputData: string): Promise<Client | any> {
+ 
+ 
+    const page = 1;
+    const PAGE_SIZE: number = 3;
+    const skip: number = (page - 1) * PAGE_SIZE;
+    const totalClients: number = await ClientModel.countDocuments({name: {$regex: inputData, $options: 'i'}});
+ 
+    const clients: any = await ClientModel.aggregate([
+      { $match: {name: {$regex: inputData}} }, 
+      { $skip: skip },
+      { $limit: PAGE_SIZE }
+    ]);  
+    const totalPages: number = Math.floor(totalClients / PAGE_SIZE)
+    if (clients) {
+      return {
+        ...clients, totalPages
+      } as Client;
+ 
+    } else {
+      throw new Error('Clients not Found')
+    }
+  }
+
+
+
+  async sortClients(sortingType: string): Promise<Client | any> {
+ 
+    const page = 1;
+    const PAGE_SIZE: number = 3;
+    const skip: number = (page - 1) * PAGE_SIZE;
+    const totalClients: number = await ClientModel.countDocuments({});
+
+    if(sortingType === 'blocked') {
+
+      const clients: any = await ClientModel.aggregate([
+        { $match: {} }, 
+        {$sort: {isBlocked: 1}},
+        { $skip: skip },
+        { $limit: PAGE_SIZE }
+      ]);  
+      const totalPages: number = Math.floor(totalClients / PAGE_SIZE)
+      if (clients) {
+        return {
+          ...clients, totalPages
+        } as Client;
+
+
+    } 
+  }else if(sortingType === 'unBlocked') {
+
+      const clients: any = await ClientModel.aggregate([
+        { $match: {} }, 
+        {$sort: {isBlocked: -1}},
+        { $skip: skip },
+        { $limit: PAGE_SIZE }
+      ]);  
+      const totalPages: number = Math.floor(totalClients / PAGE_SIZE)
+      if (clients) {
+        return {
+          ...clients, totalPages
+        } as Client;
+
+
+    }
+   } else if(sortingType === 'latest') {
+
+
+
+      const clients: any = await ClientModel.aggregate([
+        { $match: {} }, 
+        {$sort: {createdAt: 1}},
+        { $skip: skip },
+        { $limit: PAGE_SIZE }
+      ]);  
+      const totalPages: number = Math.floor(totalClients / PAGE_SIZE)
+      if (clients) {
+        return {
+          ...clients, totalPages
+        } as Client;
+    } else {
+      return;
+    }
+    
+ 
+    } else {
+      throw new Error('Clients not Found')
     }
   }
 

@@ -13,6 +13,8 @@ import { ViewRoleInfo } from '../../../application/usecases/admin/viewRoleInfo';
 import { GetWallet } from '../../../application/usecases/admin/getWallet';
 import { SearchUser } from '../../../application/usecases/admin/searchUser';
 import { SortUser } from '../../../application/usecases/admin/sortUser';
+import { SearchClient } from '../../../application/usecases/admin/searchClient';
+import { SortClient } from '../../../application/usecases/admin/sortClient';
 
 
 const adminRepositary = new AdminRepository();
@@ -28,6 +30,8 @@ const viewRoleInfoUseCase = new ViewRoleInfo(adminRepositary);
 const getWalletUseCase = new GetWallet(adminRepositary);
 const searchUserUseCase = new SearchUser(adminRepositary);
 const sortUserUseCase = new SortUser(adminRepositary);
+const searchClientUseCase = new SearchClient(adminRepositary);
+const sortClientUseCase = new SortClient(adminRepositary);
 
 
 
@@ -117,7 +121,8 @@ export const adminController = {
         getAllClients: async(req: any, res: any) => {
             try{
 
-                const clients = await getAllClientsUseCase.execute(); 
+                const page: number = parseInt(req.query.page);
+                const clients = await getAllClientsUseCase.execute(page); 
 
                 res.json({message: "Successfully fetched all the clients", data: clients, type: 'success'});
                 
@@ -257,6 +262,7 @@ export const adminController = {
             }
         },
 
+        
         searchUser: async (req: any, res: any) => {
             try{
                 const { inputData } = req.query; 
@@ -277,6 +283,33 @@ export const adminController = {
                   const response = await sortUserUseCase.execute(sortingType); 
 
                   res.json({ message: 'Successfully sorted user', data: response, success: true});
+            }catch(err: any) {
+                res.json({ message: err.message, success: false })
+            }
+        },
+
+
+
+        searchClient: async (req: any, res: any) => {
+            try{
+                const { inputData } = req.query; 
+                 
+                  const response = await searchClientUseCase.execute(inputData); 
+
+                  res.json({ message: 'Successfully loaded search client ', data: response, success: true});
+            }catch(err: any) {
+                res.json({ message: err.message, success: false })
+            }
+        },
+
+
+        sortClient: async (req: any, res: any) => {
+            try{
+                const { sortingType } = req.query; 
+                 
+                  const response = await sortClientUseCase.execute(sortingType); 
+
+                  res.json({ message: 'Successfully sorted client', data: response, success: true});
             }catch(err: any) {
                 res.json({ message: err.message, success: false })
             }

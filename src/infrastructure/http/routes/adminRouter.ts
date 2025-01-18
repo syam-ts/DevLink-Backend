@@ -25,6 +25,8 @@ adminRouter.post('/login', adminController.loginAdmin);
 adminRouter.post('/logout', adminController.logoutAdmin); 
 adminRouter.post('/getAllUsers/search?', adminController.searchUser); 
 adminRouter.post('/getAllUsers/sort?', adminController.sortUser); 
+adminRouter.post('/getAllClients/search?', adminController.searchClient); 
+adminRouter.post('/getAllClients/sort?', adminController.sortClient); 
 
 
 adminRouter.put('/verifyClient/accept',adminController.verifyAccept);
