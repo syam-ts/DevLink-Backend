@@ -10,8 +10,11 @@ import jwt from "jsonwebtoken";
 // adminRouter.post('/signup', adminController.signUpAdmin);
   
 adminRouter.get('/dashboard',adminAuth, adminController.getDashboard);
+
+
 adminRouter.get('/getAllUsers', adminController.getAllUsers);
-adminRouter.get('/getAllClients', adminController.getAllClients);
+
+
 adminRouter.get('/getRequests', adminController.getRequests);
 adminRouter.get('/request/getRequestedClient/:clientId', adminController.getRequestedClient);
 adminRouter.get('/viewRole/:roleId/:roleInfo', adminController.viewRoleInfo);

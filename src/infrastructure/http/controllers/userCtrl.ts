@@ -66,11 +66,9 @@ export const userController = {
 
     
     verifyOtp: async (req: Request, res: Response) => {
-        try {
-          
+        try { 
             const user = await verifyUserUseCase.execute(req.body);
-
-            res.json({ message: "OTP verified successfully", type: "success" });
+            res.json({ message: "OTP verified successfully ", type: "success" });
         } catch (err: any) {
             res.json({ message: err.message, type: "error" });
         }

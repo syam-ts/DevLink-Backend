@@ -63,7 +63,7 @@ const createContractUseCase = new CreateContract(ClientRepository);
            try{  
 
              const client = await verifyClientUseCase.execute(req.body); 
-                 res.json({message: 'OTP verified successfully & created new Client', type: 'success'})
+                 res.json({message: 'OTP verified successfully', type: 'success'})
             
            } catch(err: any) {
                res.json({message: err.message, type: 'error'})

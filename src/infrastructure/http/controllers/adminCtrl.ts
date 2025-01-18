@@ -1,7 +1,7 @@
 import { LoginAdmin } from '../../../application/usecases/admin/loginAdmin';
 import { AdminRepository } from '../../../domain/interfaces/Repositaries/AdminRepository';
 import { GetDashboard } from '../../../application/usecases/admin/getDashboard';
-import { GetAllUsers } from '../../../application/usecases/admin/getUsers';
+import { GetAllUsers } from '../../../application/usecases/admin/getAllUsers';
 import { GetAllClients } from '../../../application/usecases/admin/getAllClients';
 import { BlockUser, BlockClient } from '../../../application/usecases/admin/blockRole';
 import { UnBlockUser, UnBlockClient } from '../../../application/usecases/admin/unBlockRole';
@@ -98,7 +98,9 @@ export const adminController = {
         getAllUsers: async(req: any, res: any) => {
             try{
 
-                const users = await getAllUsersUseCase.execute(); 
+                const page: number = parseInt(req.query.page);
+
+                const users = await getAllUsersUseCase.execute(page); 
 
                 res.json({message: "Successfully fetched all the users", data: users, type: 'success'});
                 
