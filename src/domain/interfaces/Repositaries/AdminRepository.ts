@@ -113,7 +113,10 @@ export class AdminRepository implements AdminRepositary {
     return client;
   }
 
+
+  //verify client profile
   async verifyAccept(data: any): Promise<any> {
+ 
      
     const { clientId, editData } = data;
  

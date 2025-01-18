@@ -1,15 +1,12 @@
 import mongoose from 'mongoose';
 import { User } from './User'
 
-export interface Client extends mongoose.Document{
-    id?: string;
-    name: string;
+export interface Client extends mongoose.Document{ 
+    companyName?:string;
     password?: string;
     email: string;
-    companyName?:string;
     description?:string;
     location?: string;
-    requiredSkills?: [string],
     numberOfEmployees: number,
     domain?: string;
     since?: number,
@@ -44,15 +41,13 @@ export interface Client extends mongoose.Document{
 }
 
 //Client Schema
-const ClientSchema: mongoose.Schema = new mongoose.Schema({
-    name: { type: String, required: true },
+const ClientSchema: mongoose.Schema = new mongoose.Schema({ 
+    companyName: { type: String, required: true },
     password: { type: String, required: false },
     email: { type: String, required: true, unique: true },
     location: { type: String, required: false },
     domain: { type: String, required: false },
-    companyName: { type: String, required: false },
     description: { type: String, required: false },
-    requiredSkills: { type: [String], required: false },
     numberOfEmployees: { type: Number, required: false },
     since: {type: Number, required: false },
     totalJobs: { type: Number, required: false},

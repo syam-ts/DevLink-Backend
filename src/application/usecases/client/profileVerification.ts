@@ -10,10 +10,10 @@ export class ProfileVerification {
 
     async execute(clientId: string, clientData: any) { 
 
-        
-        const { companyName, location, description, totalEmployees, since } = clientData.editData;
       
-           if(!companyName || !location || !description || !totalEmployees || !since) {
+        const { companyName, location, description,domain,  numberOfEmployees, since } = clientData.editData;
+      
+           if(!companyName || !location || !description || !domain || ! numberOfEmployees || !since) {
                  throw new Error('All the fields need to be filled')
            }
      
@@ -29,6 +29,11 @@ export class ProfileVerification {
        
         if(description.length < 20 ) {
             throw new Error("Description should have alteast 20 words", )
+        }
+
+       
+        if(domain.length < 3 ) {
+            throw new Error("Domain should have alteast 3 Characters", )
         }
 
        

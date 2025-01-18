@@ -43,11 +43,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   async signupClient(client: Client | any): Promise<Client | any> {
 
 
-    if (!client.name || !client.email || !client.password) {
-      throw new Error('Name, email, and password are required');
+    if (!client.companyName || !client.email || !client.password) {
+      throw new Error('CompanyName, email, and password are required');
     }
 
-    if (client.name.length < 4 || client.name.length > 20) {
+    if (client.companyName.length < 4 || client.companyName.length > 20) {
       throw new Error('Name should be between 4 to 20 characters');
     }
 
@@ -72,7 +72,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async verifyOtp(client: any): Promise<Client> {
-    const { name, email, password } = client.client;
+ 
+
+    const { companyName, email, password } = client.client;
     if (client.mailOtp === parseInt(client.clientOtp.otp)) {
 
       const salt: number = 10;
@@ -92,10 +94,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     };
 
       const createdClient = new ClientModel({
-        name: name,
+        companyName: companyName,
         email: email,
-        password: hashedPassword,
-        companyName: '',
+        password: hashedPassword, 
         description: '',
         numberOfEmployees: '',
         location: '',
@@ -114,7 +115,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       const savedClient = await createdClient.save();
 
       return {
-        name: savedClient.name,
+        companyName: savedClient.companyName,
         email: savedClient.email,
         password: savedClient.password
       } as Client;
@@ -136,7 +137,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
       return {
         _id: client._id,
-        name: client.name,
+        companyName: client.companyName,
         email: client.email,
         password: client.password,
       } as Client;
@@ -198,7 +199,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     const client = await ClientModel.findOne({ email }).exec();
     if (client) {
       return {
-        name: client.name,
+        companyName: client.companyName,
         email: client.email
       } as Client;
     } else {
@@ -211,7 +212,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       const savedClient = await createdClient.save();
 
       return {
-        name: savedClient.name,
+        companyName: savedClient.companyName,
         email: savedClient.email
       } as Client;
     }
@@ -266,8 +267,10 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async profileVerification(clientId: any, data: any): Promise<any> {
+ 
     const adminId = process.env.ADMIN_OBJECT_ID;   
     const existingClient: any = await ClientModel.findById(clientId);
+
  
     if(existingClient.isEditRequest) {
       throw new Error('Request already sended');

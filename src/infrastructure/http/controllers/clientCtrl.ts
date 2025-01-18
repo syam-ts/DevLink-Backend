@@ -48,7 +48,7 @@ const createContractUseCase = new CreateContract(ClientRepository);
  export const clientController = {
        signupClient: async (req: any, res: any) => {
              try {
-                 
+               
                  const otp = await signupUseCase.execute(req.body); 
                  if(otp) {
                      res.status(201).json({message: 'Registration successed', data: req.body, otp, type: 'success'});
@@ -63,7 +63,7 @@ const createContractUseCase = new CreateContract(ClientRepository);
            try{  
 
              const client = await verifyClientUseCase.execute(req.body); 
-                 res.json({message: 'OTP verified successfully', type: 'success'})
+                 res.json({message: 'OTP verified successfully & created new Client', type: 'success'})
             
            } catch(err: any) {
                res.json({message: err.message, type: 'error'})
@@ -190,6 +190,7 @@ const createContractUseCase = new CreateContract(ClientRepository);
          editProfile: async (req: any, res: any) => {
             try{     
                
+        
                 const { clientId } = req.params;
                 const response = await editClientProfileUseCase.execute(clientId, req.body);
                
