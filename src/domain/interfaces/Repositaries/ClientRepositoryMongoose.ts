@@ -337,6 +337,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async createJobPost(clientId: string, jobPost: any): Promise<any> {
     const data = JSON.parse(jobPost);
+ 
 
     const client: any = await ClientModel.findById(clientId);
              
@@ -376,8 +377,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
           },
           status: "pending",
           isPayment: true,
-          clientId: clientId,
-          date: new Date()
+          createdAt: new Date(),
+          clientId: clientId
         });
 
         const savedJobPost = await createdJobPost.save(); 

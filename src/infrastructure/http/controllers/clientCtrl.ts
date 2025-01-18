@@ -214,8 +214,7 @@ const createContractUseCase = new CreateContract(ClientRepository);
 
  
          createJobPost: async (req: any, res: any) => {
-             try{      
-                  
+             try{       
                 const { clientId, data } = req.params;
                 const jobPost = await createJobPostUseCase.execute(clientId, data);
              
