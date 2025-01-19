@@ -74,7 +74,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   async verifyOtp(client: any): Promise<Client> {
  
 
-    const { companyName, email, password } = client.client;
+    const { companyName, email, password } = client;
     if (client.mailOtp === parseInt(client.clientOtp.otp)) {
 
       const salt: number = 10;

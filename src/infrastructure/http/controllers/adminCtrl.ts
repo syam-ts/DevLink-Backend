@@ -295,6 +295,7 @@ export const adminController = {
                 const { inputData } = req.query; 
                  
                   const response = await searchClientUseCase.execute(inputData); 
+                  
 
                   res.json({ message: 'Successfully loaded search client ', data: response, success: true});
             }catch(err: any) {

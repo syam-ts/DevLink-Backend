@@ -192,11 +192,13 @@ export class AdminRepository implements AdminRepositary {
     const totalClients: number = await ClientModel.countDocuments({name: {$regex: inputData, $options: 'i'}});
  
     const clients: any = await ClientModel.aggregate([
-      { $match: {name: {$regex: inputData}} }, 
+      { $match: {companyName: {$regex: inputData}} }, 
       { $skip: skip },
       { $limit: PAGE_SIZE }
     ]);  
-    const totalPages: number = Math.floor(totalClients / PAGE_SIZE)
+ 
+    const totalPages: number = Math.floor(totalClients / PAGE_SIZE);
+   
     if (clients) {
       return {
         ...clients, totalPages
