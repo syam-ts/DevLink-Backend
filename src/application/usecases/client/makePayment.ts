@@ -20,7 +20,7 @@ export class MakePayment {
             throw new Error('All Fields need to be filled');
         } 
 
-        if(title.length < 5  || title.length > 100) {
+        if(title.length < 5  || title.length > 400) {
             throw new Error('Title should have atleset 5 characters');
         }
         
@@ -54,6 +54,7 @@ export class MakePayment {
             throw new Error('Chose the estimate time');
         }
       
+   
        
        
     //   const minWorkingHours: number = data.formData.estimateTime * 8;

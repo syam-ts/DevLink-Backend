@@ -28,7 +28,7 @@ clientRouter.post('/profile/edit/:clientId', clientController.editProfile); //AD
 clientRouter.post('/profile/verification/:clientId', clientAuth, clientController.profileVerification);
 clientRouter.post('/jobPost/payment-stripe/:clientId',clientController.makePayment);
 // clientRouter.post('/jobPost/payment-stripe/:clientId', clientAuth,clientController.makePayment);
-clientRouter.post('/payment/success/:clientId/:data', clientAuth,clientController.createJobPost);
+clientRouter.post('/payment/success/:clientId',clientController.createJobPost);
  
 
 

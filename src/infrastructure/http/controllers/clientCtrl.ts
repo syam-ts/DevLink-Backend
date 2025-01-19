@@ -215,7 +215,10 @@ const createContractUseCase = new CreateContract(ClientRepository);
  
          createJobPost: async (req: any, res: any) => {
              try{       
-                const { clientId, data } = req.params;
+                 const { clientId } = req.params;
+                
+                  const { data } = req.body;
+ 
                 const jobPost = await createJobPostUseCase.execute(clientId, data);
              
                 res.json({message: 'Redirecting to payment page',data: jobPost, success: true});

@@ -226,6 +226,7 @@ export class AdminRepository implements AdminRepositary {
         { $skip: skip },
         { $limit: PAGE_SIZE }
       ]);  
+      
       const totalPages: number = Math.floor(totalClients / PAGE_SIZE)
       if (clients) {
         return {

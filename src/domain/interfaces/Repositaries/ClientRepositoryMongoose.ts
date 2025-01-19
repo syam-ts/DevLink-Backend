@@ -109,6 +109,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         totalHours: 0,
         wallet: {wallet},
         request: [],
+        isBlocked: false,
         createdAt: new Date()
       });
 
@@ -335,8 +336,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
 
-  async createJobPost(clientId: string, jobPost: any): Promise<any> {
-    const data = JSON.parse(jobPost);
+  async createJobPost(clientId: string, data: any): Promise<any> {
+    // const data = JSON.parse(jobPost);
+ 
+   try{
+ 
  
 
     const client: any = await ClientModel.findById(clientId);
@@ -344,12 +348,14 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     if(data.paymentType === 'hourly') { 
         // const minWorkingHours: number = data.estimateTime * 8;
         // const finalDate: number = (data.estimateTime * 24 ) - minWorkingHours;
- 
- 
+          
+       
+        const parsedEstimatedTimeInHours = parseInt(data.estimateTime)
 
         const totalAmount = data.estimateTime * data.payment;
 
         data.amount = totalAmount; //updatig the total amount 
+      
       
 
         //ADD REST OF THE FIELDS
@@ -359,8 +365,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
           keyResponsiblities: data.keyResponsiblities,
           requiredSkills: data.requiredSkills,
           paymentType: data.paymentType,
-          estimateTime: data.estimateTime,
-          estimateTimeinHours: data.estimateTime,
+          estimateTime: new Date(),
+          estimateTimeinHours: parsedEstimatedTimeInHours,
           amount: data.payment,
           expertLevel: data.expertLevel,
           location: data.location,
@@ -382,11 +388,15 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         });
 
         const savedJobPost = await createdJobPost.save(); 
+    
 
         return { savedJobPost };  
       } else {
-        return jobPost; 
+        return ; 
       }
+   }catch(err: any) {
+    console.log('ERROR: ',err.message)
+   }
   }
 
 
@@ -463,7 +473,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
             fromId: roleId,
             date: new Date()
           };
-
+ 
           const updateAdminWallet = await AdminModel.findByIdAndUpdate(adminId, {
               $inc: {"wallet.balance": amount},
               $push: {"wallet.transactions": walletEntry}
