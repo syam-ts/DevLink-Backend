@@ -16,6 +16,7 @@ export interface JobPostDocument extends Document {
     totalProposals: number;
     proposalCount: number; 
     aboutClient: {
+      companyName: string,
       location: string,
       totalSpend: number,
       totalHours: number,

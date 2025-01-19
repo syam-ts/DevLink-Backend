@@ -2,7 +2,7 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 import { User } from "../../entities/User";
 import { UserModel } from "../../entities/User";
 import { Client, ClientModel } from "../../entities/Client";
-import { JobPostModel } from "../../entities/JobPost";
+import { JobPostDocument, JobPostModel } from "../../entities/JobPost";
 import { UserRepositary } from "../../../application/usecases/user/signupUser";
 import bcrypt from "bcrypt";
 import validator from "validator";
@@ -245,7 +245,7 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
   async findAllClients(): Promise<Client | any> {
-    const clients: any = await ClientModel.find().limit(6).exec();
+    const clients: any = await ClientModel.find({isVerified: true}).limit(6).exec();
     if (clients) {
       return {
         ...clients,
@@ -466,5 +466,16 @@ export class UserRepositoryMongoose implements UserRepositary {
     } else {
       return user?.request;
     }
+  }
+
+
+
+  async getSingleJobPost(jobPostId: string): Promise< any > {
+
+    const jobPost = await JobPostModel.findById(jobPostId).exec();
+
+    if(!jobPost) throw new Error('Job Post didnt found');
+
+    return jobPost;
   }
 }

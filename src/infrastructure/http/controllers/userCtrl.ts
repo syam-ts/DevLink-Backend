@@ -18,7 +18,8 @@ import { AllContracts } from "../../../application/usecases/user/allContracts";
 import { ViewContract } from "../../../application/usecases/user/viewContract"; 
 import { AllNotifications } from "../../../application/usecases/user/allNotifications"; 
 import { BoostPayment } from "../../../application/usecases/user/boostPayment"; 
-import { BosstSuccess } from "../../../application/usecases/user/bosstSuccess"; 
+import { BoostSuccess } from "../../../application/usecases/user/bosstSuccess"; 
+import { GetSingleJobPost } from "../../../application/usecases/user/getSingleJobPost"; 
 
 
 const userRepository = new UserRepositoryMongoose();
@@ -40,7 +41,8 @@ const allContractsUseCase = new AllContracts(userRepository);
 const viewContractUseCase = new ViewContract(userRepository);
 const allNotificationsUseCase = new AllNotifications(userRepository);
 const boostAccountUseCase = new BoostPayment(userRepository);
-const bosstSuccessUseCase = new BosstSuccess(userRepository);
+const boostSuccessUseCase = new BoostSuccess(userRepository);
+const getSingleJobPostUseCase = new GetSingleJobPost(userRepository);
 
 
 export const userController = {
@@ -341,22 +343,26 @@ export const userController = {
             try{
                   const { userId } = req.params;
              
-                const response = await bosstSuccessUseCase.execute(userId);
+                const response = await boostSuccessUseCase.execute(userId);
     
                 res.status(200).json({message: 'successfully closed the contract',response: response, success: true});
             }catch(err: any) {
                 res.status(500).json({message: err.message, success: false});
             }
         },
+
+        getSingleJobPost: async (req: Request, res: Response) => {
+            try{
+                const { jobPostId } = req.params;
+
+                const jobPost = await getSingleJobPostUseCase.execute(jobPostId); 
+
+                res.status(200).json({ message: "job post loaded successfully ", jobPost, success: true });
+
+            }catch(err: any) {
+                res.status(500).json({message: err.message, success: false});
+            }
+        }
 };
 
-// POST otp =  {
-    //     user: {
-//       name: 'Syam',
-//       password: 'syamWnanddhu3@gmail.com',
-//       email: 'syamnanddhu3@gmail.com',
-//       mobile: '8848700346'
-//     },
-//     mailOtp: 1111,
-//     userOtp: { otp: '1111' }
-//   }
+ 

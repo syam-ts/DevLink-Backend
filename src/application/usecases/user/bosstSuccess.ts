@@ -5,7 +5,7 @@ export interface UserRepositary {
 
 
 
-export class BosstSuccess  {
+export class BoostSuccess  {
     constructor(private userRepositary: UserRepositary) {}
 
     async execute( userId: string ) {   

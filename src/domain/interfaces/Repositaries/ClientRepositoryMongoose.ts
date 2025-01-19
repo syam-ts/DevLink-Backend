@@ -374,6 +374,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
           totalProposals: 0,
           proposalCount: 0,
           aboutClient: {
+            companyName: client.companyName,
             location: client.location,
             totalSpend: client.totalSpend,
             totalHours: client.totalHours,
