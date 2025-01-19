@@ -207,10 +207,9 @@ export const userController = {
     createProposal: async (req: Request, res: Response) => {
         try{ 
         
-            
-            const {userId, clientId, jobPostId}= req.params;
-            const { description }= req.body; 
-           const response = await allUserUseCases.createProposalUseCase.execute(clientId, userId, jobPostId, description); 
+            const {userId, jobPostId, description, bidAmount, bidDeadline} = req.body;
+           
+           const response = await allUserUseCases.createProposalUseCase.execute(userId, jobPostId, description, bidAmount, bidDeadline); 
 
            res.json({message: 'proposal successfully send ',data: response, success: true}); 
         }catch(err: any) {

@@ -21,7 +21,9 @@ export interface Client extends mongoose.Document{
             jobPostId: mongoose.Types.ObjectId,
             jobPostInfo: string,
             userData: User,
-            description?: string
+            description?: string,
+            bidamount: number,
+            bidDeadline: number
         }],
         wallet: {
             balance: number, 
@@ -64,7 +66,9 @@ const ClientSchema: mongoose.Schema = new mongoose.Schema({
             userData: {
                
             },
-            description: { type: String, required: false }
+            description: { type: String, required: false },
+            bidAmount: { type: Number, required: false },
+            bidDeadline: { type: Number, required: false }
              }
         ],
         wallet: {

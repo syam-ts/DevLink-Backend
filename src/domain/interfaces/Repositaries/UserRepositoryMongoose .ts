@@ -280,16 +280,18 @@ export class UserRepositoryMongoose implements UserRepositary {
     return { user };
   }
 
-  async createProposal(
-    clientId: Id,
-    userId: Id,
-    jobPostId: Id,
-    description: string
-  ): Promise<any> {
+  async createProposal(userId: Id, jobPostId: Id, description: Id, bidAmount: number, bidDeadline: number): Promise<any> {
+    try{
+
+    }catch(err: any) {
+      console.error('ERROR: ',err.message);
+    }
     const user = await UserModel.findById(userId);
     if (!user) {
       throw new Error("User not found");
     }
+
+    console.log('THE WHOLE DATA : ',userId, ' : ',jobPostId, ' ,',  description)
 
     const existingProposal = await ClientModel.find({
       $and: [
@@ -308,13 +310,12 @@ export class UserRepositoryMongoose implements UserRepositary {
         userId: userId,
         jobPostId: jobPostId,
         jobPostInfo: jobpost.title,
-        userData: user,
         description: description,
       };
       //  const proposal = await ClientModel.findById(clientId)
 
       const proposal = await ClientModel.findByIdAndUpdate(
-        clientId,
+        jobpost.clientId,
         { $push: { proposals: newProposal } },
         { new: true }
       );

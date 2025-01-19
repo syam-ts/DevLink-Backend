@@ -1,6 +1,6 @@
 type Id = string;
 export interface UserRepositary {
-    createProposal(userId: Id, clientId: Id, jobPostId: Id, description: string): Promise< any >
+    createProposal(userId: Id, jobPostId: Id, description: Id, bidAmount: number, bidDeadline: number): Promise< any >
 } 
 
 
@@ -8,10 +8,10 @@ export interface UserRepositary {
 export class CreateProposal {
     constructor(private userRepositary: UserRepositary) {}
 
-    async execute(clientId: Id, userId: Id,  jobPostId: Id, description: string) {  
+    async execute(userId: Id, jobPostId: Id, description: Id, bidAmount: number, bidDeadline: number) {  
         
 
-           const result = await this.userRepositary.createProposal( clientId, userId, jobPostId,  description); 
+           const result = await this.userRepositary.createProposal( userId, jobPostId, description, bidAmount, bidDeadline); 
             
 
            return {   };
