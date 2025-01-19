@@ -6,7 +6,7 @@ export interface ClientRepositary {
     resetPassword(email: string, password: string): Promise<Client>;
 }
 
-export class ResetPassword {
+export class ResetPasswordClient {
     constructor(private clientRepositary: ClientRepositary) {}
 
     async execute(id :string, password: string) {   

@@ -5,7 +5,7 @@ export interface ClientRepository {
 };
 
 
-export class ListAllJobs {
+export class ListAllJobsClient {
     constructor( private clientRepository: ClientRepository) {};
 
     async execute() {

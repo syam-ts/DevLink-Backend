@@ -5,7 +5,7 @@ export interface ClientRepositary {
     verifyOtp(client: Client): Promise<Client>; 
 }
 
-export class verifyOtp {
+export class verifyOtpClient {
     constructor(private clientRepositary: ClientRepositary) {}
 
     async execute(client: Client) {    

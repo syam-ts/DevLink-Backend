@@ -6,7 +6,7 @@ export interface ClientRepository {
 };
 
 
-export class GetUserProfile {
+export class GetUserProfileClient {
     constructor( private clientRepository: ClientRepository) {};
 
     async execute(userId: string) {

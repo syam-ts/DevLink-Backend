@@ -1,55 +1,14 @@
 import { Request, Response } from 'express';
-import { SignupUser } from "../../../application/usecases/user/signupUser";
-import { LoginUser } from "../../../application/usecases/user/loginUser";
-import { GoogleLoginUser } from "../../../application/usecases/user/GoogleLoginUser";
-import { getHomeUser } from "../../../application/usecases/user/getHomeUser";
-import { LogoutUser } from "../../../application/usecases/user/logoutUser";
-import { verifyOtp } from "../../../application/usecases/user/otpUser";
-import { VerifyEmail } from "../../../application/usecases/user/verifyEmail";
-import { ResetPassword } from "../../../application/usecases/user/resetPassword";
-import { UserRepositoryMongoose } from "../../../domain/interfaces/Repositaries/UserRepositoryMongoose ";
-import { EditUserProfile } from "../../../application/usecases/user/editProfile";
-import { GetUserProfile } from "../../../application/usecases/user/getProfile";
-import { ListAllJobs } from "../../../application/usecases/user/listAllJobs";
-import { BestMatches } from "../../../application/usecases/user/bestMatches";
-import { CreateProposal } from "../../../application/usecases/user/createProposal"; 
-import { CloseContract } from "../../../application/usecases/user/closeContract"; 
-import { AllContracts } from "../../../application/usecases/user/allContracts"; 
-import { ViewContract } from "../../../application/usecases/user/viewContract"; 
-import { AllNotifications } from "../../../application/usecases/user/allNotifications"; 
-import { BoostPayment } from "../../../application/usecases/user/boostPayment"; 
-import { BoostSuccess } from "../../../application/usecases/user/bosstSuccess"; 
-import { GetSingleJobPost } from "../../../application/usecases/user/getSingleJobPost"; 
-
-
-const userRepository = new UserRepositoryMongoose();
-const signupUseCase = new SignupUser(userRepository);
-const loginUseCase = new LoginUser(userRepository);
-const getHomeUseCase = new getHomeUser(userRepository);
-const logoutUserUseCase = new LogoutUser(userRepository);
-const verifyEmailUseCase = new VerifyEmail(userRepository);
-const resetPasswordUseCase = new ResetPassword(userRepository);
-const verifyUserUseCase = new verifyOtp(userRepository);
-const GoogleLoginUserUseCase = new GoogleLoginUser(userRepository);
-const editProfileUseCase = new EditUserProfile(userRepository);
-const getProfileUseCase = new GetUserProfile(userRepository);
-const listAllJobsUseCase = new ListAllJobs(userRepository);
-const bestMatchesUseCase = new BestMatches(userRepository);
-const createProposalUseCase = new CreateProposal(userRepository);
-const closeContractUseCase = new CloseContract(userRepository);
-const allContractsUseCase = new AllContracts(userRepository);
-const viewContractUseCase = new ViewContract(userRepository);
-const allNotificationsUseCase = new AllNotifications(userRepository);
-const boostAccountUseCase = new BoostPayment(userRepository);
-const boostSuccessUseCase = new BoostSuccess(userRepository);
-const getSingleJobPostUseCase = new GetSingleJobPost(userRepository);
+import {
+    allUserUseCases
+} from '../../../helper/controllerHelper/allCtrlConnection';
 
 
 export const userController = {
 
     signupUser: async (req: Request, res: Response) => {
         try { 
-            const otp = await signupUseCase.execute(req.body);
+            const otp = await allUserUseCases.signupUseCase.execute(req.body);
 
             if (otp) {
                 res
@@ -69,7 +28,7 @@ export const userController = {
     
     verifyOtp: async (req: Request, res: Response) => {
         try { 
-            const user = await verifyUserUseCase.execute(req.body);
+            const user = await allUserUseCases.verifyUserUseCase.execute(req.body);
             res.json({ message: "OTP verified successfully ", type: "success" });
         } catch (err: any) {
             res.json({ message: err.message, type: "error" });
@@ -79,7 +38,7 @@ export const userController = {
 
     resendOtp: async (req: Request, res: Response) => {
         try {
-            const user = await signupUseCase.execute(req.body);
+            const user = await allUserUseCases.signupUseCase.execute(req.body);
 
             res.json({
                 message: "OTP resend successfully",
@@ -94,7 +53,7 @@ export const userController = {
 
     verifyEmail: async (req: Request, res: Response) => {
         try {
-            const response = await verifyEmailUseCase.execute(req.body.email);
+            const response = await allUserUseCases.verifyEmailUseCase.execute(req.body.email);
 
             res.json({
                 message: "successfully sended",
@@ -110,7 +69,7 @@ export const userController = {
     resetPassword: async (req: Request, res: Response) => {
         try {  
             let { userId } = req.params, { password } = req.body; 
-            const response = await resetPasswordUseCase.execute(userId, password);
+            const response = await allUserUseCases.resetPasswordUseCase.execute(userId, password);
 
             res.json({ message: "Password Reset Successfully", type: "success" });
         } catch (err: any) {
@@ -121,7 +80,7 @@ export const userController = {
 
     loginUser: async (req: Request, res: any) => {
         try {
-            const theUser = await loginUseCase.execute(req.body);
+            const theUser = await allUserUseCases.loginUseCase.execute(req.body);
 
             const { user, refreshToken, accessToken} = theUser;
        
@@ -144,7 +103,7 @@ export const userController = {
 
     googleLogin: async (req: Request, res: any) => {
         try {
-            const user = await GoogleLoginUserUseCase.execute(req.body); 
+            const user = await allUserUseCases.GoogleLoginUserUseCase.execute(req.body); 
             res.cookie("jwtU", user.jwt, {
                 httpOnly: true,
                 sameSite: "None",
@@ -161,7 +120,7 @@ export const userController = {
     getHomeUser: async (req: Request, res: any) => {
         try {
       
-            const clients = await getHomeUseCase.execute();
+            const clients = await allUserUseCases.getHomeUseCase.execute();
 
           
             return res.json({
@@ -179,7 +138,7 @@ export const userController = {
         try {
             const { userId } = req.params;
             console.log('THE PARMA S; ',userId)
-            const user = await getProfileUseCase.execute(userId);
+            const user = await allUserUseCases.getProfileUseCase.execute(userId);
             console.log('THE RESPONSE : ', user)
 
             res.json({
@@ -200,7 +159,7 @@ export const userController = {
             const profileData = req.body; 
             console.log('THE EXPOERIN: ', req.body.editData)
       
-            const response = await editProfileUseCase.execute(userId, profileData);
+            const response = await allUserUseCases.editProfileUseCase.execute(userId, profileData);
 
             res.json({ message: "Profile successfully edited", type: "success" });
         } catch (err: any) {
@@ -224,7 +183,7 @@ export const userController = {
     listAllJobs: async (req: Request, res: Response) => {
         try{
             
-           const response = await listAllJobsUseCase.execute(); 
+           const response = await allUserUseCases.listAllJobsUseCase.execute(); 
 
            res.json({message: 'successfully list all jobs',data: response, success: true}); 
         }catch(err: any) {
@@ -236,7 +195,7 @@ export const userController = {
     bestMatches: async (req: Request, res: Response) => {
         try{
             const { userId } = req.params;
-           const response = await bestMatchesUseCase.execute(userId); 
+           const response = await allUserUseCases.bestMatchesUseCase.execute(userId); 
 
            res.json({message: 'successfully list all notifications',data: response, success: true}); 
         }catch(err: any) {
@@ -251,7 +210,7 @@ export const userController = {
             
             const {userId, clientId, jobPostId}= req.params;
             const { description }= req.body; 
-           const response = await createProposalUseCase.execute(clientId, userId, jobPostId, description); 
+           const response = await allUserUseCases.createProposalUseCase.execute(clientId, userId, jobPostId, description); 
 
            res.json({message: 'proposal successfully send ',data: response, success: true}); 
         }catch(err: any) {
@@ -265,7 +224,7 @@ export const userController = {
         try{
             const { userId } = req.params;
             
-            const allContracts = await allContractsUseCase.execute(userId);
+            const allContracts = await allUserUseCases.allContractsUseCase.execute(userId);
 
           
 
@@ -281,7 +240,7 @@ export const userController = {
         try{
             const { contractId } = req.params;
             
-            const viewContract = await viewContractUseCase.execute(contractId);
+            const viewContract = await allUserUseCases.viewContractUseCase.execute(contractId);
  
             console.log('THE CON', viewContract)
 
@@ -298,7 +257,7 @@ export const userController = {
         try{
               const { userId } = req.params;
             
-            const allNotifications = await allNotificationsUseCase.execute(userId);
+            const allNotifications = await allUserUseCases.allNotificationsUseCase.execute(userId);
    
             res.status(200).json({message: 'successfully loaded all notifications',notifications: allNotifications, success: true});
         }catch(err: any) {
@@ -314,7 +273,7 @@ export const userController = {
                   const { contractId, description, progress } = req.body;
             
                    
-                const closedContract = await closeContractUseCase.execute(contractId, description, progress);
+                const closedContract = await allUserUseCases.closeContractUseCase.execute(contractId, description, progress);
                 console.log('CLOSED CONTRCAT SUCCESS!')
     
                 res.status(200).json({message: 'Contract closed successfully', success: true});
@@ -330,7 +289,7 @@ export const userController = {
                   const { userId } = req.params;
             
                    
-                const paymentUrl = await boostAccountUseCase.execute(userId);
+                const paymentUrl = await allUserUseCases.boostAccountUseCase.execute(userId);
     
                 res.status(200).json({message: 'successfully closed the contract',url: paymentUrl, success: true});
             }catch(err: any) {
@@ -343,7 +302,7 @@ export const userController = {
             try{
                   const { userId } = req.params;
              
-                const response = await boostSuccessUseCase.execute(userId);
+                const response = await allUserUseCases.boostSuccessUseCase.execute(userId);
     
                 res.status(200).json({message: 'successfully closed the contract',response: response, success: true});
             }catch(err: any) {
@@ -355,7 +314,7 @@ export const userController = {
             try{
                 const { jobPostId } = req.params;
 
-                const jobPost = await getSingleJobPostUseCase.execute(jobPostId); 
+                const jobPost = await allUserUseCases.getSingleJobPostUseCase.execute(jobPostId); 
 
                 res.status(200).json({ message: "job post loaded successfully ", jobPost, success: true });
 

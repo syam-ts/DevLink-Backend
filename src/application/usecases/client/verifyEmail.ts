@@ -36,7 +36,7 @@ export interface ClientRepositary {
         } 
   } 
  
-export class VerifyEmail {
+export class VerifyEmailClient {
      constructor(private clientRepositary: ClientRepositary) {}
        
     async execute(email: string) {
