@@ -455,6 +455,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
           }
 
           const proposals = client.proposals;
+          
           return proposals;
   }
 

@@ -291,7 +291,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       throw new Error("User not found");
     }
 
-    console.log('THE WHOLE DATA : ',userId, ' : ',jobPostId, ' ,',  description)
+ 
 
     const existingProposal = await ClientModel.find({
       $and: [
@@ -308,17 +308,23 @@ export class UserRepositoryMongoose implements UserRepositary {
       const newProposal = {
         type: "New Job Proposal ",
         userId: userId,
+        userData: {
+          profilePicture: user.profilePicture,
+        },
         jobPostId: jobPostId,
         jobPostInfo: jobpost.title,
         description: description,
+        bidAmount: bidAmount,
+        bidDeadline: bidDeadline
       };
-      //  const proposal = await ClientModel.findById(clientId)
 
       const proposal = await ClientModel.findByIdAndUpdate(
         jobpost.clientId,
         { $push: { proposals: newProposal } },
         { new: true }
       );
+
+
 
       return proposal;
     }
