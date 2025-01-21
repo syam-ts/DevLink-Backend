@@ -1,9 +1,9 @@
 import { Client, ClientModel } from '../../entities/Client';
 import { User } from '../../entities/User';
 import { ClientRepositary } from '../../../application/usecases/client/signupClient';
-import { UserModel } from '../../entities/User'; 
+import { UserModel } from '../../entities/User';
 import { NotificationModel } from '../../entities/Notification';
-import { JobPostModel } from '../../entities/JobPost'; 
+import { JobPostModel } from '../../entities/JobPost';
 import { AdminModel } from '../../entities/Admin';
 import { ContractModel } from '../../entities/Contract';
 import bcrypt from 'bcrypt';
@@ -12,7 +12,7 @@ import jwt from 'jsonwebtoken';
 import allCronJobs from '../../../helper/cron-jobs/index'
 import { ObjectId, Schema } from 'mongoose';
 
-   
+
 
 
 export class ClientRepositoryMongoose implements ClientRepositary {
@@ -72,7 +72,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async verifyOtp(client: any): Promise<Client> {
- 
+
 
     const { companyName, email, password } = client;
     if (client.mailOtp === parseInt(client.clientOtp.otp)) {
@@ -81,22 +81,22 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       const hashedPassword = await bcrypt.hash(password, salt);
 
       let wallet = {
-        balance: 0, 
+        balance: 0,
         transactions: [
-            {
-                type: "",
-                amount: 0,
-                from: "",
-                fromId: "",
-                date: ""
-            }
+          {
+            type: "",
+            amount: 0,
+            from: "",
+            fromId: "",
+            date: ""
+          }
         ]
-    };
+      };
 
       const createdClient = new ClientModel({
         companyName: companyName,
         email: email,
-        password: hashedPassword, 
+        password: hashedPassword,
         description: '',
         numberOfEmployees: '',
         location: '',
@@ -107,7 +107,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         isGoogle: false,
         totalSpend: 0,
         totalHours: 0,
-        wallet: {wallet},
+        wallet: { wallet },
         request: [],
         isBlocked: false,
         createdAt: new Date()
@@ -167,31 +167,31 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       throw new Error('client not Found');
     }
 
-    if(client.isBlocked) {
+    if (client.isBlocked) {
       throw new Error('Client not Authenticated');
     }
 
     if (!client.password) {
       throw new Error('Password is wrong');
-    } 
+    }
 
     const isValidPassword = await bcrypt.compare(password, client.password as string);
 
     if (!isValidPassword) {
       throw new Error('wrong password')
-    }; 
+    };
 
     const CLIENT_ACCESS_TOKEN: any = process.env.CLIENT_ACCESS_TOKEN;
-         const CLIENT_REFRESH_TOKEN: any = process.env.CLIENT_REFRESH_TOKEN;
-    
-         const refreshToken = jwt.sign({id: client._id, email: client.email},CLIENT_REFRESH_TOKEN, {expiresIn: "7d"});
-         const accessToken = jwt.sign({id: client._id, email: client.email},CLIENT_ACCESS_TOKEN, {expiresIn: "15m"});
-              
-         client.refreshToken = refreshToken;
-         await client.save();
+    const CLIENT_REFRESH_TOKEN: any = process.env.CLIENT_REFRESH_TOKEN;
 
-     return { client:{ client }, accessToken, refreshToken };
-        };
+    const refreshToken = jwt.sign({ id: client._id, email: client.email }, CLIENT_REFRESH_TOKEN, { expiresIn: "7d" });
+    const accessToken = jwt.sign({ id: client._id, email: client.email }, CLIENT_ACCESS_TOKEN, { expiresIn: "15m" });
+
+    client.refreshToken = refreshToken;
+    await client.save();
+
+    return { client: { client }, accessToken, refreshToken };
+  };
 
 
 
@@ -225,7 +225,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   async findAllUsers(): Promise<User | any> {
     const users: any = await UserModel.find().exec();
     if (users) {
-      
+
       return {
         ...users
       } as User;
@@ -263,39 +263,39 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return client;
   }
 
- 
+
 
 
 
   async profileVerification(clientId: any, data: any): Promise<any> {
- 
-    const adminId = process.env.ADMIN_OBJECT_ID;   
+
+    const adminId = process.env.ADMIN_OBJECT_ID;
     const existingClient: any = await ClientModel.findById(clientId);
 
- 
-    if(existingClient.isEditRequest) {
+
+    if (existingClient.isEditRequest) {
       throw new Error('Request already sended');
     }
 
-      const request = {
-        type: 'Profile Verification Request',
-        clientId: clientId,
-        status: 'pending',
-        data: data
-      }
-  
-      const updatedAdmin = await AdminModel.findByIdAndUpdate(
-        adminId,
-        { $push: { request: request } },
-        { new: true }
-      ); 
-      
-      const editclientRequest = await ClientModel.findByIdAndUpdate(clientId,
-        {isEditRequest : true },
-        { update : true }
-      );
+    const request = {
+      type: 'Profile Verification Request',
+      clientId: clientId,
+      status: 'pending',
+      data: data
+    }
 
-      return updatedAdmin;
+    const updatedAdmin = await AdminModel.findByIdAndUpdate(
+      adminId,
+      { $push: { request: request } },
+      { new: true }
+    );
+
+    const editclientRequest = await ClientModel.findByIdAndUpdate(clientId,
+      { isEditRequest: true },
+      { update: true }
+    );
+
+    return updatedAdmin;
   }
 
 
@@ -303,32 +303,32 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async editClientProfile(clientId: string, editData: any): Promise<any> {
-    const adminId = process.env.ADMIN_OBJECT_ID;   
+    const adminId = process.env.ADMIN_OBJECT_ID;
     const existingClient: any = await ClientModel.findById(clientId);
-     
-    if(existingClient.isEditRequest) {
+
+    if (existingClient.isEditRequest) {
       throw new Error('Request already sended');
     }
- 
-      const request = {
-        type: 'Profile Updation Request',
-        clientId: clientId,
-        status: 'pending',
-        data: editData
-      }
- 
-      const updatedAdmin = await AdminModel.findByIdAndUpdate(
-        adminId,
-        { $push: { request: request } },
-        { new: true }
-      ); 
-      
-      const editclientRequest = await ClientModel.findByIdAndUpdate(clientId,
-        {isEditRequest : true },
-        { update : true }
-      );
 
-      return updatedAdmin;
+    const request = {
+      type: 'Profile Updation Request',
+      clientId: clientId,
+      status: 'pending',
+      data: editData
+    }
+
+    const updatedAdmin = await AdminModel.findByIdAndUpdate(
+      adminId,
+      { $push: { request: request } },
+      { new: true }
+    );
+
+    const editclientRequest = await ClientModel.findByIdAndUpdate(clientId,
+      { isEditRequest: true },
+      { update: true }
+    );
+
+    return updatedAdmin;
   }
 
 
@@ -338,25 +338,25 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async createJobPost(clientId: string, data: any): Promise<any> {
     // const data = JSON.parse(jobPost);
- 
-   try{
- 
- 
 
-    const client: any = await ClientModel.findById(clientId);
-             
-    if(data.paymentType === 'hourly') { 
+    try {
+
+
+
+      const client: any = await ClientModel.findById(clientId);
+
+      if (data.paymentType === 'hourly') {
         // const minWorkingHours: number = data.estimateTime * 8;
         // const finalDate: number = (data.estimateTime * 24 ) - minWorkingHours;
-          
-       
+
+
         const parsedEstimatedTimeInHours = parseInt(data.estimateTime)
 
         const totalAmount = data.estimateTime * data.payment;
 
         data.amount = totalAmount; //updatig the total amount 
-      
-      
+
+
 
         //ADD REST OF THE FIELDS
         const createdJobPost = new JobPostModel({
@@ -388,16 +388,16 @@ export class ClientRepositoryMongoose implements ClientRepositary {
           clientId: clientId
         });
 
-        const savedJobPost = await createdJobPost.save(); 
-    
+        const savedJobPost = await createdJobPost.save();
 
-        return { savedJobPost };  
+
+        return { savedJobPost };
       } else {
-        return ; 
+        return;
       }
-   }catch(err: any) {
-    console.log('ERROR: ',err.message)
-   }
+    } catch (err: any) {
+      console.log('ERROR: ', err.message)
+    }
   }
 
 
@@ -418,50 +418,50 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
 
-  async findAllJobs(): Promise< any> {
+  async findAllJobs(): Promise<any> {
     const allJobs = await JobPostModel.find().exec();
- 
-    if(!allJobs) {
+
+    if (!allJobs) {
       throw new Error('No job found');
     } else {
       return allJobs;
     }
   }
 
-  
 
 
 
 
-  async getUserProfile(userId: string): Promise< any> {
+
+  async getUserProfile(userId: string): Promise<any> {
     const user = await UserModel.findById(userId).exec();
 
 
-    
-    if(!user) {
+
+    if (!user) {
       throw new Error('User not found');
     } else {
 
 
       const userProfile = {
-          name: user.name,
-          email: user.email,
-          mobile: user.mobile,
-          profilePicture: user.profilePicture,
-          location: user.location,
-          description: user.description,
-          skills: user.skills,
-          experience: user.experience,
-          budget: user.budget,
-          totalJobs: user.totalJobs,
-          totalHours: user.totalHours,
-          domain: user.domain,
-          githubLink: user.githubLinke,
-          whyHireMe: user.whyHireMe,
-          education: user.education,
-          completedJobs: user.completedJobs,
-          inProgress: user.inProgress,
-          workHistory: user.workHistory
+        name: user.name,
+        email: user.email,
+        mobile: user.mobile,
+        profilePicture: user.profilePicture,
+        location: user.location,
+        description: user.description,
+        skills: user.skills,
+        experience: user.experience,
+        budget: user.budget,
+        totalJobs: user.totalJobs,
+        totalHours: user.totalHours,
+        domain: user.domain,
+        githubLink: user.githubLinke,
+        whyHireMe: user.whyHireMe,
+        education: user.education,
+        completedJobs: user.completedJobs,
+        inProgress: user.inProgress,
+        workHistory: user.workHistory
       }
 
       // console.log('THE USER PROFILE FROM REPO: ',user)
@@ -473,42 +473,27 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
 
-  async getProposals(clientId: string): Promise< any > {
-          const client: any = await ClientModel.findById(clientId);
-          if(!client) {
-            throw new Error('Client not found');
-          }
+  async getProposals(clientId: string): Promise<any> {
+    const client: any = await ClientModel.findById(clientId);
+    if (!client) {
+      throw new Error('Client not found');
+    }
 
-          const proposals = client.proposals;
-          
-          return proposals;
+    const proposals = client.proposals;
+
+    return proposals;
   }
 
 
 
-  async viewContract(contractId: string): Promise< any > {
-          const contract: any = await ContractModel.findById(contractId);
-          if(!contract) {
-            throw new Error('contract not found');
-          }
- 
-          
-          return contract;
-  }
+  async viewContract(contractId: string): Promise<any> {
+    const contract: any = await ContractModel.findById(contractId);
+    if (!contract) {
+      throw new Error('contract not found');
+    }
 
 
-  
-
-  async contractId(contractId: string): Promise< any > {
-          const contract: any = await ContractModel.findById(contractId);
-
-          
-          if(!contract) {
-            throw new Error('contract not found');
-          }
- 
-          
-          return contract;
+    return contract;
   }
 
 
@@ -517,92 +502,93 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
 
-  async addMoneyToAdminWallet(role: string, roleId: any, amount: number): Promise< any > { 
+
+  async addMoneyToAdminWallet(role: string, roleId: any, amount: number): Promise<any> {
     const adminId = process.env.ADMIN_OBJECT_ID;
-          const admin: any = await AdminModel.findById(adminId);
-         
-          if(!admin) throw new Error('Unknown Error Occured'); 
-          const walletEntry = {
-            type: 'credit',
-            amount: amount,
-            from: role,
-            fromId: roleId,
-            date: new Date()
-          };
- 
-          const updateAdminWallet = await AdminModel.findByIdAndUpdate(adminId, {
-              $inc: {"wallet.balance": amount},
-              $push: {"wallet.transactions": walletEntry}
-            }, {
-              new: true, upsert: false
-            }).exec();
+    const admin: any = await AdminModel.findById(adminId);
 
-            if (!updateAdminWallet) {
-              console.error('Update failed. Admin Wallet was not updated.');
-              throw new Error('Admin wallet update failed.');
-            }
-          return 'success';
-      }
+    if (!admin) throw new Error('Unknown Error Occured');
+    const walletEntry = {
+      type: 'credit',
+      amount: amount,
+      from: role,
+      fromId: roleId,
+      date: new Date()
+    };
 
+    const updateAdminWallet = await AdminModel.findByIdAndUpdate(adminId, {
+      $inc: { "wallet.balance": amount },
+      $push: { "wallet.transactions": walletEntry }
+    }, {
+      new: true, upsert: false
+    }).exec();
 
+    if (!updateAdminWallet) {
+      console.error('Update failed. Admin Wallet was not updated.');
+      throw new Error('Admin wallet update failed.');
+    }
+    return 'success';
+  }
 
 
-  async getMyJobs(clientId: string): Promise< any > {
-    const jobs: any = await JobPostModel.find({ clientId: clientId}); 
-    if(!jobs) {
+
+
+  async getMyJobs(clientId: string): Promise<any> {
+    const jobs: any = await JobPostModel.find({ clientId: clientId });
+    if (!jobs) {
       throw new Error('No job found');
     }
- 
+
     return jobs;
-}
+  }
 
 
 
 
 
-  async latestJobs(): Promise< any > {
- 
-    const jobs: any = await JobPostModel.find().sort({date: 'desc'}); 
-    if(!jobs) {
-      throw new Error('No job found');
-    }
-    return jobs;
-}
+  async latestJobs(): Promise<any> {
 
-
-
-
-
-  async myContracts(clientId: string): Promise< any > {
- 
-    const jobs: any = await ContractModel.find({$and: [{clientId: clientId}, {status: 'on progress'}]}).exec();
-     
-    if(!jobs) {
+    const jobs: any = await JobPostModel.find().sort({ date: 'desc' });
+    if (!jobs) {
       throw new Error('No job found');
     }
     return jobs;
-}
+  }
 
 
 
 
-  async viewSubmissions(clientId: string): Promise< any > {
- 
+
+  async myContracts(clientId: string): Promise<any> {
+
+    const jobs: any = await ContractModel.find({ $and: [{ clientId: clientId }, { status: 'on progress' }] }).exec();
+
+    if (!jobs) {
+      throw new Error('No job found');
+    }
+    return jobs;
+  }
+
+
+
+
+  async viewSubmissions(clientId: string): Promise<any> {
+
     const client: any = await ClientModel.findById(clientId).exec();
 
 
-    if(!client) throw new Error('Client not found');
- 
+    if (!client) throw new Error('Client not found');
+
     return client.projectSubmissions;
-}
+  }
 
 
 
 
 
-  async createContract(clientId: string, userId: string, jobPostId: string): Promise< any > {
-  
-    
+  async createContract(clientId: string, userId: string, jobPostId: string): Promise<any> {
+
+
 
     // updating job post status 
     const currentJobPost: any = await JobPostModel.findByIdAndUpdate(jobPostId, {
@@ -610,61 +596,130 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }, {
       update: true
     }).exec();
- 
+
     const currentClient: any = await ClientModel.findById(clientId).exec();
 
     const currentUser: any = await UserModel.findById(userId).exec();
-    
-   // reomove all the proposals for this jobpost
-   const client = await ClientModel.findByIdAndUpdate( clientId, { $pull: { proposals: { jobPostId: jobPostId }}},{ new: true });
- 
 
-   // send notification to rejectd and accepted user
-  //  const notification = new NotificationModel({
+    // reomove all the proposals for this jobpost
+    const client = await ClientModel.findByIdAndUpdate(clientId, { $pull: { proposals: { jobPostId: jobPostId } } }, { new: true });
 
-  //  })
 
-   
+    // send notification to rejectd and accepted user
+    //  const notification = new NotificationModel({
+
+    //  })
+
+
     // const deduction = currentJobPost.amount % 10;
 
-     const newContract = new ContractModel({
-       clientId: clientId,
-       userId: userId,
-       jobPostId: jobPostId,
-       clientData: {
-         companyName: currentClient.companyName,
-         email: currentClient.email,
-         location: currentClient.location
-        },
-        userData: {
-           name: currentUser.name,
-           email: currentUser.email,
-           location: currentUser.location
-        },
-       jobPostData: {
-         title: currentJobPost.title,
-         description: currentJobPost.description,
-         expertLevel: currentJobPost.expertLevel,
-         projectType: currentJobPost.projectType
-         
-       },
-       amount: currentJobPost.amount,
-       deadline: currentJobPost.estimateTime,
-       active: true,
-       status: 'on progress',
-       createdAt: new Date()
-     } );
+    const newContract = new ContractModel({
+      clientId: clientId,
+      userId: userId,
+      jobPostId: jobPostId,
+      clientData: {
+        companyName: currentClient.companyName,
+        email: currentClient.email,
+        location: currentClient.location
+      },
+      userData: {
+        name: currentUser.name,
+        email: currentUser.email,
+        location: currentUser.location
+      },
+      jobPostData: {
+        title: currentJobPost.title,
+        description: currentJobPost.description,
+        expertLevel: currentJobPost.expertLevel,
+        projectType: currentJobPost.projectType
 
-     const savedContract = await newContract.save();
- 
-     const timer = currentJobPost.estimateTimeinHours;
-     const contractId: any = savedContract._id;
- 
-   //await allCronJobs.startContractHelperFn(timer, jobPostId, userId, contractId);
- 
-     return savedContract;
- 
-    
+      },
+      amount: currentJobPost.amount,
+      deadline: currentJobPost.estimateTime,
+      active: true,
+      status: 'on progress',
+      createdAt: new Date()
+    });
+
+    const savedContract = await newContract.save();
+
+    const timer = currentJobPost.estimateTimeinHours;
+    const contractId: any = savedContract._id;
+
+    //await allCronJobs.startContractHelperFn(timer, jobPostId, userId, contractId);
+
+    return savedContract;
+
+
+  }
+
+
+
+  async closeContract(contractId: string): Promise<any> {
+
+    //update contract status as closed
+    const currentContract: any = await ContractModel.findByIdAndUpdate( contractId, {
+        active: false,
+        status: "closed", },
+      { update: true }
+    );
+
+    if (!currentContract) {
+      throw new Error("Contract not found");
+    };
+
+
+    //update jobpost status as closed
+    const jobPostId: string = currentContract.jobPostId;
+    const currentJobPost: any = await JobPostModel.findByIdAndUpdate( jobPostId, { 
+      status: "closed", },
+    { update: true }
+  );
+     
+    const finalAmount = Math.round( currentContract.amount - (currentContract.amount * 10) / 100 );
+
+
+    // find and minus admin wallet
+    const adminId = process.env.ADMIN_OBJECT_ID;
+   
+    const walletEntryAdmin = {
+      type: "debit",
+      amount: finalAmount,
+      from: "admin",
+      fromId: adminId,
+      date: new Date(),
+    };
+
+    const updateAdminWallet = await AdminModel.findByIdAndUpdate( adminId, {
+        $inc: { "wallet.balance": -finalAmount },
+        $push: { "wallet.transactions": walletEntryAdmin }, 
+      },{
+        new: true,
+        upsert: false,
+      }).exec();
+
+
+    const walletEntryUser = {
+      type: "credit",
+      amount: finalAmount,
+      from: "admin",
+      fromId: adminId,
+      date: new Date(),
+    };
+
+    const updateUserWallet = await UserModel.findByIdAndUpdate(
+      currentContract.userId,
+      {
+        $inc: { "wallet.balance": finalAmount },
+        $push: { "wallet.transactions": walletEntryUser },
+      },
+      {
+        new: true,
+        upsert: false,
+      }
+    ).exec();
+
+    return { updateUserWallet, updateAdminWallet };
   }
 
 }

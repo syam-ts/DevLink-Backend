@@ -324,6 +324,21 @@ import {allClientUseCases } from '../../../helper/controllerHelper/allCtrlConnec
             }catch(err: any) {
                 res.status(500).json({message: err.message, success: false});
             }
+         },
+
+ 
+
+
+         closeContract: async(req: any, res: any) => {
+            try{
+               
+                const { contractId } = req.params;
+                const response = await allClientUseCases.closeContractUseCase.execute(contractId); 
+                 
+                res.status(200).json({message: 'contract closed successfully',data: response, success: true});
+            }catch(err: any) {
+                res.status(500).json({message: err.message, success: false});
+            }
          }
 
  

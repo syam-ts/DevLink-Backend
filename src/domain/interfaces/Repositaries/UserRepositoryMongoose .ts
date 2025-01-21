@@ -382,11 +382,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-  async closeContract(
-    contractId: string,
-    description: string,
-    progress: any
-  ): Promise<any> {
+  async closeContract( contractId: string, description: string, progress: any): Promise<any> {
     const currentContract: any = await ContractModel.findByIdAndUpdate(
       contractId,
       {
@@ -400,7 +396,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       throw new Error("Contract not found");
     }
 
-    currentContract.active = false;
+     
     const finalAmount = Math.round(
       currentContract.amount - (currentContract.amount * 10) / 100
     );

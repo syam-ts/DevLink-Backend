@@ -13,8 +13,7 @@ import { EditUserProfile } from "../../application/usecases/user/editProfile";
 import { GetUserProfile } from "../../application/usecases/user/getProfile";
 import { ListAllJobs } from "../../application/usecases/user/listAllJobs";
 import { BestMatches } from "../../application/usecases/user/bestMatches";
-import { CreateProposal } from "../../application/usecases/user/createProposal"; 
-import { CloseContract } from "../../application/usecases/user/closeContract"; 
+import { CreateProposal } from "../../application/usecases/user/createProposal";  
 import { AllContracts } from "../../application/usecases/user/allContracts"; 
 import { AllNotifications } from "../../application/usecases/user/allNotifications"; 
 import { BoostPayment } from "../../application/usecases/user/boostPayment"; 
@@ -52,6 +51,7 @@ import { CreateContract } from '../../application/usecases/client/createContract
 import { MyContracts } from '../../application/usecases/client/myContracts'; 
 import { ViewContract } from '../../application/usecases/client/viewContract';
 import { ViewSubmissions } from '../../application/usecases/client/viewSubmissions';
+import { CloseContract } from '../../application/usecases/client/closeContract';
 
 
 
@@ -71,8 +71,7 @@ const editProfileUseCase = new EditUserProfile(userRepository);
 const getProfileUseCase = new GetUserProfile(userRepository);
 const listAllJobsUseCase = new ListAllJobs(userRepository);
 const bestMatchesUseCase = new BestMatches(userRepository);
-const createProposalUseCase = new CreateProposal(userRepository);
-const closeContractUseCase = new CloseContract(userRepository);
+const createProposalUseCase = new CreateProposal(userRepository); 
 const allContractsUseCase = new AllContracts(userRepository);
 const allNotificationsUseCase = new AllNotifications(userRepository);
 const boostAccountUseCase = new BoostPayment(userRepository);
@@ -109,6 +108,7 @@ const createContractUseCase = new CreateContract(ClientRepository);
 const myContractsUseCase = new MyContracts(ClientRepository);
 const viewContractUseCase = new ViewContract(ClientRepository);
 const viewSubmissionsUseCase = new ViewSubmissions(ClientRepository);
+const closeContractUseCase = new CloseContract(ClientRepository);
 
 
 
@@ -163,4 +163,5 @@ export const allClientUseCases = {
      myContractsUseCase,
      viewContractUseCase,
      viewSubmissionsUseCase,
+     closeContractUseCase,
 }

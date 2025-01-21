@@ -34,7 +34,10 @@ clientRouter.post('/profile/verification/:clientId', clientAuth, clientControlle
 clientRouter.post('/jobPost/payment-stripe/:clientId',clientController.makePayment);
 // clientRouter.post('/jobPost/payment-stripe/:clientId', clientAuth,clientController.makePayment);
 clientRouter.post('/payment/success/:clientId',clientController.createJobPost);
-clientRouter.post('/project/submit/approval/:contractId',clientController.closeContract);
+
+
+
+  clientRouter.post('/project/submit/approval/:contractId',clientController.closeContract);
  
 
 
