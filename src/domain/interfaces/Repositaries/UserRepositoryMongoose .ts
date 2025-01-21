@@ -461,13 +461,14 @@ export class UserRepositoryMongoose implements UserRepositary {
 
 
   async viewMyContracts(userId: Id): Promise<any> {
+   
     const contract: any = await ContractModel.find({userId}).exec();
-    console.log('THE RESPON FROM REPO : ', userId)
+    
 
     if (!contract) {
       throw new Error("contract not found");
     } else {
-      return contract?.request;
+      return contract;
     }
   }
 

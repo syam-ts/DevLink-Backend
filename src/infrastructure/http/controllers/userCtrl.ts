@@ -307,12 +307,9 @@ export const userController = {
 
         viewMyContracts: async (req: Request, res: Response) => {
             try{
-                const { userId } = req.params;
-
+                const { userId } = req.params; 
                 const contracts = await allUserUseCases.viewMyContractsUseCase.execute(userId); 
-                console.log("THE REPSONS FRMO CTRL : ", contracts)
-
-                res.status(200).json({ message: "contracts loaded successfully ", data: contracts, success: true });
+                 res.status(200).json({ message: "contracts loaded successfully ", data: contracts, success: true });
 
             }catch(err: any) {
                 res.status(500).json({message: err.message, success: false});
