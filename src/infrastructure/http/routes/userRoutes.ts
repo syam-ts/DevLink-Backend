@@ -19,6 +19,7 @@ userRouter.get('/all-contracts/:userId', userController.allContracts);
 userRouter.get('/notifications/:userId', userController.allNotifications);
 userRouter.get('/job/:jobPostId', userController.getSingleJobPost);
 userRouter.get('/job/myContracts/:userId', userController.viewMyContracts);
+userRouter.get('/job/submittedContracts/:userId', userController.viewSubmittedContracts);
 
 
 // userRouter.get('/jobs/proposals/:clientId',userController.getAllProposals);

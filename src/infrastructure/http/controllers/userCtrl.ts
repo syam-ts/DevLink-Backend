@@ -318,11 +318,27 @@ export const userController = {
 
 
 
+        viewSubmittedContracts: async (req: Request, res: Response) => {
+            try{
+                const { userId } = req.params; 
+                const contracts = await allUserUseCases.viewSubmittedContractsUseCase.execute(userId); 
+
+                console.log('THE RESPONS FROM CTRL : ', contracts)
+                 res.status(200).json({ message: "contracts loaded successfully ", data: contracts, success: true });
+
+            }catch(err: any) {
+                res.status(500).json({message: err.message, success: false});
+            }
+        },
+
+
+
         submitProject: async (req: Request, res: Response) => {
             try{
-                const { contractId } = req.params;
+                const { contractId } = req.params; 
+                const body = req.body.formData;
 
-                const response = await allUserUseCases.submitProjectUseCase.execute(contractId, req.body); 
+                const response = await allUserUseCases.submitProjectUseCase.execute(contractId, body); 
                  
 
                 res.status(200).json({ message: "Project submitted successfully ", data: response, success: true });

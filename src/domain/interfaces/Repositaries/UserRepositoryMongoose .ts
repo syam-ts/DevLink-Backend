@@ -462,13 +462,25 @@ export class UserRepositoryMongoose implements UserRepositary {
 
   async viewMyContracts(userId: Id): Promise<any> {
    
-    const contract: any = await ContractModel.find({userId}).exec();
+    const contract: any = await ContractModel.find({$and: [{userId: userId} , {status: 'on progress'}]}).exec();
     
 
     if (!contract) {
       throw new Error("contract not found");
     } else {
       return contract;
+    }
+  }
+
+
+  async viewSubmittedContracts(userId: Id): Promise<any> {
+   
+    const contracts: any = await ContractModel.find({$and: [{userId: userId} , {status: 'submitted'}]}).exec();
+    
+    if (!contracts) {
+      throw new Error("contract not found");
+    } else {
+      return contracts;
     }
   }
 
@@ -508,7 +520,11 @@ export class UserRepositoryMongoose implements UserRepositary {
 
     
 
-    const contract: any = await ContractModel.findById(contractId).exec();
+    const contract: any = await ContractModel.findByIdAndUpdate(contractId, {
+       status: 'submitted'
+    }, {
+      update: true
+    });
 
     const clientId = contract.clientId;
 

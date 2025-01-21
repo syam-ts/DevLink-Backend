@@ -21,6 +21,7 @@ import { BoostPayment } from "../../application/usecases/user/boostPayment";
 import { BoostSuccess } from "../../application/usecases/user/bosstSuccess"; 
 import { GetSingleJobPost } from "../../application/usecases/user/getSingleJobPost"; 
 import { ViewMyContracts } from "../../application/usecases/user/viewContracts"; 
+import { ViewSubmittedContracts } from "../../application/usecases/user/viewSubmittedContracts";  
 import { SubmitProject } from "../../application/usecases/user/sumbitProject";  
 
 
@@ -48,7 +49,7 @@ import { GetProposals } from '../../application/usecases/client/getProposals';
 import { GetMyJobs } from '../../application/usecases/client/getMyJobs';
 import { LatestJobs } from '../../application/usecases/client/latestJobs';
 import { CreateContract } from '../../application/usecases/client/createContract';
-import { MyContracts } from '../../application/usecases/client/myContracts';
+import { MyContracts } from '../../application/usecases/client/myContracts'; 
 import { ViewSubmissions } from '../../application/usecases/client/viewSubmissions';
 
 
@@ -77,6 +78,7 @@ const boostAccountUseCase = new BoostPayment(userRepository);
 const boostSuccessUseCase = new BoostSuccess(userRepository);
 const getSingleJobPostUseCase = new GetSingleJobPost(userRepository);
 const viewMyContractsUseCase = new ViewMyContracts(userRepository);
+const viewSubmittedContractsUseCase = new ViewSubmittedContracts(userRepository);
 const submitProjectUseCase = new SubmitProject(userRepository);
 
 
@@ -126,6 +128,7 @@ export const allUserUseCases = {
         closeContractUseCase ,
         allContractsUseCase ,
         viewMyContractsUseCase ,
+        viewSubmittedContractsUseCase ,
         allNotificationsUseCase ,
         boostAccountUseCase ,
         boostSuccessUseCase ,
