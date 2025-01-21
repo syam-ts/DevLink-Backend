@@ -719,6 +719,16 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       }
     ).exec();
 
+    console.log('JOB ID : ', jobPostId)
+    
+    //remove project submission from client
+    const clientId = currentContract.clientId;
+    console.log('CLIENT ID : ', clientId)
+     const currentClient = await ClientModel.findByIdAndUpdate(clientId, { $pull: 
+      { projectSubmissions: { contractId: contractId } } }, { new: true });
+
+    
+
     return { updateUserWallet, updateAdminWallet };
   }
 

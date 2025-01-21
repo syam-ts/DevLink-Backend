@@ -534,6 +534,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       progress: body.progress,
       attachedFile: body.attachedFile,
       jobPostData: {
+        jobPostId: jobPost._id,
         title: jobPost.title,
         amount: jobPost.amount 
       },
