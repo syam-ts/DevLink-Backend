@@ -136,10 +136,9 @@ export const userController = {
 
     getProfile: async (req: Request, res: Response) => {
         try {
-            const { userId } = req.params;
-            console.log('THE PARMA S; ',userId)
+            const { userId } = req.params; 
             const user = await allUserUseCases.getProfileUseCase.execute(userId);
-            console.log('THE RESPONSE : ', user)
+          
 
             res.json({
                 message: "successfully loaded user data",
@@ -156,8 +155,7 @@ export const userController = {
 
         try {
             const { userId } = req.params;
-            const profileData = req.body; 
-            console.log('THE EXPOERIN: ', req.body.editData)
+            const profileData = req.body;  
       
             const response = await allUserUseCases.editProfileUseCase.execute(userId, profileData);
 
@@ -256,7 +254,7 @@ export const userController = {
             
                    
                 const closedContract = await allUserUseCases.closeContractUseCase.execute(contractId, description, progress);
-                console.log('CLOSED CONTRCAT SUCCESS!')
+            
     
                 res.status(200).json({message: 'Contract closed successfully', success: true});
             }catch(err: any) {
@@ -322,8 +320,7 @@ export const userController = {
             try{
                 const { userId } = req.params; 
                 const contracts = await allUserUseCases.viewSubmittedContractsUseCase.execute(userId); 
-
-                console.log('THE RESPONS FROM CTRL : ', contracts)
+ 
                  res.status(200).json({ message: "contracts loaded successfully ", data: contracts, success: true });
 
             }catch(err: any) {

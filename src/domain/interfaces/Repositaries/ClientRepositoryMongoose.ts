@@ -546,9 +546,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async myContracts(clientId: string): Promise< any > {
  
-    const jobs: any = await ContractModel.find({clientId}).exec();
-    
-    console.log('THE FINAL CONTRACTS FRMO REPO : ', jobs)
+    const jobs: any = await ContractModel.find({$and: [{clientId: clientId}, {status: 'on progress'}]}).exec();
+     
     if(!jobs) {
       throw new Error('No job found');
     }

@@ -42,7 +42,11 @@ export interface Client extends mongoose.Document{
                 contractId:  mongoose.Types.ObjectId ,
                 description: String, 
                 progress: Number, 
-                attachedFile: String, 
+                attachedFile: String,
+                jobPostData: {
+                  title: String,
+                  amount: Number
+                } ,
                 createdAt: Date
             }
         ],
@@ -98,6 +102,10 @@ const ClientSchema: mongoose.Schema = new mongoose.Schema({
                 description: {type: String, required: false},
                 progress: {type: Number, required: false},
                 attachedFile: {type: String, required: false},
+                jobPostData: {
+                    title:  {type: String, required: false},
+                    amount:  {type: Number, required: false}
+                  },
                 createdAt: {type: Date, required: false}
             }
             ] ,

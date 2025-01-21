@@ -527,12 +527,20 @@ export class UserRepositoryMongoose implements UserRepositary {
     });
 
     const clientId = contract.clientId;
+    const jobPostId = contract.jobPostId;
+
+    const jobPost: any = await JobPostModel.findById(jobPostId).exec();
+
 
     const submissionBody = {
       contractId: contractId,
       description: body.description,
       progress: body.progress,
       attachedFile: body.attachedFile,
+      jobPostData: {
+        title: jobPost.title,
+        amount: jobPost.amount 
+      },
       createdAt: new Date() 
     }
 
