@@ -486,6 +486,35 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
 
+  async viewContract(contractId: string): Promise< any > {
+          const contract: any = await ContractModel.findById(contractId);
+          if(!contract) {
+            throw new Error('contract not found');
+          }
+ 
+          
+          return contract;
+  }
+
+
+  
+
+  async contractId(contractId: string): Promise< any > {
+          const contract: any = await ContractModel.findById(contractId);
+
+          
+          if(!contract) {
+            throw new Error('contract not found');
+          }
+ 
+          
+          return contract;
+  }
+
+
+
+
+
 
 
   async addMoneyToAdminWallet(role: string, roleId: any, amount: number): Promise< any > { 

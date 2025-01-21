@@ -15,6 +15,7 @@ clientRouter.get('/jobs/all-jobs/:clientId', clientAuth,clientController.listAll
 clientRouter.get('/jobs/my-jobs/:clientId',clientAuth, clientController.getMyJobs);
 clientRouter.get('/jobs/latest-jobs/:clientId',clientAuth, clientController.latestJobs);
 clientRouter.get('/job/myContracts/:clientId', clientController.myContracts);
+clientRouter.get('/contract/:contractId', clientController.viewContract);
 clientRouter.get('/contracts/submissions/:clientId', clientController.viewSubmissions);
 
 
@@ -33,6 +34,7 @@ clientRouter.post('/profile/verification/:clientId', clientAuth, clientControlle
 clientRouter.post('/jobPost/payment-stripe/:clientId',clientController.makePayment);
 // clientRouter.post('/jobPost/payment-stripe/:clientId', clientAuth,clientController.makePayment);
 clientRouter.post('/payment/success/:clientId',clientController.createJobPost);
+clientRouter.post('/project/submit/approval/:contractId',clientController.closeContract);
  
 
 

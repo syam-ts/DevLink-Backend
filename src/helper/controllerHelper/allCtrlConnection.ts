@@ -50,6 +50,7 @@ import { GetMyJobs } from '../../application/usecases/client/getMyJobs';
 import { LatestJobs } from '../../application/usecases/client/latestJobs';
 import { CreateContract } from '../../application/usecases/client/createContract';
 import { MyContracts } from '../../application/usecases/client/myContracts'; 
+import { ViewContract } from '../../application/usecases/client/viewContract';
 import { ViewSubmissions } from '../../application/usecases/client/viewSubmissions';
 
 
@@ -106,6 +107,7 @@ const getMyJobsUseCase = new GetMyJobs(ClientRepository);
 const latestJobsUseCase = new LatestJobs(ClientRepository);
 const createContractUseCase = new CreateContract(ClientRepository);
 const myContractsUseCase = new MyContracts(ClientRepository);
+const viewContractUseCase = new ViewContract(ClientRepository);
 const viewSubmissionsUseCase = new ViewSubmissions(ClientRepository);
 
 
@@ -159,5 +161,6 @@ export const allClientUseCases = {
      latestJobsUseCase,
      createContractUseCase,
      myContractsUseCase,
+     viewContractUseCase,
      viewSubmissionsUseCase,
 }

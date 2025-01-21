@@ -300,6 +300,20 @@ import {allClientUseCases } from '../../../helper/controllerHelper/allCtrlConnec
  
 
 
+         viewContract: async(req: any, res: any) => {
+            try{
+               
+                const { contractId } = req.params;
+                const response = await allClientUseCases.viewContractUseCase.execute(contractId); 
+                 
+                res.status(200).json({message: 'Contract loaded successfully',contract: response, success: true});
+            }catch(err: any) {
+                res.status(500).json({message: err.message, success: false});
+            }
+         },
+
+
+
          viewSubmissions: async(req: any, res: any) => {
             try{
                
