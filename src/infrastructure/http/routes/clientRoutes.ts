@@ -9,11 +9,13 @@ import { ClientModel } from '../../../domain/entities/Client'
 clientRouter.get('/getHome', clientAuth, clientController.getHomeClient);
 clientRouter.get('/profile/view/:clientId', clientController.getProfile); //ADD CLIENTAUTH
 clientRouter.get('/profile/notifications/:clientId',clientAuth, clientController.getAllNotifications);
-clientRouter.get('/userProfile/view/:userId',clientAuth, clientController.getUserProfile);
+clientRouter.get('/userProfile/view/:userId', clientController.getUserProfile);
 clientRouter.get('/job/proposals/:clientId',clientAuth, clientController.getProposals);
 clientRouter.get('/jobs/all-jobs/:clientId', clientAuth,clientController.listAllJobs);
 clientRouter.get('/jobs/my-jobs/:clientId',clientAuth, clientController.getMyJobs);
 clientRouter.get('/jobs/latest-jobs/:clientId',clientAuth, clientController.latestJobs);
+clientRouter.get('/job/myContracts/:clientId', clientController.myContracts);
+
  
 clientRouter.post('/signup', clientController.signupClient);
 clientRouter.post('/verify-otp', clientController.verifyOtp);

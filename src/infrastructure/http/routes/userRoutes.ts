@@ -15,10 +15,10 @@ userRouter.get('/getHome', userAuth, userController.getHomeUser);
 userRouter.get('/profile/view/:userId', userController.getProfile); //ADD USERAUTH
 userRouter.get('/listAllJobs',userAuth, userController.listAllJobs);
 userRouter.get('/listJobs/bestMatches/:userId', userController.bestMatches);
-userRouter.get('/all-contracts/:userId', userController.allContracts);
-userRouter.get('/contract/:contractId', userController.viewContract);
+userRouter.get('/all-contracts/:userId', userController.allContracts); 
 userRouter.get('/notifications/:userId', userController.allNotifications);
 userRouter.get('/job/:jobPostId', userController.getSingleJobPost);
+userRouter.get('/job/myContracts/:userId', userController.viewMyContracts);
 
 
 // userRouter.get('/jobs/proposals/:clientId',userController.getAllProposals);
@@ -33,6 +33,7 @@ userRouter.post('/login', userController.loginUser);
 userRouter.post('/googleLogin', userController.googleLogin);
 userRouter.post('/logout', userController.logoutUser);
 
+userRouter.post('/project/submit/:contractId', userController.submitProject)
 
 userRouter.post('/contact/response', userController.closingContract);
 userRouter.post('/account/boost/:userId', userController.boostAccount);

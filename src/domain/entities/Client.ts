@@ -37,6 +37,15 @@ export interface Client extends mongoose.Document{
                 }
             ]
         },
+        projectSubmissions: [
+            {
+                contractId:  mongoose.Types.ObjectId ,
+                description: String, 
+                progress: Number, 
+                attachedFile: String, 
+                createdAt: Date
+            }
+        ],
         totalSpend: number,
         totalHours: number,
     createdAt: Date
@@ -83,6 +92,15 @@ const ClientSchema: mongoose.Schema = new mongoose.Schema({
                 }
             ]
         },
+        projectSubmissions:  [
+            {
+                contractId: {type: mongoose.Types.ObjectId, required: false},
+                description: {type: String, required: false},
+                progress: {type: Number, required: false},
+                attachedFile: {type: String, required: false},
+                createdAt: {type: Date, required: false}
+            }
+            ] ,
         totalSpend: {type: Number, required: false},
         totalHours: {type: Number, required: false},
         createdAt: {type: Date, required: false}

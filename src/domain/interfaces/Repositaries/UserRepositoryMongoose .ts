@@ -360,6 +360,8 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
+
+
   async bestMatches(userId: string): Promise<any> {
     const user: any = await UserModel.findById(userId).exec();
 
@@ -455,7 +457,20 @@ export class UserRepositoryMongoose implements UserRepositary {
     } else {
       return contract;
     }
+  };
+
+
+  async viewMyContracts(userId: Id): Promise<any> {
+    const contract: any = await ContractModel.find({userId}).exec();
+    console.log('THE RESPON FROM REPO : ', userId)
+
+    if (!contract) {
+      throw new Error("contract not found");
+    } else {
+      return contract?.request;
+    }
   }
+
 
   async bosstSuccess(userId: Id): Promise<any> {
     const user: any = await UserModel.findByIdAndUpdate(
@@ -484,5 +499,38 @@ export class UserRepositoryMongoose implements UserRepositary {
     if(!jobPost) throw new Error('Job Post didnt found');
 
     return jobPost;
+  }
+
+
+  async submitProject(contractId: string, body: any): Promise<any > {
+    try{
+
+    
+
+    const contract: any = await ContractModel.findById(contractId).exec();
+
+    const clientId = contract.clientId;
+
+    const submissionBody = {
+      contractId: contractId,
+      description: body.description,
+      progress: body.progress,
+      attachedFile: body.attachedFile,
+      createdAt: new Date() 
+    }
+
+    const addRequestToClient = await ClientModel.findByIdAndUpdate(clientId, {
+         $push :{ projectSubmissions: submissionBody} 
+    }, { 
+      new: true
+    });
+
+    console.log('THE FINAL UPDATED CLIENT : ', addRequestToClient)
+
+       return addRequestToClient;
+      }catch(err: any) {
+        console.log("ERROR: ", err.message)
+      }
+
   }
 }

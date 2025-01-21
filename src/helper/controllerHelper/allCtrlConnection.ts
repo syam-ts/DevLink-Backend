@@ -16,11 +16,12 @@ import { BestMatches } from "../../application/usecases/user/bestMatches";
 import { CreateProposal } from "../../application/usecases/user/createProposal"; 
 import { CloseContract } from "../../application/usecases/user/closeContract"; 
 import { AllContracts } from "../../application/usecases/user/allContracts"; 
-import { ViewContract } from "../../application/usecases/user/viewContract"; 
 import { AllNotifications } from "../../application/usecases/user/allNotifications"; 
 import { BoostPayment } from "../../application/usecases/user/boostPayment"; 
 import { BoostSuccess } from "../../application/usecases/user/bosstSuccess"; 
 import { GetSingleJobPost } from "../../application/usecases/user/getSingleJobPost"; 
+import { ViewMyContracts } from "../../application/usecases/user/viewContracts"; 
+import { SubmitProject } from "../../application/usecases/user/sumbitProject"; 
 
 
 // Client imports ---------------->
@@ -47,6 +48,7 @@ import { GetProposals } from '../../application/usecases/client/getProposals';
 import { GetMyJobs } from '../../application/usecases/client/getMyJobs';
 import { LatestJobs } from '../../application/usecases/client/latestJobs';
 import { CreateContract } from '../../application/usecases/client/createContract';
+import { MyContracts } from '../../application/usecases/client/myContracts';
 
 
 
@@ -69,11 +71,12 @@ const bestMatchesUseCase = new BestMatches(userRepository);
 const createProposalUseCase = new CreateProposal(userRepository);
 const closeContractUseCase = new CloseContract(userRepository);
 const allContractsUseCase = new AllContracts(userRepository);
-const viewContractUseCase = new ViewContract(userRepository);
 const allNotificationsUseCase = new AllNotifications(userRepository);
 const boostAccountUseCase = new BoostPayment(userRepository);
 const boostSuccessUseCase = new BoostSuccess(userRepository);
 const getSingleJobPostUseCase = new GetSingleJobPost(userRepository);
+const viewMyContractsUseCase = new ViewMyContracts(userRepository);
+const submitProjectUseCase = new SubmitProject(userRepository);
 
 
 
@@ -99,6 +102,7 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
 const getMyJobsUseCase = new GetMyJobs(ClientRepository);
 const latestJobsUseCase = new LatestJobs(ClientRepository);
 const createContractUseCase = new CreateContract(ClientRepository);
+const myContractsUseCase = new MyContracts(ClientRepository);
 
 
 
@@ -119,11 +123,12 @@ export const allUserUseCases = {
         createProposalUseCase ,
         closeContractUseCase ,
         allContractsUseCase ,
-        viewContractUseCase ,
+        viewMyContractsUseCase ,
         allNotificationsUseCase ,
         boostAccountUseCase ,
         boostSuccessUseCase ,
         getSingleJobPostUseCase ,
+        submitProjectUseCase ,
 };
 
 
@@ -148,4 +153,5 @@ export const allClientUseCases = {
      getMyJobsUseCase,
      latestJobsUseCase,
      createContractUseCase,
+     myContractsUseCase,
 }

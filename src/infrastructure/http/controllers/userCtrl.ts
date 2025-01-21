@@ -234,24 +234,7 @@ export const userController = {
     },
 
     
-    
-    viewContract: async (req: Request, res: Response) => {
-        try{
-            const { contractId } = req.params;
-            
-            const viewContract = await allUserUseCases.viewContractUseCase.execute(contractId);
  
-            console.log('THE CON', viewContract)
-
-            res.status(200).json({message: 'successfully closed the contract',contract: viewContract, success: true});
-        }catch(err: any) {
-            res.status(500).json({message: err.message, success: false});
-        }
-    },
-
-
-
-    
     allNotifications: async (req: Request, res: Response) => {
         try{
               const { userId } = req.params;
@@ -316,6 +299,36 @@ export const userController = {
                 const jobPost = await allUserUseCases.getSingleJobPostUseCase.execute(jobPostId); 
 
                 res.status(200).json({ message: "job post loaded successfully ", jobPost, success: true });
+
+            }catch(err: any) {
+                res.status(500).json({message: err.message, success: false});
+            }
+        } ,
+
+        viewMyContracts: async (req: Request, res: Response) => {
+            try{
+                const { userId } = req.params;
+
+                const contracts = await allUserUseCases.viewMyContractsUseCase.execute(userId); 
+                console.log("THE REPSONS FRMO CTRL : ", contracts)
+
+                res.status(200).json({ message: "contracts loaded successfully ", data: contracts, success: true });
+
+            }catch(err: any) {
+                res.status(500).json({message: err.message, success: false});
+            }
+        },
+
+
+
+        submitProject: async (req: Request, res: Response) => {
+            try{
+                const { contractId } = req.params;
+
+                const response = await allUserUseCases.submitProjectUseCase.execute(contractId, req.body); 
+                 
+
+                res.status(200).json({ message: "Project submitted successfully ", data: response, success: true });
 
             }catch(err: any) {
                 res.status(500).json({message: err.message, success: false});

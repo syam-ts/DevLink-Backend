@@ -434,12 +434,37 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async getUserProfile(userId: string): Promise< any> {
-    const userProfile = await UserModel.findById(userId).exec();
+    const user = await UserModel.findById(userId).exec();
+
 
     
-    if(!userProfile) {
+    if(!user) {
       throw new Error('User not found');
     } else {
+
+
+      const userProfile = {
+          name: user.name,
+          email: user.email,
+          mobile: user.mobile,
+          profilePicture: user.profilePicture,
+          location: user.location,
+          description: user.description,
+          skills: user.skills,
+          experience: user.experience,
+          budget: user.budget,
+          totalJobs: user.totalJobs,
+          totalHours: user.totalHours,
+          domain: user.domain,
+          githubLink: user.githubLinke,
+          whyHireMe: user.whyHireMe,
+          education: user.education,
+          completedJobs: user.completedJobs,
+          inProgress: user.inProgress,
+          workHistory: user.workHistory
+      }
+
+      // console.log('THE USER PROFILE FROM REPO: ',user)
       return userProfile;
     }
   }
@@ -519,8 +544,24 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
 
+  async myContracts(clientId: string): Promise< any > {
+ 
+    const jobs: any = await ContractModel.find({clientId}).exec();
+    
+    console.log('THE FINAL CONTRACTS FRMO REPO : ', jobs)
+    if(!jobs) {
+      throw new Error('No job found');
+    }
+    return jobs;
+}
+
+
+
+
+
   async createContract(clientId: string, userId: string, jobPostId: string): Promise< any > {
   
+    
 
     // updating job post status 
     const currentJobPost: any = await JobPostModel.findByIdAndUpdate(jobPostId, {
@@ -529,19 +570,12 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       update: true
     }).exec();
  
+    const currentClient: any = await ClientModel.findById(clientId).exec();
+
+    const currentUser: any = await UserModel.findById(userId).exec();
     
    // reomove all the proposals for this jobpost
-   const client = await ClientModel.findByIdAndUpdate(
-    clientId,  
-    {
-      $pull: {
-        proposals: { jobPostId: jobPostId }
-      }
-    },
-    {
-      new: true  
-    }
-  );
+   const client = await ClientModel.findByIdAndUpdate( clientId, { $pull: { proposals: { jobPostId: jobPostId }}},{ new: true });
  
 
    // send notification to rejectd and accepted user
@@ -550,18 +584,34 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   //  })
 
    
-    const deduction = currentJobPost.amount % 10;
+    // const deduction = currentJobPost.amount % 10;
 
      const newContract = new ContractModel({
+       clientId: clientId,
        userId: userId,
-       clientId: clientId, 
-       jobPostData: currentJobPost,
+       jobPostId: jobPostId,
+       clientData: {
+         companyName: currentClient.companyName,
+         email: currentClient.email,
+         location: currentClient.location
+        },
+        userData: {
+           name: currentUser.name,
+           email: currentUser.email,
+           location: currentUser.location
+        },
+       jobPostData: {
+         title: currentJobPost.title,
+         description: currentJobPost.description,
+         expertLevel: currentJobPost.expertLevel,
+         projectType: currentJobPost.projectType
+         
+       },
        amount: currentJobPost.amount,
-       deduction: deduction,
-       created: new Date(),
        deadline: currentJobPost.estimateTime,
        active: true,
-       status: 'on progress'
+       status: 'on progress',
+       createdAt: new Date()
      } );
 
      const savedContract = await newContract.save();
@@ -569,7 +619,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
      const timer = currentJobPost.estimateTimeinHours;
      const contractId: any = savedContract._id;
  
-   await allCronJobs.startContractHelperFn(timer, jobPostId, userId, contractId);
+   //await allCronJobs.startContractHelperFn(timer, jobPostId, userId, contractId);
  
      return savedContract;
  
