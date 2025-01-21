@@ -15,6 +15,8 @@ clientRouter.get('/jobs/all-jobs/:clientId', clientAuth,clientController.listAll
 clientRouter.get('/jobs/my-jobs/:clientId',clientAuth, clientController.getMyJobs);
 clientRouter.get('/jobs/latest-jobs/:clientId',clientAuth, clientController.latestJobs);
 clientRouter.get('/job/myContracts/:clientId', clientController.myContracts);
+clientRouter.get('/contracts/submissions/:clientId', clientController.viewSubmissions);
+
 
  
 clientRouter.post('/signup', clientController.signupClient);

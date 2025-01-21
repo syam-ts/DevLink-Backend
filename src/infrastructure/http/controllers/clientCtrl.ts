@@ -290,10 +290,22 @@ import {allClientUseCases } from '../../../helper/controllerHelper/allCtrlConnec
             try{
                
                 const { clientId } = req.params;
-
-        
                 const response = await allClientUseCases.myContractsUseCase.execute(clientId); 
                 
+                res.status(200).json({message: 'new contract created successfully',data: response, success: true});
+            }catch(err: any) {
+                res.status(500).json({message: err.message, success: false});
+            }
+         },
+ 
+
+
+         viewSubmissions: async(req: any, res: any) => {
+            try{
+               
+                const { clientId } = req.params;
+                const response = await allClientUseCases.viewSubmissionsUseCase.execute(clientId); 
+                 
                 res.status(200).json({message: 'new contract created successfully',data: response, success: true});
             }catch(err: any) {
                 res.status(500).json({message: err.message, success: false});

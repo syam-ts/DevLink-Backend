@@ -524,8 +524,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     }, { 
       new: true
     });
-
-    console.log('THE FINAL UPDATED CLIENT : ', addRequestToClient)
+ 
 
        return addRequestToClient;
       }catch(err: any) {
