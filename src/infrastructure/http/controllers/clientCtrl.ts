@@ -270,13 +270,13 @@ import {allClientUseCases } from '../../../helper/controllerHelper/allCtrlConnec
          createContract: async(req: any, res: any) => {
             try{
                
-                const { userId, clientId, jobPostId } = req.body;
+                const { userId, clientId, jobPostId, bidAmount, bidDeadline } = req.body;
 
-                if(!userId && !clientId && !jobPostId ) {
+                if(!userId && !clientId && !jobPostId  ) {
                    return res.status(400).json({ message: 'Missing informations ', success: false });
                 }
 
-                const response = await allClientUseCases.createContractUseCase.execute(clientId, userId, jobPostId); 
+                const response = await allClientUseCases.createContractUseCase.execute(clientId, userId, jobPostId, bidAmount, bidDeadline); 
                 
                 res.status(200).json({message: 'new contract created successfully',data: response, success: true});
             }catch(err: any) {

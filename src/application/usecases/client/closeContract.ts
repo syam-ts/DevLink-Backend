@@ -1,7 +1,7 @@
  
 
 export interface ClientRepository {
-    closeContract(contractId: string): Promise <any>
+    closeContract(contractId: string, description: string, progress: number): Promise <any>
     
 };
 
@@ -10,10 +10,10 @@ export class CloseContract
 {
     constructor( private clientRepository: ClientRepository) {};
 
-    async execute(contractId: string) { 
+    async execute(contractId: string, description: string, progress: number) { 
  
 
-          const closedContract = await this.clientRepository.closeContract(contractId);
+          const closedContract = await this.clientRepository.closeContract(contractId, description, progress);
     
           
           return closedContract;

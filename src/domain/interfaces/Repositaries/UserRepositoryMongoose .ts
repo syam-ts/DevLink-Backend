@@ -9,6 +9,7 @@ import validator from "validator";
 import jwt from "jsonwebtoken";
 import { ContractModel } from "../../entities/Contract";
 import { AdminModel } from "../../entities/Admin";
+import { NotificationModel } from "../../entities/Notification";
 
 type Id = string;
 
@@ -281,11 +282,7 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
   async createProposal(userId: Id, jobPostId: Id, description: Id, bidAmount: number, bidDeadline: number): Promise<any> {
-    try{
-
-    }catch(err: any) {
-      console.error('ERROR: ',err.message);
-    }
+   
     const user = await UserModel.findById(userId);
     if (!user) {
       throw new Error("User not found");
@@ -324,6 +321,30 @@ export class UserRepositoryMongoose implements UserRepositary {
         { new: true }
       );
 
+     const newNotificationUser = await NotificationModel.create({
+           type: "New Job Proposal",
+           message: "New Proposal send successfully",
+           sender_id: userId,
+           reciever_id: userId, 
+           createdAt: new Date()
+         });
+      
+        
+
+
+         //send to client
+     const newNotificationClient = await NotificationModel.create({
+           type: "New Job Proposal",
+           message: "New Job Proposal Received",
+           sender_id: userId,
+           reciever_id: jobpost.clientId, 
+           createdAt: new Date()
+         });
+      
+
+         newNotificationUser.save();
+         newNotificationClient.save();
+
 
 
       return proposal;
@@ -351,13 +372,12 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
   async allNotifications(userId: Id): Promise<any> {
-    const user: any = await UserModel.findById(userId).exec();
+    const notifications: any = await NotificationModel.find({ reciever_id: userId }).exec();
 
-    if (!user) {
-      throw new Error("User not found");
-    } else {
-      return user?.request;
-    }
+
+    
+      return notifications
+     
   }
 
 

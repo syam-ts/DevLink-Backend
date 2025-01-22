@@ -9,7 +9,7 @@ import mongoose, { Schema, Model } from 'mongoose';
   userData: Schema.Types.Mixed;
   jobPostData: Schema.Types.Mixed;
   amount: number;
-  deadline: Date;
+  deadline: number;
   active: Boolean;
   status: 'on progress' | 'pending' | 'closed';
   createdAt: Date;
@@ -25,7 +25,7 @@ const ContractSchema = new Schema<ContractDocument>({
   clientData: { type: Schema.Types.Mixed, required: true },
   jobPostData: { type: Schema.Types.Mixed, required: true },
   amount: { type: Number, required: true },
-  deadline: { type: Date, required: true },
+  deadline: { type: Number, required: true },
   active: { type: Boolean, required: true, default: true },
   status: { type: String, required: true, default: 'on progress' },
   createdAt: { type: Date, required: true },

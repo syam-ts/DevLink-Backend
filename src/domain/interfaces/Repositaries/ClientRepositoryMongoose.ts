@@ -594,7 +594,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
 
-  async createContract(clientId: string, userId: string, jobPostId: string): Promise<any> {
+  async createContract(clientId: string, userId: string, jobPostId: string, bidAmount: number, bidDeadline: string): Promise<any> {
 
 
 
@@ -642,8 +642,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         projectType: currentJobPost.projectType
 
       },
-      amount: currentJobPost.amount,
-      deadline: currentJobPost.estimateTime,
+      amount: bidAmount,
+      deadline: bidDeadline,
       active: true,
       status: 'on progress',
       createdAt: new Date()
