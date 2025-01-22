@@ -8,7 +8,7 @@ import { ClientModel } from '../../../domain/entities/Client'
 
 clientRouter.get('/getHome', clientAuth, clientController.getHomeClient);
 clientRouter.get('/profile/view/:clientId', clientController.getProfile); //ADD CLIENTAUTH
-clientRouter.get('/profile/notifications/:clientId',clientAuth, clientController.getAllNotifications);
+clientRouter.get('/notifications/:clientId', clientController.getAllNotifications);
 clientRouter.get('/userProfile/view/:userId', clientController.getUserProfile);
 clientRouter.get('/job/proposals/:clientId',clientAuth, clientController.getProposals);
 clientRouter.get('/jobs/all-jobs/:clientId', clientAuth,clientController.listAllJobs);
@@ -31,20 +31,20 @@ clientRouter.post('/logout', clientAuth, clientController.logoutClient);
 
 clientRouter.post('/profile/edit/:clientId', clientController.editProfile); //ADD CLIENTAUTH
 clientRouter.post('/profile/verification/:clientId', clientAuth, clientController.profileVerification);
-clientRouter.post('/jobPost/payment-stripe/:clientId',clientController.makePayment);
-// clientRouter.post('/jobPost/payment-stripe/:clientId', clientAuth,clientController.makePayment);
+
+//payment and new jobpost creation phase
+clientRouter.post('/jobPost/payment-stripe/:clientId',clientController.makePayment); 
 clientRouter.post('/payment/success/:clientId',clientController.createJobPost);
 
 
-
-  clientRouter.post('/project/submit/approval/:contractId',clientController.closeContract);
- 
-
-
+clientRouter.post('/project/submit/approval/:contractId',clientController.closeContract);
 clientRouter.post('/job/createContract',clientController.createContract);
 
 
+
 clientRouter.put('/profile/edit/:clientId', clientAuth, clientController.editProfile);
+
+
 
 
 

@@ -191,7 +191,7 @@ import {allClientUseCases } from '../../../helper/controllerHelper/allCtrlConnec
                 const {  clientId }= req.params;
                 const response = await allClientUseCases.getAllNotificationsUseCase.execute( clientId);
   
-                res.json({message: 'successfully list all notifications', type: 'success'});
+                res.json({message: 'successfully list all notifications',notifications: response, type: 'success'});
              }catch(err: any) {
                  res.json({message: err.message, type: 'error'})
              }

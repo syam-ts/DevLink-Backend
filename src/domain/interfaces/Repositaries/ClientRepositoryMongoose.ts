@@ -345,7 +345,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
       const client: any = await ClientModel.findById(clientId);
 
-      if (data.paymentType === 'hourly') {
+  
         // const minWorkingHours: number = data.estimateTime * 8;
         // const finalDate: number = (data.estimateTime * 24 ) - minWorkingHours;
 
@@ -390,11 +390,19 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
         const savedJobPost = await createdJobPost.save();
 
+        const newNotification = await NotificationModel.create({
+          type: "New Job Post",
+          message: "New Post created successfully",
+          sender_id: process.env._ADMIN_OBJECT_ID,
+          reciever_id: clientId, 
+          createdAt: new Date()
+        });
+
+        newNotification.save();
+
 
         return { savedJobPost };
-      } else {
-        return;
-      }
+        
     } catch (err: any) {
       console.log('ERROR: ', err.message)
     }
@@ -404,7 +412,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async getAllNotifications(clientId: any): Promise<any> {
-    const notifications = await NotificationModel.find({ $or: [{ sender_id: clientId }, { reciever_id: clientId }] })
+    const notifications = await NotificationModel.find({ reciever_id: clientId })
 
     if (!notifications) {
       throw new Error('No notification found')

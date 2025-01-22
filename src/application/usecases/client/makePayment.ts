@@ -12,8 +12,9 @@ export class MakePayment {
      constructor( private clientRepository: ClientRepository) {};
 
     async execute(clientId: string,data: any) { 
+
+        
         const { title, description, keyResponsiblities, requiredSkills,payment, paymentType, estimateTime} = data.formData;
- 
  
 
         if(!title || !description || !keyResponsiblities || !requiredSkills || !payment || !paymentType || !estimateTime ) {
@@ -39,67 +40,116 @@ export class MakePayment {
             throw new Error('Minimum 2 skills are mandatory');
         }
 
-
-        if(payment < 100) {
-            throw new Error('Pay per Hour atlest 100₹');
-        }
-      
-
         if(!paymentType) {
             throw new Error('Chose one payment Type');
         }
-      
 
+       
+       
         if(!estimateTime) {
             throw new Error('Chose the estimate time');
         }
       
+console.log('PAYMENT TYPE : ', paymentType)
+
+       if(paymentType === 'hourly') {
+
+  
+        if(payment < 100 || payment > 2000) {
+            throw new Error('Pay per Hour should 100₹ to 2000₹ ');
+        } 
+
+
+        const totalAmount = parseInt(data.formData.estimateTime) * data.formData.payment;
+ 
+        data.formData.payment = totalAmount; 
+  
+       const product = await stripe.products.create({
+           name: 'Job-Post'
+       })
+  
+  
+       if(product) {
+          const price = await stripe.prices.create({
+              product: `${product.id}`,
+              unit_amount: totalAmount * 100,
+              currency: 'inr'
+          })
+  
    
-       
-       
-    //   const minWorkingHours: number = data.formData.estimateTime * 8;
-    //   const finalDate: number = (data.formData.estimateTime * 24 ) - minWorkingHours;
-    // const timeInHours = data.formData.estimateTime * 60
-
-      const totalAmount = data.formData.estimateTime * data.formData.payment;
+  
+          if(price.id) {
+             var session = await stripe.checkout.sessions.create({
+                line_items: [
+                  {
+                      price: `${price.id}`,
+                      quantity: 1
+                  }
+                ],
+                mode: 'payment',
+                success_url: `http://localhost:5173/client/draftJobPost/payment-success/${encodeURIComponent(clientId)}/${encodeURIComponent(JSON.stringify(data.formData))}`,
+                cancel_url: 'http://localhost:5173/client/draftJobPost/payment-failed',
+                customer_email: 'samplemail@gmai.com'
+  
+  
+             })
+  
+              
+              
+           return session;
+          }
+  
+      }  
+       } else {
  
-      data.formData.payment = totalAmount;
-
-     const product = await stripe.products.create({
-         name: 'Job-Post'
-     })
+        if(payment < 10000 || payment > 200000) {
+            throw new Error('Pay per Hour should 10000₹ to 200000₹ ');
+        } 
 
 
-     if(product) {
-        const price = await stripe.prices.create({
-            product: `${product.id}`,
-            unit_amount: totalAmount * 100,
-            currency: 'inr'
-        })
-
+        const totalAmount = payment;
  
-
-        if(price.id) {
-           var session = await stripe.checkout.sessions.create({
-              line_items: [
-                {
-                    price: `${price.id}`,
-                    quantity: 1
-                }
-              ],
-              mode: 'payment',
-              success_url: `http://localhost:5173/client/draftJobPost/payment-success/${encodeURIComponent(clientId)}/${encodeURIComponent(JSON.stringify(data.formData))}`,
-              cancel_url: 'http://localhost:5173/client/draftJobPost/payment-failed',
-              customer_email: 'samplemail@gmai.com'
-
-
-           })
-
-            
-            
-         return session;
+       
+  
+       const product = await stripe.products.create({
+           name: 'Job-Post'
+       })
+  
+  
+       if(product) {
+          const price = await stripe.prices.create({
+              product: `${product.id}`,
+              unit_amount: totalAmount * 100,
+              currency: 'inr'
+          })
+  
+   
+  
+          if(price.id) {
+             var session = await stripe.checkout.sessions.create({
+                line_items: [
+                  {
+                      price: `${price.id}`,
+                      quantity: 1
+                  }
+                ],
+                mode: 'payment',
+                success_url: `http://localhost:5173/client/draftJobPost/payment-success/${encodeURIComponent(clientId)}/${encodeURIComponent(JSON.stringify(data.formData))}`,
+                cancel_url: 'http://localhost:5173/client/draftJobPost/payment-failed',
+                customer_email: 'samplemail@gmai.com'
+  
+  
+             })
+  
+              
+              
+           return session;
+          }
         }
+       }
+    
+    
 
-    }
+   
     }
 }

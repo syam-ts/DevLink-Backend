@@ -1,11 +1,11 @@
 import mongoose from 'mongoose'; 
 
-export interface Notification extends mongoose.Document{
-    id?: string;
+export interface Notification extends mongoose.Document{ 
     type: string;
     message: string;
     sender_id: string;
     reciever_id: string;
+    extra?: string;
     createdAt?: Date;
 }
 
@@ -15,6 +15,7 @@ const NotificationSchema: mongoose.Schema = new mongoose.Schema({
     message: {type: String, required: false},
     sender_id: {type: String, required: false},
     reciever_id: {type: String, required: false},
+    extra: {type: String, required: false},
     createdAt: {type: Date, required: false}, 
 });
 
