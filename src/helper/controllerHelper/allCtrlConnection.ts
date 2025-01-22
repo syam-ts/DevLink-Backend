@@ -52,6 +52,7 @@ import { MyContracts } from '../../application/usecases/client/myContracts';
 import { ViewContract } from '../../application/usecases/client/viewContract';
 import { ViewSubmissions } from '../../application/usecases/client/viewSubmissions';
 import { CloseContract } from '../../application/usecases/client/closeContract';
+import { RateUser } from '../../application/usecases/client/rateUser';
 
 
 
@@ -109,6 +110,7 @@ const myContractsUseCase = new MyContracts(ClientRepository);
 const viewContractUseCase = new ViewContract(ClientRepository);
 const viewSubmissionsUseCase = new ViewSubmissions(ClientRepository);
 const closeContractUseCase = new CloseContract(ClientRepository);
+const rateUserUseCase = new RateUser(ClientRepository);
 
 
 
@@ -164,4 +166,5 @@ export const allClientUseCases = {
      viewContractUseCase,
      viewSubmissionsUseCase,
      closeContractUseCase,
+     rateUserUseCase
 }

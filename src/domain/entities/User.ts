@@ -86,6 +86,7 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
     experience: { type: String, required: false },
     experienceDescription: { type: String, required: false },
     budget: {type: Number, required: false},
+    rating: {type: Number, required: false},
     totalJobs: {type: Number, required: false},
     totalHours: {type: Number, required: false},
     domain: {type: String, required: false},

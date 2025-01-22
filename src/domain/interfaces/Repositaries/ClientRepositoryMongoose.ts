@@ -412,7 +412,13 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async getAllNotifications(clientId: any): Promise<any> {
-    const notifications = await NotificationModel.find({ reciever_id: clientId })
+    const notifications = await NotificationModel.aggregate([
+      {
+        $match: {reciever_id: clientId}
+      }, {
+        $sort: {createdAt: -1}
+      }
+      ])
 
     if (!notifications) {
       throw new Error('No notification found')
@@ -757,7 +763,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       message: "One Contract Successfully Closed",
       sender_id: process.env._ADMIN_OBJECT_ID,
       reciever_id: currentContract.clientId, 
-      extra: jobPostId,
+      extra: {
+        userId: currentContract.userId
+      },
       createdAt: new Date()
     });
 
@@ -768,5 +776,21 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
     return { updateUserWallet, updateAdminWallet };
   }
+
+
+
+  async rateUser(userId: string, notificationId: string, rating: number): Promise< any> {
+   
+   //insert rating on user
+  
+    const updateUser = await UserModel.findByIdAndUpdate(userId, {rating: rating}, {update: true});
+    
+      //remove the rating from notifaicaino 
+      const removeExtra = await NotificationModel.findByIdAndUpdate(notificationId, { extra: {} }, { update: true });
+
+      return {updateUser, removeExtra};
+  };
+
+
 
 }

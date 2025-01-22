@@ -35,6 +35,7 @@ clientRouter.post('/profile/verification/:clientId', clientAuth, clientControlle
 //payment and new jobpost creation phase
 clientRouter.post('/jobPost/payment-stripe/:clientId',clientController.makePayment); 
 clientRouter.post('/payment/success/:clientId',clientController.createJobPost);
+clientRouter.post('/rate/user/:notificationId',clientController.rateUser);
 
 
 clientRouter.post('/project/submit/approval/:contractId',clientController.closeContract);

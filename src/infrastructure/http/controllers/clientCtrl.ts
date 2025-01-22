@@ -339,8 +339,21 @@ import {allClientUseCases } from '../../../helper/controllerHelper/allCtrlConnec
             }catch(err: any) {
                 res.status(500).json({message: err.message, success: false});
             }
-         }
+         },
 
+
+         rateUser: async(req: any, res: any) => {
+            try{
+                const { notificationId } = req.params;
+                const { userId, rating } = req.body.body;
+                console.log('DATA FROM ctrl ', notificationId, req.body.body)
+                const response = await allClientUseCases.rateUserUseCase.execute(notificationId, userId, rating); 
+                 
+                res.status(200).json({message: 'Rate user successfully',data: response, success: true});
+            }catch(err: any) {
+                res.status(500).json({message: err.message, success: false});
+            }
+         }
  
          
      }
