@@ -67,6 +67,8 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
+
+
   async verifyOtp(user: any): Promise<User> {
     const { name, email, password, mobile } = user.user;
     if (user.mailOtp === parseInt(user.userOtp.otp)) {
@@ -179,15 +181,15 @@ export class UserRepositoryMongoose implements UserRepositary {
       USER_REFRESH_TOKEN,
       { expiresIn: "7d" }
     );
+
+
     const accessToken = jwt.sign(
       { id: user._id, email: user.email },
       USER_ACCESS_TOKEN,
-      { expiresIn: "15m" }
+      { expiresIn: "1m" }
     );
 
-    user.refreshToken = refreshToken;
-    await user.save();
-
+   
     return {
       user: {
         _id: user._id,
@@ -205,6 +207,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       refreshToken,
     };
   }
+  
 
   async findUserByOnlyEmail(
     email: string,

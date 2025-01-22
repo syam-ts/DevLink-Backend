@@ -85,14 +85,14 @@ export const userController = {
             const { user, refreshToken, accessToken} = theUser;
        
 
-            res.cookie("jwtU", refreshToken, {
+            res.cookie("refreshU", refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",  
                 sameSite: "strict", 
                 maxAge: 24 * 60 * 60 * 1000, // 1 day
             });
             
-                          res.cookie("accessTokenU", accessToken, { httpOnly: true, secure: true, sameSite: "strict" });
+           res.cookie("accessTokenU", accessToken, { httpOnly: true, secure: true, sameSite: "strict" });
         
             return res.status(200).json({ message: "Login successful", user, accessToken, type: "success" });
         } catch (err: any) {
@@ -180,7 +180,7 @@ export const userController = {
     
     listAllJobs: async (req: Request, res: Response) => {
         try{
-            
+            console.log('THE ENTER')
            const response = await allUserUseCases.listAllJobsUseCase.execute(); 
 
            res.json({message: 'successfully list all jobs',data: response, success: true}); 

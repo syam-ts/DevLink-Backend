@@ -651,8 +651,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
     const savedContract = await newContract.save();
 
+
     const timer = currentJobPost.estimateTimeinHours;
     const contractId: any = savedContract._id;
+
+    //send notificaion to both role
 
     //await allCronJobs.startContractHelperFn(timer, jobPostId, userId, contractId);
 
@@ -726,16 +729,42 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         upsert: false,
       }
     ).exec();
-
-    console.log('JOB ID : ', jobPostId)
-    
+ 
     //remove project submission from client
-    const clientId = currentContract.clientId;
-    console.log('CLIENT ID : ', clientId)
+    const clientId = currentContract.clientId; 
      const currentClient = await ClientModel.findByIdAndUpdate(clientId, { $pull: 
       { projectSubmissions: { contractId: contractId } } }, { new: true });
 
+    //update to user workHistory
+    const updateUser = await UserModel.findByIdAndUpdate(currentContract.userId, {
+      $push:{workHistory: jobPostId}
+    }, {
+      update: true
+    });
+
+    const newNotificationUser = await NotificationModel.create({
+      type: "Job Contract Completed",
+      message: "You successfully completed Job Contract",
+      sender_id: process.env._ADMIN_OBJECT_ID,
+      reciever_id: currentContract.userId, 
+      extra: jobPostId,
+      createdAt: new Date()
+    });
+
     
+    const newNotificationClient = await NotificationModel.create({
+      type: "Job Contract Completed",
+      message: "One Contract Successfully Closed",
+      sender_id: process.env._ADMIN_OBJECT_ID,
+      reciever_id: currentContract.clientId, 
+      extra: jobPostId,
+      createdAt: new Date()
+    });
+
+    
+    newNotificationUser.save();
+    newNotificationClient.save();
+
 
     return { updateUserWallet, updateAdminWallet };
   }

@@ -6,6 +6,7 @@ import { userAuth } from '../middlewares/auth/authUser';
 
 import { UserModel } from '../../../domain/entities/User'
 import jwt from "jsonwebtoken";
+import { AnyKeys } from 'mongoose';
 
 
  
@@ -13,13 +14,14 @@ import jwt from "jsonwebtoken";
 
 userRouter.get('/getHome', userAuth, userController.getHomeUser);
 userRouter.get('/profile/view/:userId', userController.getProfile); //ADD USERAUTH
-userRouter.get('/listAllJobs/:userId', userController.listAllJobs);
+userRouter.get('/listAllJobs/:userId', userAuth, userController.listAllJobs);
 userRouter.get('/bestMatches/:userId', userController.bestMatches);
 userRouter.get('/all-contracts/:userId', userController.allContracts); 
-userRouter.get('/notifications/:userId', userController.allNotifications);
+userRouter.get('/notifications/:userId', userAuth, userController.allNotifications);
 userRouter.get('/job/:jobPostId', userController.getSingleJobPost);
 userRouter.get('/job/myContracts/:userId', userController.viewMyContracts);
 userRouter.get('/job/submittedContracts/:userId', userController.viewSubmittedContracts);
+ 
 
 
 // userRouter.get('/jobs/proposals/:clientId',userController.getAllProposals);
@@ -47,72 +49,52 @@ userRouter.put('/profile/edit/:userId',userController.editProfile); // ADD USERA
 userRouter.patch('/profile/boost/success/:userId',userController.bosstSuccess); // ADD USERAUTH
  
 
-
-
-
-userRouter.get('/refresh-token', async (req: any, res: any) => {
+userRouter.get('/refresh', (req: any, res: any, next: any) => { 
+  
+ 
   try {
-    const refreshToken = req.cookies.jwtU;
+ 
+    const refreshToken = req.cookies.refreshU;
 
     if (!refreshToken) {
       return res.status(401).json({ message: "No refresh token provided" });
     }
+ 
+    const USER_REFRESH_TOKEN: string = process.env.USER_REFRESH_TOKEN as string;
+    const USER_ACCESS_TOKEN: string = process.env.USER_ACCESS_TOKEN as string;
 
-    const USER_REFRESH_TOKEN: any = process.env.USER_REFRESH_TOKEN;
-    const USER_ACCESS_TOKEN: any = process.env.USER_ACCESS_TOKEN;
+ 
+    jwt.verify(refreshToken, USER_REFRESH_TOKEN, (err: any, decoded: any) => {
+      if (err) {
+        return res.status(403).json({ message: "Invalid or expired refresh token" });
+      }
 
-    // Verify the refresh token
-    const decoded: any = jwt.verify(refreshToken, USER_REFRESH_TOKEN);
+      
+      const newAccessToken = jwt.sign(
+        { id: decoded.id, email: decoded.email },
+        USER_ACCESS_TOKEN,
+        { expiresIn: "15m" }
+      );
 
-    // Find user in the database
-    const user = await UserModel.findById(decoded.id);
-    if (!user || user.refreshToken !== refreshToken) {
-      return res.status(403).json({ message: "Refresh token mismatch" });
-    }
+      // Optionally set the new access token in cookies (if desired)
+      res.cookie("accessTokenU", newAccessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+      });
 
-    // Generate new tokens
-    const newAccessToken = jwt.sign(
-      { id: decoded.id, email: decoded.email },
-      USER_ACCESS_TOKEN,
-      { expiresIn: "15m" }
-    );
-    const newRefreshToken = jwt.sign(
-      { id: decoded.id },
-      USER_REFRESH_TOKEN,
-      { expiresIn: "7d" }
-    );
-
-    // Update refresh token in DB
-    user.refreshToken = newRefreshToken;
-    await user.save();
-
-    // Send new tokens
-    res.cookie('jwtU', newRefreshToken, { httpOnly: true, secure: true });
-    res.json({ accessToken: newAccessToken });
+      // Send the new access token in the response
+      return res.status(200).json({ accessToken: newAccessToken });
+    });
   } catch (error) {
-    console.error("Refresh token error:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
-
-
+    console.error("Error in refreshAccessToken:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  } 
+})
 
  
 
-userRouter.get('/auth/validate-token', (req: any, res: any) => {
-  const token = req.headers.authorization?.split(' ')[1];
-
-  if (!token) {
-    return res.status(401).json({ message: 'No token provided' });
-  }
-
-  try {
-    const decoded = jwt.verify(token, process.env.USER_ACCESS_TOKEN as string);
-    return res.status(200).json({ message: 'Token is valid', user: decoded });
-  } catch (error) {
-    return res.status(403).json({ message: 'Invalid or expired token' });
-  }
-});
+  
 
 
 
