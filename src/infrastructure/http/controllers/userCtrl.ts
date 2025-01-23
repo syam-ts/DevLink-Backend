@@ -119,9 +119,9 @@ export const userController = {
 
     getHomeUser: async (req: Request, res: any) => {
         try {
-      
+     
             const clients = await allUserUseCases.getHomeUseCase.execute();
-
+             
           
             return res.json({
                 message: "successfully login",
@@ -248,19 +248,19 @@ export const userController = {
 
 
     
-        closingContract: async (req: Request, res: Response) => {
-            try{
-                  const { contractId, description, progress } = req.body;
+        // closingContract: async (req: Request, res: Response) => {
+        //     try{
+        //           const { contractId, description, progress } = req.body;
             
                    
-                const closedContract = await allUserUseCases.closeContractUseCase.execute(contractId, description, progress);
+        //         const closedContract = await allUserUseCases.closeContractUseCase.execute(contractId, description, progress);
             
     
-                res.status(200).json({message: 'Contract closed successfully', success: true});
-            }catch(err: any) {
-                res.status(500).json({message: err.message, success: false});
-            }
-        },
+        //         res.status(200).json({message: 'Contract closed successfully', success: true});
+        //     }catch(err: any) {
+        //         res.status(500).json({message: err.message, success: false});
+        //     }
+        // },
 
 
     
@@ -342,6 +342,25 @@ export const userController = {
 
             }catch(err: any) {
                 res.status(500).json({message: err.message, success: false});
+            }
+        },
+
+
+        chatbot: async (req: Request, res: any) => {
+            try{
+                const { userInput } = req.body; 
+          
+
+                const response = await allUserUseCases.chatBotUseCase.execute(userInput); 
+                 
+             
+             return res.json({
+                message: "successfully login",
+                queryResult: response,
+                type: "success",
+            });
+            }catch(err: any) {
+                res.status(404).json({message: err, success: false});
             }
         }
 };

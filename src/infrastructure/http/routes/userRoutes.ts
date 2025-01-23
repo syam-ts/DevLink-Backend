@@ -38,8 +38,12 @@ userRouter.post('/logout', userController.logoutUser);
 
 userRouter.post('/project/submit/:contractId', userController.submitProject)
 
-userRouter.post('/contact/response', userController.closingContract);
+// userRouter.post('/contact/response', userController.closingContract);
+
 userRouter.post('/account/boost/:userId', userController.boostAccount);
+
+
+userRouter.post('/chatbot', userController.chatbot);
 
 
 userRouter.post('/job/createProposal', userController.createProposal )

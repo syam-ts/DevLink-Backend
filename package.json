@@ -12,6 +12,7 @@
   "dependencies": {
     "0": "^0.0.0",
     "-": "^0.0.1",
+    "@google/generative-ai": "^0.21.0",
     "@react-oauth/google": "^0.12.1",
     "@types/nodemailer": "^6.4.17",
     "D": "^1.0.0",

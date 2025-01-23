@@ -22,6 +22,7 @@ import { GetSingleJobPost } from "../../application/usecases/user/getSingleJobPo
 import { ViewMyContracts } from "../../application/usecases/user/viewContracts"; 
 import { ViewSubmittedContracts } from "../../application/usecases/user/viewSubmittedContracts";  
 import { SubmitProject } from "../../application/usecases/user/sumbitProject";  
+import { ChatBot } from "../../application/usecases/user/ChatBot";  
 
 
 // Client imports ---------------->
@@ -80,7 +81,7 @@ const boostSuccessUseCase = new BoostSuccess(userRepository);
 const getSingleJobPostUseCase = new GetSingleJobPost(userRepository);
 const viewMyContractsUseCase = new ViewMyContracts(userRepository);
 const viewSubmittedContractsUseCase = new ViewSubmittedContracts(userRepository);
-const submitProjectUseCase = new SubmitProject(userRepository);
+const submitProjectUseCase = new SubmitProject(userRepository); 
 
 
 
@@ -111,6 +112,7 @@ const viewContractUseCase = new ViewContract(ClientRepository);
 const viewSubmissionsUseCase = new ViewSubmissions(ClientRepository);
 const closeContractUseCase = new CloseContract(ClientRepository);
 const rateUserUseCase = new RateUser(ClientRepository);
+const chatBotUseCase = new ChatBot(ClientRepository);
 
 
 
@@ -138,6 +140,7 @@ export const allUserUseCases = {
         boostSuccessUseCase ,
         getSingleJobPostUseCase ,
         submitProjectUseCase ,
+        chatBotUseCase
 };
 
 
