@@ -120,9 +120,9 @@ export const adminController = {
 
         getAllClients: async(req: any, res: any) => {
             try{
-
-                const page: number = parseInt(req.query.page);
-                const clients = await getAllClientsUseCase.execute(page); 
+ 
+              
+                const clients = await getAllClientsUseCase.execute(req.query.page, req.query.sortType); 
 
                 res.json({message: "Successfully fetched all the clients", data: clients, type: 'success'});
                 
@@ -293,6 +293,7 @@ export const adminController = {
         searchClient: async (req: any, res: any) => {
             try{
                 const { inputData } = req.query; 
+                console.log('from ctrl : ',req.query)
                  
                   const response = await searchClientUseCase.execute(inputData); 
                   

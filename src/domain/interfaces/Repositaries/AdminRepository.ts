@@ -66,25 +66,69 @@ export class AdminRepository implements AdminRepositary {
 
 
 
-  async getAllClients(page: number): Promise<Client | any> {
+  async getAllClients(page: number, sortType: string): Promise<Client | any> {
+
+    
 
     const PAGE_SIZE: number = 3;
     const skip: number = (page - 1) * PAGE_SIZE;
     const totalClients: number = await ClientModel.countDocuments({});
+    if(sortType === 'latest') {
+   
+      const clients: any = await ClientModel.aggregate([
+        { $match: {} }, 
+        {$sort: {createdAt: 1}},
+        { $skip: skip },
+        { $limit: PAGE_SIZE }
+      ]);  
+      const totalPages: number = totalClients / PAGE_SIZE
+      if (clients) {
+        return {
+          ...clients, totalPages
+        } as Client;
+      } else {
+        throw new Error('Clients not Found')
+      }
+    } else if (sortType === 'block') {
+
  
-    const clients: any = await ClientModel.aggregate([
-      { $match: {} }, 
-      { $skip: skip },
-      { $limit: PAGE_SIZE }
-    ]);  
-    const totalPages: number = totalClients / PAGE_SIZE
-    if (clients) {
-      return {
-        ...clients, totalPages
-      } as Client;
-    } else {
-      throw new Error('Clients not Found')
+      const clients: any = await ClientModel.aggregate([
+        { $match: {} }, 
+        {$sort: {isBlocked: 1}},
+        { $skip: skip },
+        { $limit: PAGE_SIZE }
+      ]);  
+   
+      const totalPages: number = totalClients / PAGE_SIZE
+      if (clients) {
+        return {
+          ...clients, totalPages
+        } as Client;
+      } else {
+        throw new Error('Clients not Found')
+      }
+
+    } else if (sortType === 'unBlock') {
+
+      const clients: any = await ClientModel.aggregate([
+        { $match: {} }, 
+        {$sort: {isBlocked: -1}},
+        { $skip: skip },
+        { $limit: PAGE_SIZE }
+      ]);  
+    
+
+      const totalPages: number = totalClients / PAGE_SIZE
+      if (clients) {
+        return {
+          ...clients, totalPages
+        } as Client;
+      } else {
+        throw new Error('Clients not Found')
+      }
     }
+
+   
   }
 
 
@@ -185,7 +229,7 @@ export class AdminRepository implements AdminRepositary {
 
   async searchClients(inputData: string): Promise<Client | any> {
  
- 
+ console.log('THEDAT', inputData)
     const page = 1;
     const PAGE_SIZE: number = 3;
     const skip: number = (page - 1) * PAGE_SIZE;
