@@ -14,6 +14,7 @@ adminRouter.get('/dashboard',adminAuth, adminController.getDashboard);
 
 adminRouter.get('/getAllUsers', adminController.getAllUsers);
 adminRouter.get('/getAllClients', adminController.getAllClients);
+adminRouter.get('/getAllUsers', adminController.getAllUsers);
 
 
 adminRouter.get('/getRequests', adminController.getRequests);
@@ -24,8 +25,7 @@ adminRouter.get('/logout', adminController.logoutAdmin);
 
 adminRouter.post('/login', adminController.loginAdmin); 
 adminRouter.post('/logout', adminController.logoutAdmin); 
-adminRouter.post('/getAllUsers/search?', adminController.searchUser); 
-adminRouter.post('/getAllUsers/sort?', adminController.sortUser); 
+adminRouter.post('/getAllUsers/search?', adminController.searchUser);  
 adminRouter.post('/getAllClients/search?', adminController.searchClient); 
 adminRouter.post('/getAllClients/sort?', adminController.sortClient); 
 

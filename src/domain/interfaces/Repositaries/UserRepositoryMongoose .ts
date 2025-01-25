@@ -14,6 +14,7 @@ import { NotificationModel } from "../../entities/Notification";
 type Id = string;
 
 export class UserRepositoryMongoose implements UserRepositary {
+  
   async createUser(user: User | any): Promise<User | any> {
     const salt: number = parseInt(process.env.BCRYPT_SALT as string);
     const hashedPassword = await bcrypt.hash(user.password, salt);
@@ -97,6 +98,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         inProgress: "",
         workHistory: [],
         isEditRequest: false,
+        isProfileFilled: false,
         request: [],
         wallet: [],
         isBlocked: false,

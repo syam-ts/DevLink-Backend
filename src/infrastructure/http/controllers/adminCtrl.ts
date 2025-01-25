@@ -106,9 +106,8 @@ export const adminController = {
         getAllUsers: async(req: any, res: any) => {
             try{
 
-                const page: number = parseInt(req.query.page);
 
-                const users = await getAllUsersUseCase.execute(page); 
+                const users = await getAllUsersUseCase.execute(req.query.page, req.query.sortType); 
 
                 res.json({message: "Successfully fetched all the users", data: users, type: 'success'});
                 

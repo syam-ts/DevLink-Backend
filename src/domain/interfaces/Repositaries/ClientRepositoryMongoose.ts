@@ -371,7 +371,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
           expertLevel: data.expertLevel,
           location: data.location,
           projectType: data.projectType,
-          totalProposals: 0,
+          maxProposals: data.maxProposals,
           proposalCount: 0,
           aboutClient: {
             companyName: client.companyName,

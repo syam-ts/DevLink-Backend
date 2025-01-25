@@ -49,7 +49,9 @@ userRouter.post('/chatbot', userController.chatbot);
 userRouter.post('/job/createProposal', userController.createProposal )
 
 // userRouter.post('/job/createProposal/:clientId/:userId/:jobPostId', userController.createProposal); // ADD USERAUTH
-userRouter.put('/profile/edit/:userId',userController.editProfile); // ADD USERAUTH
+userRouter.put('/profile/:type/:userId', userController.editProfile);  
+
+
 userRouter.patch('/profile/boost/success/:userId',userController.bosstSuccess); // ADD USERAUTH
  
 

@@ -15,7 +15,7 @@ export class GetUserProfile {
         if(!user) {
             throw new Error('User not found')
         }
-        console.log('THE USER FROM USECASE : ',user)
+        
 
         return {
             name: user.name,
@@ -29,7 +29,8 @@ export class GetUserProfile {
             description: user.description,
             whyHireMe: user.whyHireMe,
             experience: user.experience,
-            education: user.education
+            education: user.education,
+            isProfileFilled: user.isProfileFilled
         };
     }
 }

@@ -42,25 +42,70 @@ export class AdminRepository implements AdminRepositary {
 
 
 
-  async getAllUsers(page: number): Promise<User | any> {
+  async getAllUsers(page: number, sortType: string): Promise<User | any> {
 
+  
+    
     const PAGE_SIZE: number = 3;
     const skip: number = (page - 1) * PAGE_SIZE;
     const totalUsers: number = await UserModel.countDocuments({});
+    if(sortType === 'latest') {
+   
+      const users: any = await UserModel.aggregate([
+        { $match: {} }, 
+        {$sort: {createdAt: 1}},
+        { $skip: skip },
+        { $limit: PAGE_SIZE }
+      ]);  
+      const totalPages: number = totalUsers / PAGE_SIZE
+      if (users) {
+        return {
+          ...users, totalPages
+        } as Client;
+      } else {
+        throw new Error('users not Found')
+      }
+    } else if (sortType === 'block') {
+
  
-    const users: any = await UserModel.aggregate([
-      { $match: {} }, 
-      { $skip: skip },
-      { $limit: PAGE_SIZE }
-    ]);  
-    const totalPages: number = totalUsers / PAGE_SIZE
-    if (users) {
-      return {
-        ...users, totalPages
-      } as User;
-    } else {
-      throw new Error('Users not Found')
+      const users: any = await UserModel.aggregate([
+        { $match: {} }, 
+        {$sort: {isBlocked: 1}},
+        { $skip: skip },
+        { $limit: PAGE_SIZE }
+      ]);  
+   
+      const totalPages: number = totalUsers / PAGE_SIZE
+      if (users) {
+        return {
+          ...users, totalPages
+        } as Client;
+      } else {
+        throw new Error('Users not Found')
+      }
+
+    } else if (sortType === 'unBlock') {
+
+      const users: any = await UserModel.aggregate([
+        { $match: {} }, 
+        {$sort: {isBlocked: -1}},
+        { $skip: skip },
+        { $limit: PAGE_SIZE }
+      ]);  
+    
+
+      const totalPages: number = totalUsers / PAGE_SIZE
+      if (users) {
+        return {
+          ...users, totalPages
+        } as Client;
+      } else {
+        throw new Error('users not Found')
+      }
     }
+    
+
+
   }
 
 
@@ -336,10 +381,12 @@ export class AdminRepository implements AdminRepositary {
 
 
   async blockUser(userId: any): Promise<any> {
+    
 
     const user = await UserModel.findByIdAndUpdate(userId,
-      { isBlocked: true }, { new: true }
+      { isBlocked: true }, { update: true }
     ).exec();
+    console.log('TEH USER ', user)
 
     if (!user) {
       throw new Error('User not Found')

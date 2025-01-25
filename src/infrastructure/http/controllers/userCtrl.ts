@@ -151,18 +151,20 @@ export const userController = {
     },
 
 
+  
+
+
     editProfile: async (req: Request, res: Response) => {
 
         try {
-            const { userId } = req.params;
-            const profileData = req.body;  
+            const { userId, type } = req.params;
+            const profileData = req.body;   
+            console.log('TEH TYPE  : ', req.params)
       
-            const response = await allUserUseCases.editProfileUseCase.execute(userId, profileData);
-
-            res.json({ message: "Profile successfully edited", type: "success" });
+            const response = await allUserUseCases.editProfileUseCase.execute(userId, profileData, type);
+            res.json({ message: "Profile successfully edited", sucess: true });
         } catch (err: any) {
-         
-            res.json({ message: err.message, type: "error" });
+            res.json({ message: err.message, sucess: false });
         }
     },
 
@@ -180,7 +182,7 @@ export const userController = {
     
     listAllJobs: async (req: Request, res: Response) => {
         try{
-            console.log('THE ENTER')
+             
            const response = await allUserUseCases.listAllJobsUseCase.execute(); 
 
            res.json({message: 'successfully list all jobs',data: response, success: true}); 

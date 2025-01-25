@@ -41,6 +41,7 @@ export interface User extends mongoose.Document{
       };
     isBlocked: boolean;
     isBoosted: boolean;
+    isProfileFilled: boolean;
     createdAt: Date;
 }
 
@@ -110,6 +111,7 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
       isBoosted: { type: Boolean, required: false },
     isBlocked: { type: Boolean, required: false },
     isEditRequest: { type: Boolean, required: false},
+    isProfileFilled: {type: Boolean, required: true},
     createdAt: {type: Date, required: false},
    
 });

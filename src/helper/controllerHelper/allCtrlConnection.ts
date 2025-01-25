@@ -9,7 +9,7 @@ import { verifyOtp } from "../../application/usecases/user/otpUser";
 import { VerifyEmail } from "../../application/usecases/user/verifyEmail";
 import { ResetPassword } from "../../application/usecases/user/resetPassword";
 import { UserRepositoryMongoose } from "../../domain/interfaces/Repositaries/UserRepositoryMongoose ";
-import { EditUserProfile } from "../../application/usecases/user/editProfile";
+import { EditUserProfile } from "../../application/usecases/user/editProfile"; 
 import { GetUserProfile } from "../../application/usecases/user/getProfile";
 import { ListAllJobs } from "../../application/usecases/user/listAllJobs";
 import { BestMatches } from "../../application/usecases/user/bestMatches";
@@ -22,7 +22,7 @@ import { GetSingleJobPost } from "../../application/usecases/user/getSingleJobPo
 import { ViewMyContracts } from "../../application/usecases/user/viewContracts"; 
 import { ViewSubmittedContracts } from "../../application/usecases/user/viewSubmittedContracts";  
 import { SubmitProject } from "../../application/usecases/user/sumbitProject";  
-import { ChatBot } from "../../application/usecases/user/ChatBot";  
+import { ChatBot } from "../../application/usecases/user/ChatBot";   
 
 
 // Client imports ---------------->
