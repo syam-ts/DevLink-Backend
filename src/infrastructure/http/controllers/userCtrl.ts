@@ -158,11 +158,11 @@ export const userController = {
 
         try {
             const { userId, type } = req.params;
-            const profileData = req.body;   
-            console.log('TEH TYPE  : ', req.params)
+            const profileData = req.body;    
       
             const response = await allUserUseCases.editProfileUseCase.execute(userId, profileData, type);
-            res.json({ message: "Profile successfully edited", sucess: true });
+            
+            res.json({ message: "Profile successfully edited",data: response, sucess: true });
         } catch (err: any) {
             res.json({ message: err.message, sucess: false });
         }
@@ -184,6 +184,7 @@ export const userController = {
         try{
              
            const response = await allUserUseCases.listAllJobsUseCase.execute(); 
+           console.log('THE RESPONS ; ', response)
 
            res.json({message: 'successfully list all jobs',data: response, success: true}); 
         }catch(err: any) {

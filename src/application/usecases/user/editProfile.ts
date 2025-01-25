@@ -1,5 +1,5 @@
 export interface UserRepositary {
-  editUserProfile(userId: string, editData: any): Promise<any>;
+  editUserProfile(userId: string, editData: any,type: string): Promise<any>;
 }
 
 export class EditUserProfile {
@@ -75,7 +75,7 @@ export class EditUserProfile {
     
  
      
-        if (education.length < 20) {
+        if (education.length < 2) {
           throw new Error("Education field need to have atlest need 20 words");
         }
     
@@ -94,11 +94,12 @@ export class EditUserProfile {
         }
   
 
-
+      const type: string = 'verify';
 
       const updatedUser = await this.userRepositary.editUserProfile(
         userId,
-        profileData
+        profileData,
+        type
       );
       if (!updatedUser) {
         throw new Error("Profile editing failed");
@@ -106,7 +107,7 @@ export class EditUserProfile {
 
 
 
-      return { updatedUser };
+      return updatedUser;
 
 
 
@@ -183,10 +184,12 @@ export class EditUserProfile {
           profileData.editData[value] = profileData.unchangedData[value];
         }
       }
+      const type: string = 'edit';
 
       const updatedUser = await this.userRepositary.editUserProfile(
         userId,
-        profileData
+        profileData,
+        type
       );
       if (!updatedUser) {
         throw new Error("Profile editing failed");
@@ -194,7 +197,7 @@ export class EditUserProfile {
 
 
 
-      return { updatedUser };
+      return updatedUser ;
     }
   }
 }

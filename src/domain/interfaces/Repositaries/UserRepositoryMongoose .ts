@@ -273,17 +273,29 @@ export class UserRepositoryMongoose implements UserRepositary {
     return "Password reset successfully!";
   }
 
-  async editUserProfile(userId: string, userData: any): Promise<any> {
+  async editUserProfile(userId: string, userData: any, type: string): Promise<any> {
     // const existingUser: any = await UserModel.findById(userId);
 
     const { editData } = userData;
+    
+    editData.isProfileFilled = true
 
-    const user = await UserModel.findByIdAndUpdate(userId, editData, {
-      update: true,
-    }).exec();
-
-    if (!user) throw new Error("User not found");
-    return { user };
+    if(type === 'verify') {
+      const user = await UserModel.findByIdAndUpdate(userId, editData, {
+        update: true,
+      }).exec();
+  
+      if (!user) throw new Error("User not found");
+      return user;
+    } else {
+      const user = await UserModel.findByIdAndUpdate(userId,editData, {
+        update: true,
+      }).exec();
+  
+      if (!user) throw new Error("User not found");
+       
+      return user;
+    }
   }
 
   async createProposal(userId: Id, jobPostId: Id, description: Id, bidAmount: number, bidDeadline: number): Promise<any> {
@@ -357,12 +369,25 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
   async findAllJobs(): Promise<any> {
+    const totalJobs = await JobPostModel.countDocuments();
+    
+    const verifiedAccounts = await ClientModel.countDocuments({isVerified: true})
+    
     const allJobs = await JobPostModel.find({ status: "pending" }).exec();
+
+
+    
+    
+    const totalHours = await JobPostModel.aggregate([
+     
+      {$group: {_id: null, sum: {$sum: "$estimateTimeinHours"}}}
+    ]);
+   
 
     if (!allJobs) {
       throw new Error("No job found");
     } else {
-      return allJobs;
+      return {allJobs, totalJobs,totalHours, verifiedAccounts };
     }
   }
 
