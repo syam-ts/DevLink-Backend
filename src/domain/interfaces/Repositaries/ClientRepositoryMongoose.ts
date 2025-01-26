@@ -530,6 +530,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       date: new Date()
     };
 
+    
     const updateAdminWallet = await AdminModel.findByIdAndUpdate(adminId, {
       $inc: { "wallet.balance": amount },
       $push: { "wallet.transactions": walletEntry }
