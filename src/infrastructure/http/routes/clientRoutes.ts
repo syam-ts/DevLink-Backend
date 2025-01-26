@@ -17,6 +17,7 @@ clientRouter.get('/jobs/latest-jobs/:clientId',clientAuth, clientController.late
 clientRouter.get('/job/myContracts/:clientId', clientController.myContracts);
 clientRouter.get('/contract/:contractId', clientController.viewContract);
 clientRouter.get('/contracts/submissions/:clientId', clientController.viewSubmissions);
+clientRouter.get('/chat/:memberId', clientController.getAllChats);
 
 
  

@@ -51,4 +51,15 @@ export class ChatRepositoryMongoose {
     return savedMessage;
   }
 
+
+  async getAllChats(memberId: string): Promise<any> {
+  
+     const allChats = await ChatModel.find({members: {$in: memberId}});
+
+     if(!allChats) throw new Error('No chats found');
+     console.log('THE RESPO : ',allChats)
+
+    return allChats;
+  }
+
 }

@@ -56,6 +56,7 @@ import { CloseContract } from '../../application/usecases/client/closeContract';
 import { RateUser } from '../../application/usecases/client/rateUser';
 import { CreateChat } from '../../application/usecases/client/createChat';
 import { SendMessage } from '../../application/usecases/client/sendMessage';
+import { GetAllChats } from '../../application/usecases/client/getAllChats';
 import { ChatRepositoryMongoose } from "../../domain/interfaces/Repositaries/ChatRepository";
 
 
@@ -119,6 +120,7 @@ const rateUserUseCase = new RateUser(ClientRepository);
 const chatBotUseCase = new ChatBot(ClientRepository);
 const createChatUseCase = new CreateChat(ChatRepository);
 const sendMessageUseCase = new SendMessage(ChatRepository);
+const getAllChatsUseCase = new GetAllChats(ChatRepository);
 
 
 
@@ -177,5 +179,6 @@ export const allClientUseCases = {
      closeContractUseCase,
      rateUserUseCase,
      createChatUseCase,
-     sendMessageUseCase
+     sendMessageUseCase,
+     getAllChatsUseCase
 }

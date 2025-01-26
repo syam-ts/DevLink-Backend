@@ -380,6 +380,18 @@ import { ErrorRequestHandler } from 'express';
             }catch(err: any) {
                 res.status(500).json({message: err.message, success: false});
             }
+         },
+ 
+
+         getAllChats: async(req: any, res: any) => {
+            try{
+                const { memberId } = req.params;
+                const response = await allClientUseCases.getAllChatsUseCase.execute(memberId);
+
+                res.status(201).json({message: 'message send successfully', data: response, success: true});
+            }catch(err: any) {
+                res.status(500).json({message: err.message, success: false});
+            }
          }
  
          
