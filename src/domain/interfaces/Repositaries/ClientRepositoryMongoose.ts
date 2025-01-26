@@ -10,7 +10,7 @@ import bcrypt from 'bcrypt';
 import validator from 'validator';
 import jwt from 'jsonwebtoken';
 import allCronJobs from '../../../helper/cron-jobs/index'
-import { ObjectId, Schema } from 'mongoose';
+ 
 
 
 

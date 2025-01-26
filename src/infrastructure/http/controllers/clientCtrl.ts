@@ -1,4 +1,6 @@
+import { Error } from 'mongoose';
 import {allClientUseCases } from '../../../helper/controllerHelper/allCtrlConnection'
+import { ErrorRequestHandler } from 'express';
  
 
  
@@ -350,6 +352,18 @@ import {allClientUseCases } from '../../../helper/controllerHelper/allCtrlConnec
                 const response = await allClientUseCases.rateUserUseCase.execute(notificationId, userId, rating); 
                  
                 res.status(200).json({message: 'Rate user successfully',data: response, success: true});
+            }catch(err: any) {
+                res.status(500).json({message: err.message, success: false});
+            }
+         },
+
+
+         createChat: async(req: any, res: any) => {
+            try{
+
+                const response = await allClientUseCases.createChatUseCase.execute(req.body);
+
+                res.status(201).json({message: 'connection created', data: response, success: true});
             }catch(err: any) {
                 res.status(500).json({message: err.message, success: false});
             }

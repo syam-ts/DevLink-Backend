@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema, model } from 'mongoose';
 
 export interface Chat extends Document{
-    members: [String],
+    members: [ mongoose.Schema.Types.ObjectId ],
     createdAt: Date
 }
 

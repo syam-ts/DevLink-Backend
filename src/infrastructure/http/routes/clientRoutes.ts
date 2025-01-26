@@ -40,6 +40,7 @@ clientRouter.post('/rate/user/:notificationId',clientController.rateUser);
 
 clientRouter.post('/project/submit/approval/:contractId',clientController.closeContract);
 clientRouter.post('/job/createContract',clientController.createContract);
+clientRouter.post('/chat/create-chat', clientController.createChat);
 
 
 
