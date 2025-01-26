@@ -12,9 +12,9 @@ export interface Message extends Document {
 
 const MessageSchema: Schema = new Schema({
 
-    chatId: {type: mongoose.Types.ObjectId, required: true, ref: "chats"},
-    sender: {type: mongoose.Types.ObjectId, required: true},
-    text: {type: String, required: true},
+    chatId: {type: mongoose.Types.ObjectId, ref: "chats"},
+    sender: {type: mongoose.Types.ObjectId},
+    text: {type: String},
     read: {type: Boolean, default: false},
 
 });

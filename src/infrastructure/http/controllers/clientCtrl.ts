@@ -367,6 +367,19 @@ import { ErrorRequestHandler } from 'express';
             }catch(err: any) {
                 res.status(500).json({message: err.message, success: false});
             }
+         },
+ 
+         
+
+         sendMessage: async(req: any, res: any) => {
+            try{
+
+                const response = await allClientUseCases.sendMessageUseCase.execute(req.body);
+
+                res.status(201).json({message: 'message send successfully', data: response, success: true});
+            }catch(err: any) {
+                res.status(500).json({message: err.message, success: false});
+            }
          }
  
          

@@ -55,6 +55,7 @@ import { ViewSubmissions } from '../../application/usecases/client/viewSubmissio
 import { CloseContract } from '../../application/usecases/client/closeContract';
 import { RateUser } from '../../application/usecases/client/rateUser';
 import { CreateChat } from '../../application/usecases/client/createChat';
+import { SendMessage } from '../../application/usecases/client/sendMessage';
 import { ChatRepositoryMongoose } from "../../domain/interfaces/Repositaries/ChatRepository";
 
 
@@ -117,6 +118,7 @@ const closeContractUseCase = new CloseContract(ClientRepository);
 const rateUserUseCase = new RateUser(ClientRepository);
 const chatBotUseCase = new ChatBot(ClientRepository);
 const createChatUseCase = new CreateChat(ChatRepository);
+const sendMessageUseCase = new SendMessage(ChatRepository);
 
 
 
@@ -174,5 +176,6 @@ export const allClientUseCases = {
      viewSubmissionsUseCase,
      closeContractUseCase,
      rateUserUseCase,
-     createChatUseCase
+     createChatUseCase,
+     sendMessageUseCase
 }
