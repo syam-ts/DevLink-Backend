@@ -67,4 +67,15 @@ export class ChatRepositoryMongoose {
 
     return allChats;
   }
+
+
+  async viewChat(chatId: string): Promise<any> {
+   
+    const currentChat = await ChatModel.findById(chatId).exec();
+
+    if(!currentChat) throw new Error('Not found the chat');
+
+    return currentChat;
+
+  }
 }

@@ -10,7 +10,11 @@ export interface Chat extends Document {
             userId: mongoose.Types.ObjectId,
             userName: String
         },
-       
+       chatHistory?: {
+        clientChat: [ {text: String, createdAt: Date}],
+        userChat: [ {text: String, createdAt: Date}],
+ 
+       },
      
     createdAt: Date
 };
@@ -26,6 +30,17 @@ const ChatSchema: Schema = new Schema({
                 userId: { type: mongoose.Types.ObjectId , required: true},
                 userName: { type: String }
             },
+    chatHistory: {
+        clientChat:[ {
+            text: {type: String, required: false},
+            createdAt: {type: Date, required: false}
+        }],
+        userChat:[ {
+            text: {type: String, required: false},
+            createdAt: {type: Date, required: false}
+        }],
+    
+    },
         
     createdAt: { type: Date, required: true }
 });

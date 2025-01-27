@@ -392,6 +392,18 @@ import { ErrorRequestHandler } from 'express';
             }catch(err: any) {
                 res.status(500).json({message: err.message, success: false});
             }
+         },
+ 
+
+         viewChat: async(req: any, res: any) => {
+            try{
+                const { chatId } = req.params;
+                const response = await allClientUseCases.viewChatUseCase.execute(chatId);
+
+                res.status(200).json({message: 'Loading chat data', data: response, success: true});
+            }catch(err: any) {
+                res.status(500).json({message: err.message, success: false});
+            }
          }
  
          
