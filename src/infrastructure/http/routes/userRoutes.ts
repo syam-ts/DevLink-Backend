@@ -36,6 +36,8 @@ userRouter.post('/login', userController.loginUser);
 userRouter.post('/googleLogin', userController.googleLogin);
 userRouter.post('/logout', userController.logoutUser);
 
+userRouter.post('/wishlist/add', userController.addUserToWishlist);
+
 userRouter.post('/project/submit/:contractId', userController.submitProject)
 
 // userRouter.post('/contact/response', userController.closingContract);

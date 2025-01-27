@@ -23,6 +23,7 @@ import { ViewMyContracts } from "../../application/usecases/user/viewContracts";
 import { ViewSubmittedContracts } from "../../application/usecases/user/viewSubmittedContracts";  
 import { SubmitProject } from "../../application/usecases/user/sumbitProject";  
 import { ChatBot } from "../../application/usecases/user/ChatBot";   
+import { AddToWishlist } from "../../application/usecases/user/addToWishlist";   
 
 
 // Client imports ---------------->
@@ -59,6 +60,7 @@ import { SendMessage } from '../../application/usecases/client/sendMessage';
 import { GetAllChats } from '../../application/usecases/client/getAllChats';
 import { ViewChat } from '../../application/usecases/client/viewChat';
 import { ChatRepositoryMongoose } from "../../domain/interfaces/Repositaries/ChatRepository";
+import { WishlistRepositoryMongoose } from "../../domain/interfaces/WishlistRepository";
 
 
 
@@ -66,6 +68,7 @@ import { ChatRepositoryMongoose } from "../../domain/interfaces/Repositaries/Cha
 
 
 const userRepository = new UserRepositoryMongoose();
+const wishlistRepository = new WishlistRepositoryMongoose();
 const signupUseCase = new SignupUser(userRepository);
 const loginUseCase = new LoginUser(userRepository);
 const getHomeUseCase = new getHomeUser(userRepository);
@@ -87,6 +90,7 @@ const getSingleJobPostUseCase = new GetSingleJobPost(userRepository);
 const viewMyContractsUseCase = new ViewMyContracts(userRepository);
 const viewSubmittedContractsUseCase = new ViewSubmittedContracts(userRepository);
 const submitProjectUseCase = new SubmitProject(userRepository); 
+const addToWishlistUseCase = new AddToWishlist(wishlistRepository); 
 
 
 
@@ -150,7 +154,8 @@ export const allUserUseCases = {
         boostSuccessUseCase ,
         getSingleJobPostUseCase ,
         submitProjectUseCase ,
-        chatBotUseCase
+        chatBotUseCase,
+        addToWishlistUseCase
 };
 
 

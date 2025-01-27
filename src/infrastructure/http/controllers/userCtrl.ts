@@ -357,6 +357,19 @@ export const userController = {
             }catch(err: any) {
                 res.status(404).json({message: err, success: false});
             }
+        },
+
+
+        addUserToWishlist: async (req: Request, res: any) => {
+            try{
+                const { userId, jobPostId } = req.body;  
+                
+                const response = await allUserUseCases.addToWishlistUseCase.execute(userId, jobPostId); 
+                 
+              res.status(201).json({message: "added to wishlist", success: true});
+            }catch(err: any) {
+                res.status(404).json({message: err.message, success: false});
+            }
         }
 };
 
