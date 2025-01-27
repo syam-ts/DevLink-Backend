@@ -14,7 +14,7 @@ import { AnyKeys } from 'mongoose';
 
 userRouter.get('/getHome', userAuth, userController.getHomeUser);
 userRouter.get('/profile/view/:userId', userController.getProfile); //ADD USERAUTH
-userRouter.get('/listAllJobs/:userId', userAuth, userController.listAllJobs);
+userRouter.get('/home/:type', userAuth, userController.listHomeJobs); 
 userRouter.get('/bestMatches/:userId', userController.bestMatches);
 userRouter.get('/all-contracts/:userId', userController.allContracts); 
 userRouter.get('/notifications/:userId', userAuth, userController.allNotifications);

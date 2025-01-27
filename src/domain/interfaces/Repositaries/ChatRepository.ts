@@ -28,6 +28,10 @@ export class ChatRepositoryMongoose {
       clientName: clientName.companyName,
       userId: membersIds.members.userId,
       userName: userName.name,
+      chatHistory: {
+        clientChat: [{"text": "", "date": ""}],
+        userChat: [{"text": "", "createdAt": ""}]
+      }
     };
 
     const updateChat = new ChatModel({
@@ -36,26 +40,11 @@ export class ChatRepositoryMongoose {
     });
 
     const savedChat = await updateChat.save();
-    console.log("saved", savedChat);
+
 
     return savedChat;
   }
 
-
-
-  async sendMessage(body: Message): Promise<any> {
-    const { chatId, sender, text }: Message = body;
-
-    const newMessage = new MessageModel({
-      chatId: chatId,
-      sender: sender,
-      text: text,
-    });
-
-    const savedMessage = await newMessage.save();
-
-    return savedMessage;
-  }
 
 
 
@@ -78,4 +67,46 @@ export class ChatRepositoryMongoose {
     return currentChat;
 
   }
+
+
+  
+
+  async sendMessage(body: Message): Promise<any> {
+    const { chatId, sender, text }: Message = body;
+    console.log('THE BODY: ',body)
+
+    const newMessage = new MessageModel({
+      chatId: chatId,
+      sender: sender,
+      text: text,
+    });
+
+    const savedMessage = await newMessage.save();
+
+    
+
+    // insert message inot chat
+    const updateChat = await ChatModel.findByIdAndUpdate(
+      chatId,
+      {
+        
+        $push: {
+          "chatHistory.clientChat": {
+            text: text,
+            createdAt: new Date(),
+          },
+        },
+      },
+      {
+        new: true, 
+        upsert: true,  
+      }
+    );
+    
+    
+
+
+    return updateChat;
+  }
+
 }

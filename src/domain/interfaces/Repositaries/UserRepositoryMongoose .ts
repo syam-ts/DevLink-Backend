@@ -14,7 +14,6 @@ import { NotificationModel } from "../../entities/Notification";
 type Id = string;
 
 export class UserRepositoryMongoose implements UserRepositary {
-  
   async createUser(user: User | any): Promise<User | any> {
     const salt: number = parseInt(process.env.BCRYPT_SALT as string);
     const hashedPassword = await bcrypt.hash(user.password, salt);
@@ -68,8 +67,6 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-
-
   async verifyOtp(user: any): Promise<User> {
     const { name, email, password, mobile } = user.user;
     if (user.mailOtp === parseInt(user.userOtp.otp)) {
@@ -103,7 +100,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         wallet: [],
         isBlocked: false,
         isBoosted: false,
-        createdAt: new Date()
+        createdAt: new Date(),
       });
 
       const savedUser = await createdUser.save();
@@ -184,14 +181,12 @@ export class UserRepositoryMongoose implements UserRepositary {
       { expiresIn: "7d" }
     );
 
-
     const accessToken = jwt.sign(
       { id: user._id, email: user.email },
       USER_ACCESS_TOKEN,
       { expiresIn: "1m" }
     );
 
-   
     return {
       user: {
         _id: user._id,
@@ -209,7 +204,6 @@ export class UserRepositoryMongoose implements UserRepositary {
       refreshToken,
     };
   }
-  
 
   async findUserByOnlyEmail(
     email: string,
@@ -251,7 +245,9 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
   async findAllClients(): Promise<Client | any> {
-    const clients: any = await ClientModel.find({isVerified: true}).limit(6).exec();
+    const clients: any = await ClientModel.find({ isVerified: true })
+      .limit(6)
+      .exec();
     if (clients) {
       return {
         ...clients,
@@ -273,39 +269,46 @@ export class UserRepositoryMongoose implements UserRepositary {
     return "Password reset successfully!";
   }
 
-  async editUserProfile(userId: string, userData: any, type: string): Promise<any> {
+  async editUserProfile(
+    userId: string,
+    userData: any,
+    type: string
+  ): Promise<any> {
     // const existingUser: any = await UserModel.findById(userId);
 
     const { editData } = userData;
-    
-    editData.isProfileFilled = true
 
-    if(type === 'verify') {
+    editData.isProfileFilled = true;
+
+    if (type === "verify") {
       const user = await UserModel.findByIdAndUpdate(userId, editData, {
         update: true,
       }).exec();
-  
+
       if (!user) throw new Error("User not found");
       return user;
     } else {
-      const user = await UserModel.findByIdAndUpdate(userId,editData, {
+      const user = await UserModel.findByIdAndUpdate(userId, editData, {
         update: true,
       }).exec();
-  
+
       if (!user) throw new Error("User not found");
-       
+
       return user;
     }
   }
 
-  async createProposal(userId: Id, jobPostId: Id, description: Id, bidAmount: number, bidDeadline: number): Promise<any> {
-   
+  async createProposal(
+    userId: Id,
+    jobPostId: Id,
+    description: Id,
+    bidAmount: number,
+    bidDeadline: number
+  ): Promise<any> {
     const user = await UserModel.findById(userId);
     if (!user) {
       throw new Error("User not found");
     }
-
- 
 
     const existingProposal = await ClientModel.find({
       $and: [
@@ -329,7 +332,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         jobPostInfo: jobpost.title,
         description: description,
         bidAmount: bidAmount,
-        bidDeadline: bidDeadline
+        bidDeadline: bidDeadline,
       };
 
       const proposal = await ClientModel.findByIdAndUpdate(
@@ -338,58 +341,67 @@ export class UserRepositoryMongoose implements UserRepositary {
         { new: true }
       );
 
-     const newNotificationUser = await NotificationModel.create({
-           type: "New Job Proposal",
-           message: "New Proposal send successfully",
-           sender_id: userId,
-           reciever_id: userId, 
-           createdAt: new Date()
-         });
-      
-        
+      const newNotificationUser = await NotificationModel.create({
+        type: "New Job Proposal",
+        message: "New Proposal send successfully",
+        sender_id: userId,
+        reciever_id: userId,
+        createdAt: new Date(),
+      });
 
+      //send to client
+      const newNotificationClient = await NotificationModel.create({
+        type: "New Job Proposal",
+        message: "New Job Proposal Received",
+        sender_id: userId,
+        reciever_id: jobpost.clientId,
+        createdAt: new Date(),
+      });
 
-         //send to client
-     const newNotificationClient = await NotificationModel.create({
-           type: "New Job Proposal",
-           message: "New Job Proposal Received",
-           sender_id: userId,
-           reciever_id: jobpost.clientId, 
-           createdAt: new Date()
-         });
-      
-
-         newNotificationUser.save();
-         newNotificationClient.save();
-
-
+      newNotificationUser.save();
+      newNotificationClient.save();
 
       return proposal;
     }
   }
 
-  async findAllJobs(): Promise<any> {
-    const totalJobs = await JobPostModel.countDocuments();
-    
-    const verifiedAccounts = await ClientModel.countDocuments({isVerified: true})
-    
-    const allJobs = await JobPostModel.find({ status: "pending" }).exec();
 
 
-    
-    
-    const totalHours = await JobPostModel.aggregate([
-     
-      {$group: {_id: null, sum: {$sum: "$estimateTimeinHours"}}}
-    ]);
-   
+  async listHomeJobs(type: string): Promise<any> {
+    if(type === 'listAllJobs') {
+      const totalJobs = await JobPostModel.countDocuments();
 
-    if (!allJobs) {
-      throw new Error("No job found");
+      const verifiedAccounts = await ClientModel.countDocuments({
+        isVerified: true,
+      });
+  
+      const allJobs = await JobPostModel.find({ status: "pending" }).exec();
+  
+      const totalHours = await JobPostModel.aggregate([
+        { $group: { _id: null, sum: { $sum: "$estimateTimeinHours" } } },
+      ]);
+  
+      if (!allJobs) {
+        throw new Error("No job found");
+      } else {
+        return { allJobs, totalJobs, totalHours, verifiedAccounts };
+      }
+    } else if (type === 'latestJobs') {
+      const latestJobs = await JobPostModel.find({})
+      .sort({ createdAt: -1 }).limit(6)
+      .exec();
+
+    return latestJobs;
     } else {
-      return {allJobs, totalJobs,totalHours, verifiedAccounts };
+      throw new Error('Jobs not founded');
     }
   }
+
+
+
+ 
+
+
 
   async allContracts(userId: Id): Promise<any> {
     const contract = await ContractModel.find({ userId: userId }).exec();
@@ -402,15 +414,12 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
   async allNotifications(userId: Id): Promise<any> {
-    const notifications: any = await NotificationModel.find({ reciever_id: userId }).exec();
+    const notifications: any = await NotificationModel.find({
+      reciever_id: userId,
+    }).exec();
 
-
-    
-      return notifications
-     
+    return notifications;
   }
-
-
 
   async bestMatches(userId: string): Promise<any> {
     const user: any = await UserModel.findById(userId).exec();
@@ -432,7 +441,11 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-  async closeContract( contractId: string, description: string, progress: any): Promise<any> {
+  async closeContract(
+    contractId: string,
+    description: string,
+    progress: any
+  ): Promise<any> {
     const currentContract: any = await ContractModel.findByIdAndUpdate(
       contractId,
       {
@@ -446,7 +459,6 @@ export class UserRepositoryMongoose implements UserRepositary {
       throw new Error("Contract not found");
     }
 
-     
     const finalAmount = Math.round(
       currentContract.amount - (currentContract.amount * 10) / 100
     );
@@ -503,13 +515,12 @@ export class UserRepositoryMongoose implements UserRepositary {
     } else {
       return contract;
     }
-  };
-
+  }
 
   async viewMyContracts(userId: Id): Promise<any> {
-   
-    const contract: any = await ContractModel.find({$and: [{userId: userId} , {status: 'on progress'}]}).exec();
-    
+    const contract: any = await ContractModel.find({
+      $and: [{ userId: userId }, { status: "on progress" }],
+    }).exec();
 
     if (!contract) {
       throw new Error("contract not found");
@@ -518,18 +529,17 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-
   async viewSubmittedContracts(userId: Id): Promise<any> {
-   
-    const contracts: any = await ContractModel.find({$and: [{userId: userId} , {status: 'submitted'}]}).exec();
-    
+    const contracts: any = await ContractModel.find({
+      $and: [{ userId: userId }, { status: "submitted" }],
+    }).exec();
+
     if (!contracts) {
       throw new Error("contract not found");
     } else {
       return contracts;
     }
   }
-
 
   async bosstSuccess(userId: Id): Promise<any> {
     const user: any = await UserModel.findByIdAndUpdate(
@@ -549,59 +559,57 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-
-
-  async getSingleJobPost(jobPostId: string): Promise< any > {
-
+  async getSingleJobPost(jobPostId: string): Promise<any> {
     const jobPost = await JobPostModel.findById(jobPostId).exec();
 
-    if(!jobPost) throw new Error('Job Post didnt found');
+    if (!jobPost) throw new Error("Job Post didnt found");
 
     return jobPost;
   }
 
+  async submitProject(contractId: string, body: any): Promise<any> {
+    try {
+      const contract: any = await ContractModel.findByIdAndUpdate(
+        contractId,
+        {
+          status: "submitted",
+        },
+        {
+          update: true,
+        }
+      );
 
-  async submitProject(contractId: string, body: any): Promise<any > {
-    try{
+      const clientId = contract.clientId;
+      const jobPostId = contract.jobPostId;
 
-    
+      const jobPost: any = await JobPostModel.findById(jobPostId).exec();
 
-    const contract: any = await ContractModel.findByIdAndUpdate(contractId, {
-       status: 'submitted'
-    }, {
-      update: true
-    });
+      const submissionBody = {
+        contractId: contractId,
+        description: body.description,
+        progress: body.progress,
+        attachedFile: body.attachedFile,
+        jobPostData: {
+          jobPostId: jobPost._id,
+          title: jobPost.title,
+          amount: jobPost.amount,
+        },
+        createdAt: new Date(),
+      };
 
-    const clientId = contract.clientId;
-    const jobPostId = contract.jobPostId;
+      const addRequestToClient = await ClientModel.findByIdAndUpdate(
+        clientId,
+        {
+          $push: { projectSubmissions: submissionBody },
+        },
+        {
+          new: true,
+        }
+      );
 
-    const jobPost: any = await JobPostModel.findById(jobPostId).exec();
-
-
-    const submissionBody = {
-      contractId: contractId,
-      description: body.description,
-      progress: body.progress,
-      attachedFile: body.attachedFile,
-      jobPostData: {
-        jobPostId: jobPost._id,
-        title: jobPost.title,
-        amount: jobPost.amount 
-      },
-      createdAt: new Date() 
+      return addRequestToClient;
+    } catch (err: any) {
+      console.log("ERROR: ", err.message);
     }
-
-    const addRequestToClient = await ClientModel.findByIdAndUpdate(clientId, {
-         $push :{ projectSubmissions: submissionBody} 
-    }, { 
-      new: true
-    });
- 
-
-       return addRequestToClient;
-      }catch(err: any) {
-        console.log("ERROR: ", err.message)
-      }
-
   }
 }

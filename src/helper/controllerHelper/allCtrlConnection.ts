@@ -11,7 +11,7 @@ import { ResetPassword } from "../../application/usecases/user/resetPassword";
 import { UserRepositoryMongoose } from "../../domain/interfaces/Repositaries/UserRepositoryMongoose ";
 import { EditUserProfile } from "../../application/usecases/user/editProfile"; 
 import { GetUserProfile } from "../../application/usecases/user/getProfile";
-import { ListAllJobs } from "../../application/usecases/user/listAllJobs";
+import { ListHomeJobs } from "../../application/usecases/user/listHomeJobs";
 import { BestMatches } from "../../application/usecases/user/bestMatches";
 import { CreateProposal } from "../../application/usecases/user/createProposal";  
 import { AllContracts } from "../../application/usecases/user/allContracts"; 
@@ -76,7 +76,7 @@ const verifyUserUseCase = new verifyOtp(userRepository);
 const GoogleLoginUserUseCase = new GoogleLoginUser(userRepository);
 const editProfileUseCase = new EditUserProfile(userRepository);
 const getProfileUseCase = new GetUserProfile(userRepository);
-const listAllJobsUseCase = new ListAllJobs(userRepository);
+const listHomeJobsUseCase = new ListHomeJobs(userRepository);
 const bestMatchesUseCase = new BestMatches(userRepository);
 const createProposalUseCase = new CreateProposal(userRepository); 
 const allContractsUseCase = new AllContracts(userRepository);
@@ -106,7 +106,7 @@ const getClientProfileUseCase = new GetClientProfile(ClientRepository);
 const profileVerificationUseCase = new ProfileVerification(ClientRepository);
 const createJobPostUseCase = new CreateJobPost(ClientRepository);
 const getAllNotificationsUseCase = new GetAllNotifications(ClientRepository);
-const listAllJobsClientUseCase = new ListAllJobs(ClientRepository);
+const listAllJobsClientUseCase = new ListAllJobsClient(ClientRepository);
 const makePaymentUseCase = new MakePayment(ClientRepository);
 const getUserProfileUseCase = new GetUserProfileClient(ClientRepository);
 const getProposalsUseCase = new GetProposals(ClientRepository);
@@ -138,7 +138,7 @@ export const allUserUseCases = {
         GoogleLoginUserUseCase ,
         editProfileUseCase ,
         getProfileUseCase ,
-        listAllJobsUseCase ,
+        listHomeJobsUseCase ,
         bestMatchesUseCase ,
         createProposalUseCase ,
         closeContractUseCase ,

@@ -180,13 +180,12 @@ export const userController = {
 
 
     
-    listAllJobs: async (req: Request, res: Response) => {
+    listHomeJobs: async (req: Request, res: Response) => {
         try{
-             
-           const response = await allUserUseCases.listAllJobsUseCase.execute(); 
-           console.log('THE RESPONS ; ', response)
+            const { type } = req.params;
+           const response = await allUserUseCases.listHomeJobsUseCase.execute(type); 
 
-           res.json({message: 'successfully list all jobs',data: response, success: true}); 
+           res.json({message: 'successfully list jobs',data: response, success: true}); 
         }catch(err: any) {
             res.json({message: err.message, success: false})
         }
@@ -197,7 +196,6 @@ export const userController = {
         try{
             const { userId } = req.params;
            const response = await allUserUseCases.bestMatchesUseCase.execute(userId); 
-
            res.json({message: 'successfully list all notifications',data: response, success: true}); 
         }catch(err: any) {
             res.json({message: err.message, success: false})
@@ -207,9 +205,7 @@ export const userController = {
     
     createProposal: async (req: Request, res: Response) => {
         try{ 
-    
             const {userId, jobPostId, description, bidAmount, bidDeadline} = req.body.body;
-            
            const response = await allUserUseCases.createProposalUseCase.execute(userId, jobPostId, description, bidAmount, bidDeadline); 
 
            res.json({message: 'proposal successfully send ',data: response, success: true}); 
@@ -223,10 +219,7 @@ export const userController = {
     allContracts: async (req: Request, res: Response) => {
         try{
             const { userId } = req.params;
-            
             const allContracts = await allUserUseCases.allContractsUseCase.execute(userId);
-
-          
 
             res.status(200).json({message: 'successfully closed the contract',contracts: allContracts, success: true});
         }catch(err: any) {
@@ -239,7 +232,6 @@ export const userController = {
     allNotifications: async (req: Request, res: Response) => {
         try{
               const { userId } = req.params;
-            
             const allNotifications = await allUserUseCases.allNotificationsUseCase.execute(userId);
    
             res.status(200).json({message: 'successfully loaded all notifications',notifications: allNotifications, success: true});
