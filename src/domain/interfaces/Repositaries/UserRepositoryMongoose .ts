@@ -199,6 +199,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         isBlocked: user.isBlocked,
         budget: user.budget,
         skills: user.skills,
+        isProfileFilled: user.isProfileFilled,
       },
       accessToken,
       refreshToken,
@@ -269,11 +270,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     return "Password reset successfully!";
   }
 
-  async editUserProfile(
-    userId: string,
-    userData: any,
-    type: string
-  ): Promise<any> {
+  async editUserProfile( userId: string, userData: any, type: string ): Promise<any> {
     // const existingUser: any = await UserModel.findById(userId);
 
     const { editData } = userData;
@@ -294,7 +291,20 @@ export class UserRepositoryMongoose implements UserRepositary {
 
       if (!user) throw new Error("User not found");
 
-      return user;
+      return  {user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        profilePicture: user.profilePicture,
+        mobile: user.mobile,
+        description: user.description,
+        location: user.locaiton,
+        isBlocked: user.isBlocked,
+        budget: user.budget,
+        skills: user.skills,
+        isProfileFilled: user.isProfileFilled,
+      }
+    }
     }
   }
 
