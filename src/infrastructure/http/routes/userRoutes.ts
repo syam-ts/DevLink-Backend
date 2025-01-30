@@ -7,6 +7,7 @@ import { userAuth } from '../middlewares/auth/authUser';
 import { UserModel } from '../../../domain/entities/User'
 import jwt from "jsonwebtoken";
 import { AnyKeys } from 'mongoose';
+import { clientController } from '../controllers/clientCtrl';
 
 
  
@@ -21,8 +22,8 @@ userRouter.get('/notifications/:userId', userAuth, userController.allNotificatio
 userRouter.get('/job/:jobPostId', userController.getSingleJobPost);
 userRouter.get('/job/myContracts/:userId', userController.viewMyContracts);
 userRouter.get('/job/submittedContracts/:userId', userController.viewSubmittedContracts);
- 
-
+userRouter.get('/chat/:memberId', clientController.getAllChats);
+userRouter.get('/chat/view/:chatId', clientController.viewChat);
 
 // userRouter.get('/jobs/proposals/:clientId',userController.getAllProposals);
  
@@ -35,6 +36,11 @@ userRouter.post('/resetPassword/:userId', userController.resetPassword);
 userRouter.post('/login', userController.loginUser);
 userRouter.post('/googleLogin', userController.googleLogin);
 userRouter.post('/logout', userController.logoutUser);
+
+
+
+//chat
+userRouter.post('/chat/sendMessage', clientController.sendMessage);
 
 userRouter.post('/wishlist/add', userController.addUserToWishlist);
 
