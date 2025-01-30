@@ -10,13 +10,13 @@ import { AnyKeys } from 'mongoose';
 import { clientController } from '../controllers/clientCtrl';
 
 
- 
+
 
 
 userRouter.get('/getHome', userAuth, userController.getHomeUser);
 userRouter.get('/profile/view/:userId', userController.getProfile); //ADD USERAUTH
 userRouter.get('/home/:type', userAuth, userController.listHomeJobs); 
-userRouter.get('/bestMatches/:userId', userController.bestMatches);
+userRouter.get('/:jobType/:userId', userController.getSelectedJobs);
 userRouter.get('/all-contracts/:userId', userController.allContracts); 
 userRouter.get('/notifications/:userId', userAuth, userController.allNotifications);
 userRouter.get('/job/:jobPostId', userController.getSingleJobPost);
@@ -25,7 +25,7 @@ userRouter.get('/job/submittedContracts/:userId', userController.viewSubmittedCo
 userRouter.get('/chat/:memberId', clientController.getAllChats);
 userRouter.get('/chat/view/:chatId', clientController.viewChat);
 
-// userRouter.get('/jobs/proposals/:clientId',userController.getAllProposals);
+  userRouter.get('/job/proposals/:userId',userController.getAllProposals);
  
  
 userRouter.post('/signup', userController.signupUser);

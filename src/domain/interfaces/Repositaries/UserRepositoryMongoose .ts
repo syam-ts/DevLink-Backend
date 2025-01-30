@@ -308,6 +308,19 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
+  async getAllProposals(userId: string): Promise< any> {
+    const allClients = await ClientModel.find().exec();
+    const filteredClients = allClients.filter((client: any) =>
+      client.proposals.some((proposal: any) => proposal.userId === userId)
+    );
+    
+    console.log("Filtered Clients:", filteredClients);
+    
+    // if(!client) throw new Error('No proposal found');
+
+    // return client;
+  }
+
   async createProposal(
     userId: Id,
     jobPostId: Id,
@@ -431,24 +444,43 @@ export class UserRepositoryMongoose implements UserRepositary {
     return notifications;
   }
 
-  async bestMatches(userId: string): Promise<any> {
+  async getSelectedJobs(userId: string, jobType: string): Promise<any> {
     const user: any = await UserModel.findById(userId).exec();
 
     if (!user || !user.skills || user.skills.length === 0) {
       throw new Error("User has no skills or does not exist.");
     }
 
-    const userSkills = user.skills;
+    if(jobType === 'listAllJobs') {
 
-    const matchJobs = await JobPostModel.find({
-      requiredSkills: { $elemMatch: { $in: userSkills } },
-    }).exec();
+      const jobs = await JobPostModel.find().exec();
 
-    if (!matchJobs || matchJobs.length === 0) {
-      throw new Error("No matched job found ");
+      if(!jobs) throw new Error('No jobs found')
+        return jobs;
+
+    } else if(jobType === 'trendingJobs') {
+
+      const jobs = await JobPostModel.find().sort({proposalCount: -1});
+
+      return jobs;
+
+    } else if (jobType === 'bestMatches') {
+      const userSkills = user.skills;
+
+      const matchJobs = await JobPostModel.find({
+        requiredSkills: { $elemMatch: { $in: userSkills } },
+      }).exec();
+  
+      if (!matchJobs || matchJobs.length === 0) {
+        throw new Error("No matched job found ");
+      } else {
+        return matchJobs;
+      }
     } else {
-      return matchJobs;
+      throw new Error('Invalid selection');
     }
+
+   
   }
 
   async closeContract(

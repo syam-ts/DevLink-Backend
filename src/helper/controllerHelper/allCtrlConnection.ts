@@ -12,7 +12,7 @@ import { UserRepositoryMongoose } from "../../domain/interfaces/Repositaries/Use
 import { EditUserProfile } from "../../application/usecases/user/editProfile"; 
 import { GetUserProfile } from "../../application/usecases/user/getProfile";
 import { ListHomeJobs } from "../../application/usecases/user/listHomeJobs";
-import { BestMatches } from "../../application/usecases/user/bestMatches";
+import { GetSelectedJobs } from "../../application/usecases/user/getSelectedJobs";
 import { CreateProposal } from "../../application/usecases/user/createProposal";  
 import { AllContracts } from "../../application/usecases/user/allContracts"; 
 import { AllNotifications } from "../../application/usecases/user/allNotifications"; 
@@ -24,6 +24,7 @@ import { ViewSubmittedContracts } from "../../application/usecases/user/viewSubm
 import { SubmitProject } from "../../application/usecases/user/sumbitProject";  
 import { ChatBot } from "../../application/usecases/user/ChatBot";   
 import { AddToWishlist } from "../../application/usecases/user/addToWishlist";   
+import { GetAllProposals } from "../../application/usecases/user/getAllProposals";   
 
 
 // Client imports ---------------->
@@ -80,7 +81,7 @@ const GoogleLoginUserUseCase = new GoogleLoginUser(userRepository);
 const editProfileUseCase = new EditUserProfile(userRepository);
 const getProfileUseCase = new GetUserProfile(userRepository);
 const listHomeJobsUseCase = new ListHomeJobs(userRepository);
-const bestMatchesUseCase = new BestMatches(userRepository);
+const getSelectedJobsUseCase = new GetSelectedJobs(userRepository);
 const createProposalUseCase = new CreateProposal(userRepository); 
 const allContractsUseCase = new AllContracts(userRepository);
 const allNotificationsUseCase = new AllNotifications(userRepository);
@@ -91,6 +92,7 @@ const viewMyContractsUseCase = new ViewMyContracts(userRepository);
 const viewSubmittedContractsUseCase = new ViewSubmittedContracts(userRepository);
 const submitProjectUseCase = new SubmitProject(userRepository); 
 const addToWishlistUseCase = new AddToWishlist(wishlistRepository); 
+const getAllProposalsUseCase = new GetAllProposals(userRepository); 
 
 
 
@@ -143,7 +145,7 @@ export const allUserUseCases = {
         editProfileUseCase ,
         getProfileUseCase ,
         listHomeJobsUseCase ,
-        bestMatchesUseCase ,
+        getSelectedJobsUseCase ,
         createProposalUseCase ,
         closeContractUseCase ,
         allContractsUseCase ,
@@ -155,7 +157,8 @@ export const allUserUseCases = {
         getSingleJobPostUseCase ,
         submitProjectUseCase ,
         chatBotUseCase,
-        addToWishlistUseCase
+        addToWishlistUseCase,
+        getAllProposalsUseCase
 };
 
 

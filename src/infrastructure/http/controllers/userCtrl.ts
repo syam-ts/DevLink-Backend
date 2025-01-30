@@ -192,23 +192,38 @@ export const userController = {
     },
 
     
-    bestMatches: async (req: Request, res: Response) => {
+    getSelectedJobs: async (req: Request, res: Response) => {
         try{
-            const { userId } = req.params;
-           const response = await allUserUseCases.bestMatchesUseCase.execute(userId); 
+            const { userId, jobType } = req.params;
+           const response = await allUserUseCases.getSelectedJobsUseCase.execute(userId, jobType); 
            res.json({message: 'successfully list all notifications',data: response, success: true}); 
         }catch(err: any) {
             res.json({message: err.message, success: false})
         }
     },
+    
+ 
 
     
     createProposal: async (req: Request, res: Response) => {
         try{ 
+            console.log('THE BODY  :', req.body)
             const {userId, jobPostId, description, bidAmount, bidDeadline} = req.body.body;
            const response = await allUserUseCases.createProposalUseCase.execute(userId, jobPostId, description, bidAmount, bidDeadline); 
 
            res.json({message: 'proposal successfully send ',data: response, success: true}); 
+        }catch(err: any) {
+            res.json({message: err.message, success: false})
+        }
+    },
+    
+    getAllProposals: async (req: Request, res: Response) => {
+        try{ 
+             
+            const {userId} = req.params;
+           const response = await allUserUseCases.getAllProposalsUseCase.execute(userId); 
+
+           res.json({message: 'proposal founded',proposals: response, success: true}); 
         }catch(err: any) {
             res.json({message: err.message, success: false})
         }
