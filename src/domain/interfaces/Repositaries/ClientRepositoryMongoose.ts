@@ -223,7 +223,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async findAllUsers(): Promise<User | any> {
-    const users: any = await UserModel.find().exec();
+    const users: any = await UserModel.find().limit(4).exec();
     if (users) {
 
       return {
@@ -496,6 +496,17 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     const proposals = client.proposals;
 
     return proposals;
+  }
+
+
+
+  async getallDevelopers(): Promise<any> {
+    //  const developers = await UserModel.find({isProfileFilled: true}).exec();
+   const developers = await UserModel.find().exec();
+
+    if (!developers) throw new Error('Developers not found');
+
+    return developers;
   }
 
 
