@@ -3,18 +3,16 @@ const userRouter = express.Router();
 import { userController } from '../controllers/userCtrl'
 import { userAuth } from '../middlewares/auth/authUser'; 
 
-
-import { UserModel } from '../../../domain/entities/User'
-import jwt from "jsonwebtoken";
-import { AnyKeys } from 'mongoose';
+ 
+import jwt from "jsonwebtoken"; 
 import { clientController } from '../controllers/clientCtrl';
 
 
 
 
 
-userRouter.get('/getHome', userAuth, userController.getHomeUser);
-userRouter.get('/profile/view/:userId', userController.getProfile); //ADD USERAUTH
+userRouter.get('/getHome', userController.getHomeUser);
+userRouter.get('/profile/view/:userId', userController.getProfile);  
 userRouter.get('/home/:type', userAuth, userController.listHomeJobs); 
 userRouter.get('/:jobType/:userId', userController.getSelectedJobs);
 userRouter.get('/all-contracts/:userId', userController.allContracts); 
@@ -56,7 +54,7 @@ userRouter.post('/chatbot', userController.chatbot);
 
 userRouter.post('/job/createProposal', userController.createProposal )
 
-// userRouter.post('/job/createProposal/:clientId/:userId/:jobPostId', userController.createProposal); // ADD USERAUTH
+// userRouter.post('/job/createProposal/:clientId/:userId/:jobPostId', userController.createProposal);  
 userRouter.put('/profile/:type/:userId', userController.editProfile);  
 
 
@@ -90,14 +88,14 @@ userRouter.get('/refresh', (req: any, res: any, next: any) => {
         { expiresIn: "15m" }
       );
 
-      // Optionally set the new access token in cookies (if desired)
+      
       res.cookie("accessTokenU", newAccessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
       });
 
-      // Send the new access token in the response
+       
       return res.status(200).json({ accessToken: newAccessToken });
     });
   } catch (error) {

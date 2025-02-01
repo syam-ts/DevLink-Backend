@@ -68,16 +68,16 @@ clientRouter.get('/refresh-token', async (req: any, res: any) => {
     const CLIENT_REFRESH_TOKEN: any = process.env.CLIENT_REFRESH_TOKEN;
     const CLIENT_ACCESS_TOKEN: any = process.env.CLIENT_ACCESS_TOKEN;
 
-    // Verify the refresh token
+    
     const decoded: any = jwt.verify(refreshToken, CLIENT_REFRESH_TOKEN);
 
-    // Find client in the database
+     
     const client = await ClientModel.findById(decoded.id);
     if (!client || client.refreshToken !== refreshToken) {
       return res.status(403).json({ message: "Refresh token mismatch" });
     }
 
-    // Generate new tokens
+    
     const newAccessToken = jwt.sign(
       { id: decoded.id, email: decoded.email },
       CLIENT_ACCESS_TOKEN,
@@ -89,11 +89,11 @@ clientRouter.get('/refresh-token', async (req: any, res: any) => {
       { expiresIn: "7d" }
     );
 
-    // Update refresh token in DB
+   
     client.refreshToken = newRefreshToken;
     await client.save();
 
-    // Send new tokens
+ 
     res.cookie('jwtC', newRefreshToken, { httpOnly: true, secure: true });
     res.json({ accessTokenC: newAccessToken });
   } catch (error) {

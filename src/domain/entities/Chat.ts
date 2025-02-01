@@ -20,6 +20,7 @@ export interface Chat extends Document {
 };
 
 
+
 const ChatSchema: Schema = new Schema({
 
     members:  
@@ -27,7 +28,7 @@ const ChatSchema: Schema = new Schema({
                 clientId: { type: mongoose.Types.ObjectId },
                 clientName: { type: String },
           
-                userId: { type: mongoose.Types.ObjectId , required: true},
+                userId: { type: mongoose.Types.ObjectId , required: true },
                 userName: { type: String }
             },
             chatHistory: {
