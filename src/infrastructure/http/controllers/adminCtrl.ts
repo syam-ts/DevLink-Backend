@@ -14,10 +14,10 @@ export const adminController = {
 
     //         const users = await allAdminUseCases.create.execute(adminId); 
 
-    //         res.json({message: "Successfully fetched all the users", data: users, type: 'success'});
+    //         res.json({message: "Successfully fetched all the users", data: users, success: true});
             
     //     }catch(err: any) {
-    //         res.json({message: err.message , type: 'error'});
+    //         res.json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR] , success: false});
     //     }
     // },
 
@@ -27,7 +27,9 @@ export const adminController = {
                  const admin = await allAdminUseCases.loginAdminUseCase.execute(req.body); 
 
                  if(!admin) {
-                    res.json({message: 'admin not found', type: 'error'})
+                    res
+                    .status(HttpStatusCode.NOT_FOUND)
+                    .json({message: StatusMessage[HttpStatusCode.NOT_FOUND], success: false})
                  } else { 
 
                     res.cookie("jwtA", admin.jwt, {
@@ -37,11 +39,15 @@ export const adminController = {
                         maxAge: 24 * 60 * 60 * 1000
                       })
 
-                    return res.json({message: "successfully login",admin: admin, type: 'success'});
+                    return res
+                    .status(HttpStatusCode.OK)
+                    .json({message: StatusMessage[HttpStatusCode.OK],admin: admin, success: true});
                 
                }
             }catch(err: any) { 
-                res.json({message: err.message, type: 'error'}); 
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false}); 
             }
         }, 
 
@@ -58,11 +64,15 @@ export const adminController = {
                 maxAge: 24 * 60 * 60 * 1000
               }
             );
-            return res.json({message: "successfully login",data: clientsAndUsers, type: 'success'});
+            return res
+            .status(HttpStatusCode.OK)
+            .json({message: StatusMessage[HttpStatusCode.OK],data: clientsAndUsers, success: true});
               
 
             }catch(err: any) {
-                res.json({message: err.message, type: 'error'})
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false})
             }
         },
 
@@ -73,10 +83,14 @@ export const adminController = {
 
                 const users = await allAdminUseCases.getAllUsersUseCase.execute(req.query.page, req.query.sortType); 
 
-                res.json({message: "Successfully fetched all the users", data: users, type: 'success'});
+                res
+                .status(HttpStatusCode.OK)
+                .json({message: StatusMessage[HttpStatusCode.OK], data: users, success: true});
                 
             }catch(err: any) {
-                res.json({message: err.message , type: 'error'});
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR] , success: false});
             }
         },
 
@@ -87,10 +101,14 @@ export const adminController = {
               
                 const clients = await allAdminUseCases.getAllClientsUseCase.execute(req.query.page, req.query.sortType); 
 
-                res.json({message: "Successfully fetched all the clients", data: clients, type: 'success'});
+                res
+                .status(HttpStatusCode.OK)
+                .json({message: StatusMessage[HttpStatusCode.OK], data: clients, success: true});
                 
             }catch(err: any) {
-                res.json({message: err.message , type: 'error'});
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR] , success: false});
             }
         },
 
@@ -100,11 +118,15 @@ export const adminController = {
                  const user = await allAdminUseCases.blockUserUseCase.execute(req.params);
 
                  if(user) {
-                    res.json({message: 'User blocked successfully ', type: 'success'})
+                    res
+                    .status(HttpStatusCode.OK)
+                    .json({message: StatusMessage[HttpStatusCode.OK], success: true})
                  }
 
             }catch(err: any) {
-                res.json({message: err.message, type: 'error'})
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false})
             }
         },
         
@@ -115,11 +137,15 @@ export const adminController = {
                  const user = await allAdminUseCases.unBlockUserUseCase.execute(req.params);
 
                  if(user) {
-                    res.json({message: 'User unblocked successfully ', type: 'success'})
+                    res
+                    .status(HttpStatusCode.OK)
+                    .json({message: StatusMessage[HttpStatusCode.OK], success: true})
                  }
 
             }catch(err: any) {
-                res.json({message: err.message, type: 'error'})
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false})
             }
         },
         
@@ -130,11 +156,15 @@ export const adminController = {
                  const client = await allAdminUseCases.blockClientUseCase.execute(req.params);
 
                  if(client) {
-                    res.json({message: 'Client blocked successfully ', type: 'success'})
+                    res
+                    .status(HttpStatusCode.OK)
+                    .json({message: StatusMessage[HttpStatusCode.OK], success: true})
                  }
 
             }catch(err: any) {
-                res.json({message: err.message, type: 'error'})
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false})
             }
         },
         
@@ -145,11 +175,15 @@ export const adminController = {
                  const client = await allAdminUseCases.unBlockClientUseCase.execute(req.params);
 
                  if(client) {
-                    res.json({message: 'client unblocked successfully ', type: 'success'})
+                    res
+                    .status(HttpStatusCode.OK)
+                    .json({message: StatusMessage[HttpStatusCode.OK], success: true})
                  }
 
             }catch(err: any) {
-                res.json({message: err.message, type: 'error'})
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false})
             }
         },
         
@@ -159,10 +193,14 @@ export const adminController = {
    
                 res.clearCookie("jwtA", { path: '/'});  
                 
-               res.json({message: 'successfully loggedout', type: 'success'});
+               res
+               .status(HttpStatusCode.OK)
+               .json({message: StatusMessage[HttpStatusCode.OK], success: true});
 
             }catch(err: any) {
-                res.json({message: err.message, type: 'error'})
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false})
             }
         },
         
@@ -173,9 +211,13 @@ export const adminController = {
                   const response = await allAdminUseCases.verifyAcceptUseCase.execute(req.body);
                    
 
-                  res.json({ message: 'client verified ', success: true });
+                  res
+                  .status(HttpStatusCode.OK)
+                  .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
             }catch(err: any) {
-                res.json({ message: err.message, success: false })
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false })
             }
         },
         
@@ -184,9 +226,13 @@ export const adminController = {
             try{
                   const response = await allAdminUseCases.getAllRequestsUseCase.execute(); 
 
-                  res.json({ message: 'Successfully loaded all requests ',data: response, type: 'success'});
+                  res
+                  .status(HttpStatusCode.OK)
+                  .json({ message: StatusMessage[HttpStatusCode.OK],data: response, success: true});
             }catch(err: any) {
-                res.json({ message: err.message, type: 'error'})
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false})
             }
         },
         
@@ -196,9 +242,13 @@ export const adminController = {
                 const { clientId } = req.params; 
                   const response = await allAdminUseCases.getRequestedClientUseCase.execute(clientId); 
 
-                  res.json({ message: 'Successfully loaded all requests ',data: response, success: true});
+                  res
+                  .status(HttpStatusCode.OK)
+                  .json({ message: StatusMessage[HttpStatusCode.OK],data: response, success: true});
             }catch(err: any) {
-                res.json({ message: err.message, success: false })
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false })
             }
         },
         
@@ -208,9 +258,13 @@ export const adminController = {
                 const { roleId, roleInfo } = req.params; 
                   const response = await allAdminUseCases.viewRoleInfoUseCase.execute(roleId, roleInfo); 
 
-                  res.json({ message: 'Successfully loaded all requests ',data: response, success: true});
+                  res
+                  .status(HttpStatusCode.OK)
+                  .json({ message: StatusMessage[HttpStatusCode.OK],data: response, success: true});
             }catch(err: any) {
-                res.json({ message: err.message, success: false })
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false })
             }
         },
 
@@ -219,35 +273,44 @@ export const adminController = {
                  
                   const response = await allAdminUseCases.getWalletUseCase.execute(); 
 
-                  res.json({ message: 'Successfully loaded all requests ', data: response, success: true});
+                  res
+                  .status(HttpStatusCode.OK)
+                  .json({ message: StatusMessage[HttpStatusCode.OK], data: response, success: true});
             }catch(err: any) {
-                res.json({ message: err.message, success: false })
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false })
             }
         },
 
         
         searchUser: async (req: any, res: any) => {
             try{
-                const { inputData } = req.query; 
-                 
-                  const response = await allAdminUseCases.searchUserUseCase.execute(inputData); 
-
-                  res.json({ message: 'Successfully loaded search user ', data: response, success: true});
+                const { inputData } = req.query;  
+                  const response = await allAdminUseCases.searchUserUseCase.execute(inputData);  
+                  res
+                  .status(HttpStatusCode.OK)
+                  .json({ message: StatusMessage[HttpStatusCode.OK], data: response, success: true});
             }catch(err: any) {
-                res.json({ message: err.message, success: false })
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false })
             }
         },
 
 
         sortUser: async (req: any, res: any) => {
             try{
-                const { sortingType } = req.query; 
-                 
+                const { sortingType } = req.query;  
                   const response = await allAdminUseCases.sortUserUseCase.execute(sortingType); 
 
-                  res.json({ message: 'Successfully sorted user', data: response, success: true});
+                  res
+                  .status(HttpStatusCode.OK)
+                  .json({ message: StatusMessage[HttpStatusCode.OK], data: response, success: true});
             }catch(err: any) {
-                res.json({ message: err.message, success: false })
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false })
             }
         },
 
@@ -255,15 +318,16 @@ export const adminController = {
 
         searchClient: async (req: any, res: any) => {
             try{
-                const { inputData } = req.query; 
-                console.log('from ctrl : ',req.query)
-                 
-                  const response = await allAdminUseCases.searchClientUseCase.execute(inputData); 
-                  
+                const { inputData } = req.query;   
+                  const response = await allAdminUseCases.searchClientUseCase.execute(inputData);  
 
-                  res.json({ message: 'Successfully loaded search client ', data: response, success: true});
+                  res
+                  .status(HttpStatusCode.OK)
+                  .json({ message: StatusMessage[HttpStatusCode.OK], data: response, success: true});
             }catch(err: any) {
-                res.json({ message: err.message, success: false })
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false })
             }
         },
 
@@ -271,12 +335,14 @@ export const adminController = {
         sortClient: async (req: any, res: any) => {
             try{
                 const { sortingType } = req.query; 
-                 
                   const response = await allAdminUseCases.sortClientUseCase.execute(sortingType); 
-
-                  res.json({ message: 'Successfully sorted client', data: response, success: true});
+                  res
+                  .status(HttpStatusCode.OK)
+                  .json({ message: StatusMessage[HttpStatusCode.OK], data: response, success: true});
             }catch(err: any) {
-                res.json({ message: err.message, success: false })
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false })
             }
         },
 
