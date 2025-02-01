@@ -1,44 +1,8 @@
-import { LoginAdmin } from '../../../application/usecases/admin/loginAdmin';
-import { AdminRepository } from '../../../domain/interfaces/Repositaries/AdminRepository';
-import { GetDashboard } from '../../../application/usecases/admin/getDashboard';
-import { GetAllUsers } from '../../../application/usecases/admin/getAllUsers';
-import { GetAllClients } from '../../../application/usecases/admin/getAllClients';
-import { BlockUser, BlockClient } from '../../../application/usecases/admin/blockRole';
-import { UnBlockUser, UnBlockClient } from '../../../application/usecases/admin/unBlockRole';
-import { Create } from '../../../application/usecases/admin/create';
-import { VerifyAccept } from '../../../application/usecases/admin/verifyAccept';
-import { GetAllRequests } from '../../../application/usecases/admin/getAllRequests';
-import { GetRequestedClient } from '../../../application/usecases/admin/getRequestedClient';
-import { ViewRoleInfo } from '../../../application/usecases/admin/viewRoleInfo';
-import { GetWallet } from '../../../application/usecases/admin/getWallet';
-import { SearchUser } from '../../../application/usecases/admin/searchUser';
-import { SortUser } from '../../../application/usecases/admin/sortUser';
-import { SearchClient } from '../../../application/usecases/admin/searchClient';
-import { SortClient } from '../../../application/usecases/admin/sortClient';
 
+import { allAdminUseCases } from '../../../helper/controllerHelper/allCtrlConnection'
 
-const adminRepositary = new AdminRepository();
-const loginUseCase = new LoginAdmin(adminRepositary);
-const getDashboardUseCase = new GetDashboard(adminRepositary);
-const getAllUsersUseCase = new GetAllUsers(adminRepositary);
-const getAllClientsUseCase = new GetAllClients(adminRepositary);
-const blockUserUseCase = new BlockUser(adminRepositary);
-const unBlockUserUseCase = new UnBlockUser(adminRepositary);
-const blockClientUseCase = new BlockClient(adminRepositary);
-const unBlockClientUseCase = new UnBlockClient(adminRepositary);
-const viewRoleInfoUseCase = new ViewRoleInfo(adminRepositary);
-const getWalletUseCase = new GetWallet(adminRepositary);
-const searchUserUseCase = new SearchUser(adminRepositary);
-const sortUserUseCase = new SortUser(adminRepositary);
-const searchClientUseCase = new SearchClient(adminRepositary);
-const sortClientUseCase = new SortClient(adminRepositary);
-
-
-
-const verifyAcceptUseCase = new VerifyAccept(adminRepositary);
-const getAllRequestsUseCase = new GetAllRequests(adminRepositary);
-const getRequestedClientUseCase = new GetRequestedClient(adminRepositary);
-// const create = new Create(adminRepositary);
+import { HttpStatusCode } from "../../../helper/constants/enums";
+import { StatusMessage } from "../../../helper/constants/stausMessages";
 
 
 export const adminController = {
@@ -48,7 +12,7 @@ export const adminController = {
     //     try{
     //         const adminId: string = '676bfa326c2e4c9fc3afba8e'
 
-    //         const users = await create.execute(adminId); 
+    //         const users = await allAdminUseCases.create.execute(adminId); 
 
     //         res.json({message: "Successfully fetched all the users", data: users, type: 'success'});
             
@@ -60,7 +24,7 @@ export const adminController = {
         loginAdmin: async (req: any, res: any) => {
             try{ 
                 
-                 const admin = await loginUseCase.execute(req.body); 
+                 const admin = await allAdminUseCases.loginAdminUseCase.execute(req.body); 
 
                  if(!admin) {
                     res.json({message: 'admin not found', type: 'error'})
@@ -84,7 +48,7 @@ export const adminController = {
 
         getDashboard: async (req: any, res: any) => {
             try{  
-               const clientsAndUsers = await getDashboardUseCase.execute();
+               const clientsAndUsers = await allAdminUseCases.getDashboardUseCase.execute();
  
 
                res.cookie("jwtA", req.admin.accessToken, {
@@ -107,7 +71,7 @@ export const adminController = {
             try{
 
 
-                const users = await getAllUsersUseCase.execute(req.query.page, req.query.sortType); 
+                const users = await allAdminUseCases.getAllUsersUseCase.execute(req.query.page, req.query.sortType); 
 
                 res.json({message: "Successfully fetched all the users", data: users, type: 'success'});
                 
@@ -121,7 +85,7 @@ export const adminController = {
             try{
  
               
-                const clients = await getAllClientsUseCase.execute(req.query.page, req.query.sortType); 
+                const clients = await allAdminUseCases.getAllClientsUseCase.execute(req.query.page, req.query.sortType); 
 
                 res.json({message: "Successfully fetched all the clients", data: clients, type: 'success'});
                 
@@ -133,7 +97,7 @@ export const adminController = {
         blockUser: async(req: any, res: any) => {
             try{
 
-                 const user = await blockUserUseCase.execute(req.params);
+                 const user = await allAdminUseCases.blockUserUseCase.execute(req.params);
 
                  if(user) {
                     res.json({message: 'User blocked successfully ', type: 'success'})
@@ -148,7 +112,7 @@ export const adminController = {
         unBlockUser: async(req: any, res: any) => {
             try{
 
-                 const user = await unBlockUserUseCase.execute(req.params);
+                 const user = await allAdminUseCases.unBlockUserUseCase.execute(req.params);
 
                  if(user) {
                     res.json({message: 'User unblocked successfully ', type: 'success'})
@@ -163,7 +127,7 @@ export const adminController = {
         blockClient: async(req: any, res: any) => {
             try{
    
-                 const client = await blockClientUseCase.execute(req.params);
+                 const client = await allAdminUseCases.blockClientUseCase.execute(req.params);
 
                  if(client) {
                     res.json({message: 'Client blocked successfully ', type: 'success'})
@@ -178,7 +142,7 @@ export const adminController = {
         unBlockClient: async(req: any, res: any) => {
             try{
 
-                 const client = await unBlockClientUseCase.execute(req.params);
+                 const client = await allAdminUseCases.unBlockClientUseCase.execute(req.params);
 
                  if(client) {
                     res.json({message: 'client unblocked successfully ', type: 'success'})
@@ -206,7 +170,7 @@ export const adminController = {
         verifyAccept: async (req: any, res: any) => {
             try{
           
-                  const response = await verifyAcceptUseCase.execute(req.body);
+                  const response = await allAdminUseCases.verifyAcceptUseCase.execute(req.body);
                    
 
                   res.json({ message: 'client verified ', success: true });
@@ -218,7 +182,7 @@ export const adminController = {
 
         getRequests: async (req: any, res: any) => {
             try{
-                  const response = await getAllRequestsUseCase.execute(); 
+                  const response = await allAdminUseCases.getAllRequestsUseCase.execute(); 
 
                   res.json({ message: 'Successfully loaded all requests ',data: response, type: 'success'});
             }catch(err: any) {
@@ -230,7 +194,7 @@ export const adminController = {
         getRequestedClient: async (req: any, res: any) => {
             try{
                 const { clientId } = req.params; 
-                  const response = await getRequestedClientUseCase.execute(clientId); 
+                  const response = await allAdminUseCases.getRequestedClientUseCase.execute(clientId); 
 
                   res.json({ message: 'Successfully loaded all requests ',data: response, success: true});
             }catch(err: any) {
@@ -242,7 +206,7 @@ export const adminController = {
         viewRoleInfo: async (req: any, res: any) => {
             try{
                 const { roleId, roleInfo } = req.params; 
-                  const response = await viewRoleInfoUseCase.execute(roleId, roleInfo); 
+                  const response = await allAdminUseCases.viewRoleInfoUseCase.execute(roleId, roleInfo); 
 
                   res.json({ message: 'Successfully loaded all requests ',data: response, success: true});
             }catch(err: any) {
@@ -253,7 +217,7 @@ export const adminController = {
         getWallet: async (req: any, res: any) => {
             try{
                  
-                  const response = await getWalletUseCase.execute(); 
+                  const response = await allAdminUseCases.getWalletUseCase.execute(); 
 
                   res.json({ message: 'Successfully loaded all requests ', data: response, success: true});
             }catch(err: any) {
@@ -266,7 +230,7 @@ export const adminController = {
             try{
                 const { inputData } = req.query; 
                  
-                  const response = await searchUserUseCase.execute(inputData); 
+                  const response = await allAdminUseCases.searchUserUseCase.execute(inputData); 
 
                   res.json({ message: 'Successfully loaded search user ', data: response, success: true});
             }catch(err: any) {
@@ -279,7 +243,7 @@ export const adminController = {
             try{
                 const { sortingType } = req.query; 
                  
-                  const response = await sortUserUseCase.execute(sortingType); 
+                  const response = await allAdminUseCases.sortUserUseCase.execute(sortingType); 
 
                   res.json({ message: 'Successfully sorted user', data: response, success: true});
             }catch(err: any) {
@@ -294,7 +258,7 @@ export const adminController = {
                 const { inputData } = req.query; 
                 console.log('from ctrl : ',req.query)
                  
-                  const response = await searchClientUseCase.execute(inputData); 
+                  const response = await allAdminUseCases.searchClientUseCase.execute(inputData); 
                   
 
                   res.json({ message: 'Successfully loaded search client ', data: response, success: true});
@@ -308,7 +272,7 @@ export const adminController = {
             try{
                 const { sortingType } = req.query; 
                  
-                  const response = await sortClientUseCase.execute(sortingType); 
+                  const response = await allAdminUseCases.sortClientUseCase.execute(sortingType); 
 
                   res.json({ message: 'Successfully sorted client', data: response, success: true});
             }catch(err: any) {

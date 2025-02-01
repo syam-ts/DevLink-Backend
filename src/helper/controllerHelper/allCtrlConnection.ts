@@ -27,8 +27,8 @@ import { AddToWishlist } from "../../application/usecases/user/addToWishlist";
 import { GetAllProposals } from "../../application/usecases/user/getAllProposals";   
 
 
-// Client imports ---------------->
 
+// Client imports ---------------->
 
 import { SignupClient } from '../../application/usecases/client/signupClient';
 import { LoginClient } from '../../application/usecases/client/loginClient';
@@ -66,9 +66,29 @@ import { WishlistRepositoryMongoose } from "../../domain/interfaces/WishlistRepo
  
 
 
+// admin imports ----->
+
+import { LoginAdmin } from '../../application/usecases/admin/loginAdmin';
+import { AdminRepository } from '../../domain/interfaces/Repositaries/AdminRepository';
+import { GetDashboard } from '../../application/usecases/admin/getDashboard';
+import { GetAllUsers } from '../../application/usecases/admin/getAllUsers';
+import { GetAllClients } from '../../application/usecases/admin/getAllClients';
+import { BlockUser, BlockClient } from '../../application/usecases/admin/blockRole';
+import { UnBlockUser, UnBlockClient } from '../../application/usecases/admin/unBlockRole';
+import { Create } from '../../application/usecases/admin/create';
+import { VerifyAccept } from '../../application/usecases/admin/verifyAccept';
+import { GetAllRequests } from '../../application/usecases/admin/getAllRequests';
+import { GetRequestedClient } from '../../application/usecases/admin/getRequestedClient';
+import { ViewRoleInfo } from '../../application/usecases/admin/viewRoleInfo';
+import { GetWallet } from '../../application/usecases/admin/getWallet';
+import { SearchUser } from '../../application/usecases/admin/searchUser';
+import { SortUser } from '../../application/usecases/admin/sortUser';
+import { SearchClient } from '../../application/usecases/admin/searchClient';
+import { SortClient } from '../../application/usecases/admin/sortClient';
+
+
 
 // User Respo instance  ---------->
-
 
 const userRepository = new UserRepositoryMongoose();
 const wishlistRepository = new WishlistRepositoryMongoose();
@@ -99,6 +119,7 @@ const getAllProposalsUseCase = new GetAllProposals(userRepository);
 
 
 // Client Repo instance -------------->
+
 const ClientRepository = new ClientRepositoryMongoose();
 const ChatRepository = new ChatRepositoryMongoose();
 const signupClientUseCase = new SignupClient(ClientRepository); 
@@ -135,6 +156,30 @@ const viewChatUseCase = new ViewChat(ChatRepository);
 
 
 
+// Admin repo intances ------->
+
+const adminRepositary = new AdminRepository();
+const loginAdminUseCase = new LoginAdmin(adminRepositary);
+const getDashboardUseCase = new GetDashboard(adminRepositary);
+const getAllUsersUseCase = new GetAllUsers(adminRepositary);
+const getAllClientsUseCase = new GetAllClients(adminRepositary);
+const blockUserUseCase = new BlockUser(adminRepositary);
+const unBlockUserUseCase = new UnBlockUser(adminRepositary);
+const blockClientUseCase = new BlockClient(adminRepositary);
+const unBlockClientUseCase = new UnBlockClient(adminRepositary);
+const viewRoleInfoUseCase = new ViewRoleInfo(adminRepositary);
+const getWalletUseCase = new GetWallet(adminRepositary);
+const searchUserUseCase = new SearchUser(adminRepositary);
+const sortUserUseCase = new SortUser(adminRepositary);
+const searchClientUseCase = new SearchClient(adminRepositary);
+const sortClientUseCase = new SortClient(adminRepositary);
+const verifyAcceptUseCase = new VerifyAccept(adminRepositary);
+const getAllRequestsUseCase = new GetAllRequests(adminRepositary);
+const getRequestedClientUseCase = new GetRequestedClient(adminRepositary);
+ 
+
+
+
 // export all user usecases
 export const allUserUseCases = {
         signupUseCase ,
@@ -165,6 +210,7 @@ export const allUserUseCases = {
 };
 
 
+// exports all Client Usecases ------->
 export const allClientUseCases = {
      signupClientUseCase, 
      loginClientUseCase,
@@ -196,4 +242,28 @@ export const allClientUseCases = {
      sendMessageUseCase,
      getAllChatsUseCase,
      viewChatUseCase,
+}
+
+
+
+// exports all Admin usecases  ------->
+export const allAdminUseCases = {
+        adminRepositary , 
+        getDashboardUseCase ,
+        loginAdminUseCase,
+        getAllUsersUseCase ,
+        getAllClientsUseCase ,
+        blockUserUseCase ,
+        unBlockUserUseCase ,
+        blockClientUseCase ,
+        unBlockClientUseCase ,
+        viewRoleInfoUseCase ,
+        getWalletUseCase ,
+        searchUserUseCase ,
+        sortUserUseCase ,
+        searchClientUseCase ,
+        sortClientUseCase ,
+        verifyAcceptUseCase ,
+        getAllRequestsUseCase ,
+        getRequestedClientUseCase 
 }

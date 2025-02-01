@@ -1,79 +1,105 @@
-import { Error } from 'mongoose';
+import { Request, Response } from 'express';
 import {allClientUseCases } from '../../../helper/controllerHelper/allCtrlConnection'
-import { ErrorRequestHandler } from 'express';
+import { HttpStatusCode } from "../../../helper/constants/enums";
+import { StatusMessage } from "../../../helper/constants/stausMessages";
  
 
  
  export const clientController = {
-       signupClient: async (req: any, res: any) => {
+       signupClient: async (req: Request, res: Response) => {
              try {
                
                  const otp = await allClientUseCases.signupClientUseCase.execute(req.body); 
                  if(otp) {
-                     res.status(201).json({message: 'Registration successed', data: req.body, otp, type: 'success'});
+                     res.status(HttpStatusCode.CREATED)
+                     .json({message: StatusMessage[HttpStatusCode.CREATED], data: req.body, otp, success: true});
  
                  }   
              } catch (err: any) {
-                 res.status(400).json({message: err.message, type: 'error'});
+                 res.status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                 .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false});
              }
          }, 
  
-         verifyOtp : async (req: any, res: any ) => {
+
+         verifyOtp : async (req: Request, res: Response ) => {
            try{  
 
              const client = await allClientUseCases.verifyClientUseCase.execute(req.body); 
-                 res.json({message: 'OTP verified successfully', type: 'success'})
+                 res
+                 .status(HttpStatusCode.OK)
+                 .json({message: StatusMessage[HttpStatusCode.OK], success: true})
             
            } catch(err: any) {
-               res.json({message: err.message, type: 'error'})
+               res
+               .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+               .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false})
            } 
          },
 
-         resendOtp: async(req: any, res: any) => {
+
+         //From here fix status
+
+         resendOtp: async(req: Request, res: Response) => {
             try{
 
                 const client =  await allClientUseCases.signupClientUseCase.execute(req.body); 
 
-                res.json({ message: 'OTP resend successfully',newOtp: client, type: 'success'});
+                res
+                .status(HttpStatusCode.OK)
+                .json({ message: StatusMessage[HttpStatusCode.OK],newOtp: client, success: true});
 
             }catch(err: any) {
-                res.json({message: err.message, type: 'error'});
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false});
             }
         },
         
 
-        verifyEmail: async (req: any, res: any) => {
+        verifyEmail: async (req: Request, res: Response) => {
             try {
                 const response = await allClientUseCases.verifyEmailClientUseCase.execute(req.body.email);
  
-                res.json({message: "successfully sended", data: response ,type: 'success'})
+                res
+                .status(HttpStatusCode.OK)
+                .json({message: StatusMessage[HttpStatusCode.OK], data: response ,success: true})
             } catch (err: any) {
-                 res.json({message: err.message, type: 'error'});
+                 res
+                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                 .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false});
             }
         },
         
 
-        resetPassword: async (req: any, res: any) => {
+        resetPassword: async (req: Request, res: Response) => {
            try{
                 const { clientId } = req.params;
                 const { password } = req.body;
                 const response = await allClientUseCases.resetPasswordClientUseCase.execute(clientId, password);
  
-                res.json({message: 'Password Reset Successfully', type: 'success'});
+                res
+                .status(HttpStatusCode.OK)
+                .json({message: StatusMessage[HttpStatusCode.OK], success: true});
            }catch(err: any) {
-            res.json({message: err.message, type: 'error'});
+            res
+            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+            .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false});
            }
         },
  
         
-         loginClient: async (req: any, res: any) => {
+         loginClient: async (req: Request, res: any) => {
              try{
                 
                   const response: any = await allClientUseCases.loginClientUseCase.execute(req.body);  
                   const { client, refreshToken, accessToken} = response.client;
                    
                   if(!client) {
-                     res.json({message: 'client not found', type: 'error'})
+                     res
+                     .status(HttpStatusCode.NOT_FOUND)
+                     .json({message: StatusMessage[HttpStatusCode.NOT_FOUND], sucess: false})
                   } else {
                      res.cookie("jwtC", refreshToken, {
                          httpOnly: true, 
@@ -84,23 +110,33 @@ import { ErrorRequestHandler } from 'express';
                      );
                      
                      res.cookie("accessTokenC", accessToken, { httpOnly: true, secure: true, sameSite: "strict" });
-                     return res.json({message: "successfully login",data: response, type: 'success'});
+                     return res
+                     .status(HttpStatusCode.OK)
+                     .json({message: StatusMessage[HttpStatusCode.OK],data: response, success: true});
                 }
              }catch(err: any) { 
-                 res.json({message: err.message, type: 'error'}); 
+                 res
+                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                 .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false}); 
              }
          },
+
   
-         googleLogin: async (req: any, res: any) => {
+         googleLogin: async (req: Request, res: Response) => {
              try {
 
                  const client = await allClientUseCases.GoogleLoginClientUseCase.execute(req.body);
-                 res.json({message: "successfully login", type: 'success'});
+                 res
+                 .status(HttpStatusCode.OK)
+                 .json({message: StatusMessage[HttpStatusCode.OK], success: true});
              } catch (err: any) {
-                 res.json({message: err.message, type: 'error'});
+                 res
+                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                 .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false});
              }
          },
   
+
          getHomeClient: async (req: any, res: any) => {
              try{ 
 
@@ -112,67 +148,86 @@ import { ErrorRequestHandler } from 'express';
                  maxAge: 24 * 60 * 60 * 1000
                }
              );
-             return res.json({message: "successfully login",data: users, type: 'success'}); 
+             return res
+             .status(HttpStatusCode.OK)
+             .json({message: StatusMessage[HttpStatusCode.OK],data: users, success: true}); 
              }catch(err: any) {
-                 res.json({message: err.message, type: 'error'})
+                 res
+                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                 .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false})
              }
          }, 
 
-         getProfile: async (req: any, res: any) => {
+
+         getProfile: async (req: Request, res: Response) => {
             try{
                 const { clientId } = req.params;
 
                const client = await allClientUseCases.getClientProfileUseCase.execute(clientId);
 
-               res.json({message: 'successfully loaded client ', data: client, type: 'success'});
+               res
+               .status(HttpStatusCode.OK)
+               .json({message: StatusMessage[HttpStatusCode.OK], data: client, success: true});
 
             } catch(err: any) {
-                res.json({ message: err.messge , type: 'error' });
+                res.json({ message: err.messge , sucess: false });
             }
          },
 
 
-         profileVerification: async (req: any, res: any) => {
+         profileVerification: async (req: Request, res: Response) => {
             try{ 
 
                 const { clientId } = req.params; 
                 
                  const response = await allClientUseCases.profileVerificationUseCase.execute(clientId, req.body); 
                
-                 res.json({message: 'successfully sended', success: true });
+                 res
+                 .status(HttpStatusCode.OK)
+                 .json({message: StatusMessage[HttpStatusCode.OK], success: true });
             }catch(err: any) {
-                res.json({ message: err.message, success: false });
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
             }
          },
 
 
-         editProfile: async (req: any, res: any) => {
+         editProfile: async (req: Request, res: Response) => {
             try{     
                
         
                 const { clientId } = req.params;
                 const response = await allClientUseCases.editClientProfileUseCase.execute(clientId, req.body);
                
-                res.json({ message: 'successfully edited', success: true });
+                res
+                .status(HttpStatusCode.CREATED)
+                .json({ message: StatusMessage[HttpStatusCode.CREATED], success: true });
             }catch(err: any) {
-                res.json({message: err.message, success: false });
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
             }
          },
 
  
-         logoutClient: async (req: any, res: any) => {
+         logoutClient: async (req: Request, res: Response) => {
 
              try{    
                  res.clearCookie("jwtC", { path: '/'}); 
-                res.json({message: 'successfully loggedout', type: 'success'});
+                res
+                .status(HttpStatusCode.OK)
+                .json({message: StatusMessage[HttpStatusCode.OK], success: true});
  
              }catch(err: any) {
-                 res.json({message: err.message, type: 'error'})
+                 res
+                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                 .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false})
              }
          },
 
  
-         createJobPost: async (req: any, res: any) => {
+         createJobPost: async (req: Request, res: Response) => {
              try{       
                  const { clientId } = req.params;
                 
@@ -180,242 +235,309 @@ import { ErrorRequestHandler } from 'express';
  
                 const jobPost = await allClientUseCases.createJobPostUseCase.execute(clientId, data);
              
-                res.json({message: 'Redirecting to payment page',data: jobPost, success: true});
+                res
+                .status(HttpStatusCode.CREATED)
+                .json({message: StatusMessage[HttpStatusCode.CREATED],data: jobPost, success: true});
              }catch(err: any) {
-                 res.json({message: err.message, type: 'error'})
+                 res
+                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                 .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false})
              }
          },
 
  
-         getAllNotifications: async (req: any, res: any) => {
+         getAllNotifications: async (req: Request, res: Response) => {
              try{
                 
                 const {  clientId }= req.params;
                 const response = await allClientUseCases.getAllNotificationsUseCase.execute( clientId);
   
-                res.json({message: 'successfully list all notifications',notifications: response, type: 'success'});
+                res
+                .status(HttpStatusCode.OK)
+                .json({message: StatusMessage[HttpStatusCode.OK],notifications: response, success: true});
              }catch(err: any) {
-                 res.json({message: err.message, type: 'error'})
+                 res
+                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                 .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false})
              }
          },
  
-         listAllJobs: async (req: any, res: any) => {
+
+         listAllJobs: async (req: Request, res: Response) => {
              try{
                 const response = await allClientUseCases.listAllJobsClientUseCase.execute(); 
 
-                res.json({message: 'successfully list all notifications',data: response, success: true}); 
+                res
+                .status(HttpStatusCode.OK)
+                .json({message: StatusMessage[HttpStatusCode.OK],data: response, success: true}); 
              }catch(err: any) {
-                 res.json({message: err.message, success: false})
+                 res
+                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                 .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false})
              }
          },
 
          
-         makePayment: async (req: any, res: any) => {
+         makePayment: async (req: Request, res: Response) => {
              try{ 
                  const { clientId } = req.params; 
                   const response = await allClientUseCases.makePaymentUseCase.execute(clientId, req.body); 
              
-                  res.status(200).json({ response, success: true }); 
+                  res
+                  .status(HttpStatusCode.OK)
+                  .json({message: StatusMessage[HttpStatusCode.OK], response, success: true }); 
              }catch(err: any) { 
-                 res.json({message: err.message, success: false});
+                 res
+                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                 .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false});
              }
          },
 
 
  
-         getUserProfile: async (req: any, res: any) => {
+         getUserProfile: async (req: Request, res: Response) => {
              try{
                  
                 const { userId } = req.params;
                 const response = await allClientUseCases.getUserProfileUseCase.execute(userId); 
                 
-                res.status(200).json({ response }); 
+                res
+                .status(HttpStatusCode.OK)
+                .json({ message: StatusMessage[HttpStatusCode.OK], response, success: true }); 
              }catch(err: any) {
-                 res.json({message: err.message, success: false})
+                 res
+                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                 .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false})
              }
          },
          
 
-         getProposals: async(req: any, res: any) => {
+         getProposals: async(req: Request, res: Response) => {
             try{
                 const { clientId } = req.params;
                 const response = await allClientUseCases.getProposalsUseCase.execute(clientId);
                 
-                res.status(200).json({message: 'Loading propsals', data: response, success: true});
+                res.status(HttpStatusCode.OK)
+                .json({message: StatusMessage[HttpStatusCode.OK], data: response, success: true});
             }catch(err: any) {
-                res.status(500).json({message: err.message, success: false});
+                res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false});
             }
          },
 
-         getMyJobs: async(req: any, res: any) => {
+         getMyJobs: async(req: Request, res: Response) => {
             try{
                 const { clientId } = req.params;
                 const response = await allClientUseCases.getMyJobsUseCase.execute(clientId);
                 
-                res.status(200).json({message: 'Loading propsals', data: response, success: true});
+                res.status(HttpStatusCode.OK)
+                .json({message: StatusMessage[HttpStatusCode.OK], data: response, success: true});
             }catch(err: any) {
-                res.status(500).json({message: err.message, success: false});
+                res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false});
             }
          },
 
-         latestJobs: async(req: any, res: any) => {
+         latestJobs: async(req: Request, res: Response) => {
             try{
                 
                 const response = await allClientUseCases.latestJobsUseCase.execute();
                 
-                res.status(200).json({message: 'Loading propsals', data: response, success: true});
+                res.status(HttpStatusCode.OK)
+                .json({message: StatusMessage[HttpStatusCode.OK], data: response, success: true});
             }catch(err: any) {
-                res.status(500).json({message: err.message, success: false});
+                res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false});
             }
          },
 
-         createContract: async(req: any, res: any) => {
+         createContract: async(req: Request, res: Response) => {
             try{
                
                 const { userId, clientId, jobPostId, bidAmount, bidDeadline } = req.body;
 
                 if(!userId && !clientId && !jobPostId  ) {
-                   return res.status(400).json({ message: 'Missing informations ', success: false });
+                   return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Missing informations ', success: false });
                 }
 
                 const response = await allClientUseCases.createContractUseCase.execute(clientId, userId, jobPostId, bidAmount, bidDeadline); 
                 
-                res.status(200).json({message: 'new contract created successfully',data: response, success: true});
+                res.status(HttpStatusCode.CREATED)
+                .json({message: StatusMessage[HttpStatusCode.CREATED],data: response, success: true});
             }catch(err: any) {
-                res.status(500).json({message: err.message, success: false});
+                res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false});
             }
          },
 
  
 
-         myContracts: async(req: any, res: any) => {
+         myContracts: async(req: Request, res: Response) => {
             try{
                
                 const { clientId } = req.params;
                 const response = await allClientUseCases.myContractsUseCase.execute(clientId); 
                 
-                res.status(200).json({message: 'new contract created successfully',data: response, success: true});
+                res.status(HttpStatusCode.OK)
+                .json({message: StatusMessage[HttpStatusCode.OK],data: response, success: true});
             }catch(err: any) {
-                res.status(500).json({message: err.message, success: false});
+                res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false});
             }
          },
  
 
 
-         viewContract: async(req: any, res: any) => {
+         viewContract: async(req: Request, res: Response) => {
             try{
                
                 const { contractId } = req.params;
                 const response = await allClientUseCases.viewContractUseCase.execute(contractId); 
                  
-                res.status(200).json({message: 'Contract loaded successfully',contract: response, success: true});
+                res.status(HttpStatusCode.OK)
+                .json({message: StatusMessage[HttpStatusCode.OK],contract: response, success: true});
             }catch(err: any) {
-                res.status(500).json({message: err.message, success: false});
+                res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false});
             }
          },
 
 
 
-         viewSubmissions: async(req: any, res: any) => {
+         viewSubmissions: async(req: Request, res: Response) => {
             try{
                
                 const { clientId } = req.params;
                 const response = await allClientUseCases.viewSubmissionsUseCase.execute(clientId); 
                  
-                res.status(200).json({message: 'new contract created successfully',data: response, success: true});
+                res.status(HttpStatusCode.OK)
+                .json({message: StatusMessage[HttpStatusCode.OK],data: response, success: true});
             }catch(err: any) {
-                res.status(500).json({message: err.message, success: false});
+                res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false});
             }
          },
 
  
 
 
-         closeContract: async(req: any, res: any) => {
+         closeContract: async(req: Request, res: Response) => {
             try{
                
                 const { contractId } = req.params;
                 const response = await allClientUseCases.closeContractUseCase.execute(contractId); 
                  
-                res.status(200).json({message: 'contract closed successfully',data: response, success: true});
+                res.status(HttpStatusCode.OK)
+                .json({message: StatusMessage[HttpStatusCode.OK],data: response, success: true});
             }catch(err: any) {
-                res.status(500).json({message: err.message, success: false});
+                res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false});
             }
          },
 
 
-         rateUser: async(req: any, res: any) => {
+         rateUser: async(req: Request, res: Response) => {
             try{
                 const { notificationId } = req.params;
                 const { userId, rating } = req.body.body;
                 console.log('DATA FROM ctrl ', notificationId, req.body.body)
                 const response = await allClientUseCases.rateUserUseCase.execute(notificationId, userId, rating); 
                  
-                res.status(200).json({message: 'Rate user successfully',data: response, success: true});
+                res.status(HttpStatusCode.OK)
+                .json({message: StatusMessage[HttpStatusCode.OK],data: response, success: true});
             }catch(err: any) {
-                res.status(500).json({message: err.message, success: false});
+                res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false});
             }
          },
 
 
-         createChat: async(req: any, res: any) => {
+         createChat: async(req: Request, res: Response) => {
             try{
 
                 const response = await allClientUseCases.createChatUseCase.execute(req.body);
 
-                res.status(201).json({message: 'connection created', data: response, success: true});
+                res.status(HttpStatusCode.CREATED)
+                .json({message: StatusMessage[HttpStatusCode.CREATED], data: response, success: true});
             }catch(err: any) {
-                res.status(500).json({message: err.message, success: false});
+                res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false});
             }
          },
  
          
 
-         sendMessage: async(req: any, res: any) => {
+         sendMessage: async(req: Request, res: Response) => {
             try{
 
                 const response = await allClientUseCases.sendMessageUseCase.execute(req.body);
 
-                res.status(201).json({message: 'message send successfully', data: response, success: true});
+                res
+                .status(HttpStatusCode.CREATED)
+                .json({message: StatusMessage[HttpStatusCode.CREATED], data: response, success: true});
             }catch(err: any) {
-                res.status(500).json({message: err.message, success: false});
+                res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false});
             }
          },
  
 
-         getAllChats: async(req: any, res: any) => {
+         getAllChats: async(req: Request, res: Response) => {
             try{
                 const { memberId } = req.params;
                 const response = await allClientUseCases.getAllChatsUseCase.execute(memberId);
 
-                res.status(201).json({message: 'message send successfully', data: response, success: true});
+                res
+                .status(HttpStatusCode.OK)
+                .json({message: StatusMessage[HttpStatusCode.OK], data: response, success: true});
             }catch(err: any) {
-                res.status(500).json({message: err.message, success: false});
+                res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false});
             }
          },
  
 
-         viewChat: async(req: any, res: any) => {
+         viewChat: async(req: Request, res: Response) => {
             try{
                 const { chatId } = req.params;
                 const response = await allClientUseCases.viewChatUseCase.execute(chatId);
 
-                res.status(200).json({message: 'Loading chat data', data: response, success: true});
+                res
+                .status(HttpStatusCode.OK)
+                .json({message: StatusMessage[HttpStatusCode.OK], data: response, success: true});
             }catch(err: any) {
-                res.status(500).json({message: err.message, success: false});
+                res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false});
             }
          },
  
  
 
-         getallDevelopers: async(req: any, res: any) => {
+         getallDevelopers: async(req: Request, res: Response) => {
             try{
                  
                 const response = await allClientUseCases.getallDevelopersUseCase.execute();
 
-                res.status(200).json({message: 'Loading all developers', developers: response, success: true});
+                res
+                .status(HttpStatusCode.OK)
+                .json({message: StatusMessage[HttpStatusCode.OK], developers: response, success: true});
             }catch(err: any) {
-                res.status(500).json({message: err.message, success: false});
+                res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false});
             }
          }
  
