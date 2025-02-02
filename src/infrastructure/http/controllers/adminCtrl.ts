@@ -3,6 +3,7 @@ import { allAdminUseCases } from '../../../helper/controllerHelper/allCtrlConnec
 
 import { HttpStatusCode } from "../../../helper/constants/enums";
 import { StatusMessage } from "../../../helper/constants/stausMessages";
+import generateTokens from '../../../utils/generateTokens';
 
 
 export const adminController = {
@@ -31,14 +32,23 @@ export const adminController = {
                     .status(HttpStatusCode.NOT_FOUND)
                     .json({message: StatusMessage[HttpStatusCode.NOT_FOUND], success: false})
                  } else { 
-
-                    res.cookie("jwtA", admin.jwt, {
-                        httpOnly: true, 
-                        sameSite: "None", 
-                        secure: true, 
-                        maxAge: 24 * 60 * 60 * 1000
-                      })
-
+                    const  { accessToken, refreshToken } = generateTokens(admin);
+            
+   
+                    res.cookie('refreshToken', refreshToken, {
+                        httpOnly: true,
+                        secure: process.env.NODE_ENV === 'production',
+                        sameSite: 'strict'
+                    });
+        
+        
+                    res.status(HttpStatusCode.OK).json({
+                        message: StatusMessage[HttpStatusCode.OK], 
+                        admin,
+                        accessToken,
+                        refreshToken,
+                        success: true,
+                    });
                     return res
                     .status(HttpStatusCode.OK)
                     .json({message: StatusMessage[HttpStatusCode.OK],admin: admin, success: true});

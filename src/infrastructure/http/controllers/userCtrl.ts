@@ -126,8 +126,8 @@ export const userController = {
             });
 
 
-            res.status(200).json({
-                message: "Login successful", 
+            res.status(HttpStatusCode.OK).json({
+                message: StatusMessage[HttpStatusCode.OK], 
                 user,
                 accessToken,
                 refreshToken,
