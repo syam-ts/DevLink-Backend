@@ -1,7 +1,6 @@
 import express from 'express';
 const adminRouter = express.Router();
-import { adminController } from '../controllers/adminCtrl'
-import { adminAuth } from '../middlewares/auth/authAdmin'
+import { adminController } from '../controllers/adminCtrl' 
 
 import { AdminModel } from '../../../domain/entities/Admin'
 import jwt from "jsonwebtoken";
@@ -9,7 +8,7 @@ import jwt from "jsonwebtoken";
 
 // adminRouter.post('/signup', adminController.signUpAdmin);
   
-adminRouter.get('/dashboard',adminAuth, adminController.getDashboard);
+adminRouter.get('/dashboard', adminController.getDashboard);
 
 
 adminRouter.get('/getAllUsers', adminController.getAllUsers);

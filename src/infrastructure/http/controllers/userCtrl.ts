@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { allUserUseCases } from "../../../helper/controllerHelper/allCtrlConnection";
 import { HttpStatusCode } from "../../../helper/constants/enums";
 import { StatusMessage } from "../../../helper/constants/stausMessages";
+import generateTokens from '../../../utils/generateTokens';
+import jwt from "jsonwebtoken";
 
 export const userController = {
     signupUser: async (req: Request, res: Response) => {
@@ -102,36 +104,39 @@ export const userController = {
     },
 
     loginUser: async (req: Request, res: any) => {
-        try {
-            const theUser = await allUserUseCases.loginUseCase.execute(req.body);
+        try { 
 
-            const { user, refreshToken, accessToken } = theUser;
+       
+            const { user } = await allUserUseCases.loginUseCase.execute(req.body);
+    
 
-            res.cookie("refreshU", refreshToken, {
+            if (!user) {
+                res.status(401).json({ message: "Invalid credentials", success: false });
+                return;
+            }
+ 
+
+            const  { accessToken, refreshToken } = generateTokens(user);
+            
+   
+            res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "strict",
-                maxAge: 24 * 60 * 60 * 1000, // 1 day
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict'
             });
 
-            res.cookie("accessTokenU", accessToken, {
-                httpOnly: true,
-                secure: true,
-                sameSite: "strict",
-            });
 
-            return res
-                .status(HttpStatusCode.OK)
-                .json({
-                    message: StatusMessage[HttpStatusCode.OK],
-                    user,
-                    accessToken,
-                    type: true,
-                });
+            res.status(200).json({
+                message: "Login successful", 
+                user,
+                accessToken,
+                refreshToken,
+                success: true,
+            });
         } catch (err: any) {
             res
             .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
+            .json({ message: err.message, sucess: false });
         }
     },
 

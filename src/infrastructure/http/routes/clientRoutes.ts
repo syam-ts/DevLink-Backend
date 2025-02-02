@@ -1,19 +1,20 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 const clientRouter = express.Router();
-import { clientController } from '../controllers/clientCtrl';
-import { clientAuth } from '../middlewares/auth/authClient';
-import { ClientModel } from '../../../domain/entities/Client'
+import { clientController } from '../controllers/clientCtrl'; 
+import { ClientModel } from '../../../domain/entities/Client';
+import { verifyToken } from '../middlewares/auth/verifyToken';
+import { requireRole } from '../middlewares/auth/requireRole';
 
 
-clientRouter.get('/getHome', clientAuth, clientController.getHomeClient);
-clientRouter.get('/profile/view/:clientId', clientController.getProfile); //ADD CLIENTAUTH
-clientRouter.get('/notifications/:clientId', clientController.getAllNotifications);
+clientRouter.get('/getHome',verifyToken, requireRole('client'), clientController.getHomeClient);
+clientRouter.get('/profile/view/:clientId',verifyToken, requireRole('client'), clientController.getProfile); //AD
+clientRouter.get('/notifications/:clientId',verifyToken, requireRole('client'), clientController.getAllNotifications);
 clientRouter.get('/userProfile/view/:userId', clientController.getUserProfile);
-clientRouter.get('/job/proposals/:clientId',clientAuth, clientController.getProposals);
-clientRouter.get('/jobs/all-jobs/:clientId', clientAuth,clientController.listAllJobs);
-clientRouter.get('/jobs/my-jobs/:clientId',clientAuth, clientController.getMyJobs);
-clientRouter.get('/jobs/latest-jobs/:clientId',clientAuth, clientController.latestJobs);
+clientRouter.get('/job/proposals/:clientId',verifyToken, requireRole('client'), clientController.getProposals);
+clientRouter.get('/jobs/all-jobs/:clientId',clientController.listAllJobs);
+clientRouter.get('/jobs/my-jobs/:clientId', clientController.getMyJobs);
+clientRouter.get('/jobs/latest-jobs/:clientId', clientController.latestJobs);
 clientRouter.get('/job/myContracts/:clientId', clientController.myContracts);
 clientRouter.get('/contract/:contractId', clientController.viewContract);
 clientRouter.get('/contracts/submissions/:clientId', clientController.viewSubmissions);
@@ -30,10 +31,10 @@ clientRouter.post('/login', clientController.loginClient);
 clientRouter.post('/verify-email',clientController.verifyEmail);
 clientRouter.post('/resetPassword/:clientId',clientController.resetPassword);
 clientRouter.post('/googleLogin', clientController.googleLogin);
-clientRouter.post('/logout', clientAuth, clientController.logoutClient);
+clientRouter.post('/logout', clientController.logoutClient);
 
-clientRouter.post('/profile/edit/:clientId', clientController.editProfile); //ADD CLIENTAUTH
-clientRouter.post('/profile/verification/:clientId', clientAuth, clientController.profileVerification);
+clientRouter.post('/profile/edit/:clientId', clientController.editProfile); //AD
+clientRouter.post('/profile/verification/:clientId', clientController.profileVerification);
 
 //payment and new jobpost creation phase
 clientRouter.post('/jobPost/payment-stripe/:clientId',clientController.makePayment); 
@@ -42,7 +43,7 @@ clientRouter.post('/rate/user/:notificationId',clientController.rateUser);
 
 
 clientRouter.post('/project/submit/approval/:contractId',clientController.closeContract);
-clientRouter.post('/job/createContract',clientController.createContract);
+// clientRouter.post('/job/createContract',clientController.createContract);
 
 //chat routes
 clientRouter.post('/chat/create-chat', clientController.createChat);
@@ -50,7 +51,7 @@ clientRouter.post('/chat/sendMessage', clientController.sendMessage);
 
 
 
-clientRouter.put('/profile/edit/:clientId', clientAuth, clientController.editProfile);
+clientRouter.put('/profile/edit/:clientId', clientController.editProfile);
 
 
 

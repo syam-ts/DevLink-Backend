@@ -8,13 +8,13 @@ export interface ClientRepositary {
 export class LoginClient {
     constructor(private clientRepositary: ClientRepositary) {}
 
-    async execute(client: any) {   
+    async execute(clientData: any) {   
 
         
-        const foundClient: any = await this.clientRepositary.findClientByEmailAndPassword(client.email, client.password);
+        const client: any = await this.clientRepositary.findClientByEmailAndPassword(clientData.email, clientData.password);
  
    
-        return { client: foundClient };
+        return client; 
   
         
     }

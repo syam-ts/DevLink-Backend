@@ -5,8 +5,7 @@ import { Client, ClientModel } from "../../entities/Client";
 import { JobPostDocument, JobPostModel } from "../../entities/JobPost";
 import { UserRepositary } from "../../../application/usecases/user/signupUser";
 import bcrypt from "bcrypt";
-import validator from "validator";
-import jwt from "jsonwebtoken";
+import validator from "validator"; 
 import { ContractModel } from "../../entities/Contract";
 import { AdminModel } from "../../entities/Admin";
 import { NotificationModel } from "../../entities/Notification";
@@ -139,10 +138,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-  async findUserByEmailAndPassword(
-    email: string,
-    passwordUser: string
-  ): Promise<User | any> {
+  async findUserByEmailAndPassword( email: string, passwordUser: string ): Promise<User | any> {
     if (!email || !passwordUser) {
       throw new Error("Email, and password are required");
     }
@@ -150,6 +146,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     if (!validator.isEmail(email)) {
       throw new Error("Invalid email format");
     }
+   
 
     const user = await UserModel.findOne({ email }).exec();
 
@@ -171,21 +168,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     if (!isValidPassword) {
       throw new Error("wrong password");
     }
-
-    const USER_ACCESS_TOKEN: any = process.env.USER_ACCESS_TOKEN;
-    const USER_REFRESH_TOKEN: any = process.env.USER_REFRESH_TOKEN;
-
-    const refreshToken = jwt.sign(
-      { id: user._id, email: user.email },
-      USER_REFRESH_TOKEN,
-      { expiresIn: "7d" }
-    );
-
-    const accessToken = jwt.sign(
-      { id: user._id, email: user.email },
-      USER_ACCESS_TOKEN,
-      { expiresIn: "1m" }
-    );
+ 
 
     return {
       user: {
@@ -200,9 +183,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         budget: user.budget,
         skills: user.skills,
         isProfileFilled: user.isProfileFilled,
-      },
-      accessToken,
-      refreshToken,
+      } 
     };
   }
 

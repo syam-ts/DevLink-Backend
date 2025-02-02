@@ -1,29 +1,29 @@
 import express from 'express';
 const userRouter = express.Router();
-import { userController } from '../controllers/userCtrl'
-import { userAuth } from '../middlewares/auth/authUser'; 
-
+import { userController } from '../controllers/userCtrl' 
+import { verifyToken } from '../middlewares/auth/verifyToken';
+import { requireRole } from '../middlewares/auth/requireRole';
  
 import jwt from "jsonwebtoken"; 
 import { clientController } from '../controllers/clientCtrl';
+import generateTokens from '../../../utils/generateTokens';
 
 
 
 
 
-userRouter.get('/getHome', userController.getHomeUser);
-userRouter.get('/profile/view/:userId', userController.getProfile);  
-userRouter.get('/home/:type', userAuth, userController.listHomeJobs); 
-userRouter.get('/:jobType/:userId', userController.getSelectedJobs);
+userRouter.get('/getHome', verifyToken, requireRole('user'), userController.getHomeUser);
+userRouter.get('/profile/view/:userId', verifyToken, requireRole('user'), userController.getProfile);  
+userRouter.get('/home/:type', verifyToken, requireRole('user'), userController.listHomeJobs); 
+userRouter.get('/:jobType/:userId', verifyToken, requireRole('user'), userController.getSelectedJobs);
 userRouter.get('/all-contracts/:userId', userController.allContracts); 
-userRouter.get('/notifications/:userId', userAuth, userController.allNotifications);
+userRouter.get('/notifications/:userId', userController.allNotifications);
 userRouter.get('/job/:jobPostId', userController.getSingleJobPost);
 userRouter.get('/job/myContracts/:userId', userController.viewMyContracts);
 userRouter.get('/job/submittedContracts/:userId', userController.viewSubmittedContracts);
 userRouter.get('/chat/:memberId', clientController.getAllChats);
 userRouter.get('/chat/view/:chatId', clientController.viewChat);
-
-  userRouter.get('/job/proposals/:userId',userController.getAllProposals);
+userRouter.get('/job/proposals/:userId',verifyToken, requireRole('user'),userController.getAllProposals);
  
  
 userRouter.post('/signup', userController.signupUser);
@@ -59,54 +59,22 @@ userRouter.put('/profile/:type/:userId', userController.editProfile);
 
 
 userRouter.patch('/profile/boost/success/:userId',userController.bosstSuccess); // ADD USERAUTH
- 
-
-userRouter.get('/refresh', (req: any, res: any, next: any) => { 
   
- 
-  try {
- 
-    const refreshToken = req.cookies.refreshU;
 
-    if (!refreshToken) {
-      return res.status(401).json({ message: "No refresh token provided" });
-    }
- 
-    const USER_REFRESH_TOKEN: string = process.env.USER_REFRESH_TOKEN as string;
-    const USER_ACCESS_TOKEN: string = process.env.USER_ACCESS_TOKEN as string;
 
- 
-    jwt.verify(refreshToken, USER_REFRESH_TOKEN, (err: any, decoded: any) => {
-      if (err) {
-        return res.status(403).json({ message: "Invalid or expired refresh token" });
-      }
+userRouter.post('/refresh-token', (req: any, res: any) => {
+  const refreshToken = req.cookies.refreshToken;
+  console.log('ENTERED HERE FOR RETRY AND REFRES TKN : ', refreshToken)
 
-      
-      const newAccessToken = jwt.sign(
-        { id: decoded.id, email: decoded.email },
-        USER_ACCESS_TOKEN,
-        { expiresIn: "15m" }
-      );
+  if (!refreshToken) return res.status(401).json({ message: 'No refresh token' });
 
-      
-      res.cookie("accessTokenU", newAccessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-      });
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET as string, (err: any, decoded: any) => {
+      if (err) return res.status(403).json({ message: 'Invalid or expired refresh token' });
 
-       
-      return res.status(200).json({ accessToken: newAccessToken });
-    });
-  } catch (error) {
-    console.error("Error in refreshAccessToken:", error);
-    return res.status(500).json({ message: "Internal Server Error" });
-  } 
-})
-
- 
-
-  
+      const { accessToken } = generateTokens(decoded);
+      res.json({ accessToken });
+  });
+});
 
 
 

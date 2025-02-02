@@ -1,6 +1,4 @@
-
-
-
+ 
 export const StatusMessage = {
     [200]: "Success",
     [201]: "Resource created successfully",

@@ -181,16 +181,10 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       throw new Error('wrong password')
     };
 
-    const CLIENT_ACCESS_TOKEN: any = process.env.CLIENT_ACCESS_TOKEN;
-    const CLIENT_REFRESH_TOKEN: any = process.env.CLIENT_REFRESH_TOKEN;
-
-    const refreshToken = jwt.sign({ id: client._id, email: client.email }, CLIENT_REFRESH_TOKEN, { expiresIn: "7d" });
-    const accessToken = jwt.sign({ id: client._id, email: client.email }, CLIENT_ACCESS_TOKEN, { expiresIn: "15m" });
-
-    client.refreshToken = refreshToken;
+     
     await client.save();
 
-    return { client: { client }, accessToken, refreshToken };
+    return client;
   };
 
 
