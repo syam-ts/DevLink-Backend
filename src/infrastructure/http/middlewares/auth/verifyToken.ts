@@ -4,27 +4,35 @@ import { HttpStatusCode } from '../../../../helper/constants/enums';
 import { StatusMessage } from '../../../../helper/constants/stausMessages';
 
 
+interface DecodedUser {
+    id: string;
+    role: 'user' | 'client' | 'admin';
+    iat: number;
+    exp: number;
+}
+
 const verifyToken = (req: any, res: Response, next: NextFunction): void => {
     const token = req.headers.authorization?.split(' ')[1];
-
-    console.log('ENTER VERIFY AND TKN : ', token)
+  
+    
     if(!token) {
          res
         .status(HttpStatusCode.UNAUTHORIZED)
         .json({ message: StatusMessage[HttpStatusCode.UNAUTHORIZED] });
         return;
     };
+  
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as DecodedUser;
+  
+        
+        req.user = {
+            id: decoded.id,
+            role: decoded.role
+        };
 
-    const ACCESS_TOKEN_SECRET: string = process.env.ACCESS_TOKEN_SECRET as string;
-
-    jwt.verify(token, ACCESS_TOKEN_SECRET, (err: any, decoded: any) => {
-        if(err) return res
-        .status(HttpStatusCode.FORBIDDEN)
-        .json({ message: StatusMessage[HttpStatusCode.FORBIDDEN] });
-
-        req.user = decoded;
+  
         next();
-    });
+ 
 };
 
 
