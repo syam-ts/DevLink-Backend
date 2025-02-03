@@ -14,6 +14,6 @@ export class CreateProposal {
            const result = await this.userRepositary.createProposal( userId, jobPostId, description, bidAmount, bidDeadline); 
             
 
-           return {   };
+           return result ;
     }
 }

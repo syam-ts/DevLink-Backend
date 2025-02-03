@@ -309,7 +309,10 @@ export class UserRepositoryMongoose implements UserRepositary {
     bidAmount: number,
     bidDeadline: number
   ): Promise<any> {
+
+    
     const user = await UserModel.findById(userId);
+    
     if (!user) {
       throw new Error("User not found");
     }
@@ -321,10 +324,12 @@ export class UserRepositoryMongoose implements UserRepositary {
       ],
     });
 
+  
     if (existingProposal.length !== 0) {
       throw new Error("Proposal alredy send");
     } else {
       const jobpost: any = await JobPostModel.findById(jobPostId);
+      console.log('JOBNPOST : ', jobpost)
 
       const newProposal = {
         type: "New Job Proposal ",
@@ -364,6 +369,7 @@ export class UserRepositoryMongoose implements UserRepositary {
 
       newNotificationUser.save();
       newNotificationClient.save();
+      console.log('PROPOSAL FINAL : ', proposal)
 
       return proposal;
     }

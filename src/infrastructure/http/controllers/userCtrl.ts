@@ -281,8 +281,7 @@ export const userController = {
     createProposal: async (req: Request, res: Response) => {
         try {
              
-            const { userId, jobPostId, description, bidAmount, bidDeadline } =
-                req.body.body;
+            const { userId, jobPostId, description, bidAmount, bidDeadline } = req.body.body;
             const response = await allUserUseCases.createProposalUseCase.execute(
                 userId,
                 jobPostId,
@@ -290,6 +289,8 @@ export const userController = {
                 bidAmount,
                 bidDeadline
             );
+
+            console.log('THE REPSON S: ', response)
 
             res
             .status(HttpStatusCode.CREATED)
@@ -301,7 +302,7 @@ export const userController = {
         } catch (err: any) {
             res
             .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+            .json({ message: err.message, success: false });
         }
     },
 
