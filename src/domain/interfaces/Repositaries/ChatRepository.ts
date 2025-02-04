@@ -3,7 +3,7 @@ import { ChatModel } from "../../../domain/entities/Chat";
 import { MessageModel } from "../../entities/Message";
 import { UserModel } from "../../entities/User";
 import { ClientModel } from "../../entities/Client";
-import { io } from '../../../infrastructure/socket/socket';
+// import { io } from '../../../infrastructure/socket/socket';
 
 interface Members {
   members: string[];
@@ -19,27 +19,27 @@ interface Message {
 
 
 //sockets
-io.on("connection", (socket) => {
-  console.log("new user has connceted", socket.id);
+// io.on("connection", (socket) => {
+//   console.log("new user has connceted", socket.id);
 
-  socket.on("join_chat", (chatId) => {
-    socket.join(chatId);
-    console.log(`User joined chat: ${chatId}`);
-});
-
-
-socket.on("sendMessage", (message) => {
-  io.to(message.chatId).emit("receiveMessage", message);  
-  console.log("MESSAGE SENT:", message);
-});
-
-});
+//   socket.on("join_chat", (chatId) => {
+//     socket.join(chatId);
+//     console.log(`User joined chat: ${chatId}`);
+// });
 
 
-io.on("sendMessage", (message: string) => {
-  io.emit("message", message);
-  console.log("mes", message);
-});
+// socket.on("sendMessage", (message) => {
+//   io.to(message.chatId).emit("receiveMessage", message);  
+//   console.log("MESSAGE SENT:", message);
+// });
+
+// });
+
+
+// io.on("sendMessage", (message: string) => {
+//   io.emit("message", message);
+//   console.log("mes", message);
+// });
 
 export class ChatRepositoryMongoose {
 

@@ -24,7 +24,10 @@ import { ViewSubmittedContracts } from "../../application/usecases/user/viewSubm
 import { SubmitProject } from "../../application/usecases/user/sumbitProject";  
 import { ChatBot } from "../../application/usecases/user/ChatBot";   
 import { AddToWishlist } from "../../application/usecases/user/addToWishlist";   
-import { GetAllProposals } from "../../application/usecases/user/getAllProposals";   
+import { GetAllProposals } from "../../application/usecases/user/getAllProposals"; 
+
+
+import { AllClients } from "../../application/usecases/user/allClients";   
 
 
 
@@ -63,7 +66,8 @@ import { ViewChat } from '../../application/usecases/client/viewChat';
 import { GetallDevelopers } from '../../application/usecases/client/getallDevelopers';
 import { ChatRepositoryMongoose } from "../../domain/interfaces/Repositaries/ChatRepository";
 import { WishlistRepositoryMongoose } from "../../domain/interfaces/WishlistRepository";
- 
+
+import { AllUser } from '../../application/usecases/client/allUser';
 
 
 // admin imports ----->
@@ -117,6 +121,9 @@ const addToWishlistUseCase = new AddToWishlist(wishlistRepository);
 const getAllProposalsUseCase = new GetAllProposals(userRepository); 
 
 
+const allClientsUseCase = new AllClients(userRepository); 
+
+
 
 // Client Repo instance -------------->
 
@@ -154,6 +161,7 @@ const sendMessageUseCase = new SendMessage(ChatRepository);
 const getAllChatsUseCase = new GetAllChats(ChatRepository);
 const viewChatUseCase = new ViewChat(ChatRepository);
 
+const allUserUseCase = new AllUser(ClientRepository);
 
 
 // Admin repo intances ------->
@@ -206,7 +214,9 @@ export const allUserUseCases = {
         submitProjectUseCase ,
         chatBotUseCase,
         addToWishlistUseCase,
-        getAllProposalsUseCase
+        getAllProposalsUseCase,
+
+        allClientsUseCase,
 };
 
 
@@ -242,6 +252,10 @@ export const allClientUseCases = {
      sendMessageUseCase,
      getAllChatsUseCase,
      viewChatUseCase,
+
+
+
+     allUserUseCase,
 }
 
 

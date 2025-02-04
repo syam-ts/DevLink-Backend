@@ -8,7 +8,7 @@ import { requireRole } from '../middlewares/auth/requireRole';
 
 
 
-
+userRouter.get('/alluser', userController.allClients)
 
 userRouter.get('/getHome', verifyToken, requireRole('user'), userController.getHomeUser);
 userRouter.get('/profile/view/:userId', verifyToken, requireRole('user'), userController.getProfile);

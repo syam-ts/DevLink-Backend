@@ -6,6 +6,9 @@ import { ClientModel } from "../../../domain/entities/Client";
 import { verifyToken } from "../middlewares/auth/verifyToken";
 // import { requireRole } from "../middlewares/auth/requireRole";
 
+clientRouter.get( "/allclient",  clientController.allUser );
+
+
 
 clientRouter.get( "/getHome", verifyToken,  clientController.getHomeClient );
 clientRouter.get( "/profile/view/:clientId", verifyToken,  clientController.getProfile); 

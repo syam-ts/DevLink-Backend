@@ -7,7 +7,7 @@ const generateTokens = (user: any) => {
 
   const ACCESS_TOKEN_SECRET: string = process.env.ACCESS_TOKEN_SECRET as string;
 
-  console.log("THE USER ID : ", user._id.toString());
+ 
 
   const accessToken = jwt.sign(
     { _id: user._id.toString(), role: user.role },

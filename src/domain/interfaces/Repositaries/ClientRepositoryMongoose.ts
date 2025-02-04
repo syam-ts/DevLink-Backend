@@ -216,6 +216,17 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
 
+
+  async allUser(): Promise<any | null> {
+    const user = await UserModel.find().exec();
+    
+    return user;
+ 
+  }
+
+
+
+
   async findAllUsers(): Promise<User | any> {
     const users: any = await UserModel.find().limit(4).exec();
     if (users) {

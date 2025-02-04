@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { allUserUseCases } from "../../../helper/controllerHelper/allCtrlConnection";
+import { allClientUseCases, allUserUseCases } from "../../../helper/controllerHelper/allCtrlConnection";
 import { HttpStatusCode } from "../../../helper/constants/enums";
 import { StatusMessage } from "../../../helper/constants/stausMessages";
 import generateTokens from '../../../utils/generateTokens';
@@ -227,6 +227,23 @@ export const userController = {
             res
                 .status(HttpStatusCode.OK)
                 .json({ message: StatusMessage[HttpStatusCode.OK], type: true });
+        } catch (err: any) {
+            res
+            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+            .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
+        }
+    },
+
+
+
+
+
+    allClients: async (req: Request, res: Response) => {
+        try {
+            const result = await allUserUseCases.allClientsUseCase.execute()
+            res
+                .status(HttpStatusCode.OK)
+                .json({ message: StatusMessage[HttpStatusCode.OK], data: result, type: true });
         } catch (err: any) {
             res
             .status(HttpStatusCode.INTERNAL_SERVER_ERROR)

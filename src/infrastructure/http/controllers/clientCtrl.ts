@@ -132,6 +132,36 @@ export const clientController = {
     },
 
 
+
+
+
+
+
+
+
+    allUser: async (req: Request, res: Response) => {
+        try {
+
+            const response = await allClientUseCases.allUserUseCase.execute();
+            res
+                .status(HttpStatusCode.OK)
+                .json({ message: StatusMessage[HttpStatusCode.OK], data: response, success: true });
+        } catch (err: any) {
+            res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
+        }
+    },
+
+
+
+
+
+
+
+
+
+
     googleLogin: async (req: Request, res: Response) => {
         try {
 

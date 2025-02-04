@@ -2,11 +2,13 @@ import express from "express";
 require("dotenv").config();
 import cors from "cors";
 import cookieparser from "cookie-parser";
+import http from 'node:http';
 import routes from "./infrastructure/http/routes";
 import { connectDB } from "./infrastructure/database/db";
-import { app, server, io } from "./infrastructure/socket/socket";
+import initializeSocket from "./infrastructure/socket/socket";
 
 
+const app = express();
 app.use(express.json());
 app.use(cookieparser());
 app.use(
@@ -18,9 +20,10 @@ app.use(
 
 app.use("/", routes);
 
+const server = http.createServer(app);
 
 
-
+initializeSocket(server)
 
 const PORT: number = (process.env.PORT as any) || 3000;
 
