@@ -24,22 +24,21 @@ export const adminController = {
 
         loginAdmin: async (req: any, res: any) => {
             try{ 
-                
-                 const admin = await allAdminUseCases.loginAdminUseCase.execute(req.body); 
+                const admin = await allAdminUseCases.loginAdminUseCase.execute(req.body); 
+    
 
-                 if(!admin) {
-                    res
-                    .status(HttpStatusCode.NOT_FOUND)
-                    .json({message: StatusMessage[HttpStatusCode.NOT_FOUND], success: false})
-                 } else { 
-                    const  { accessToken, refreshToken } = generateTokens(admin);
+               
+                 admin.role = "admin";
+             
+          
+                 const  { accessToken, refreshToken } = generateTokens(admin);
+                 
             
-   
-                    res.cookie('refreshToken', refreshToken, {
-                        httpOnly: true,
+                 res.cookie('refreshToken', refreshToken, {
+                     httpOnly: true,
                         secure: process.env.NODE_ENV === 'production',
                         sameSite: 'strict'
-                    });
+                    }); 
         
         
                     res.status(HttpStatusCode.OK).json({
@@ -49,11 +48,9 @@ export const adminController = {
                         refreshToken,
                         success: true,
                     });
-                    return res
-                    .status(HttpStatusCode.OK)
-                    .json({message: StatusMessage[HttpStatusCode.OK],admin: admin, success: true});
-                
-               }
+
+                   
+             
             }catch(err: any) { 
                 res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)

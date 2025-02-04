@@ -11,6 +11,8 @@ import { AdminModel} from '../../entities/Admin'
 export class AdminRepository implements AdminRepositary {
   
   async findAdmin(name: string, password: string): Promise<any> {
+ 
+  
 
     if (!name || !password) {
       throw new Error('Name and password are required');
@@ -22,9 +24,8 @@ export class AdminRepository implements AdminRepositary {
       throw new Error('Password is incorrect');
     }
 
-    return {
-      name: name
-    } 
+    
+    return {_id: process.env.ADMIN_OBJECT_ID, name}
   }
 
 
@@ -274,7 +275,7 @@ export class AdminRepository implements AdminRepositary {
 
   async searchClients(inputData: string): Promise<Client | any> {
  
- console.log('THEDAT', inputData)
+ 
     const page = 1;
     const PAGE_SIZE: number = 3;
     const skip: number = (page - 1) * PAGE_SIZE;
@@ -386,7 +387,7 @@ export class AdminRepository implements AdminRepositary {
     const user = await UserModel.findByIdAndUpdate(userId,
       { isBlocked: true }, { update: true }
     ).exec();
-    console.log('TEH USER ', user)
+   
 
     if (!user) {
       throw new Error('User not Found')

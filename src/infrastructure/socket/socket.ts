@@ -34,7 +34,7 @@ const initializeSocket = (server: any) => {
       socket.join(roomId);
     });
 
-    socket.on("sendMessage", async ({ name,roleType, roleId, targetId, text }: any) => {
+    socket.on("sendMessage", async ({ name, roleType, roleId, targetId, text }: any) => {
       try {
       const roomId = [roleId, targetId].sort().join("_");
      
@@ -73,7 +73,7 @@ const initializeSocket = (server: any) => {
 
         await chat.save();
 
-        io.to(roomId).emit("messageReceived", { name, text });
+        io.to(roomId).emit("messageReceived", { name, text, roleType });
       } catch (err: any) {
         console.log(err)
       }
