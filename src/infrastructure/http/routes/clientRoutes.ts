@@ -22,8 +22,9 @@ clientRouter.get( "/job/myContracts/:clientId", verifyToken,  clientController.m
 clientRouter.get( "/contract/:contractId", verifyToken,  clientController.viewContract);
 clientRouter.get( "/contracts/submissions/:clientId", verifyToken,  clientController.viewSubmissions);
 clientRouter.get( "/chat/:memberId", verifyToken,  clientController.getAllChats);
-clientRouter.get( "/chat/view/:chatId", verifyToken,  clientController.viewChat);
 clientRouter.get( "/developers/allDevelopers", verifyToken,  clientController.getallDevelopers);
+
+clientRouter.get( "/chat/view/:roleId/:targetId", clientController.viewChat);
 
 
 clientRouter.post("/signup", clientController.signupClient);

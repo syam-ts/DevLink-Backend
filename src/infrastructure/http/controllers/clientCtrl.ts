@@ -548,15 +548,14 @@ export const clientController = {
         }
     },
 
-
     viewChat: async (req: Request, res: Response) => {
         try {
-            const { chatId } = req.params;
-            const response = await allClientUseCases.viewChatUseCase.execute(chatId);
+            const { roleId , targetId, roleName } = req.params;
+            const response = await allClientUseCases.viewChatUseCase.execute(roleId, targetId, roleName);
 
             res
                 .status(HttpStatusCode.OK)
-                .json({ message: StatusMessage[HttpStatusCode.OK], data: response, success: true });
+                .json({ message: StatusMessage[HttpStatusCode.OK], messages: response, success: true });
         } catch (err: any) {
             res.status(500)
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)

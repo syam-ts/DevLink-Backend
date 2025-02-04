@@ -84,13 +84,25 @@ export class ChatRepositoryMongoose {
   }
 
 
-  async viewChat(chatId: string): Promise<any> {
+  async viewChat(roleId: string, targetId: string): Promise<any> {
 
-    const currentChat = await ChatModel.findById(chatId).exec();
+    console.log('The roleid ' + roleId + 'targetid ' + targetId + 'roleName : ');
 
-    if (!currentChat) throw new Error('Not found the chat');
+    let chat = await ChatModel.findOne({
+      members: { $all: [roleId, targetId]}
+    });
 
-    return currentChat;
+    if(!chat) {
+      chat = new ChatModel({
+        members: [roleId, targetId],
+        messages: []
+      })
+    }
+
+    await chat.save();
+    
+
+    return chat;
 
   }
 

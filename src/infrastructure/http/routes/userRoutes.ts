@@ -20,8 +20,9 @@ userRouter.get('/job/:jobPostId', verifyToken, requireRole('user'), userControll
 userRouter.get('/job/myContracts/:userId', verifyToken, requireRole('user'), userController.viewMyContracts);
 userRouter.get('/job/submittedContracts/:userId', verifyToken, requireRole('user'), userController.viewSubmittedContracts);
 userRouter.get('/chat/:memberId', verifyToken, requireRole('user'), clientController.getAllChats);
-userRouter.get('/chat/view/:chatId', verifyToken, requireRole('user'), clientController.viewChat);
 userRouter.get('/job/proposals/:userId', verifyToken, requireRole('user'), userController.getAllProposals);
+
+userRouter.get('/chat/view/:roleId/:targetId',  clientController.viewChat);
 
 
 userRouter.post('/signup', userController.signupUser);
