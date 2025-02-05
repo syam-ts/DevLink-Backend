@@ -95,12 +95,14 @@ export class EditUserProfile {
   
 
       const type: string = 'verify';
+      console.log("Reached here so far")
 
       const updatedUser = await this.userRepositary.editUserProfile(
         userId,
         profileData,
         type
       );
+      console.log('Updated user: ', updatedUser)
       if (!updatedUser) {
         throw new Error("Profile editing failed");
       }

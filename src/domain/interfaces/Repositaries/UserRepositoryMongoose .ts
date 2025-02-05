@@ -182,13 +182,8 @@ export class UserRepositoryMongoose implements UserRepositary {
         _id: user._id,
         name: user.name,
         email: user.email,
-        profilePicture: user.profilePicture,
-        mobile: user.mobile,
-        description: user.description,
-        location: user.locaiton,
-        isBlocked: user.isBlocked,
-        budget: user.budget,
-        skills: user.skills,
+        profilePicture: user.profilePicture, 
+        isBlocked: user.isBlocked, 
         isProfileFilled: user.isProfileFilled,
       } 
     };
@@ -266,35 +261,42 @@ export class UserRepositoryMongoose implements UserRepositary {
     editData.isProfileFilled = true;
 
     if (type === "verify") {
+ 
       const user = await UserModel.findByIdAndUpdate(userId, editData, {
-        update: true,
+        new: true,
       }).exec();
+ 
 
       if (!user) throw new Error("User not found");
-      return user;
+      return  {user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        profilePicture: user.profilePicture, 
+        isBlocked: user.isBlocked, 
+        isProfileFilled: user.isProfileFilled,
+      }}
     } else {
+     
       const user = await UserModel.findByIdAndUpdate(userId, editData, {
-        update: true,
+        new: true,
       }).exec();
 
       if (!user) throw new Error("User not found");
+ 
 
       return  {user: {
         _id: user._id,
         name: user.name,
         email: user.email,
-        profilePicture: user.profilePicture,
-        mobile: user.mobile,
-        description: user.description,
-        location: user.locaiton,
-        isBlocked: user.isBlocked,
-        budget: user.budget,
-        skills: user.skills,
+        profilePicture: user.profilePicture, 
+        isBlocked: user.isBlocked, 
         isProfileFilled: user.isProfileFilled,
       }
     }
     }
   }
+
 
   async getAllProposals(userId: string): Promise< any> {
     const allClients = await ClientModel.find().exec();

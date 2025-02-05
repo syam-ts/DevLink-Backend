@@ -199,6 +199,7 @@ export const userController = {
         try {
             const { userId, type } = req.params;
             const profileData = req.body;
+           
 
             const response = await allUserUseCases.editProfileUseCase.execute(
                 userId,
@@ -216,7 +217,7 @@ export const userController = {
         } catch (err: any) {
             res
             .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({ message : StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
+            .json({ message : err.message, sucess: false });
         }
     },
 
