@@ -308,7 +308,7 @@ export const userController = {
                 bidDeadline
             );
 
-            console.log('THE REPSON S: ', response)
+ 
 
             res
             .status(HttpStatusCode.CREATED)
@@ -449,7 +449,7 @@ export const userController = {
 
     getSingleJobPost: async (req: Request, res: Response) => {
         try {
-            console.log('POST ID : ')
+             
             const { jobPostId } = req.params;
             const jobPost = await allUserUseCases.getSingleJobPostUseCase.execute(
                 jobPostId

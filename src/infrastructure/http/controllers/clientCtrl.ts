@@ -394,7 +394,7 @@ export const clientController = {
         }
     },
 
-    createContract: async (req: Request, res: Response) => {
+    createContract: async (req: Request, res: any) => {
         try {
 
             const { userId, clientId, jobPostId, bidAmount, bidDeadline } = req.body;
@@ -411,6 +411,27 @@ export const clientController = {
             res.status(500)
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
                 .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+        }
+    },
+
+
+    rejectProposal: async (req: Request, res: any) => {
+        try {
+          
+            const { userId, clientId, jobPostId } = req.body;
+
+            if (!userId && !clientId && !jobPostId) {
+                return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Missing informations ', success: false });
+            }
+
+            const response = await allClientUseCases.rejectProposalUseCase.execute(clientId, userId, jobPostId);
+
+            res.status(HttpStatusCode.CREATED)
+                .json({ message: StatusMessage[HttpStatusCode.CREATED], data: response, success: true });
+        } catch (err: any) {
+            res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: err.message, success: false });
         }
     },
 

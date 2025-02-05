@@ -5,7 +5,7 @@ import { Client, ClientModel } from "../../entities/Client";
 import { JobPostDocument, JobPostModel } from "../../entities/JobPost";
 import { UserRepositary } from "../../../application/usecases/user/signupUser";
 import bcrypt from "bcrypt";
-import validator from "validator"; 
+import validator from "validator";
 import { ContractModel } from "../../entities/Contract";
 import { AdminModel } from "../../entities/Admin";
 import { NotificationModel } from "../../entities/Notification";
@@ -138,14 +138,14 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-  
+
   async allClients(): Promise<any | null> {
     const clients = await ClientModel.find().exec();
-   
+
     return clients
   }
 
-  async findUserByEmailAndPassword( email: string, passwordUser: string ): Promise<User | any> {
+  async findUserByEmailAndPassword(email: string, passwordUser: string): Promise<User | any> {
     if (!email || !passwordUser) {
       throw new Error("Email, and password are required");
     }
@@ -153,7 +153,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     if (!validator.isEmail(email)) {
       throw new Error("Invalid email format");
     }
-   
+
 
     const user = await UserModel.findOne({ email }).exec();
 
@@ -175,17 +175,17 @@ export class UserRepositoryMongoose implements UserRepositary {
     if (!isValidPassword) {
       throw new Error("wrong password");
     }
- 
+
 
     return {
       user: {
         _id: user._id,
         name: user.name,
         email: user.email,
-        profilePicture: user.profilePicture, 
-        isBlocked: user.isBlocked, 
+        profilePicture: user.profilePicture,
+        isBlocked: user.isBlocked,
         isProfileFilled: user.isProfileFilled,
-      } 
+      }
     };
   }
 
@@ -253,7 +253,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     return "Password reset successfully!";
   }
 
-  async editUserProfile( userId: string, userData: any, type: string ): Promise<any> {
+  async editUserProfile(userId: string, userData: any, type: string): Promise<any> {
     // const existingUser: any = await UserModel.findById(userId);
 
     const { editData } = userData;
@@ -261,67 +261,67 @@ export class UserRepositoryMongoose implements UserRepositary {
     editData.isProfileFilled = true;
 
     if (type === "verify") {
- 
-      const user = await UserModel.findByIdAndUpdate(userId, editData, {
-        new: true,
-      }).exec();
- 
 
-      if (!user) throw new Error("User not found");
-      return  {user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        profilePicture: user.profilePicture, 
-        isBlocked: user.isBlocked, 
-        isProfileFilled: user.isProfileFilled,
-      }}
-    } else {
-     
       const user = await UserModel.findByIdAndUpdate(userId, editData, {
         new: true,
       }).exec();
 
-      if (!user) throw new Error("User not found");
- 
 
-      return  {user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        profilePicture: user.profilePicture, 
-        isBlocked: user.isBlocked, 
-        isProfileFilled: user.isProfileFilled,
+      if (!user) throw new Error("User not found");
+      return {
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          profilePicture: user.profilePicture,
+          isBlocked: user.isBlocked,
+          isProfileFilled: user.isProfileFilled,
+        }
       }
-    }
+    } else {
+
+      const user = await UserModel.findByIdAndUpdate(userId, editData, {
+        new: true,
+      }).exec();
+
+      if (!user) throw new Error("User not found");
+
+
+      return {
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          profilePicture: user.profilePicture,
+          isBlocked: user.isBlocked,
+          isProfileFilled: user.isProfileFilled,
+        }
+      }
     }
   }
 
 
-  async getAllProposals(userId: string): Promise< any> {
+  async getAllProposals(userId: string): Promise<any> {
+
     const allClients = await ClientModel.find().exec();
+
     const filteredClients = allClients.filter((client: any) =>
+      
       client.proposals.some((proposal: any) => proposal.userId === userId)
     );
-    
-    console.log("Filtered Clients:", filteredClients);
-    
+
+
+
     // if(!client) throw new Error('No proposal found');
 
     // return client;
   }
 
-  async createProposal(
-    userId: Id,
-    jobPostId: Id,
-    description: Id,
-    bidAmount: number,
-    bidDeadline: number
-  ): Promise<any> {
+  async createProposal( userId: Id ,jobPostId: Id, description: Id, bidAmount: number, bidDeadline: number): Promise<any> {
 
-    
+
     const user = await UserModel.findById(userId);
-    
+
     if (!user) {
       throw new Error("User not found");
     }
@@ -333,12 +333,23 @@ export class UserRepositoryMongoose implements UserRepositary {
       ],
     });
 
-  
+
     if (existingProposal.length !== 0) {
       throw new Error("Proposal alredy send");
     } else {
-      const jobpost: any = await JobPostModel.findById(jobPostId);
-      console.log('JOBNPOST : ', jobpost)
+      const jobpost: any = await JobPostModel.findByIdAndUpdate(jobPostId,
+        {
+          $inc: { proposalCount: 1 }
+        },
+        {
+          new: true
+        }
+      );
+
+      console.log("Modified jobpost: ", jobPostId)
+
+
+
 
       const newProposal = {
         type: "New Job Proposal ",
@@ -349,6 +360,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         jobPostId: jobPostId,
         jobPostInfo: jobpost.title,
         description: description,
+        status: "pending",
         bidAmount: bidAmount,
         bidDeadline: bidDeadline,
       };
@@ -378,7 +390,7 @@ export class UserRepositoryMongoose implements UserRepositary {
 
       newNotificationUser.save();
       newNotificationClient.save();
-      console.log('PROPOSAL FINAL : ', proposal)
+
 
       return proposal;
     }
@@ -387,19 +399,19 @@ export class UserRepositoryMongoose implements UserRepositary {
 
 
   async listHomeJobs(type: string): Promise<any> {
-    if(type === 'listAllJobs') {
+    if (type === 'listAllJobs') {
       const totalJobs = await JobPostModel.countDocuments();
 
       const verifiedAccounts = await ClientModel.countDocuments({
         isVerified: true,
       });
-  
+
       const allJobs = await JobPostModel.find({ status: "pending" }).exec();
-  
+
       const totalHours = await JobPostModel.aggregate([
         { $group: { _id: null, sum: { $sum: "$estimateTimeinHours" } } },
       ]);
-  
+
       if (!allJobs) {
         throw new Error("No job found");
       } else {
@@ -407,10 +419,10 @@ export class UserRepositoryMongoose implements UserRepositary {
       }
     } else if (type === 'latestJobs') {
       const latestJobs = await JobPostModel.find({})
-      .sort({ createdAt: -1 }).limit(6)
-      .exec();
+        .sort({ createdAt: -1 }).limit(6)
+        .exec();
 
-    return latestJobs;
+      return latestJobs;
     } else {
       throw new Error('Jobs not founded');
     }
@@ -418,7 +430,7 @@ export class UserRepositoryMongoose implements UserRepositary {
 
 
 
- 
+
 
 
 
@@ -447,16 +459,16 @@ export class UserRepositoryMongoose implements UserRepositary {
       throw new Error("User has no skills or does not exist.");
     }
 
-    if(jobType === 'listAllJobs') {
+    if (jobType === 'listAllJobs') {
 
       const jobs = await JobPostModel.find().exec();
 
-      if(!jobs) throw new Error('No jobs found')
-        return jobs;
+      if (!jobs) throw new Error('No jobs found')
+      return jobs;
 
-    } else if(jobType === 'trendingJobs') {
+    } else if (jobType === 'trendingJobs') {
 
-      const jobs = await JobPostModel.find().sort({proposalCount: -1});
+      const jobs = await JobPostModel.find().sort({ proposalCount: -1 });
 
       return jobs;
 
@@ -466,7 +478,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       const matchJobs = await JobPostModel.find({
         requiredSkills: { $elemMatch: { $in: userSkills } },
       }).exec();
-  
+
       if (!matchJobs || matchJobs.length === 0) {
         throw new Error("No matched job found ");
       } else {
@@ -476,7 +488,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       throw new Error('Invalid selection');
     }
 
-   
+
   }
 
   async closeContract(

@@ -22,6 +22,7 @@ export interface Client extends mongoose.Document{
             jobPostInfo: string,
             userData: User,
             description?: string,
+            status?: string,
             bidamount: number,
             bidDeadline: number
         }],
@@ -81,6 +82,7 @@ const ClientSchema: mongoose.Schema = new mongoose.Schema({
                
             },
             description: { type: String, required: false },
+            status: { type: String, required: false },
             bidAmount: { type: Number, required: false },
             bidDeadline: { type: Number, required: false }
              }

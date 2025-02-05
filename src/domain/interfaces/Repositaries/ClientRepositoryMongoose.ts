@@ -10,6 +10,7 @@ import bcrypt from 'bcrypt';
 import validator from 'validator';
 import jwt from 'jsonwebtoken';
 import allCronJobs from '../../../helper/cron-jobs/index'
+import mongoose from 'mongoose';
  
 
 
@@ -683,10 +684,31 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     //await allCronJobs.startContractHelperFn(timer, jobPostId, userId, contractId);
 
     return savedContract;
-
-
+ 
   }
 
+
+  
+  async rejectProposal(clientId: any, userId: any, jobPostId: any): Promise<any > {
+    const proposal = await ClientModel.findOneAndUpdate(
+      {
+          _id: new mongoose.Types.ObjectId(clientId), // Ensure correct ID type
+          proposals: {
+              $elemMatch: {
+                  userId: new mongoose.Types.ObjectId(userId),
+                  jobPostId: new mongoose.Types.ObjectId(jobPostId),
+              }
+          }
+      },
+      {
+          $set: { "proposals.$.status": "rejected" } // Update only the matched proposal
+      },
+      { new: true }
+  );
+        
+
+    return proposal
+  }
 
 
   async closeContract(contractId: string): Promise<any> {

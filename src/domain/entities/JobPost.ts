@@ -13,8 +13,8 @@ export interface JobPostDocument extends Document {
     expertLevel: 'beginner' | 'intermediate' | 'advanced';
     location: string;
     projectType: 'ongoing project' | 'project updation';
-    totalProposals: number;
     maxProposals: number; 
+    proposalCount: number;
     aboutClient: {
       companyName: string,
       location: string,
@@ -43,8 +43,8 @@ export interface JobPostDocument extends Document {
     expertLevel: { type: String, required: false },
     location: { type: String, required: false },
     projectType: { type: String, required: false },
-    totalProposals: { type: Number, required: false },
     maxProposals: { type: Number, required: false },
+    proposalCount: { type: Number, required: false },
     aboutClient: {type: {}, required: false}, 
     status: { type: String, required: true },
     isPayment: { type: Boolean, required: true },

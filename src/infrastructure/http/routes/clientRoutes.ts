@@ -46,13 +46,14 @@ clientRouter.post("/payment/success/:clientId", clientController.createJobPost);
 clientRouter.post("/rate/user/:notificationId", verifyToken,  clientController.rateUser);
 
 clientRouter.post("/project/submit/approval/:contractId", verifyToken,  clientController.closeContract);
-// clientRouter.post('/job/createContract',verifyToken, requireRole('client'), clientController.createContract);
-
-//chat routes
-clientRouter.post("/chat/create-chat", verifyToken,  clientController.createChat);
-clientRouter.post("/chat/sendMessage", verifyToken,  clientController.sendMessage);
-
-clientRouter.put("/profile/edit/:clientId", verifyToken,  clientController.editProfile);
+ clientRouter.post('/job/createContract',verifyToken, clientController.createContract);
+ 
+ //chat routes
+ clientRouter.post("/chat/create-chat", verifyToken,  clientController.createChat);
+ clientRouter.post("/chat/sendMessage", verifyToken,  clientController.sendMessage);
+ 
+ clientRouter.put("/profile/edit/:clientId", verifyToken,  clientController.editProfile);
+ clientRouter.put('/job/proposal/reject', clientController.rejectProposal);
 
 
 

@@ -54,6 +54,7 @@ import { GetProposals } from '../../application/usecases/client/getProposals';
 import { GetMyJobs } from '../../application/usecases/client/getMyJobs';
 import { LatestJobs } from '../../application/usecases/client/latestJobs';
 import { CreateContract } from '../../application/usecases/client/createContract';
+import { RejectProposal } from '../../application/usecases/client/rejectProposal';
 import { MyContracts } from '../../application/usecases/client/myContracts'; 
 import { ViewContract } from '../../application/usecases/client/viewContract';
 import { ViewSubmissions } from '../../application/usecases/client/viewSubmissions';
@@ -149,6 +150,7 @@ const getProposalsUseCase = new GetProposals(ClientRepository);
 const getMyJobsUseCase = new GetMyJobs(ClientRepository);
 const latestJobsUseCase = new LatestJobs(ClientRepository);
 const createContractUseCase = new CreateContract(ClientRepository);
+const rejectProposalUseCase = new RejectProposal(ClientRepository);
 const myContractsUseCase = new MyContracts(ClientRepository);
 const viewContractUseCase = new ViewContract(ClientRepository);
 const viewSubmissionsUseCase = new ViewSubmissions(ClientRepository);
@@ -242,6 +244,7 @@ export const allClientUseCases = {
      getMyJobsUseCase,
      latestJobsUseCase,
      createContractUseCase,
+     rejectProposalUseCase,
      myContractsUseCase,
      viewContractUseCase,
      viewSubmissionsUseCase,
