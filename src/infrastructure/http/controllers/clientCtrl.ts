@@ -94,7 +94,7 @@ export const clientController = {
     loginClient: async (req: Request, res: any) => {
         try {
 
-           
+ 
             const client: any = await allClientUseCases.loginClientUseCase.execute(req.body);
 
  

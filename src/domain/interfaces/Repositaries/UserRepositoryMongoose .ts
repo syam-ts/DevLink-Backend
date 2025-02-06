@@ -303,21 +303,13 @@ export class UserRepositoryMongoose implements UserRepositary {
 
   async getAllProposals(userId: string): Promise<any> {
 
-    const allClients = await ClientModel.find().exec();
-
-    const filteredClients = allClients.filter((client: any) =>
-      
-      client.proposals.some((proposal: any) => proposal.userId === userId)
-    );
+    const findProposals: any = await ClientModel.find({ proposals: { $elemMatch: { userId } } }).exec(); 
+    if (!findProposals) throw new Error('No proposal found'); 
+    return findProposals[0].proposals;
+  };
 
 
-
-    // if(!client) throw new Error('No proposal found');
-
-    // return client;
-  }
-
-  async createProposal( userId: Id ,jobPostId: Id, description: Id, bidAmount: number, bidDeadline: number): Promise<any> {
+  async createProposal(userId: Id, jobPostId: Id, description: Id, bidAmount: number, bidDeadline: number): Promise<any> {
 
 
     const user = await UserModel.findById(userId);
@@ -392,7 +384,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       newNotificationClient.save();
 
 
-      return {proposal, notification: newNotificationUser};
+      return { proposal, notification: newNotificationUser };
     }
   }
 
@@ -447,7 +439,7 @@ export class UserRepositoryMongoose implements UserRepositary {
   async allNotifications(userId: Id): Promise<any> {
     const notifications: any = await NotificationModel.find({
       reciever_id: userId,
-    }).sort({createdAt: -1}).exec(); 
+    }).sort({ createdAt: -1 }).exec();
 
     return notifications;
   }

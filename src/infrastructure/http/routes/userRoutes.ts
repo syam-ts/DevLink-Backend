@@ -13,14 +13,14 @@ userRouter.get('/alluser', userController.allClients)
 userRouter.get('/getHome', verifyToken, requireRole('user'), userController.getHomeUser);
 userRouter.get('/profile/view/:userId', verifyToken, requireRole('user'), userController.getProfile);
 userRouter.get('/home/:type', verifyToken, requireRole('user'), userController.listHomeJobs);
-userRouter.get('/job/:jobType/:userId', verifyToken, requireRole('user'), userController.getSelectedJobs);
+userRouter.get('/jobs/view/:jobType/:userId', verifyToken, requireRole('user'), userController.getSelectedJobs);
 userRouter.get('/all-contracts/:userId', verifyToken, requireRole('user'), userController.allContracts);
 userRouter.get('/notifications/:userId', verifyToken, userController.allNotifications);
-userRouter.get('/job/:jobPostId', verifyToken, requireRole('user'), userController.getSingleJobPost);
+userRouter.get('/job/view/:jobPostId', verifyToken, requireRole('user'), userController.getSingleJobPost);
 userRouter.get('/job/myContracts/:userId', verifyToken, requireRole('user'), userController.viewMyContracts);
 userRouter.get('/job/submittedContracts/:userId', verifyToken, requireRole('user'), userController.viewSubmittedContracts);
 userRouter.get('/chat/:memberId', verifyToken, requireRole('user'), clientController.getAllChats);
-userRouter.get('/job/proposals/:userId', verifyToken, requireRole('user'), userController.getAllProposals);
+userRouter.get('/job/proposals/:userId',  userController.getAllProposals);
 
 userRouter.get('/chat/view/:roleId/:targetId',  clientController.viewChat);
 
