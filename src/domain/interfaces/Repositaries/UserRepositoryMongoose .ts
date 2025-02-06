@@ -392,7 +392,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       newNotificationClient.save();
 
 
-      return proposal;
+      return {proposal, notification: newNotificationUser};
     }
   }
 
@@ -447,7 +447,7 @@ export class UserRepositoryMongoose implements UserRepositary {
   async allNotifications(userId: Id): Promise<any> {
     const notifications: any = await NotificationModel.find({
       reciever_id: userId,
-    }).exec();
+    }).sort({createdAt: -1}).exec(); 
 
     return notifications;
   }
