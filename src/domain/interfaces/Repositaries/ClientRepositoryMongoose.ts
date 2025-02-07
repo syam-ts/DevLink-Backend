@@ -7,10 +7,10 @@ import { JobPostModel } from '../../entities/JobPost';
 import { AdminModel } from '../../entities/Admin';
 import { ContractModel } from '../../entities/Contract';
 import bcrypt from 'bcrypt';
-import validator from 'validator'; 
+import validator from 'validator';
 import allCronJobs from '../../../helper/cron-jobs/index'
 import mongoose from 'mongoose';
- 
+
 
 export interface Notification {
   type: string
@@ -24,7 +24,7 @@ export interface Notification {
 export interface Extra {
   userId: string
 }
-  
+
 
 
 export class ClientRepositoryMongoose implements ClientRepositary {
@@ -193,7 +193,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       throw new Error('wrong password')
     };
 
-     
+
     await client.save();
 
     return client;
@@ -231,9 +231,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async allUser(): Promise<any | null> {
     const user = await UserModel.find().exec();
-    
+
     return user;
- 
+
   }
 
 
@@ -362,64 +362,64 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
       const client: any = await ClientModel.findById(clientId);
 
-  
-        // const minWorkingHours: number = data.estimateTime * 8;
-        // const finalDate: number = (data.estimateTime * 24 ) - minWorkingHours;
+
+      // const minWorkingHours: number = data.estimateTime * 8;
+      // const finalDate: number = (data.estimateTime * 24 ) - minWorkingHours;
 
 
-        const parsedEstimatedTimeInHours = parseInt(data.estimateTime)
+      const parsedEstimatedTimeInHours = parseInt(data.estimateTime)
 
-        const totalAmount = data.estimateTime * data.payment;
+      const totalAmount = data.estimateTime * data.payment;
 
-        data.amount = totalAmount; //updatig the total amount 
-
-
-
-        //ADD REST OF THE FIELDS
-        const createdJobPost = new JobPostModel({
-          title: data.title,
-          description: data.description,
-          keyResponsiblities: data.keyResponsiblities,
-          requiredSkills: data.requiredSkills,
-          paymentType: data.paymentType,
-          estimateTime: new Date(),
-          estimateTimeinHours: parsedEstimatedTimeInHours,
-          amount: data.payment,
-          expertLevel: data.expertLevel,
-          location: data.location,
-          projectType: data.projectType,
-          maxProposals: data.maxProposals,
-          proposalCount: 0,
-          aboutClient: {
-            companyName: client.companyName,
-            location: client.location,
-            totalSpend: client.totalSpend,
-            totalHours: client.totalHours,
-            domain: client.domain,
-            numberOfEmployees: client.numberOfEmployees,
-            joined: client.createdAt
-          },
-          status: "pending",
-          isPayment: true,
-          createdAt: new Date(),
-          clientId: clientId
-        });
-
-        const savedJobPost = await createdJobPost.save();
-
-        const newNotification = await NotificationModel.create({
-          type: "New Job Post",
-          message: "New Post created successfully",
-          sender_id: process.env._ADMIN_OBJECT_ID,
-          reciever_id: clientId, 
-          createdAt: new Date()
-        });
-
-        newNotification.save();
+      data.amount = totalAmount; //updatig the total amount 
 
 
-        return { savedJobPost };
-        
+
+      //ADD REST OF THE FIELDS
+      const createdJobPost = new JobPostModel({
+        title: data.title,
+        description: data.description,
+        keyResponsiblities: data.keyResponsiblities,
+        requiredSkills: data.requiredSkills,
+        paymentType: data.paymentType,
+        estimateTime: new Date(),
+        estimateTimeinHours: parsedEstimatedTimeInHours,
+        amount: data.payment,
+        expertLevel: data.expertLevel,
+        location: data.location,
+        projectType: data.projectType,
+        maxProposals: data.maxProposals,
+        proposalCount: 0,
+        aboutClient: {
+          companyName: client.companyName,
+          location: client.location,
+          totalSpend: client.totalSpend,
+          totalHours: client.totalHours,
+          domain: client.domain,
+          numberOfEmployees: client.numberOfEmployees,
+          joined: client.createdAt
+        },
+        status: "pending",
+        isPayment: true,
+        createdAt: new Date(),
+        clientId: clientId
+      });
+
+      const savedJobPost = await createdJobPost.save();
+
+      const newNotification = await NotificationModel.create({
+        type: "New Job Post",
+        message: "New Post created successfully",
+        sender_id: process.env._ADMIN_OBJECT_ID,
+        reciever_id: clientId,
+        createdAt: new Date()
+      });
+
+      newNotification.save();
+
+
+      return { savedJobPost };
+
     } catch (err: any) {
       console.log('ERROR: ', err.message)
     }
@@ -431,11 +431,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   async getAllNotifications(clientId: any): Promise<any> {
     const notifications = await NotificationModel.aggregate([
       {
-        $match: {reciever_id: clientId}
+        $match: { reciever_id: clientId }
       }, {
-        $sort: {createdAt: -1}
+        $sort: { createdAt: -1 }
       }
-      ])
+    ])
 
     if (!notifications) {
       throw new Error('No notification found')
@@ -519,7 +519,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async getallDevelopers(): Promise<any> {
     //  const developers = await UserModel.find({isProfileFilled: true}).exec();
-   const developers = await UserModel.find().exec();
+    const developers = await UserModel.find().exec();
 
     if (!developers) throw new Error('Developers not found');
 
@@ -558,7 +558,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       date: new Date()
     };
 
-    
+
     const updateAdminWallet = await AdminModel.findByIdAndUpdate(adminId, {
       $inc: { "wallet.balance": amount },
       $push: { "wallet.transactions": walletEntry }
@@ -631,7 +631,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async createContract(clientId: string, userId: string, jobPostId: string, bidAmount: number, bidDeadline: string): Promise<any> {
 
-   
+
 
 
     // updating job post status 
@@ -657,7 +657,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
     // const deduction = currentJobPost.amount % 10;
-   
+
 
     const newContract = new ContractModel({
       clientId: clientId,
@@ -703,7 +703,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       createdAt: new Date(),
     });
 
-    const newNotificationClient= await NotificationModel.create<Notification>({
+    const newNotificationClient = await NotificationModel.create<Notification>({
       type: "Contract",
       message: "New Contract signed in",
       sender_id: adminId,
@@ -713,70 +713,70 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     });
 
     newNotificationUser.save();
-    newNotificationClient.save();
-
-    //send notificaion to both role
+    newNotificationClient.save(); 
 
     //await allCronJobs.startContractHelperFn(timer, jobPostId, userId, contractId);
 
-    return { 
+    return {
       newNotificationUser,
       newNotificationClient
     };
- 
+
   }
 
 
-  
-  async rejectProposal(clientId: any, userId: any, jobPostId: any): Promise<any > {
+
+  async rejectProposal(clientId: any, userId: any, jobPostId: any): Promise<any> {
     const proposal = await ClientModel.findOneAndUpdate(
       {
-          _id: new mongoose.Types.ObjectId(clientId), // Ensure correct ID type
-          proposals: {
-              $elemMatch: {
-                  userId: new mongoose.Types.ObjectId(userId),
-                  jobPostId: new mongoose.Types.ObjectId(jobPostId),
-              }
+        _id: new mongoose.Types.ObjectId(clientId),  
+        proposals: {
+          $elemMatch: {
+            userId: new mongoose.Types.ObjectId(userId),
+            jobPostId: new mongoose.Types.ObjectId(jobPostId),
           }
+        }
       },
       {
-          $set: { "proposals.$.status": "rejected" } // Update only the matched proposal
+        $set: { "proposals.$.status": "rejected" } // Update only the matched proposal ----------------
       },
       { new: true }
-  );
-        
-
+    ); 
     return proposal
   }
 
 
-  async closeContract(contractId: string): Promise<any> {
+  async closeContract(contractId: string, progress: number): Promise<any> {
+  
 
-    //update contract status as closed
-    const currentContract: any = await ContractModel.findByIdAndUpdate( contractId, {
-        active: false,
-        status: "closed", },
+    //update contract status as closed ----------------
+    if (!progress) throw new Error('Progress data missing');
+
+    const currentContract: any = await ContractModel.findByIdAndUpdate(contractId, {
+      active: false,
+      status: "closed",
+    },
       { update: true }
     );
 
     if (!currentContract) {
       throw new Error("Contract not found");
-    };
+    }; 
 
-
-    //update jobpost status as closed
+    //update jobpost status as closed ----------------
     const jobPostId: string = currentContract.jobPostId;
-    const currentJobPost: any = await JobPostModel.findByIdAndUpdate( jobPostId, { 
-      status: "closed", },
-    { update: true }
-  );
-     
-    const finalAmount = Math.round( currentContract.amount - (currentContract.amount * 10) / 100 );
 
+    const currentJobPost: any = await JobPostModel.findByIdAndUpdate(jobPostId, {
+      status: "closed",
+    },
+      { update: true }
+    );
 
-    // find and minus admin wallet
+    const finalAmount = Math.round(currentContract.amount - (currentContract.amount * 10) / 100);
     const adminId = process.env.ADMIN_OBJECT_ID;
-   
+    let updateUserWallet, updateAdminWallet, updateClientWallet;
+
+    // find and substract admin wallet ----------------
     const walletEntryAdmin = {
       type: "debit",
       amount: finalAmount,
@@ -785,88 +785,155 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       date: new Date(),
     };
 
-    const updateAdminWallet = await AdminModel.findByIdAndUpdate( adminId, {
-        $inc: { "wallet.balance": -finalAmount },
-        $push: { "wallet.transactions": walletEntryAdmin }, 
-      },{
+    updateAdminWallet = await AdminModel.findByIdAndUpdate(adminId, {
+      $inc: { "wallet.balance": -finalAmount },
+      $push: { "wallet.transactions": walletEntryAdmin },
+       },{
         new: true,
         upsert: false,
       }).exec();
+      
+      console.log("updateclient wallet : ", adminId)
 
-
-    const walletEntryUser = {
-      type: "credit",
-      amount: finalAmount,
-      from: "admin",
-      fromId: adminId,
-      date: new Date(),
-    };
-
-    const updateUserWallet = await UserModel.findByIdAndUpdate(
-      currentContract.userId,
-      {
-        $inc: { "wallet.balance": finalAmount },
-        $push: { "wallet.transactions": walletEntryUser },
-      },
-      {
-        new: true,
-        upsert: false,
-      }
-    ).exec();
+      
+      if (progress === 100) {
  
-    //remove project submission from client
-    const clientId = currentContract.clientId; 
-     const currentClient = await ClientModel.findByIdAndUpdate(clientId, { $pull: 
-      { projectSubmissions: { contractId: contractId } } }, { new: true });
+        const walletEntryUser = {
+          type: "credit",
+          amount: finalAmount,
+          from: "admin",
+          fromId: adminId,
+          date: new Date(),
+        };
 
-    //update to user workHistory
+      updateUserWallet = await UserModel.findByIdAndUpdate(
+        currentContract.userId,
+        {
+          $inc: { "wallet.balance": finalAmount },
+          $push: { "wallet.transactions": walletEntryUser },
+        },
+        {
+          new: true,
+          upsert: false,
+        }
+      ).exec();
+    } else {
+ 
+      //update user wallet according to the progress ----------------
+      const userFinalPayment = (finalAmount * progress ) / 100;
+      const walletEntryUser = {
+        type: "credit",
+        amount: userFinalPayment,
+        from: "admin",
+        fromId: adminId,
+        date: new Date(),
+      };
+
+      updateUserWallet = await UserModel.findByIdAndUpdate(
+        currentContract.userId,
+        {
+          $inc: { "wallet.balance": userFinalPayment },
+          $push: { "wallet.transactions": walletEntryUser },
+        },
+        {
+          new: true,
+          upsert: false,
+        }
+      ).exec();
+
+
+
+
+
+      //rest of the amount go to client wallet ---------------- 
+      const clientLeftoverAmount = finalAmount - userFinalPayment;
+      const walletEntryClient = {
+        type: "credit",
+        amount: clientLeftoverAmount,
+        from: "admin",
+        fromId: adminId,
+        date: new Date(),
+      }; 
+
+      updateClientWallet = await ClientModel.findByIdAndUpdate(
+        currentContract.clientId,
+        {
+          $inc: { "wallet.balance": clientLeftoverAmount },
+          $push: { "wallet.transactions": walletEntryClient },
+        },
+        {
+          new: true,
+          upsert: false,
+        }
+      ).exec();
+
+
+
+    }
+
+    //remove project submission from client ----------------
+    const clientId = currentContract.clientId;
+    const currentClient = await ClientModel.findByIdAndUpdate(clientId, {
+      $pull:
+        { projectSubmissions: { contractId: contractId } }
+    }, { new: true });
+
+    //update to user workHistory ----------------
     const updateUser = await UserModel.findByIdAndUpdate(currentContract.userId, {
-      $push:{workHistory: jobPostId}
+      $push: { workHistory: jobPostId }
     }, {
       update: true
     });
 
-    const newNotificationUser = await NotificationModel.create({
-      type: "Job Contract Completed",
-      message: "You successfully completed Job Contract",
-      sender_id: process.env._ADMIN_OBJECT_ID,
-      reciever_id: currentContract.userId, 
-      extra: jobPostId,
-      createdAt: new Date()
-    });
 
-    
-    const newNotificationClient = await NotificationModel.create({
-      type: "Job Contract Completed",
-      message: "One Contract Successfully Closed",
+    const newNotificationUser = await NotificationModel.create({
+      type: "Contract",
+      message: "You successfully completed a Job Contract",
       sender_id: process.env._ADMIN_OBJECT_ID,
-      reciever_id: currentContract.clientId, 
+      reciever_id: currentContract.userId,
       extra: {
-        userId: currentContract.userId
+        documentId: contractId
       },
       createdAt: new Date()
     });
 
-    
+
+    const newNotificationClient = await NotificationModel.create({
+      type: "Contract",
+      message: "One Contract Successfully Closed",
+      sender_id: process.env._ADMIN_OBJECT_ID,
+      reciever_id: currentContract.clientId,
+      extra: {
+        documentId: contractId
+      },
+      createdAt: new Date()
+    });
+
+
     newNotificationUser.save();
     newNotificationClient.save();
 
-
-    return { updateUserWallet, updateAdminWallet };
+    return {
+      updateUserWallet,
+      updateAdminWallet,
+      updateClientWallet,
+      newNotificationUser,
+      newNotificationClient
+    };
   }
 
 
 
-  async rateUser(userId: string, notificationId: string, rating: number): Promise< any> {
-   
-   //insert rating on user
-  
-    const updateUser = await UserModel.findByIdAndUpdate(userId, {rating: rating}, {update: true});
-    
-      //remove the rating from notifaicaino 
-      const removeExtra = await NotificationModel.findByIdAndUpdate(notificationId, { extra: {} }, { update: true });
+  async rateUser(userId: string, notificationId: string, rating: number): Promise<any> {
 
-      return {updateUser, removeExtra};
+    //insert rating on user
+
+    const updateUser = await UserModel.findByIdAndUpdate(userId, { rating: rating }, { update: true });
+
+    //remove the rating from notifaicaino 
+    const removeExtra = await NotificationModel.findByIdAndUpdate(notificationId, { extra: {} }, { update: true });
+
+    return { updateUser, removeExtra };
   };
 
 

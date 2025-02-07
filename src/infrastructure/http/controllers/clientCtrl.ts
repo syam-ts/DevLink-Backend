@@ -492,15 +492,15 @@ export const clientController = {
     closeContract: async (req: Request, res: Response) => {
         try {
 
-            const { contractId } = req.params;
-            const response = await allClientUseCases.closeContractUseCase.execute(contractId);
+            const { contractId, progress } = req.body; 
+            const response = await allClientUseCases.closeContractUseCase.execute(contractId, progress);
 
             res.status(HttpStatusCode.OK)
                 .json({ message: StatusMessage[HttpStatusCode.OK], data: response, success: true });
         } catch (err: any) {
             res.status(500)
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .json({ message: err.message, success: false });
         }
     },
 

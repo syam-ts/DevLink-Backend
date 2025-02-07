@@ -6,7 +6,7 @@ export interface Notification extends mongoose.Document{
     sender_id: string;
     reciever_id: string;
     extra?: {
-        userId: mongoose.Types.ObjectId
+        documentId: mongoose.Types.ObjectId
     };
     createdAt?: Date;
 }

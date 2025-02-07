@@ -27,14 +27,10 @@ export interface Client extends mongoose.Document{
             bidDeadline: number
         }],
         wallet: {
-            balance: number, 
+            balance: {type: Number, required: false}, 
             transactions: [
                 {
-                    type: String,
-                    amount: Number,
-                    from: String,
-                    fromId: mongoose.Types.ObjectId,
-                    date: Date
+                    type: []
                 }
             ]
         },
@@ -89,16 +85,10 @@ const ClientSchema: mongoose.Schema = new mongoose.Schema({
         ],
         wallet: {
             balance: {type: Number, required: false}, 
-            transactions: [
-                {
-                    type: String,
-                    amount: Number,
-                    from: String,
-                    fromId: mongoose.Types.ObjectId,
-                    date: Date
-                }
-            ]
-        },
+            transactions: [{
+                    type: Array
+                }]
+         },
         projectSubmissions:  [
             {
                 contractId: {type: mongoose.Types.ObjectId, required: false},
