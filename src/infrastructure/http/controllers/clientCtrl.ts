@@ -522,20 +522,6 @@ export const clientController = {
     },
 
 
-    createChat: async (req: Request, res: Response) => {
-        try {
-
-            const response = await allClientUseCases.createChatUseCase.execute(req.body);
-
-            res.status(HttpStatusCode.CREATED)
-                .json({ message: StatusMessage[HttpStatusCode.CREATED], data: response, success: true });
-        } catch (err: any) {
-            res.status(500)
-                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
-        }
-    },
-
 
 
     sendMessage: async (req: Request, res: Response) => {
@@ -578,6 +564,23 @@ export const clientController = {
             res
                 .status(HttpStatusCode.OK)
                 .json({ message: StatusMessage[HttpStatusCode.OK], messages: response, success: true });
+        } catch (err: any) {
+            res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: err.message, success: false });
+        }
+    },
+
+    viewWallet: async (req: Request, res: Response) => {
+        try {
+            const { clientId } = req.params;
+       
+           
+            const response = await allClientUseCases.viewWalletUseCase.execute(clientId);
+            console.log('The wallet ', response)
+            res
+                .status(HttpStatusCode.OK)
+                .json({ message: StatusMessage[HttpStatusCode.OK], wallet: response, success: true });
         } catch (err: any) {
             res.status(500)
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)

@@ -63,6 +63,7 @@ import { RateUser } from '../../application/usecases/client/rateUser';
 import { CreateChat } from '../../application/usecases/client/createChat';
 import { SendMessage } from '../../application/usecases/client/sendMessage';
 import { GetAllChats } from '../../application/usecases/client/getAllChats';
+import { ViewWallet } from '../../application/usecases/client/viewWallet';
 import { ViewChat } from '../../application/usecases/client/viewChat';
 import { GetallDevelopers } from '../../application/usecases/client/getallDevelopers';
 import { ChatRepositoryMongoose } from "../../domain/interfaces/Repositaries/ChatRepository";
@@ -156,9 +157,9 @@ const viewContractUseCase = new ViewContract(ClientRepository);
 const viewSubmissionsUseCase = new ViewSubmissions(ClientRepository);
 const closeContractUseCase = new CloseContract(ClientRepository);
 const rateUserUseCase = new RateUser(ClientRepository);
+const viewWalletUseCase = new ViewWallet(ClientRepository);
 const getallDevelopersUseCase = new GetallDevelopers(ClientRepository);
 const chatBotUseCase = new ChatBot(ClientRepository);
-const createChatUseCase = new CreateChat(ChatRepository);
 const sendMessageUseCase = new SendMessage(ChatRepository);
 const getAllChatsUseCase = new GetAllChats(ChatRepository);
 const viewChatUseCase = new ViewChat(ChatRepository);
@@ -241,6 +242,7 @@ export const allClientUseCases = {
      makePaymentUseCase,
      getUserProfileUseCase,
      getProposalsUseCase,
+     viewWalletUseCase,
      getMyJobsUseCase,
      latestJobsUseCase,
      createContractUseCase,
@@ -250,8 +252,7 @@ export const allClientUseCases = {
      viewSubmissionsUseCase,
      getallDevelopersUseCase,
      closeContractUseCase,
-     rateUserUseCase,
-     createChatUseCase,
+     rateUserUseCase, 
      sendMessageUseCase,
      getAllChatsUseCase,
      viewChatUseCase,

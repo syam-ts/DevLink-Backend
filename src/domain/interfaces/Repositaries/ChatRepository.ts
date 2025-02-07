@@ -61,12 +61,12 @@ export class ChatRepositoryMongoose {
 
   async viewChat(roleType: string, roleId: string, targetId: string): Promise<any> {
 
-    console.log('The roleid ' + roleId + ' targetid ' + targetId);
+    
 
     let chat = await ChatModel.findOne({
       members: { $all: [roleId, targetId] }
     });
-    console.log('The chat ', chat)
+ 
 
     if (!chat) {
       
@@ -102,7 +102,7 @@ export class ChatRepositoryMongoose {
 
   async sendMessage(body: Message): Promise<any> {
     const { chatId, sender, text, roleType }: Message = body;
-    console.log('THE BODY: ', body)
+ 
 
     const newMessage = new MessageModel({
       chatId: chatId,

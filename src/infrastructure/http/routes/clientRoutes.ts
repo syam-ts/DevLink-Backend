@@ -22,6 +22,7 @@ clientRouter.get( "/job/myContracts/:clientId", verifyToken,  clientController.m
 clientRouter.get( "/contract/:contractId", verifyToken,  clientController.viewContract);
 clientRouter.get( "/contracts/submissions/:clientId",  clientController.viewSubmissions);
 clientRouter.get( "/developers/allDevelopers", verifyToken, clientController.getallDevelopers);
+clientRouter.get( "/wallet/view/:clientId", clientController.viewWallet);
 
 clientRouter.get( "/allChat/view/:roleId", clientController.getAllChats);
 
@@ -49,9 +50,7 @@ clientRouter.post("/rate/user/:notificationId", verifyToken,  clientController.r
 
 clientRouter.post("/project/submit/approval",  clientController.closeContract);
  clientRouter.post('/job/createContract',verifyToken, clientController.createContract);
- 
- //chat routes
- clientRouter.post("/chat/create-chat", verifyToken,  clientController.createChat);
+  
 
  clientRouter.post("/chat/sendMessage", verifyToken,  clientController.sendMessage);
  

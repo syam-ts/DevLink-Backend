@@ -542,6 +542,21 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
 
+  async viewWallet(clientId: string): Promise<any> {
+    console.log('The id ', clientId)
+    const client: any = await ClientModel.findById(clientId);
+    if (!client) {
+      throw new Error('Client not found');
+    }
+    console.log('afte ', client)
+
+    return client.wallet;
+  }
+
+
+
+
+
 
 
 
