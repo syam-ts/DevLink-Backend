@@ -7,13 +7,24 @@ import { JobPostModel } from '../../entities/JobPost';
 import { AdminModel } from '../../entities/Admin';
 import { ContractModel } from '../../entities/Contract';
 import bcrypt from 'bcrypt';
-import validator from 'validator';
-import jwt from 'jsonwebtoken';
+import validator from 'validator'; 
 import allCronJobs from '../../../helper/cron-jobs/index'
 import mongoose from 'mongoose';
  
 
+export interface Notification {
+  type: string
+  message: string
+  sender_id: string
+  reciever_id: string
+  extra: Extra
+  createdAt: string
+}
 
+export interface Extra {
+  userId: string
+}
+  
 
 
 export class ClientRepositoryMongoose implements ClientRepositary {
@@ -646,7 +657,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
     // const deduction = currentJobPost.amount % 10;
-    console.log('com name : ', currentClient)
+   
 
     const newContract = new ContractModel({
       clientId: clientId,
@@ -683,7 +694,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     const contractId: any = savedContract._id;
     const adminId = process.env.ADMIN_OBJECT_ID;
 
-    const newNotificationUser = await NotificationModel.create({
+    const newNotificationUser = await NotificationModel.create<Notification>({
       type: "Contract",
       message: "New Contract signed in",
       sender_id: adminId,
@@ -692,7 +703,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       createdAt: new Date(),
     });
 
-    const newNotificationClient= await NotificationModel.create({
+    const newNotificationClient= await NotificationModel.create<Notification>({
       type: "Contract",
       message: "New Contract signed in",
       sender_id: adminId,

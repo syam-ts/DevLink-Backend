@@ -2,10 +2,33 @@ export interface UserRepositary {
   editUserProfile(userId: string, editData: any,type: string): Promise<any>;
 }
 
+interface ProfileData {
+    editData: EditData
+    unchangedData: EditData
+}
+
+interface EditData {
+  [key: string]: string | number | string[],
+   name: string,
+   budget: number,
+   age: number,
+   location: string,
+   mobile: number,
+   skills: string,
+   profilePicture: string,
+   domain: string,
+   githubLink: string,
+   description: string,
+   whyHireMe: string,
+   experience: string,
+   education: string  
+}
+
+
 export class EditUserProfile {
   constructor(private userRepositary: UserRepositary) { }
 
-  async execute(userId: string, profileData: any, type: string) {
+  async execute(userId: string, profileData: ProfileData, type: string) {
 
     if (type === 'verify') {
 
