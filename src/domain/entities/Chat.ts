@@ -5,6 +5,7 @@ import { MessageSchema } from './Message';
 
 export interface Chat extends Document {
     members:[];
+    membersData:[];
     messages?: []
          
       
@@ -18,9 +19,19 @@ const ChatSchema: Schema = new Schema({
       {
         type: mongoose.Types.ObjectId,
          ref: "User", 
-         rquired: true
+         required: true
         }
       ], 
+    userData: 
+      {
+        userName: {type: String },
+        profilePicture: {type: String }, 
+        },  
+    clientData: 
+      {
+        companyName: {type: String },
+        profilePicture: {type: String }, 
+        },  
         
     messages: [MessageSchema]
 });

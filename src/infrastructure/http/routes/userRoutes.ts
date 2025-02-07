@@ -11,7 +11,7 @@ import { requireRole } from '../middlewares/auth/requireRole';
 userRouter.get('/alluser', userController.allClients)
 
 userRouter.get('/getHome', verifyToken, requireRole('user'), userController.getHomeUser);
-userRouter.get('/profile/view/:userId', verifyToken, requireRole('user'), userController.getProfile);
+userRouter.get('/profile/view/:userId', userController.getProfile);
 userRouter.get('/home/:type', verifyToken, requireRole('user'), userController.listHomeJobs);
 userRouter.get('/jobs/view/:jobType/:userId', verifyToken, requireRole('user'), userController.getSelectedJobs);
 userRouter.get('/all-contracts/:userId', verifyToken, requireRole('user'), userController.allContracts);
@@ -21,9 +21,10 @@ userRouter.get('/job/myContracts/:userId', verifyToken, requireRole('user'), use
 userRouter.get('/job/submittedContracts/:userId', verifyToken, requireRole('user'), userController.viewSubmittedContracts);
 userRouter.get('/chat/:memberId', verifyToken, requireRole('user'), clientController.getAllChats);
 userRouter.get('/job/proposals/:userId',  userController.getAllProposals);
+ 
 
-userRouter.get('/chat/view/:roleId/:targetId',  clientController.viewChat);
-
+userRouter.get('/allChat/view/:roleId',  clientController.getAllChats);
+userRouter.get( "/chat/view/:roleType/:roleId/:targetId", clientController.viewChat);
 
 userRouter.post('/signup', userController.signupUser);
 userRouter.post('/verify-otp', userController.verifyOtp);

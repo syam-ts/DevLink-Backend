@@ -21,10 +21,12 @@ clientRouter.get( "/jobs/latest-jobs/:clientId", verifyToken,  clientController.
 clientRouter.get( "/job/myContracts/:clientId", verifyToken,  clientController.myContracts);
 clientRouter.get( "/contract/:contractId", verifyToken,  clientController.viewContract);
 clientRouter.get( "/contracts/submissions/:clientId",  clientController.viewSubmissions);
-clientRouter.get( "/chat/:memberId", verifyToken,  clientController.getAllChats);
 clientRouter.get( "/developers/allDevelopers", verifyToken, clientController.getallDevelopers);
 
-clientRouter.get( "/chat/view/:roleId/:targetId", clientController.viewChat);
+clientRouter.get( "/allChat/view/:roleId", clientController.getAllChats);
+
+
+clientRouter.get( "/chat/view/:roleType/:roleId/:targetId", clientController.viewChat);
 
 
 clientRouter.post("/signup", clientController.signupClient);
@@ -50,6 +52,7 @@ clientRouter.post("/project/submit/approval",  clientController.closeContract);
  
  //chat routes
  clientRouter.post("/chat/create-chat", verifyToken,  clientController.createChat);
+
  clientRouter.post("/chat/sendMessage", verifyToken,  clientController.sendMessage);
  
  clientRouter.put("/profile/edit/:clientId", verifyToken,  clientController.editProfile);

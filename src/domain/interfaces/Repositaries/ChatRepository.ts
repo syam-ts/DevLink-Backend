@@ -43,39 +43,12 @@ interface Message {
 
 export class ChatRepositoryMongoose {
 
-  async createChat(membersIds: any): Promise<any> {
-    const clientName: any = await ClientModel.findById(
-      membersIds.members.clientId
-    );
-    const userName: any = await UserModel.findById(membersIds.members.userId);
-
-    const members = {
-      clientId: membersIds.members.clientId,
-      clientName: clientName.companyName,
-      userId: membersIds.members.userId,
-      userName: userName.name,
-      chatHistory: {
-        clientChat: [{ "text": "", "date": "" }],
-        userChat: [{ "text": "", "createdAt": "" }]
-      }
-    };
-
-    const updateChat = new ChatModel({
-      members,
-      createdAt: new Date(),
-    });
-
-    const savedChat = await updateChat.save();
-
-
-    return savedChat;
-  }
 
 
 
+  async getAllChats(roleId: string): Promise<any> {
 
-  async getAllChats(memberId: string): Promise<any> {
-    const allChats = await ChatModel.find({ $or: [{ "members.clientId": memberId }, { "members.userId": memberId }] });
+    const allChats = await ChatModel.find({ members: roleId });
 
 
     if (!allChats) throw new Error("No chats found");
@@ -84,23 +57,41 @@ export class ChatRepositoryMongoose {
   }
 
 
-  async viewChat(roleId: string, targetId: string): Promise<any> {
 
-    console.log('The roleid ' + roleId + 'targetid ' + targetId + 'roleName : ');
+
+  async viewChat(roleType: string, roleId: string, targetId: string): Promise<any> {
+
+    console.log('The roleid ' + roleId + ' targetid ' + targetId);
 
     let chat = await ChatModel.findOne({
-      members: { $all: [roleId, targetId]}
+      members: { $all: [roleId, targetId] }
     });
+    console.log('The chat ', chat)
 
-    if(!chat) {
-      chat = new ChatModel({
-        members: [roleId, targetId],
-        messages: []
-      })
+    if (!chat) {
+      
+        const client: any = await ClientModel.findOne({ $or: [{ _id: roleId }, { _id: targetId }] })
+        const user: any = await UserModel.findOne({ $or: [{ _id: roleId }, { _id: targetId }] })
+        console.log( 'client', client.companyName)
+        chat = new ChatModel({
+          members: [roleId, targetId],
+          userData:  
+            {
+            userName: user.name,
+            profilePicture: user.profilePicture
+          } ,
+          clientData:  
+            {
+              companyName: client.companyName,
+            profilePicture: ""
+          } ,
+          messages: []
+        })
+    
     }
 
     await chat.save();
-    
+
 
     return chat;
 
@@ -140,7 +131,7 @@ export class ChatRepositoryMongoose {
           new: true,
           upsert: true,
         }
-      ).sort({"chatHistory.clientChat.createdAt": 1});
+      ).sort({ "chatHistory.clientChat.createdAt": 1 });
 
 
       return updateChat;
@@ -160,7 +151,7 @@ export class ChatRepositoryMongoose {
           new: true,
           upsert: true,
         }
-      ).sort({"chatHistory.useChat.createdAt": 1});
+      ).sort({ "chatHistory.useChat.createdAt": 1 });
       return updateChat;
     }
 

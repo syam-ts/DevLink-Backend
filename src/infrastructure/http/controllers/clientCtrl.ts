@@ -556,8 +556,8 @@ export const clientController = {
 
     getAllChats: async (req: Request, res: Response) => {
         try {
-            const { memberId } = req.params;
-            const response = await allClientUseCases.getAllChatsUseCase.execute(memberId);
+            const { roleId } = req.params;
+            const response = await allClientUseCases.getAllChatsUseCase.execute(roleId);
 
             res
                 .status(HttpStatusCode.OK)
@@ -571,8 +571,9 @@ export const clientController = {
 
     viewChat: async (req: Request, res: Response) => {
         try {
-            const { roleId , targetId, roleName } = req.params;
-            const response = await allClientUseCases.viewChatUseCase.execute(roleId, targetId, roleName);
+            const { roleType, roleId , targetId, roleName } = req.params;
+           
+            const response = await allClientUseCases.viewChatUseCase.execute(roleType, roleId, targetId, roleName);
 
             res
                 .status(HttpStatusCode.OK)
@@ -580,7 +581,7 @@ export const clientController = {
         } catch (err: any) {
             res.status(500)
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .json({ message: err.message, success: false });
         }
     },
 

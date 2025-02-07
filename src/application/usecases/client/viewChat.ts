@@ -3,16 +3,16 @@ import { Chat } from "../../../domain/entities/Chat";
  
 
 export interface ChatRepositary { 
-    viewChat(roleId: string, targetId: string, roleName: string): Promise< Chat>;
+    viewChat(roleType: string, roleId: string, targetId: string, roleName: string): Promise< Chat>;
 }
 
 export class ViewChat {
     constructor(private chatRepositary: ChatRepositary) {}
 
-    async execute(roleId: string, targetId: string, roleName: string) {   
+    async execute(roleType: string, roleId: string, targetId: string, roleName: string) {   
         
 
-        const foundedChat = await this.chatRepositary.viewChat(roleId, targetId, roleName)
+        const foundedChat = await this.chatRepositary.viewChat(roleType, roleId, targetId, roleName)
 
        return foundedChat;  
       
