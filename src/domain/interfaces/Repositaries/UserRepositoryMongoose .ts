@@ -453,14 +453,14 @@ export class UserRepositoryMongoose implements UserRepositary {
 
     if (jobType === 'listAllJobs') {
 
-      const jobs = await JobPostModel.find().exec();
+      const jobs = await JobPostModel.find({status: "pending"}).exec();
 
       if (!jobs) throw new Error('No jobs found')
       return jobs;
 
     } else if (jobType === 'trendingJobs') {
 
-      const jobs = await JobPostModel.find().sort({ proposalCount: -1 });
+      const jobs = await JobPostModel.find({status: "pending"}).sort({ proposalCount: -1 });
 
       return jobs;
 
@@ -468,7 +468,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       const userSkills = user.skills;
 
       const matchJobs = await JobPostModel.find({
-        requiredSkills: { $elemMatch: { $in: userSkills } },
+        $and: [{status: "pending"}, {requiredSkills: { $elemMatch: { $in: userSkills } }}]
       }).exec();
 
       if (!matchJobs || matchJobs.length === 0) {

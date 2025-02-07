@@ -329,7 +329,7 @@ export const clientController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .json({ message: err.message, success: false });
         }
     },
 
@@ -410,7 +410,7 @@ export const clientController = {
         } catch (err: any) {
             res.status(500)
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .json({ message: err.message, success: false });
         }
     },
 

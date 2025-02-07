@@ -620,6 +620,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async createContract(clientId: string, userId: string, jobPostId: string, bidAmount: number, bidDeadline: string): Promise<any> {
 
+   
 
 
     // updating job post status 
@@ -628,6 +629,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }, {
       update: true
     }).exec();
+
 
     const currentClient: any = await ClientModel.findById(clientId).exec();
 
@@ -644,6 +646,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
     // const deduction = currentJobPost.amount % 10;
+    console.log('com name : ', currentClient)
 
     const newContract = new ContractModel({
       clientId: clientId,
@@ -678,12 +681,37 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
     const timer = currentJobPost.estimateTimeinHours;
     const contractId: any = savedContract._id;
+    const adminId = process.env.ADMIN_OBJECT_ID;
+
+    const newNotificationUser = await NotificationModel.create({
+      type: "Contract",
+      message: "New Contract signed in",
+      sender_id: adminId,
+      reciever_id: userId,
+      "extra.documentId": contractId,
+      createdAt: new Date(),
+    });
+
+    const newNotificationClient= await NotificationModel.create({
+      type: "Contract",
+      message: "New Contract signed in",
+      sender_id: adminId,
+      reciever_id: clientId,
+      "extra.documentId": contractId,
+      createdAt: new Date(),
+    });
+
+    newNotificationUser.save();
+    newNotificationClient.save();
 
     //send notificaion to both role
 
     //await allCronJobs.startContractHelperFn(timer, jobPostId, userId, contractId);
 
-    return savedContract;
+    return { 
+      newNotificationUser,
+      newNotificationClient
+    };
  
   }
 

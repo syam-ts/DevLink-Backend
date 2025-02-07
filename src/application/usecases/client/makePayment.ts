@@ -17,40 +17,8 @@ export class MakePayment {
         const { title, description, keyResponsiblities, requiredSkills,payment, paymentType, estimateTime} = data.formData;
  
 
-        if(!title || !description || !keyResponsiblities || !requiredSkills || !payment || !paymentType || !estimateTime ) {
-            throw new Error('All Fields need to be filled');
-        } 
-
-        if(title.length < 5  || title.length > 400) {
-            throw new Error('Title should have atleset 5 characters');
-        }
         
-        
-        if(keyResponsiblities.length < 10) {
-            throw new Error('KeyResponsiblities should have 10 words');
-        }
-        
-       
-        if(description.length < 15) {
-            throw new Error('Description should have 15 words');
-        }
-  
-     
-        if(requiredSkills.length < 2) {
-            throw new Error('Minimum 2 skills are mandatory');
-        }
-
-        if(!paymentType) {
-            throw new Error('Chose one payment Type');
-        }
-
-       
-       
-        if(!estimateTime) {
-            throw new Error('Chose the estimate time');
-        }
-      
-console.log('PAYMENT TYPE : ', paymentType)
+ 
 
        if(paymentType === 'hourly') {
 

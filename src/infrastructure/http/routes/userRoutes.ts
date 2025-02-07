@@ -38,7 +38,7 @@ userRouter.post('/logout', userController.logoutUser);
 //chat
 userRouter.post('/chat/sendMessage', verifyToken, requireRole('user'), clientController.sendMessage);
 userRouter.post('/wishlist/add', verifyToken, requireRole('user'), userController.addUserToWishlist);
-userRouter.post('/project/submit/:contractId', verifyToken, requireRole('user'), userController.submitProject)
+userRouter.post('/project/submit/:contractId',  userController.submitProject)
 // userRouter.post('/contact/response', userController.closingContract);
 userRouter.post('/account/boost/:userId', verifyToken, requireRole('user'), userController.boostAccount);
 userRouter.post('/chatbot', verifyToken, requireRole('user'), userController.chatbot);

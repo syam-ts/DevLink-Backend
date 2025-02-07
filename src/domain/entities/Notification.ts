@@ -18,7 +18,8 @@ const NotificationSchema: mongoose.Schema = new mongoose.Schema({
     sender_id: {type: String, required: false},
     reciever_id: {type: String, required: false},
     extra: {
-        userId: {type: mongoose.Types.ObjectId, required: false}
+        documentId: {type: mongoose.Types.ObjectId, required: false},
+
     },
     createdAt: {type: Date, required: false}, 
 });
