@@ -69,9 +69,7 @@ import { ViewChat } from '../../application/usecases/client/viewChat';
 import { GetallDevelopers } from '../../application/usecases/client/getallDevelopers';
 import { ChatRepositoryMongoose } from "../../domain/interfaces/Repositaries/ChatRepository";
 import { WishlistRepositoryMongoose } from "../../domain/interfaces/WishlistRepository";
-
-import { AllUser } from '../../application/usecases/client/allUser';
-
+ 
 
 // admin imports ----->
 
@@ -165,8 +163,7 @@ const chatBotUseCase = new ChatBot(ClientRepository);
 const sendMessageUseCase = new SendMessage(ChatRepository);
 const getAllChatsUseCase = new GetAllChats(ChatRepository);
 const viewChatUseCase = new ViewChat(ChatRepository);
-
-const allUserUseCase = new AllUser(ClientRepository);
+ 
 
 
 // Admin repo intances ------->
@@ -258,11 +255,7 @@ export const allClientUseCases = {
      rateUserUseCase, 
      sendMessageUseCase,
      getAllChatsUseCase,
-     viewChatUseCase,
-
-
-
-     allUserUseCase,
+     viewChatUseCase,  
 }
 
 
