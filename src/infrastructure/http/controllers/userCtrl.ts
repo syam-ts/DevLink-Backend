@@ -78,12 +78,12 @@ export const userController = {
             });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
         }
     },
 
-    
+
     resetPassword: async (req: Request, res: Response) => {
         try {
             let { userId } = req.params,
@@ -98,41 +98,41 @@ export const userController = {
                 .json({ message: StatusMessage[HttpStatusCode.OK], type: true });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
         }
     },
 
     loginUser: async (req: Request, res: any) => {
-        try {  
-       
+        try {
+
             const { user } = await allUserUseCases.loginUseCase.execute(req.body);
 
             if (!user) {
                 res.status(401).json({ message: "Invalid credentials", success: false });
                 return;
-            } 
+            }
             user.role = "user";
-            const  { accessToken, refreshToken } = generateTokens(user);
-   
+            const { accessToken, refreshToken } = generateTokens(user);
+
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'strict'
-            }); 
+            });
 
             res.status(HttpStatusCode.OK).json({
-                message: StatusMessage[HttpStatusCode.OK], 
+                message: StatusMessage[HttpStatusCode.OK],
                 user,
                 accessToken,
                 refreshToken,
                 success: true,
             });
         } catch (err: any) {
-           
+
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({ message: err.message, success: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: err.message, success: false });
         }
     },
 
@@ -153,15 +153,16 @@ export const userController = {
                 .json({ message: StatusMessage[HttpStatusCode.OK], user: user, success: true });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
         }
     },
 
 
     getHomeUser: async (req: Request, res: any) => {
         try {
-            
+            console.log('Reach here so far')
+
             const clients = await allUserUseCases.getHomeUseCase.execute();
 
             return res.status(HttpStatusCode.OK).json({
@@ -171,8 +172,8 @@ export const userController = {
             });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
         }
     },
 
@@ -189,8 +190,8 @@ export const userController = {
             });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
         }
     },
 
@@ -199,7 +200,7 @@ export const userController = {
         try {
             const { userId, type } = req.params;
             const profileData = req.body;
-           
+
 
             const response = await allUserUseCases.editProfileUseCase.execute(
                 userId,
@@ -216,22 +217,29 @@ export const userController = {
                 });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({ message : err.message, sucess: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: err.message, sucess: false });
         }
     },
 
 
     logoutUser: async (req: Request, res: Response) => {
         try {
-            res.clearCookie("jwtU", { path: "/" });
+            res.clearCookie("refreshToken",
+                 { 
+                    httpOnly: true, 
+                      sameSite: 'strict',
+                      secure: process.env.NODE_ENV === 'production',
+                      path: "/"
+                     }
+                );
             res
                 .status(HttpStatusCode.OK)
                 .json({ message: StatusMessage[HttpStatusCode.OK], type: true });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
         }
     },
 
@@ -247,29 +255,29 @@ export const userController = {
                 .json({ message: StatusMessage[HttpStatusCode.OK], data: result, type: true });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
         }
     },
 
 
- 
+
     listHomeJobs: async (req: Request, res: Response) => {
         try {
             const { type } = req.params;
             const response = await allUserUseCases.listHomeJobsUseCase.execute(type);
 
             res
-            .status(HttpStatusCode.OK)
-            .json({
-                message: StatusMessage[HttpStatusCode.OK],
-                data: response,
-                success: true,
-            });
+                .status(HttpStatusCode.OK)
+                .json({
+                    message: StatusMessage[HttpStatusCode.OK],
+                    data: response,
+                    success: true,
+                });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
         }
     },
 
@@ -282,23 +290,23 @@ export const userController = {
                 jobType
             );
             res
-            .status(HttpStatusCode.OK)
-            .json({
-                message: StatusMessage[HttpStatusCode.OK],
-                data: response,
-                success: true,
-            });
+                .status(HttpStatusCode.OK)
+                .json({
+                    message: StatusMessage[HttpStatusCode.OK],
+                    data: response,
+                    success: true,
+                });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
         }
     },
 
 
     createProposal: async (req: Request, res: Response) => {
         try {
-             
+
             const { userId, jobPostId, description, bidAmount, bidDeadline } = req.body.body;
             const response = await allUserUseCases.createProposalUseCase.execute(
                 userId,
@@ -308,19 +316,19 @@ export const userController = {
                 bidDeadline
             );
 
- 
+
 
             res
-            .status(HttpStatusCode.CREATED)
-            .json({
-                message: StatusMessage[HttpStatusCode.CREATED],
-                data: response,
-                success: true,
-            });
+                .status(HttpStatusCode.CREATED)
+                .json({
+                    message: StatusMessage[HttpStatusCode.CREATED],
+                    data: response,
+                    success: true,
+                });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({ message: err.message, success: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: err.message, success: false });
         }
     },
 
@@ -333,16 +341,16 @@ export const userController = {
             );
 
             res
-            .status(HttpStatusCode.OK)
-            .json({
-                message: StatusMessage[HttpStatusCode.OK],
-                proposals: response,
-                success: true,
-            });
+                .status(HttpStatusCode.OK)
+                .json({
+                    message: StatusMessage[HttpStatusCode.OK],
+                    proposals: response,
+                    success: true,
+                });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({ message: err.message, success: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: err.message, success: false });
         }
     },
 
@@ -363,8 +371,8 @@ export const userController = {
                 });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
         }
     },
 
@@ -384,8 +392,8 @@ export const userController = {
                 });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR] , success: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
         }
     },
 
@@ -419,8 +427,8 @@ export const userController = {
                 });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR] , success: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
         }
     },
 
@@ -432,7 +440,7 @@ export const userController = {
                 userId
             );
 
-              res
+            res
                 .status(HttpStatusCode.OK)
                 .json({
                     message: StatusMessage[HttpStatusCode.OK],
@@ -441,15 +449,15 @@ export const userController = {
                 });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR] , success: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
         }
     },
 
 
     getSingleJobPost: async (req: Request, res: Response) => {
         try {
-             
+
             const { jobPostId } = req.params;
             const jobPost = await allUserUseCases.getSingleJobPostUseCase.execute(
                 jobPostId
@@ -464,8 +472,8 @@ export const userController = {
                 });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR] , success: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
         }
     },
 
@@ -485,8 +493,8 @@ export const userController = {
                 });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR] , success: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
         }
     },
 
@@ -496,7 +504,7 @@ export const userController = {
             const { userId } = req.params;
             const contracts =
                 await allUserUseCases.viewSubmittedContractsUseCase.execute(userId);
-             res
+            res
                 .status(HttpStatusCode.OK)
                 .json({
                     message: StatusMessage[HttpStatusCode.OK],
@@ -505,8 +513,8 @@ export const userController = {
                 });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR] , success: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
         }
     },
 
@@ -529,11 +537,11 @@ export const userController = {
                 });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR] , success: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
         }
     },
-    
+
     chatbot: async (req: Request, res: any) => {
         try {
             const { userInput } = req.body;
@@ -541,16 +549,16 @@ export const userController = {
             const response = await allUserUseCases.chatBotUseCase.execute(userInput);
 
             return res
-            .status(HttpStatusCode.OK)
-            .json({
-                message: StatusMessage[HttpStatusCode.OK],
-                queryResult: response,
-                type: true,
-            });
+                .status(HttpStatusCode.OK)
+                .json({
+                    message: StatusMessage[HttpStatusCode.OK],
+                    queryResult: response,
+                    type: true,
+                });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
         }
     },
 
@@ -568,8 +576,22 @@ export const userController = {
                 .json({ message: StatusMessage[HttpStatusCode.CREATED], success: true });
         } catch (err: any) {
             res
-            .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-            .json({message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+        }
+    },
+    viewWalletUser: async (req: Request, res: Response) => {
+        try {
+            const { userId } = req.params;
+            const response = await allUserUseCases.viewWalletUserUseCase.execute(userId);
+
+            res
+                .status(HttpStatusCode.OK)
+                .json({ message: StatusMessage[HttpStatusCode.OK], wallet: response, success: true });
+        } catch (err: any) {
+            res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: err.message, success: false });
         }
     },
 };

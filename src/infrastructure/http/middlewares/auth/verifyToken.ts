@@ -11,10 +11,12 @@ interface DecodedUser {
     exp: number;
 }
 
-const verifyToken = (req: any, res: Response, next: NextFunction): any => {
+const verifyToken = (req: any, res: Response, next: NextFunction): any => { 
+ 
     const token = req.headers.authorization?.split(' ')[1];
   
-    
+ 
+   
     
     if(!token) {
          res

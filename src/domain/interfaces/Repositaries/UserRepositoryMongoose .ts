@@ -654,4 +654,18 @@ export class UserRepositoryMongoose implements UserRepositary {
       console.log("ERROR: ", err.message);
     }
   }
+
+
+  async viewWallet(userId: string): Promise<any> {
+ 
+    const user: any = await UserModel.findById(userId);
+    if (!user) {
+      throw new Error('User not found');
+    } 
+
+    return user.wallet;
+  }
+
+  
+
 }

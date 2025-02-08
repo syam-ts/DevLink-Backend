@@ -19,9 +19,9 @@ clientRouter.get( "/jobs/all-jobs/:clientId", verifyToken,  clientController.lis
 clientRouter.get( "/jobs/my-jobs/:clientId", verifyToken,  clientController.getMyJobs);
 clientRouter.get( "/jobs/latest-jobs/:clientId", verifyToken,  clientController.latestJobs);
 clientRouter.get( "/job/myContracts/:clientId", verifyToken,  clientController.myContracts);
-clientRouter.get( "/contract/:contractId", verifyToken,  clientController.viewContract);
+clientRouter.get( "/contract/:contractId", clientController.viewContract);
 clientRouter.get( "/contracts/submissions/:clientId",  clientController.viewSubmissions);
-clientRouter.get( "/developers/allDevelopers", verifyToken, clientController.getallDevelopers);
+clientRouter.get( "/developers/allDevelopers", clientController.getallDevelopers);
 clientRouter.get( "/wallet/view/:clientId", clientController.viewWallet);
 
 clientRouter.get( "/allChat/view/:roleId", clientController.getAllChats);
@@ -46,7 +46,7 @@ clientRouter.post(
 "/jobPost/payment-stripe/:clientId", clientController.makePayment
 );
 clientRouter.post("/payment/success/:clientId", clientController.createJobPost);
-clientRouter.post("/rate/user/:notificationId", verifyToken,  clientController.rateUser);
+clientRouter.post("/rate/user/:notificationId",  clientController.rateUser);
 
 clientRouter.post("/project/submit/approval",  clientController.closeContract);
  clientRouter.post('/job/createContract',verifyToken, clientController.createContract);

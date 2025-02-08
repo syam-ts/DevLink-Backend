@@ -8,7 +8,7 @@ import { requireRole } from '../middlewares/auth/requireRole';
 
 
 
-userRouter.get('/alluser', userController.allClients)
+userRouter.get('/alluser', userController.allClients) 
 
 userRouter.get('/getHome', verifyToken, requireRole('user'), userController.getHomeUser);
 userRouter.get('/profile/view/:userId', userController.getProfile);
@@ -21,7 +21,7 @@ userRouter.get('/job/myContracts/:userId', verifyToken, requireRole('user'), use
 userRouter.get('/job/submittedContracts/:userId', verifyToken, requireRole('user'), userController.viewSubmittedContracts);
 userRouter.get('/chat/:memberId', verifyToken, requireRole('user'), clientController.getAllChats);
 userRouter.get('/job/proposals/:userId',  userController.getAllProposals);
- 
+userRouter.get( "/wallet/view/:userId", userController.viewWalletUser);
 
 userRouter.get('/allChat/view/:roleId',  clientController.getAllChats);
 userRouter.get( "/chat/view/:roleType/:roleId/:targetId", clientController.viewChat);

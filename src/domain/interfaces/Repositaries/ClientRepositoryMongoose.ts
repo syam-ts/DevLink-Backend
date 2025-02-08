@@ -85,13 +85,17 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async verifyOtp(client: any): Promise<Client> {
 
+   
 
-    const { companyName, email, password } = client;
+    const { companyName, email, password } = client.client;
     if (client.mailOtp === parseInt(client.clientOtp.otp)) {
 
-      const salt: number = 10;
+      const salt = 10;
+      console.log('pa', client.password)
+      console.log('pa2', client.client.password)
+    
       const hashedPassword = await bcrypt.hash(password, salt);
-
+      
       let wallet = {
         balance: 0,
         transactions: [
@@ -543,12 +547,12 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async viewWallet(clientId: string): Promise<any> {
-    console.log('The id ', clientId)
+   
     const client: any = await ClientModel.findById(clientId);
     if (!client) {
       throw new Error('Client not found');
     }
-    console.log('afte ', client)
+ 
 
     return client.wallet;
   }
@@ -857,8 +861,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       ).exec();
 
 
-
-
+ 
 
       //rest of the amount go to client wallet ---------------- 
       const clientLeftoverAmount = finalAmount - userFinalPayment;
@@ -902,7 +905,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
     const newNotificationUser = await NotificationModel.create({
-      type: "Contract",
+      type: "contract close",
       message: "You successfully completed a Job Contract",
       sender_id: process.env._ADMIN_OBJECT_ID,
       reciever_id: currentContract.userId,
@@ -914,12 +917,12 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
     const newNotificationClient = await NotificationModel.create({
-      type: "Contract",
+      type: "contract-close",
       message: "One Contract Successfully Closed",
       sender_id: process.env._ADMIN_OBJECT_ID,
       reciever_id: currentContract.clientId,
       extra: {
-        documentId: contractId
+        documentId: currentContract.userId
       },
       createdAt: new Date()
     });
@@ -945,7 +948,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
     const updateUser = await UserModel.findByIdAndUpdate(userId, { rating: rating }, { update: true });
 
-    //remove the rating from notifaicaino 
+    //remove the rating from notifaicaion
     const removeExtra = await NotificationModel.findByIdAndUpdate(notificationId, { extra: {} }, { update: true });
 
     return { updateUser, removeExtra };

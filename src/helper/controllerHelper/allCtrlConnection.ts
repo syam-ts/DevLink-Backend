@@ -25,6 +25,7 @@ import { SubmitProject } from "../../application/usecases/user/sumbitProject";
 import { ChatBot } from "../../application/usecases/user/ChatBot";   
 import { AddToWishlist } from "../../application/usecases/user/addToWishlist";   
 import { GetAllProposals } from "../../application/usecases/user/getAllProposals"; 
+import { ViewWalletUser } from "../../application/usecases/user/viewWalletUser"; 
 
 
 import { AllClients } from "../../application/usecases/user/allClients";   
@@ -121,6 +122,7 @@ const viewSubmittedContractsUseCase = new ViewSubmittedContracts(userRepository)
 const submitProjectUseCase = new SubmitProject(userRepository); 
 const addToWishlistUseCase = new AddToWishlist(wishlistRepository); 
 const getAllProposalsUseCase = new GetAllProposals(userRepository); 
+const viewWalletUserUseCase = new ViewWalletUser(userRepository); 
 
 
 const allClientsUseCase = new AllClients(userRepository); 
@@ -218,6 +220,7 @@ export const allUserUseCases = {
         chatBotUseCase,
         addToWishlistUseCase,
         getAllProposalsUseCase,
+        viewWalletUserUseCase,
 
         allClientsUseCase,
 };

@@ -35,7 +35,7 @@ export const clientController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false })
+                .json({ message: err.message, sucess: false })
         }
     },
 
@@ -254,7 +254,14 @@ export const clientController = {
     logoutClient: async (req: Request, res: Response) => {
 
         try {
-            res.clearCookie("jwtC", { path: '/' });
+            res.clearCookie("refreshToken",
+                { 
+                   httpOnly: true, 
+                     sameSite: 'strict',
+                     secure: process.env.NODE_ENV === 'production',
+                     path: "/"
+                    }
+               );
             res
                 .status(HttpStatusCode.OK)
                 .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
