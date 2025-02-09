@@ -13,10 +13,7 @@ interface DecodedUser {
 
 const verifyToken = (req: any, res: Response, next: NextFunction): any => { 
  
-    const token = req.headers.authorization?.split(' ')[1];
-  
- 
-   
+    const token = req.headers.authorization?.split(' ')[1]; 
     
     if(!token) {
          res
@@ -27,7 +24,7 @@ const verifyToken = (req: any, res: Response, next: NextFunction): any => {
   
           try {
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as DecodedUser;
-        req.user = { id: decoded._id, role: decoded.role };
+        req.user = { id: decoded._id, role: decoded.role };  
         next();
     } catch (error) {
         return res.status(HttpStatusCode.UNAUTHORIZED).json({ 

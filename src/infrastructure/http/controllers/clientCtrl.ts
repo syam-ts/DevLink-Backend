@@ -97,7 +97,7 @@ export const clientController = {
  
             const client: any = await allClientUseCases.loginClientUseCase.execute(req.body);
 
- 
+             client.role = "client";
             const { accessToken, refreshToken } = generateTokens(client);
 
 

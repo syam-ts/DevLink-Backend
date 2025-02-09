@@ -1,13 +1,11 @@
-import express from "express";
-import jwt from "jsonwebtoken";
+import express from "express"; 
 const clientRouter = express.Router();
-import { clientController } from "../controllers/clientCtrl";
-import { ClientModel } from "../../../domain/entities/Client";
+import { clientController } from "../controllers/clientCtrl"; 
 import { verifyToken } from "../middlewares/auth/verifyToken";
-// import { requireRole } from "../middlewares/auth/requireRole";
+import { requireRole } from "../middlewares/auth/requireRole"; 
 
 
-const { 
+const {
   getHomeClient,
   getProfile,
   getAllNotifications,
@@ -23,41 +21,41 @@ const {
   viewWallet,
   getAllChats,
   viewChat,
-signupClient,
-verifyOtp,
-resendOtp,
-loginClient,
-verifyEmail,
-resetPassword,
-googleLogin,
-logoutClient,
-editProfile,
-profileVerification,
-makePayment,
-createJobPost,
-rateUser,
-closeContract,
-createContract,
-sendMessage, 
-rejectProposal,
+  signupClient,
+  verifyOtp,
+  resendOtp,
+  loginClient,
+  verifyEmail,
+  resetPassword,
+  googleLogin,
+  logoutClient,
+  editProfile,
+  profileVerification,
+  makePayment,
+  createJobPost,
+  rateUser,
+  closeContract,
+  createContract,
+  sendMessage,
+  rejectProposal,
 } = clientController;
 
- 
-clientRouter.get( "/getHome", verifyToken, getHomeClient );
-clientRouter.get( "/profile/view/:clientId", verifyToken,getProfile); 
-clientRouter.get( "/notifications/:clientId", verifyToken,getAllNotifications );
-clientRouter.get("/userProfile/view/:userId",getUserProfile);
-clientRouter.get( "/job/proposals/:clientId", verifyToken,getProposals);
-clientRouter.get( "/jobs/all-jobs/:clientId", verifyToken, listAllJobs);
-clientRouter.get( "/jobs/my-jobs/:clientId", verifyToken, getMyJobs);
-clientRouter.get( "/jobs/latest-jobs/:clientId", verifyToken, latestJobs);
-clientRouter.get( "/job/myContracts/:clientId", verifyToken, myContracts);
-clientRouter.get( "/contract/:contractId",viewContract);
-clientRouter.get( "/contracts/submissions/:clientId", viewSubmissions);
-clientRouter.get( "/developers/allDevelopers",getallDevelopers);
-clientRouter.get( "/wallet/view/:clientId",viewWallet); 
-clientRouter.get( "/allChat/view/:roleId",getAllChats); 
-clientRouter.get( "/chat/view/:roleType/:roleId/:targetId", clientController.viewChat);
+
+clientRouter.get("/getHome", verifyToken, requireRole('client'), getHomeClient);
+clientRouter.get("/profile/view/:clientId", verifyToken, requireRole('client'), getProfile);
+clientRouter.get("/notifications/:clientId", verifyToken, requireRole('client'), getAllNotifications);
+clientRouter.get("/userProfile/view/:userId", verifyToken, requireRole('client'), getUserProfile);
+clientRouter.get("/job/proposals/:clientId", verifyToken, requireRole('client'), getProposals);
+clientRouter.get("/jobs/all-jobs/:clientId", verifyToken, requireRole('client'), listAllJobs);
+clientRouter.get("/jobs/my-jobs/:clientId", verifyToken, requireRole('client'), getMyJobs);
+clientRouter.get("/jobs/latest-jobs/:clientId", verifyToken, requireRole('client'), latestJobs);
+clientRouter.get("/job/myContracts/:clientId", verifyToken, requireRole('client'), myContracts);
+clientRouter.get("/contract/:contractId", verifyToken, requireRole('client'), viewContract);
+clientRouter.get("/contracts/submissions/:clientId", verifyToken, requireRole('client'), viewSubmissions);
+clientRouter.get("/developers/allDevelopers", verifyToken, requireRole('client'), getallDevelopers);
+clientRouter.get("/wallet/view/:clientId", verifyToken, requireRole('client'), viewWallet);
+clientRouter.get("/allChat/view/:roleId", verifyToken, requireRole('client'), getAllChats);
+clientRouter.get("/chat/view/:roleType/:roleId/:targetId", verifyToken, requireRole('client'), clientController.viewChat);
 
 
 clientRouter.post("/signup", signupClient);
@@ -68,65 +66,23 @@ clientRouter.post("/verify-email", verifyEmail);
 clientRouter.post("/resetPassword/:clientId", resetPassword);
 clientRouter.post("/googleLogin", googleLogin);
 clientRouter.post("/logout", logoutClient);
-clientRouter.post( "/profile/verification/:clientId", profileVerification);
+clientRouter.post("/profile/verification/:clientId", verifyToken, requireRole('client'), profileVerification);
 
-//payment and new jobpost creation phase
-clientRouter.post(
-  "/jobPost/payment-stripe/:clientId", makePayment
-);
-clientRouter.post("/payment/success/:clientId", createJobPost);
-clientRouter.post("/rate/user/:notificationId", rateUser);
-
-clientRouter.post("/project/submit/approval", closeContract);
-clientRouter.post('/job/createContract', createContract);
-
-
-clientRouter.post("/chat/sendMessage", sendMessage);
+//Payment and New Jobpost creation phase   -------------->
+clientRouter.post("/jobPost/payment-stripe/:clientId",verifyToken, requireRole('client'), makePayment );
+clientRouter.post("/payment/success/:clientId",verifyToken, requireRole('client'), createJobPost);
+clientRouter.post("/rate/user/:notificationId",verifyToken, requireRole('client'), rateUser); 
+clientRouter.post("/project/submit/approval", verifyToken, requireRole('client'), closeContract);
+clientRouter.post('/job/createContract', verifyToken, requireRole('client'), createContract); 
+clientRouter.post("/chat/sendMessage", verifyToken, requireRole('client'), sendMessage);
 
 // clientRouter.post( "/profile/edit/:clientId", editProfile);  
 
 
- clientRouter.put("/profile/edit/:clientId", editProfile);
- clientRouter.put('/job/proposal/reject', rejectProposal);
+clientRouter.put("/profile/edit/:clientId",verifyToken, requireRole('client'), editProfile);
+clientRouter.put('/job/proposal/reject',verifyToken, requireRole('client'), rejectProposal);
 
 
-
-clientRouter.get("/refresh-token", async (req: any, res: any) => {
-  try {
-    const refreshToken = req.cookies.jwtC;
-
-    if (!refreshToken) {
-      return res.status(401).json({ message: "No refresh token provided" });
-    }
-
-    const CLIENT_REFRESH_TOKEN: any = process.env.CLIENT_REFRESH_TOKEN;
-    const CLIENT_ACCESS_TOKEN: any = process.env.CLIENT_ACCESS_TOKEN;
-
-    const decoded: any = jwt.verify(refreshToken, CLIENT_REFRESH_TOKEN);
-
-    const client = await ClientModel.findById(decoded.id);
-    if (!client || client.refreshToken !== refreshToken) {
-      return res.status(403).json({ message: "Refresh token mismatch" });
-    }
-
-    const newAccessToken = jwt.sign(
-      { id: decoded.id, email: decoded.email },
-      CLIENT_ACCESS_TOKEN,
-      { expiresIn: "15m" }
-    );
-    const newRefreshToken = jwt.sign({ id: decoded.id }, CLIENT_REFRESH_TOKEN, {
-      expiresIn: "7d",
-    });
-
-    client.refreshToken = newRefreshToken;
-    await client.save();
-
-    res.cookie("jwtC", newRefreshToken, { httpOnly: true, secure: true });
-    res.json({ accessTokenC: newAccessToken });
-  } catch (error) {
-    console.error("Refresh token error:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
+ 
 
 export default clientRouter;
