@@ -30,10 +30,8 @@ const verifyToken = (req: any, res: Response, next: NextFunction): any => {
         req.user = { id: decoded._id, role: decoded.role };
         next();
     } catch (error) {
-        
-
         return res.status(HttpStatusCode.UNAUTHORIZED).json({ 
-            message: 'Invalid token' 
+            message: error
         });
     }
  
