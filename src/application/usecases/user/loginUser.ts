@@ -1,22 +1,25 @@
-import { User } from '../../../domain/entities/User';
- 
 
 export interface UserRepositary {
     findUserByEmailAndPassword(email: string, password: string): Promise<User | null>;
 }
 
-export class LoginUser {
-    constructor(private userRepositary: UserRepositary) {}
+interface User {
+    _id: string
+    name: string
+    email: string
+    password: string
+}
 
-    async execute(theUser: any) {   
-  
- 
-        const user: any = await this.userRepositary.findUserByEmailAndPassword(theUser.email, theUser.password);
-  
+
+export class LoginUser {
+    constructor(private userRepositary: UserRepositary) { }
+
+    async execute(theUser: User) {
+        const user = await this.userRepositary.findUserByEmailAndPassword(theUser.email, theUser.password);
+
         if (!user) {
             throw new Error('User not Found');
-        }  
- 
-       return user; 
+        }
+        return user;
     }
 }

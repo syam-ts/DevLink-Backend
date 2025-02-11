@@ -1,5 +1,4 @@
-import mongoose, { Schema, Document, Model } from "mongoose";
-import { User } from "../../entities/User";
+ 
 import { UserModel } from "../../entities/User";
 import { Client, ClientModel } from "../../entities/Client";
 import { JobPostDocument, JobPostModel } from "../../entities/JobPost";
@@ -12,7 +11,40 @@ import { NotificationModel } from "../../entities/Notification";
 
 type Id = string;
 
+interface User {
+  _id: string
+  name: string
+  email: string
+  password: string
+  mobile: number
+  skills: string[]
+  profilePicture: string
+  location: string
+  description: string
+  experience: string
+  education: string
+  budget: number
+  rating: number
+  domain: string
+  githubLink: string
+  totalJobs: number
+  totalHours: number
+  whyHireMe: string
+  completedJobs: string
+  inProgress: string
+  workHistory: string[]
+  isEditRequest: boolean
+  isProfileFilled: boolean
+  request: string[]
+  wallet: string[]
+  isBlocked: boolean
+  isBoosted: boolean
+  createdAt: string
+}
+
+
 export class UserRepositoryMongoose implements UserRepositary {
+
   async createUser(user: User | any): Promise<User | any> {
     const salt: number = parseInt(process.env.BCRYPT_SALT as string);
     const hashedPassword = await bcrypt.hash(user.password, salt);
@@ -37,35 +69,14 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
   async signupUser(user: User | any): Promise<User | any> {
-    if (!user.name || !user.email || !user.password) {
-      throw new Error("Name, email, and password are required");
-    }
 
-    if (user.name.length < 4 || user.name.length > 20) {
-      throw new Error("Name should be between 4 to 20 characters");
-    }
+    const foundUser = this.findUserByEmail(user.email);
+    if (!foundUser) throw new Error('User Not found');
 
-    if (user.mobile.length < 10 || user.mobile.length > 12) {
-      throw new Error("invalid Mobile Number");
-    }
-
-    if (!validator.isEmail(user.email)) {
-      throw new Error("Invalid email format");
-    }
-
-    if (!validator.isStrongPassword(user.password)) {
-      throw new Error("Please enter a strong password");
-    }
-
-    const foundUser: any = this.findUserByEmail(user.email);
-
-    if (foundUser) {
-      return foundUser;
-    } else {
-      return null;
-    }
+    return foundUser; 
   }
 
+  
   async verifyOtp(user: any): Promise<User> {
     const { name, email, password, mobile } = user.user;
     if (user.mailOtp === parseInt(user.userOtp.otp)) {
@@ -303,8 +314,8 @@ export class UserRepositoryMongoose implements UserRepositary {
 
   async getAllProposals(userId: string): Promise<any> {
 
-    const findProposals: any = await ClientModel.find({ proposals: { $elemMatch: { userId } } }).exec(); 
-    if (!findProposals) throw new Error('No proposal found'); 
+    const findProposals: any = await ClientModel.find({ proposals: { $elemMatch: { userId } } }).exec();
+    if (!findProposals) throw new Error('No proposal found');
     return findProposals[0].proposals;
   };
 
@@ -453,14 +464,14 @@ export class UserRepositoryMongoose implements UserRepositary {
 
     if (jobType === 'listAllJobs') {
 
-      const jobs = await JobPostModel.find({status: "pending"}).exec();
+      const jobs = await JobPostModel.find({ status: "pending" }).exec();
 
       if (!jobs) throw new Error('No jobs found')
       return jobs;
 
     } else if (jobType === 'trendingJobs') {
 
-      const jobs = await JobPostModel.find({status: "pending"}).sort({ proposalCount: -1 });
+      const jobs = await JobPostModel.find({ status: "pending" }).sort({ proposalCount: -1 });
 
       return jobs;
 
@@ -468,7 +479,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       const userSkills = user.skills;
 
       const matchJobs = await JobPostModel.find({
-        $and: [{status: "pending"}, {requiredSkills: { $elemMatch: { $in: userSkills } }}]
+        $and: [{ status: "pending" }, { requiredSkills: { $elemMatch: { $in: userSkills } } }]
       }).exec();
 
       if (!matchJobs || matchJobs.length === 0) {
@@ -657,15 +668,15 @@ export class UserRepositoryMongoose implements UserRepositary {
 
 
   async viewWallet(userId: string): Promise<any> {
- 
+
     const user: any = await UserModel.findById(userId);
     if (!user) {
       throw new Error('User not found');
-    } 
+    }
 
     return user.wallet;
   }
 
-  
+
 
 }

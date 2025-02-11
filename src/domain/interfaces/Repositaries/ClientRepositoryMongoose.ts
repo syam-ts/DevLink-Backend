@@ -54,48 +54,24 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async signupClient(client: Client | any): Promise<Client | any> {
 
+    const foundClient: any = this.findClientByEmail(client.email); 
+    if (!foundClient) throw new Error('Client Not Found');
 
-    if (!client.companyName || !client.email || !client.password) {
-      throw new Error('CompanyName, email, and password are required');
-    }
-
-    if (client.companyName.length < 4 || client.companyName.length > 20) {
-      throw new Error('Name should be between 4 to 20 characters');
-    }
-
-
-    if (!validator.isEmail(client.email)) {
-      throw new Error('Invalid email format');
-    }
-
-    if (!validator.isStrongPassword(client.password)) {
-      throw new Error('Please enter a strong password');
-    }
-
-    const foundClient: any = this.findClientByEmail(client.email);
-
-    if (foundClient) {
-      return foundClient
-    } else {
-      return null
-    }
+    return foundClient;
   };
 
 
 
   async verifyOtp(client: any): Promise<Client> {
-
-   
+ 
 
     const { companyName, email, password } = client.client;
     if (client.mailOtp === parseInt(client.clientOtp.otp)) {
 
-      const salt = 10;
-      console.log('pa', client.password)
-      console.log('pa2', client.client.password)
-    
+      const salt = 10; 
+
       const hashedPassword = await bcrypt.hash(password, salt);
-      
+
       let wallet = {
         balance: 0,
         transactions: [
@@ -228,7 +204,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       } as Client;
     }
   }
- 
+
 
 
   async findAllUsers(): Promise<User | any> {
@@ -535,12 +511,12 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async viewWallet(clientId: string): Promise<any> {
-   
+
     const client: any = await ClientModel.findById(clientId);
     if (!client) {
       throw new Error('Client not found');
     }
- 
+
 
     return client.wallet;
   }
@@ -720,7 +696,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     });
 
     newNotificationUser.save();
-    newNotificationClient.save(); 
+    newNotificationClient.save();
 
     //await allCronJobs.startContractHelperFn(timer, jobPostId, userId, contractId);
 
@@ -736,7 +712,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   async rejectProposal(clientId: any, userId: any, jobPostId: any): Promise<any> {
     const proposal = await ClientModel.findOneAndUpdate(
       {
-        _id: new mongoose.Types.ObjectId(clientId),  
+        _id: new mongoose.Types.ObjectId(clientId),
         proposals: {
           $elemMatch: {
             userId: new mongoose.Types.ObjectId(userId),
@@ -748,13 +724,13 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         $set: { "proposals.$.status": "rejected" } // Update only the matched proposal ----------------
       },
       { new: true }
-    ); 
+    );
     return proposal
   }
 
 
   async closeContract(contractId: string, progress: number): Promise<any> {
-  
+
 
     //update contract status as closed ----------------
     if (!progress) throw new Error('Progress data missing');
@@ -768,7 +744,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
     if (!currentContract) {
       throw new Error("Contract not found");
-    }; 
+    };
 
     //update jobpost status as closed ----------------
     const jobPostId: string = currentContract.jobPostId;
@@ -795,23 +771,23 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     updateAdminWallet = await AdminModel.findByIdAndUpdate(adminId, {
       $inc: { "wallet.balance": -finalAmount },
       $push: { "wallet.transactions": walletEntryAdmin },
-       },{
-        new: true,
-        upsert: false,
-      }).exec();
-      
-      console.log("updateclient wallet : ", adminId)
+    }, {
+      new: true,
+      upsert: false,
+    }).exec();
 
-      
-      if (progress === 100) {
- 
-        const walletEntryUser = {
-          type: "credit",
-          amount: finalAmount,
-          from: "admin",
-          fromId: adminId,
-          date: new Date(),
-        };
+    console.log("updateclient wallet : ", adminId)
+
+
+    if (progress === 100) {
+
+      const walletEntryUser = {
+        type: "credit",
+        amount: finalAmount,
+        from: "admin",
+        fromId: adminId,
+        date: new Date(),
+      };
 
       updateUserWallet = await UserModel.findByIdAndUpdate(
         currentContract.userId,
@@ -825,9 +801,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         }
       ).exec();
     } else {
- 
+
       //update user wallet according to the progress ----------------
-      const userFinalPayment = (finalAmount * progress ) / 100;
+      const userFinalPayment = (finalAmount * progress) / 100;
       const walletEntryUser = {
         type: "credit",
         amount: userFinalPayment,
@@ -849,7 +825,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       ).exec();
 
 
- 
+
 
       //rest of the amount go to client wallet ---------------- 
       const clientLeftoverAmount = finalAmount - userFinalPayment;
@@ -859,7 +835,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         from: "admin",
         fromId: adminId,
         date: new Date(),
-      }; 
+      };
 
       updateClientWallet = await ClientModel.findByIdAndUpdate(
         currentContract.clientId,
