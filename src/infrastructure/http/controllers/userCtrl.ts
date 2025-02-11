@@ -3,7 +3,11 @@ import { allClientUseCases, allUserUseCases } from "../../../helper/controllerHe
 import { HttpStatusCode } from "../../../helper/constants/enums";
 import { StatusMessage } from "../../../helper/constants/stausMessages";
 import generateTokens from '../../../utils/generateTokens';
-import jwt from "jsonwebtoken";
+ 
+
+ 
+  
+  
 
 export const userController = {
     signupUser: async (req: Request, res: Response) => {
@@ -20,7 +24,7 @@ export const userController = {
             }
         } catch (err: any) {
             res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+                message: err.message,
                 success: false,
             });
         }
@@ -38,7 +42,7 @@ export const userController = {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
                 .json({
-                    message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+                    message: err.message,
                     success: false,
                 });
         }
@@ -58,7 +62,7 @@ export const userController = {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
                 .json({
-                    message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+                    message: err.message,
                     success: false,
                 });
         }
@@ -79,7 +83,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
+                .json({ message: err.message, sucess: false });
         }
     },
 
@@ -99,7 +103,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
+                .json({ message: err.message, sucess: false });
         }
     },
 
@@ -107,6 +111,7 @@ export const userController = {
         try {
 
             const { user } = await allUserUseCases.loginUseCase.execute(req.body);
+            console.log(user)
 
             if (!user) {
                 res.status(401).json({ message: "Invalid credentials", success: false });
@@ -154,7 +159,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .json({ message: err.message, success: false });
         }
     },
 
@@ -173,7 +178,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
+                .json({ message: err.message, sucess: false });
         }
     },
 
@@ -191,7 +196,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
+                .json({ message: err.message, sucess: false });
         }
     },
 
@@ -239,7 +244,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
+                .json({ message: err.message, sucess: false });
         }
     },
 
@@ -256,7 +261,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], sucess: false });
+                .json({ message: err.message, sucess: false });
         }
     },
 
@@ -277,7 +282,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .json({ message: err.message, success: false });
         }
     },
 
@@ -299,7 +304,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .json({ message: err.message, success: false });
         }
     },
 
@@ -372,7 +377,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .json({ message: err.message, success: false });
         }
     },
 
@@ -393,7 +398,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .json({ message: err.message, success: false });
         }
     },
 
@@ -428,7 +433,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .json({ message: err.message, success: false });
         }
     },
 
@@ -450,7 +455,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .json({ message: err.message, success: false });
         }
     },
 
@@ -473,7 +478,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .json({ message: err.message, success: false });
         }
     },
 
@@ -494,7 +499,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .json({ message: err.message, success: false });
         }
     },
 
@@ -514,7 +519,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .json({ message: err.message, success: false });
         }
     },
 
@@ -538,7 +543,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .json({ message: err.message, success: false });
         }
     },
 
@@ -558,7 +563,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .json({ message: err.message, success: false });
         }
     },
 
@@ -577,7 +582,7 @@ export const userController = {
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false });
+                .json({ message: err.message, success: false });
         }
     },
     viewWalletUser: async (req: Request, res: Response) => {

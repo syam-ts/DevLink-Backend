@@ -1,10 +1,9 @@
- 
-import { UserModel } from "../../entities/User";
-import { Client, ClientModel } from "../../entities/Client";
-import { JobPostDocument, JobPostModel } from "../../entities/JobPost";
-import { UserRepositary } from "../../../application/usecases/user/signupUser";
 import bcrypt from "bcrypt";
 import validator from "validator";
+import { UserModel } from "../../entities/User";
+import { Client, ClientModel } from "../../entities/Client";
+import { JobPostModel } from "../../entities/JobPost";
+import { UserRepositary } from "../../../application/usecases/user/signupUser";
 import { ContractModel } from "../../entities/Contract";
 import { AdminModel } from "../../entities/Admin";
 import { NotificationModel } from "../../entities/Notification";
@@ -45,9 +44,10 @@ interface User {
 
 export class UserRepositoryMongoose implements UserRepositary {
 
-  async createUser(user: User | any): Promise<User | any> {
+  async createUser(user: User): Promise<User> {
     const salt: number = parseInt(process.env.BCRYPT_SALT as string);
     const hashedPassword = await bcrypt.hash(user.password, salt);
+ 
 
     const createdUser = new UserModel({
       name: user.name,
@@ -58,6 +58,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     });
 
     const savedUser = await createdUser.save();
+ 
 
     return {
       name: savedUser.name,
@@ -68,20 +69,27 @@ export class UserRepositoryMongoose implements UserRepositary {
     } as User;
   }
 
-  async signupUser(user: User | any): Promise<User | any> {
 
-    const foundUser = this.findUserByEmail(user.email);
+
+  async signupUser(email: string): Promise<User | null> {
+
+    const foundUser = this.findUserByEmail(email);
     if (!foundUser) throw new Error('User Not found');
 
-    return foundUser; 
+    return foundUser;
   }
 
-  
+
   async verifyOtp(user: any): Promise<User> {
-    const { name, email, password, mobile } = user.user;
+    const { name, email, password, mobile } = user.user.data;
+
     if (user.mailOtp === parseInt(user.userOtp.otp)) {
+ 
+ 
+
       const salt: number = 10;
-      const hashedPassword = await bcrypt.hash(password, salt);
+      const hashedPassword: string = await bcrypt.hash(password, salt);
+ 
 
       const createdUser = new UserModel({
         name: name,
@@ -126,12 +134,11 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
   async findUserById(_id: string): Promise<any | null> {
-    const user = await UserModel.findById(_id);
-    if (!user) {
-      throw new Error("User not found");
-    }
 
-    return { user };
+    const user = await UserModel.findById(_id);
+    if (!user) throw new Error("User not found"); 
+    
+    return user;
   }
 
   async findUserByEmail(email: string): Promise<User | null> {
@@ -348,9 +355,7 @@ export class UserRepositoryMongoose implements UserRepositary {
           new: true
         }
       );
-
-      console.log("Modified jobpost: ", jobPostId)
-
+ 
 
 
 
@@ -621,7 +626,7 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
   async submitProject(contractId: string, body: any): Promise<any> {
-    try {
+ 
       const contract: any = await ContractModel.findByIdAndUpdate(
         contractId,
         {
@@ -661,9 +666,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       );
 
       return addRequestToClient;
-    } catch (err: any) {
-      console.log("ERROR: ", err.message);
-    }
+ 
   }
 
 

@@ -1,5 +1,16 @@
-import { User } from '../../../domain/entities/User';
+
 import { sendMail } from '../../../utils/send-mail';
+
+
+interface User {
+    _id: string
+    name: string
+    email: string
+    password: string
+    mobile: number 
+  }
+
+  
 
 export interface UserRepositary {
     createUser(user: User): Promise<User>;
@@ -9,10 +20,10 @@ export interface UserRepositary {
 export class SignupUser {
     constructor(private userRepositary: UserRepositary) {}
 
-    async execute(user: User | any) {   
+    async execute(user: User) {   
         
 
-        const existingUser:any = await this.userRepositary.signupUser(user)
+        const existingUser = await this.userRepositary.signupUser(user.email)
 
         
         if(existingUser) {

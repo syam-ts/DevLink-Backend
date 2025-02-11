@@ -8,7 +8,7 @@ export interface ClientRepositary {
 export class verifyOtpClient {
     constructor(private clientRepositary: ClientRepositary) {}
 
-    async execute(client: Client) {    
+    async execute(client: Client) {     
  
           const verifiedOtp = await this.clientRepositary.verifyOtp(client); 
           return verifiedOtp

@@ -26,6 +26,7 @@ export const clientController = {
 
     verifyOtp: async (req: Request, res: Response) => {
         try {
+            
 
             const client = await allClientUseCases.verifyClientUseCase.execute(req.body);
             res

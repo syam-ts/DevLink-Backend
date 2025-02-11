@@ -66,6 +66,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
  
 
     const { companyName, email, password } = client.client;
+ 
     if (client.mailOtp === parseInt(client.clientOtp.otp)) {
 
       const salt = 10; 

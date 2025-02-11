@@ -111,7 +111,7 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
       isBoosted: { type: Boolean, required: false },
     isBlocked: { type: Boolean, required: false },
     isEditRequest: { type: Boolean, required: false},
-    isProfileFilled: {type: Boolean, required: true},
+    isProfileFilled: {type: Boolean, required: false},
     createdAt: {type: Date, required: false},
    
 });

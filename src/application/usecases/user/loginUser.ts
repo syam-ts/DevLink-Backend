@@ -4,10 +4,12 @@ export interface UserRepositary {
 }
 
 interface User {
+    user: User
     _id: string
     name: string
     email: string
     password: string
+    role: string
 }
 
 
@@ -20,6 +22,7 @@ export class LoginUser {
         if (!user) {
             throw new Error('User not Found');
         }
+    
         return user;
     }
 }
