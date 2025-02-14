@@ -12,12 +12,20 @@ interface JobPostData {
     projectType: 'ongoing project' | 'project updation';
 };
 
+interface ClientData {
+    companyName: string;
+    email: string;
+    location: string;
+
+};
+
 
 interface InviteDocument extends Document {
     clientId?: mongoose.Types.ObjectId;
     userId?: mongoose.Types.ObjectId;
     description: String;
     jobPostData?: JobPostData;
+    clientData: ClientData;
     status: 'pending' | 'rejected';
     createdAt: Date;
 };
@@ -27,7 +35,7 @@ interface InviteDocument extends Document {
 const InviteSchema = new Schema<InviteDocument>({
     clientId: { type: mongoose.Types.ObjectId, required: true },
     userId: { type: mongoose.Types.ObjectId, required: true },
-    description: {type: String, required: true},
+    description: { type: String, required: true },
     jobPostData: {
         title: { type: String, required: true },
         description: { type: String, required: true },
@@ -38,6 +46,11 @@ const InviteSchema = new Schema<InviteDocument>({
         paymentType: { type: String, required: false },
         estimateTimeinHours: { type: Number, required: false },
         projectType: { type: String, required: false },
+    },
+    clientData: {
+        companyName: { type: String, required: true },
+        email: { type: String, required: true },
+        location: { type: String, required: false },
     },
     status: { type: String, required: true, default: 'pending' },
     createdAt: { type: Date, required: true },
