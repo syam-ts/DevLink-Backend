@@ -25,24 +25,25 @@ export interface Notification {
 export interface Extra {
   userId: string
 }
- 
+
 
 interface Invite {
-    clientId?: mongoose.Types.ObjectId;
-    userId?: mongoose.Types.ObjectId;
-    jobPostData?: {
-      title: string;
+  clientId?: mongoose.Types.ObjectId;
+  userId?: mongoose.Types.ObjectId;
+  description: String;
+  jobPostData?: {
+    title: string;
     description: string;
-    expertLevel: 'beginner' | 'intermediate' | 'advanced';
+    expertLevel: String;
     location: string;
     requiredSkills: string[];
     amount: number,
-    paymentType: 'hourly' | 'fixed',
+    paymentType: String,
     estimateTimeinHours: Number;
-    projectType: 'ongoing project' | 'project updation';
-    };
-    status: 'pending' | 'rejected';
-    createdAt: Date;
+    projectType: String;
+  };
+  status: String;
+  createdAt: Date;
 };
 
 
@@ -73,7 +74,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async signupClient(client: Client | any): Promise<Client | any> {
 
-    const foundClient: any = this.findClientByEmail(client.email); 
+    const foundClient: any = this.findClientByEmail(client.email);
     if (!foundClient) throw new Error('Client Not Found');
 
     return foundClient;
@@ -82,13 +83,13 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async verifyOtp(client: any): Promise<Client> {
- 
+
 
     const { companyName, email, password } = client.client;
- 
+
     if (client.mailOtp === parseInt(client.clientOtp.otp)) {
 
-      const salt = 10; 
+      const salt = 10;
 
       const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -342,75 +343,62 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async createJobPost(clientId: string, data: any): Promise<any> {
-    // const data = JSON.parse(jobPost);
-
-    try {
 
 
 
-      const client: any = await ClientModel.findById(clientId);
+    const client: any = await ClientModel.findById(clientId);
 
 
-      // const minWorkingHours: number = data.estimateTime * 8;
-      // const finalDate: number = (data.estimateTime * 24 ) - minWorkingHours;
+    const parsedEstimatedTimeInHours = parseInt(data.estimateTime)
 
+    const totalAmount = data.estimateTime * data.payment;
 
-      const parsedEstimatedTimeInHours = parseInt(data.estimateTime)
-
-      const totalAmount = data.estimateTime * data.payment;
-
-      data.amount = totalAmount; //updatig the total amount 
+    data.amount = totalAmount; //updatig the total amount 
 
 
 
-      //ADD REST OF THE FIELDS
-      const createdJobPost = new JobPostModel({
-        title: data.title,
-        description: data.description,
-        keyResponsiblities: data.keyResponsiblities,
-        requiredSkills: data.requiredSkills,
-        paymentType: data.paymentType,
-        estimateTime: new Date(),
-        estimateTimeinHours: parsedEstimatedTimeInHours,
-        amount: data.payment,
-        expertLevel: data.expertLevel,
-        location: data.location,
-        projectType: data.projectType,
-        maxProposals: data.maxProposals,
-        proposalCount: 0,
-        aboutClient: {
-          companyName: client.companyName,
-          location: client.location,
-          totalSpend: client.totalSpend,
-          totalHours: client.totalHours,
-          domain: client.domain,
-          numberOfEmployees: client.numberOfEmployees,
-          joined: client.createdAt
-        },
-        status: "pending",
-        isPayment: true,
-        createdAt: new Date(),
-        clientId: clientId
-      });
+    const createdJobPost = new JobPostModel({
+      title: data.title,
+      description: data.description,
+      keyResponsiblities: data.keyResponsiblities,
+      requiredSkills: data.requiredSkills,
+      paymentType: data.paymentType,
+      estimateTime: new Date(),
+      estimateTimeinHours: parsedEstimatedTimeInHours,
+      amount: data.payment,
+      expertLevel: data.expertLevel,
+      location: data.location,
+      projectType: data.projectType,
+      maxProposals: data.maxProposals,
+      proposalCount: 0,
+      aboutClient: {
+        companyName: client.companyName,
+        location: client.location,
+        totalSpend: client.totalSpend,
+        totalHours: client.totalHours,
+        domain: client.domain,
+        numberOfEmployees: client.numberOfEmployees,
+        joined: client.createdAt
+      },
+      status: "pending",
+      isPayment: true,
+      createdAt: new Date(),
+      clientId: clientId
+    });
 
-      const savedJobPost = await createdJobPost.save();
+    const savedJobPost = await createdJobPost.save();
 
-      const newNotification = await NotificationModel.create({
-        type: "New Job Post",
-        message: "New Post created successfully",
-        sender_id: process.env._ADMIN_OBJECT_ID,
-        reciever_id: clientId,
-        createdAt: new Date()
-      });
+    const newNotification = await NotificationModel.create({
+      type: "New Job Post",
+      message: "New Post created successfully",
+      sender_id: process.env._ADMIN_OBJECT_ID,
+      reciever_id: clientId,
+      createdAt: new Date()
+    });
 
-      newNotification.save();
+    newNotification.save();
 
-
-      return { savedJobPost };
-
-    } catch (err: any) {
-      console.log('ERROR: ', err.message)
-    }
+    return { savedJobPost };
   }
 
 
@@ -483,7 +471,6 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         workHistory: user.workHistory
       }
 
-      // console.log('THE USER PROFILE FROM REPO: ',user)
       return userProfile;
     }
   }
@@ -796,8 +783,6 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       upsert: false,
     }).exec();
 
-    console.log("updateclient wallet : ", adminId)
-
 
     if (progress === 100) {
 
@@ -940,32 +925,33 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
 
-  async inviteUser(userId: string, clientId: string, jobPostId: string): Promise<Invite> {
+  async inviteUser(userId: string, clientId: string, jobPostId: string, description: string): Promise<Invite> {
 
     const jobPostData: any = await JobPostModel.findById(jobPostId);
 
-  
-    const inviteFn =  new InviteModel({
-          clientId,
-          userId,
-          jobPostData: {
-            title: jobPostData.title,
-            description: jobPostData.description,
-            expertLevel: jobPostData.expertLevel,
-            location: jobPostData.location,
-            requiredSkills: jobPostData.requiredSkills,
-            amount: jobPostData.amount,
-            paymentType: jobPostData.paymentType,
-            estimateTimeinHours: jobPostData.estimateTimeinHours,
-            projectType: jobPostData.projectType,
-          },
-          state: "pending",
-          createdAt: new Date()
+
+    const inviteFn = new InviteModel({
+      clientId,
+      userId,
+      description,
+      jobPostData: {
+        title: jobPostData.title,
+        description: jobPostData.description,
+        expertLevel: jobPostData.expertLevel,
+        location: jobPostData.location,
+        requiredSkills: jobPostData.requiredSkills,
+        amount: jobPostData.amount,
+        paymentType: jobPostData.paymentType,
+        estimateTimeinHours: jobPostData.estimateTimeinHours,
+        projectType: jobPostData.projectType,
+      },
+      state: "pending",
+      createdAt: new Date()
     });
 
-    const savedInvite = await inviteFn.save(); 
- 
-     return savedInvite;
+    const savedInvite = await inviteFn.save();
+
+    return savedInvite;
   };
 
 

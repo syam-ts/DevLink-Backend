@@ -156,10 +156,10 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
   async findUserById(_id: string): Promise<any | null> {
-    console.log('THe id ', _id)
+ 
 
     const user = await UserModel.findById(_id);
-    console.log('THe user ', user)
+     
     if (!user) throw new Error("User not found"); 
     
     return user;
@@ -713,7 +713,7 @@ export class UserRepositoryMongoose implements UserRepositary {
           { $skip: skip }, 
           { $limit: PAGE_SIZE } 
       ]);
-      console.log(userWallets)
+ 
   
       return userWallets;
   }
@@ -724,7 +724,7 @@ export class UserRepositoryMongoose implements UserRepositary {
    const foundedInvites = await InviteModel.find({userId: userId});
 
    if(!foundedInvites) throw new Error('Invite not Found');
-   console.log('user' ,foundedInvites);
+ 
 
       return foundedInvites;
   }

@@ -16,6 +16,7 @@ interface JobPostData {
 interface InviteDocument extends Document {
     clientId?: mongoose.Types.ObjectId;
     userId?: mongoose.Types.ObjectId;
+    description: String;
     jobPostData?: JobPostData;
     status: 'pending' | 'rejected';
     createdAt: Date;
@@ -26,6 +27,7 @@ interface InviteDocument extends Document {
 const InviteSchema = new Schema<InviteDocument>({
     clientId: { type: mongoose.Types.ObjectId, required: true },
     userId: { type: mongoose.Types.ObjectId, required: true },
+    description: {type: String, required: true},
     jobPostData: {
         title: { type: String, required: true },
         description: { type: String, required: true },

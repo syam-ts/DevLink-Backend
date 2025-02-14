@@ -592,8 +592,10 @@ export const clientController = {
     inviteUser: async (req: Request, res: Response) => {
         try {
 
-            const { userId, clientId, jobPostId }: { userId: string, clientId: string, jobPostId: string } = req.body;
-            const response = await allClientUseCases.inviteUserUseCase.execute(userId, clientId, jobPostId);
+            const { userId, clientId, jobPostId, description }:
+                { userId: string, clientId: string, jobPostId: string, description: string }
+                = req.body;
+            const response = await allClientUseCases.inviteUserUseCase.execute(userId, clientId, jobPostId. description);
 
             res
                 .status(HttpStatusCode.CREATED)
