@@ -135,8 +135,10 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
   async findUserById(_id: string): Promise<any | null> {
+    console.log('THe id ', _id)
 
     const user = await UserModel.findById(_id);
+    console.log('THe user ', user)
     if (!user) throw new Error("User not found"); 
     
     return user;

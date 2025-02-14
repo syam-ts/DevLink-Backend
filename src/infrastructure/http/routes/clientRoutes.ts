@@ -38,6 +38,7 @@ const {
   createContract,
   sendMessage,
   rejectProposal,
+  inviteUser
 } = clientController;
 
 
@@ -75,6 +76,7 @@ clientRouter.post("/rate/user/:notificationId",verifyToken, requireRole('client'
 clientRouter.post("/project/submit/approval", verifyToken, requireRole('client'), closeContract);
 clientRouter.post('/job/createContract', verifyToken, requireRole('client'), createContract); 
 clientRouter.post("/chat/sendMessage", verifyToken, requireRole('client'), sendMessage);
+clientRouter.post("/invite/user", inviteUser);
 
 // clientRouter.post( "/profile/edit/:clientId", editProfile);  
 

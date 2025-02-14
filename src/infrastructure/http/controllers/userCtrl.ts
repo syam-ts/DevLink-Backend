@@ -78,7 +78,7 @@ export const userController = {
             res.status(HttpStatusCode.OK).json({
                 message: StatusMessage[HttpStatusCode.OK],
                 data: response,
-                type: true,
+                success: true,
             });
         } catch (err: any) {
             res
@@ -99,7 +99,7 @@ export const userController = {
 
             res
                 .status(HttpStatusCode.OK)
-                .json({ message: StatusMessage[HttpStatusCode.OK], type: true });
+                .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
@@ -173,7 +173,7 @@ export const userController = {
             return res.status(HttpStatusCode.OK).json({
                 message: StatusMessage[HttpStatusCode.OK],
                 data: clients,
-                type: true,
+                success: true,
             });
         } catch (err: any) {
             res
@@ -191,7 +191,7 @@ export const userController = {
             res.status(HttpStatusCode.OK).json({
                 message: StatusMessage[HttpStatusCode.OK],
                 data: user,
-                type: true,
+                success: true,
             });
         } catch (err: any) {
             res
@@ -218,7 +218,7 @@ export const userController = {
                 .json({
                     message: StatusMessage[HttpStatusCode.OK],
                     data: response,
-                    sucess: true,
+                    success: true,
                 });
         } catch (err: any) {
             res
@@ -240,7 +240,7 @@ export const userController = {
                 );
             res
                 .status(HttpStatusCode.OK)
-                .json({ message: StatusMessage[HttpStatusCode.OK], type: true });
+                .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
@@ -257,7 +257,7 @@ export const userController = {
             const result = await allUserUseCases.allClientsUseCase.execute()
             res
                 .status(HttpStatusCode.OK)
-                .json({ message: StatusMessage[HttpStatusCode.OK], data: result, type: true });
+                .json({ message: StatusMessage[HttpStatusCode.OK], data: result, success: true });
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
@@ -558,7 +558,7 @@ export const userController = {
                 .json({
                     message: StatusMessage[HttpStatusCode.OK],
                     queryResult: response,
-                    type: true,
+                    success: true,
                 });
         } catch (err: any) {
             res

@@ -26,7 +26,7 @@ export const clientController = {
 
     verifyOtp: async (req: Request, res: Response) => {
         try {
-            
+
 
             const client = await allClientUseCases.verifyClientUseCase.execute(req.body);
             res
@@ -95,10 +95,10 @@ export const clientController = {
     loginClient: async (req: Request, res: any) => {
         try {
 
- 
+
             const client: any = await allClientUseCases.loginClientUseCase.execute(req.body);
 
-             client.role = "client";
+            client.role = "client";
             const { accessToken, refreshToken } = generateTokens(client);
 
 
@@ -132,7 +132,7 @@ export const clientController = {
         }
     },
 
- 
+
 
 
 
@@ -231,13 +231,13 @@ export const clientController = {
 
         try {
             res.clearCookie("refreshToken",
-                { 
-                   httpOnly: true, 
-                     sameSite: 'strict',
-                     secure: process.env.NODE_ENV === 'production',
-                     path: "/"
-                    }
-               );
+                {
+                    httpOnly: true,
+                    sameSite: 'strict',
+                    secure: process.env.NODE_ENV === 'production',
+                    path: "/"
+                }
+            );
             res
                 .status(HttpStatusCode.OK)
                 .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
@@ -400,7 +400,7 @@ export const clientController = {
 
     rejectProposal: async (req: Request, res: any) => {
         try {
-          
+
             const { userId, clientId, jobPostId } = req.body;
 
             if (!userId && !clientId && !jobPostId) {
@@ -475,7 +475,7 @@ export const clientController = {
     closeContract: async (req: Request, res: Response) => {
         try {
 
-            const { contractId, progress } = req.body; 
+            const { contractId, progress } = req.body;
             const response = await allClientUseCases.closeContractUseCase.execute(contractId, progress);
 
             res.status(HttpStatusCode.OK)
@@ -540,8 +540,8 @@ export const clientController = {
 
     viewChat: async (req: Request, res: Response) => {
         try {
-            const { roleType, roleId , targetId, roleName } = req.params;
-           
+            const { roleType, roleId, targetId, roleName } = req.params;
+
             const response = await allClientUseCases.viewChatUseCase.execute(roleType, roleId, targetId, roleName);
 
             res
@@ -557,8 +557,8 @@ export const clientController = {
     viewWallet: async (req: Request, res: Response) => {
         try {
             const { clientId } = req.params;
-       
-           
+
+
             const response = await allClientUseCases.viewWalletUseCase.execute(clientId);
             console.log('The wallet ', response)
             res
@@ -581,6 +581,23 @@ export const clientController = {
             res
                 .status(HttpStatusCode.OK)
                 .json({ message: StatusMessage[HttpStatusCode.OK], developers: response, success: true });
+        } catch (err: any) {
+            res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: err.message, success: false });
+        }
+    },
+
+
+    inviteUser: async (req: Request, res: Response) => {
+        try {
+
+            const { userId, clientId, jobPostId }: { userId: string, clientId: string, jobPostId: string } = req.body;
+            const response = await allClientUseCases.inviteUserUseCase.execute(userId, clientId, jobPostId);
+
+            res
+                .status(HttpStatusCode.CREATED)
+                .json({ message: StatusMessage[HttpStatusCode.CREATED], success: true });
         } catch (err: any) {
             res.status(500)
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)

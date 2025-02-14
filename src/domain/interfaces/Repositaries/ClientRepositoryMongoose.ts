@@ -10,6 +10,7 @@ import bcrypt from 'bcrypt';
 import validator from 'validator';
 import allCronJobs from '../../../helper/cron-jobs/index'
 import mongoose from 'mongoose';
+import { InviteModel } from '../../entities/Invite';
 
 
 export interface Notification {
@@ -24,7 +25,25 @@ export interface Notification {
 export interface Extra {
   userId: string
 }
+ 
 
+interface Invite {
+    clientId?: mongoose.Types.ObjectId;
+    userId?: mongoose.Types.ObjectId;
+    jobPostData?: {
+      title: string;
+    description: string;
+    expertLevel: 'beginner' | 'intermediate' | 'advanced';
+    location: string;
+    requiredSkills: string[];
+    amount: number,
+    paymentType: 'hourly' | 'fixed',
+    estimateTimeinHours: Number;
+    projectType: 'ongoing project' | 'project updation';
+    };
+    status: 'pending' | 'rejected';
+    createdAt: Date;
+};
 
 
 export class ClientRepositoryMongoose implements ClientRepositary {
@@ -917,6 +936,36 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     const removeExtra = await NotificationModel.findByIdAndUpdate(notificationId, { extra: {} }, { update: true });
 
     return { updateUser, removeExtra };
+  };
+
+
+
+  async inviteUser(userId: string, clientId: string, jobPostId: string): Promise<Invite> {
+
+    const jobPostData: any = await JobPostModel.findById(jobPostId);
+
+  
+    const inviteFn =  new InviteModel({
+          clientId,
+          userId,
+          jobPostData: {
+            title: jobPostData.title,
+            description: jobPostData.description,
+            expertLevel: jobPostData.expertLevel,
+            location: jobPostData.location,
+            requiredSkills: jobPostData.requiredSkills,
+            amount: jobPostData.amount,
+            paymentType: jobPostData.paymentType,
+            estimateTimeinHours: jobPostData.estimateTimeinHours,
+            projectType: jobPostData.projectType,
+          },
+          state: "pending",
+          createdAt: new Date()
+    });
+
+    const savedInvite = await inviteFn.save(); 
+ 
+     return savedInvite;
   };
 
 
