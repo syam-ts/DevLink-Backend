@@ -35,6 +35,7 @@ const {
     createProposal,
     editProfile,
     bosstSuccess,
+    rejectInvite
 } = userController;
 
 
@@ -74,7 +75,9 @@ userRouter.post('/project/submit/:contractId', submitProject)
 // userRouter.post('/contact/response', closingContract);
 userRouter.post('/account/boost/:userId', verifyToken, requireRole('user'), boostAccount);
 userRouter.post('/chatbot', verifyToken, requireRole('user'), chatbot);
-userRouter.post('/job/createProposal', verifyToken, requireRole('user'), createProposal)
+userRouter.post('/job/createProposal', verifyToken, requireRole('user'), createProposal);
+userRouter.post('/invite/reject/:inviteId', rejectInvite);
+// userRouter.post('/invite/reject', verifyToken, requireRole('user'), rejectInvite)
 
 
 // userRouter.post('/job/createProposal/:clientId/:userId/:jobPostId', verifyToken,  createProposal);  

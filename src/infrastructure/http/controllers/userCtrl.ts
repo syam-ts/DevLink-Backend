@@ -585,10 +585,28 @@ export const userController = {
                 .json({ message: err.message, success: false });
         }
     },
+
+
     viewWalletUser: async (req: Request, res: Response) => {
         try {
             const { userId, currentPage } = req.params;
             const response = await allUserUseCases.viewWalletUserUseCase.execute(userId, parseInt(currentPage));
+
+            res
+                .status(HttpStatusCode.OK)
+                .json({ message: StatusMessage[HttpStatusCode.OK], wallet: response, success: true });
+        } catch (err: any) {
+            res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: err.message, success: false });
+        }
+    },
+
+
+    rejectInvite: async (req: Request, res: Response) => {
+        try {
+            const { inviteId } = req.params;
+            const response = await allUserUseCases.rejectInviteUseCase.execute(inviteId);
 
             res
                 .status(HttpStatusCode.OK)

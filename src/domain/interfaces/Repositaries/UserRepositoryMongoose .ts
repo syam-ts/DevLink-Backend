@@ -8,6 +8,7 @@ import { ContractModel } from "../../entities/Contract";
 import { AdminModel } from "../../entities/Admin";
 import { NotificationModel } from "../../entities/Notification";
 import mongoose from "mongoose";
+import { InviteModel } from "../../entities/Invite";
 
 type Id = string;
 
@@ -41,6 +42,26 @@ interface User {
   isBoosted: boolean
   createdAt: string
 }
+
+
+
+interface Invite {
+    clientId?: mongoose.Types.ObjectId;
+    userId?: mongoose.Types.ObjectId;
+    jobPostData?: {
+      title: string;
+    description: string;
+    expertLevel: 'beginner' | 'intermediate' | 'advanced';
+    location: string;
+    requiredSkills: string[];
+    amount: number,
+    paymentType: 'hourly' | 'fixed',
+    estimateTimeinHours: Number;
+    projectType: 'ongoing project' | 'project updation';
+    };
+    status: 'pending' | 'rejected';
+    createdAt: Date;
+};
 
 
 export class UserRepositoryMongoose implements UserRepositary {
@@ -690,6 +711,20 @@ export class UserRepositoryMongoose implements UserRepositary {
       console.log(userWallets)
   
       return userWallets;
+  }
+
+
+  async rejectInvite(inviteId: string): Promise<Invite | any> {
+
+   const updateInvite = await InviteModel.updateOne({_id: inviteId}, {
+      status: "rejected"
+   }, {
+    new: true
+   });
+
+   if(!updateInvite) throw new Error('Invite not Found');
+
+      return updateInvite;
   }
  
 
