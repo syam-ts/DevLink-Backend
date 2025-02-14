@@ -2,7 +2,7 @@
 
  
 export interface UserRepositary {
-    viewWallet(userId: string): Promise< any >;
+    viewWallet(userId: string, currentPage: number): Promise< any >;
 }
 
  
@@ -10,8 +10,8 @@ export interface UserRepositary {
 export class ViewWalletUser {
      constructor(private userRepositary: UserRepositary) {}
        
-    async execute(userId: string) {
-        const result = await this.userRepositary.viewWallet(userId);  
+    async execute(userId: string, currentPage: number) {
+        const result = await this.userRepositary.viewWallet(userId, currentPage);  
 
         return result;
      }

@@ -7,6 +7,7 @@ import { UserRepositary } from "../../../application/usecases/user/signupUser";
 import { ContractModel } from "../../entities/Contract";
 import { AdminModel } from "../../entities/Admin";
 import { NotificationModel } from "../../entities/Notification";
+import mongoose from "mongoose";
 
 type Id = string;
 
@@ -670,15 +671,25 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
 
-  async viewWallet(userId: string): Promise<any> {
+  async viewWallet(userId: string, currentPage: number): Promise<any> {
 
-    const user: any = await UserModel.findById(userId);
-    if (!user) {
-      throw new Error('User not found');
-    }
-
-    return user.wallet;
+    const page = 1;
+    const PAGE_SIZE: number = 5;
+    const skip: number = (page - 1) * PAGE_SIZE;    
+ 
+  
+      const userWallets = await UserModel.aggregate([
+          { $match: { _id: new mongoose.Types.ObjectId(userId) } },  
+          { $project: { transactions: "$wallet.transactions", _id: 0 } },   
+          
+          { $skip: skip }, 
+          { $limit: PAGE_SIZE } 
+      ]);
+      console.log(userWallets)
+  
+      return userWallets;
   }
+ 
 
 
 

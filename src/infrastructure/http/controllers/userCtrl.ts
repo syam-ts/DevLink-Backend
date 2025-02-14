@@ -587,8 +587,8 @@ export const userController = {
     },
     viewWalletUser: async (req: Request, res: Response) => {
         try {
-            const { userId } = req.params;
-            const response = await allUserUseCases.viewWalletUserUseCase.execute(userId);
+            const { userId, currentPage } = req.params;
+            const response = await allUserUseCases.viewWalletUserUseCase.execute(userId, parseInt(currentPage));
 
             res
                 .status(HttpStatusCode.OK)
