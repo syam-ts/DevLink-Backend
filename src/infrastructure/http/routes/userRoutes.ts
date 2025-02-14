@@ -35,7 +35,8 @@ const {
     createProposal,
     editProfile,
     bosstSuccess,
-    rejectInvite
+    getAllInvites,
+    rejectInvite,
 } = userController;
 
 
@@ -54,6 +55,7 @@ userRouter.get('/job/submittedContracts/:userId', verifyToken, requireRole('user
 userRouter.get('/chat/:memberId', verifyToken, requireRole('user'), clientController.getAllChats);
 userRouter.get('/job/proposals/:userId', getAllProposals);
 userRouter.get("/wallet/:userId/view", viewWalletUser);
+userRouter.get("/invites/view/:userId", getAllInvites);
 
 userRouter.get('/allChat/view/:roleId', clientController.getAllChats);
 userRouter.get("/chat/view/:roleType/:roleId/:targetId", clientController.viewChat);

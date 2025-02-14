@@ -603,6 +603,21 @@ export const userController = {
     },
 
 
+    getAllInvites: async (req: Request, res: Response) => {
+        try {
+            const { userId } = req.params;
+            const response = await allUserUseCases.getAllInvitesUseCase.execute(userId);
+
+            res
+                .status(HttpStatusCode.OK)
+                .json({ message: StatusMessage[HttpStatusCode.OK], invites: response , success: true });
+        } catch (err: any) {
+            res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: err.message, success: false });
+        }
+    },
+
     rejectInvite: async (req: Request, res: Response) => {
         try {
             const { inviteId } = req.params;
@@ -610,7 +625,7 @@ export const userController = {
 
             res
                 .status(HttpStatusCode.OK)
-                .json({ message: StatusMessage[HttpStatusCode.OK], wallet: response, success: true });
+                .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
         } catch (err: any) {
             res.status(500)
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
