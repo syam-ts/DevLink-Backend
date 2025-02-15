@@ -33,7 +33,7 @@ const {
   profileVerification,
   makePayment,
   createJobPost,
-  rateUser,
+  rateAndReview,
   closeContract,
   createContract,
   sendMessage,
@@ -72,8 +72,8 @@ clientRouter.post("/profile/verification/:clientId", verifyToken, requireRole('c
 //Payment and New Jobpost creation phase   -------------->
 clientRouter.post("/jobPost/payment-stripe/:clientId",verifyToken, requireRole('client'), makePayment );
 clientRouter.post("/payment/success/:clientId", createJobPost);
-clientRouter.post("/rate/user/:notificationId",verifyToken, requireRole('client'), rateUser); 
-clientRouter.post("/project/submit/approval", verifyToken, requireRole('client'), closeContract);
+clientRouter.post("/rate/user/:notificationId",verifyToken, requireRole('client'), rateAndReview); 
+clientRouter.post("/project/submit/approval", closeContract);
 clientRouter.post('/job/createContract', verifyToken, requireRole('client'), createContract); 
 clientRouter.post("/chat/sendMessage", verifyToken, requireRole('client'), sendMessage);
 clientRouter.post("/invite/user", inviteUser);

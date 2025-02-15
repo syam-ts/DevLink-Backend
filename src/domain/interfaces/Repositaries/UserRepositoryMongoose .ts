@@ -104,9 +104,7 @@ export class UserRepositoryMongoose implements UserRepositary {
 
   async verifyOtp(user: any): Promise<User> {
     const { name, email, password, mobile } = user.user.data;
-    console.log(user.user)
-    console.log('Mail otp : ', user.mailOtp, 'enter otp : ', user.mailOtp);
-
+ 
     if (user.mailOtp === parseInt(user.mailOtp)) { 
 
       const salt: number = 10;

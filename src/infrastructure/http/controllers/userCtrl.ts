@@ -463,6 +463,7 @@ export const userController = {
 
     getSingleJobPost: async (req: Request, res: Response) => {
         try {
+            console.log('Parma ', req.params)
 
             const { jobPostId } = req.params;
             const jobPost = await allUserUseCases.getSingleJobPostUseCase.execute(

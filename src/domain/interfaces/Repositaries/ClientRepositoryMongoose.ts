@@ -917,11 +917,14 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
 
-  async rateUser(userId: string, notificationId: string, rating: number): Promise<any> {
+  async rateAndReviewUser(userId: string, notificationId: string, rating: number, review: string): Promise<any> {
 
     //insert rating on user
 
-    const updateUser = await UserModel.findByIdAndUpdate(userId, { rating: rating }, { update: true });
+    const updateUser = await UserModel.findByIdAndUpdate(userId, { 
+      rating: rating,
+      $push: {review: review}
+     }, { update: true });
 
     //remove the rating from notifaicaion
     const removeExtra = await NotificationModel.findByIdAndUpdate(notificationId, { extra: {} }, { update: true });

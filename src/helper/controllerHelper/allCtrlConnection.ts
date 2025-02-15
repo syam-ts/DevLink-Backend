@@ -62,7 +62,7 @@ import { MyContracts } from '../../application/usecases/client/myContracts';
 import { ViewContract } from '../../application/usecases/client/viewContract';
 import { ViewSubmissions } from '../../application/usecases/client/viewSubmissions';
 import { CloseContract } from '../../application/usecases/client/closeContract';
-import { RateUser } from '../../application/usecases/client/rateUser';
+import { RateAndReview } from '../../application/usecases/client/rateAndReview';
 import { CreateChat } from '../../application/usecases/client/createChat';
 import { SendMessage } from '../../application/usecases/client/sendMessage';
 import { GetAllChats } from '../../application/usecases/client/getAllChats';
@@ -161,7 +161,7 @@ const myContractsUseCase = new MyContracts(ClientRepository);
 const viewContractUseCase = new ViewContract(ClientRepository);
 const viewSubmissionsUseCase = new ViewSubmissions(ClientRepository);
 const closeContractUseCase = new CloseContract(ClientRepository);
-const rateUserUseCase = new RateUser(ClientRepository);
+const rateAndReviewUserUseCase = new RateAndReview(ClientRepository);
 const viewWalletUseCase = new ViewWallet(ClientRepository);
 const getallDevelopersUseCase = new GetallDevelopers(ClientRepository);
 const inviteUserUseCase = new InviteUser(ClientRepository);
@@ -260,7 +260,7 @@ export const allClientUseCases = {
      viewSubmissionsUseCase,
      getallDevelopersUseCase,
      closeContractUseCase,
-     rateUserUseCase, 
+     rateAndReviewUserUseCase, 
      inviteUserUseCase, 
      sendMessageUseCase,
      getAllChatsUseCase,

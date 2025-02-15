@@ -49,7 +49,7 @@ userRouter.get('/home/:type', verifyToken, requireRole('user'), listHomeJobs);
 userRouter.get('/jobs/view/:jobType/:userId', verifyToken, requireRole('user'), getSelectedJobs);
 userRouter.get('/all-contracts/:userId', verifyToken, requireRole('user'), allContracts);
 userRouter.get('/notifications/:userId', verifyToken, allNotifications);
-userRouter.get('/job/view/:jobPostId', verifyToken, requireRole('user'), getSingleJobPost);
+userRouter.get('/job/view/:jobPostId',  getSingleJobPost);
 userRouter.get('/job/myContracts/:userId', verifyToken, requireRole('user'), viewMyContracts);
 userRouter.get('/job/submittedContracts/:userId', verifyToken, requireRole('user'), viewSubmittedContracts);
 userRouter.get('/chat/:memberId', verifyToken, requireRole('user'), clientController.getAllChats);

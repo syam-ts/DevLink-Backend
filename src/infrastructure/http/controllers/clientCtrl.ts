@@ -488,11 +488,11 @@ export const clientController = {
     },
 
 
-    rateUser: async (req: Request, res: Response) => {
+    rateAndReview: async (req: Request, res: Response) => {
         try {
             const { notificationId } = req.params;
-            const { userId, rating } = req.body.body; 
-            const response = await allClientUseCases.rateUserUseCase.execute(notificationId, userId, rating);
+            const { userId, rating, review } = req.body.body; 
+            const response = await allClientUseCases.rateAndReviewUserUseCase.execute(notificationId, userId, rating, review);
 
             res.status(HttpStatusCode.OK)
                 .json({ message: StatusMessage[HttpStatusCode.OK], data: response, success: true });
