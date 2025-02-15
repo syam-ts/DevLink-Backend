@@ -71,7 +71,7 @@ clientRouter.post("/profile/verification/:clientId", verifyToken, requireRole('c
 
 //Payment and New Jobpost creation phase   -------------->
 clientRouter.post("/jobPost/payment-stripe/:clientId",verifyToken, requireRole('client'), makePayment );
-clientRouter.post("/payment/success/:clientId",verifyToken, requireRole('client'), createJobPost);
+clientRouter.post("/payment/success/:clientId", createJobPost);
 clientRouter.post("/rate/user/:notificationId",verifyToken, requireRole('client'), rateUser); 
 clientRouter.post("/project/submit/approval", verifyToken, requireRole('client'), closeContract);
 clientRouter.post('/job/createContract', verifyToken, requireRole('client'), createContract); 

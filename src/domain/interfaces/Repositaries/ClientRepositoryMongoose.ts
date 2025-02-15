@@ -42,6 +42,11 @@ interface Invite {
     estimateTimeinHours: Number;
     projectType: String;
   };
+  clientData: {
+    companyName: string;
+    email: string;
+    location: string;
+  };
   status: String;
   createdAt: Date;
 };
@@ -344,6 +349,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async createJobPost(clientId: string, data: any): Promise<any> {
 
+    console.log('Enter here')
 
 
     const client: any = await ClientModel.findById(clientId);
@@ -396,7 +402,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       createdAt: new Date()
     });
 
-    newNotification.save();
+    newNotification.save(); 
 
     return { savedJobPost };
   }
@@ -928,6 +934,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   async inviteUser(userId: string, clientId: string, jobPostId: string, description: string): Promise<Invite> {
 
     const jobPostData: any = await JobPostModel.findById(jobPostId);
+    const client: any = await ClientModel.findById(clientId);
 
 
     const inviteFn = new InviteModel({
@@ -944,6 +951,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         paymentType: jobPostData.paymentType,
         estimateTimeinHours: jobPostData.estimateTimeinHours,
         projectType: jobPostData.projectType,
+      },
+      clientData: {
+        companyName: client.companyName,
+        email: client.email,
+        location: client.location, 
       },
       state: "pending",
       createdAt: new Date()

@@ -251,7 +251,7 @@ export const clientController = {
 
 
     createJobPost: async (req: Request, res: Response) => {
-        try {
+        try { 
             const { clientId } = req.params;
 
             const { data } = req.body;
@@ -302,7 +302,7 @@ export const clientController = {
 
 
     makePayment: async (req: Request, res: Response) => {
-        try {
+        try { 
             const { clientId } = req.params;
             const response = await allClientUseCases.makePaymentUseCase.execute(clientId, req.body);
 
@@ -491,8 +491,7 @@ export const clientController = {
     rateUser: async (req: Request, res: Response) => {
         try {
             const { notificationId } = req.params;
-            const { userId, rating } = req.body.body;
-            console.log('DATA FROM ctrl ', notificationId, req.body.body)
+            const { userId, rating } = req.body.body; 
             const response = await allClientUseCases.rateUserUseCase.execute(notificationId, userId, rating);
 
             res.status(HttpStatusCode.OK)
@@ -560,7 +559,7 @@ export const clientController = {
 
 
             const response = await allClientUseCases.viewWalletUseCase.execute(clientId);
-            console.log('The wallet ', response)
+           
             res
                 .status(HttpStatusCode.OK)
                 .json({ message: StatusMessage[HttpStatusCode.OK], wallet: response, success: true });
@@ -595,7 +594,7 @@ export const clientController = {
             const { userId, clientId, jobPostId, description }:
                 { userId: string, clientId: string, jobPostId: string, description: string }
                 = req.body;
-            const response = await allClientUseCases.inviteUserUseCase.execute(userId, clientId, jobPostId. description);
+            const response = await allClientUseCases.inviteUserUseCase.execute(userId, clientId, jobPostId, description);
 
             res
                 .status(HttpStatusCode.CREATED)
