@@ -10,5 +10,6 @@ export class verifyOtp {
 
     async execute(user: User) {
         const verifiedOtp = await this.userRepositary.verifyOtp(user);
+        return verifiedOtp
     }
 }

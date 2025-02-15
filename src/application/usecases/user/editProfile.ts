@@ -32,92 +32,10 @@ export class EditUserProfile {
 
     if (type === 'verify') {
 
-
-      const { name, budget, location, mobile, skills, profilePicture, domain, githubLink, description, whyHireMe, experience, education } = profileData.editData;
-
-      if (!name || !budget || !location || !mobile || !skills || !profilePicture || !domain || !githubLink || !description || !whyHireMe || !experience || !education) {
-        throw new Error('All fields need to be filled')
-      };
-
-
-     
-        if ( name.length <= 3 || name.length > 20) {
-          throw new Error("Name should contain atlest 4 characters");
-        }
-      
-  
  
-
-     
-        if (mobile.toString().length < 10) {
-          throw new Error("Number should be atlest 10 digits");
-        }
- 
-           
-     
-        if (location.length < 3) {
-          throw new Error("Location need to valid");
-        }
-
-     
-        if (skills.length < 3) {
-          throw new Error("Require atleast 3 skills");
-        }
-       
-     
-        if (domain.length < 4) {
-          throw new Error("Enter valid domain");
-        }
-       
-       
-     
-        if (githubLink.length < 20) {
-          throw new Error("Enter valid github link");
-        }
-       
-
-      //TODO
-      // if(typeof(profilePicture) === 'png | svg | jpeg | jpg') {
-      //     throw new Error('Invalid Profile picture')
-      // }
-
-     
-        if (description.length < 20) {
-          throw new Error("Description should atlest need 20 words");
-        }
-     
-     
-        if (whyHireMe.length < 20) {
-          throw new Error("Hire me field need to have atlest need 20 words");
-        }
-    
-     
-        if (experience.length < 20) {
-          throw new Error("Experince field need to have atlest need 20 words");
-        }
-    
- 
-     
-        if (education.length < 2) {
-          throw new Error("Education field need to have atlest need 20 words");
-        }
-    
-
-    
- 
-        if (
-          budget < 100 ||
-          budget > 2000
-        ) {
-          if (budget < 100) {
-            throw new Error("Pay per Hour need to be atlest 100₹");
-          } else if (budget > 2000) {
-            throw new Error("Maximum pay per hour is 2000₹");
-          }
-        }
   
 
-      const type: string = 'verify';
+       
       console.log("Reached here so far")
 
       const updatedUser = await this.userRepositary.editUserProfile(

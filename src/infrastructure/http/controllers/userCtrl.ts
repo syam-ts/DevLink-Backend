@@ -33,6 +33,7 @@ export const userController = {
 
     verifyOtp: async (req: Request, res: Response) => {
         try {
+            
             const user = await allUserUseCases.verifyUserUseCase.execute(req.body);
             res.status(HttpStatusCode.OK).json({
                 message: StatusMessage[HttpStatusCode.OK],
