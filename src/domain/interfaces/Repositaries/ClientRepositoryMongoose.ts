@@ -921,9 +921,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
     //insert rating on user
 
+    //add {rating: , review}
+
     const updateUser = await UserModel.findByIdAndUpdate(userId, { 
       rating: rating,
-      $push: {review: review}
+      $push: {review: {rating: rating, review: review}}
      }, { update: true });
 
     //remove the rating from notifaicaion
