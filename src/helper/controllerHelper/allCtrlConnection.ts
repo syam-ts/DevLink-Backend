@@ -44,7 +44,7 @@ import { getHomeClient } from '../../application/usecases/client/getHomeClient';
 import { LogoutClient } from '../../application/usecases/client/logoutClient';
 import { VerifyEmailClient } from '../../application/usecases/client/verifyEmail';
 import { ResetPasswordClient } from '../../application/usecases/client/resetPassword';
-import { verifyOtpClient } from '../../application/usecases/client/otpClient';
+import { verifyOtpClient } from '../../application/usecases/client/verifyOtpClient';
 import { EditClientProfile } from '../../application/usecases/client/EditClientProfile';
 import { GetClientProfile } from '../../application/usecases/client/getProfile';
 import { ProfileVerification } from '../../application/usecases/client/profileVerification';

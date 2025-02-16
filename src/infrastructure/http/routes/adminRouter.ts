@@ -28,10 +28,10 @@ const {
 
 // adminRouter.post('/signup', adminController.signUpAdmin);
 
-adminRouter.get('/dashboard', verifyToken, requireRole('admin'), getDashboard);
-adminRouter.get('/getAllUsers', verifyToken, requireRole('admin'), getAllUsers);
-adminRouter.get('/getAllClients', verifyToken, requireRole('admin'), getAllClients); 
-adminRouter.get('/getRequests', verifyToken, getRequests);
+adminRouter.get('/dashboard', getDashboard);
+adminRouter.get('/getAllUsers', getAllUsers);
+adminRouter.get('/getAllClients', getAllClients); 
+adminRouter.get('/getRequests', getRequests);
 adminRouter.get('/request/getRequestedClient/:clientId', verifyToken, getRequestedClient);
 adminRouter.get('/viewRole/:roleId/:roleInfo', verifyToken, viewRoleInfo);
 adminRouter.get('/getWallet', verifyToken, getWallet); 
@@ -43,7 +43,7 @@ adminRouter.post('/getAllUsers/search?', verifyToken, searchUser);
 adminRouter.post('/getAllClients/search?', verifyToken, searchClient);
 adminRouter.post('/getAllClients/sort?', verifyToken, sortClient);
 
-adminRouter.put('/verifyClient/accept', verifyToken, verifyAccept);
+adminRouter.put('/verifyClient/accept', verifyAccept);
 
 adminRouter.patch('/blockUser/:userId', verifyToken, blockUser);
 adminRouter.patch('/unBlockUser/:userId', verifyToken, unBlockUser);

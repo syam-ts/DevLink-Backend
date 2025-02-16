@@ -61,16 +61,17 @@ export const adminController = {
 
         getDashboard: async (req: any, res: any) => {
             try{  
-               const clientsAndUsers = await allAdminUseCases.getDashboardUseCase.execute();
- 
 
-               res.cookie("jwtA", req.admin.accessToken, {
-                httpOnly: true, 
-                sameSite: "None", 
-                secure: true, 
-                maxAge: 24 * 60 * 60 * 1000
-              }
-            );
+               const clientsAndUsers = await allAdminUseCases.getDashboardUseCase.execute();
+               
+
+            //    res.cookie("jwt", req.admin.accessToken, {
+            //     httpOnly: true, 
+            //     sameSite: "None", 
+            //     secure: true, 
+            //     maxAge: 24 * 60 * 60 * 1000
+            //   }
+            // );
             return res
             .status(HttpStatusCode.OK)
             .json({message: StatusMessage[HttpStatusCode.OK],data: clientsAndUsers, success: true});
@@ -86,7 +87,7 @@ export const adminController = {
 
         getAllUsers: async(req: any, res: any) => {
             try{
-
+ 
 
                 const users = await allAdminUseCases.getAllUsersUseCase.execute(req.query.page, req.query.sortType); 
 

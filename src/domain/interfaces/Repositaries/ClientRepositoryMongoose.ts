@@ -88,11 +88,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
 
   async verifyOtp(client: any): Promise<Client> {
+ 
 
+    const { name , email, password } = client.user.data;
 
-    const { companyName, email, password } = client.client;
-
-    if (client.mailOtp === parseInt(client.clientOtp.otp)) {
+    if (client.mailOtp === parseInt(client.user.otp)) {
 
       const salt = 10;
 
@@ -112,7 +112,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       };
 
       const createdClient = new ClientModel({
-        companyName: companyName,
+        companyName: name,
         email: email,
         password: hashedPassword,
         description: '',

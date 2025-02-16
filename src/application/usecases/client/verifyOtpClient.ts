@@ -1,7 +1,7 @@
 import { Client } from '../../../domain/entities/Client';
 
 export interface ClientRepositary {
-    createClient(client: Client): Promise<Client>;
+   
     verifyOtp(client: Client): Promise<Client>; 
 }
 

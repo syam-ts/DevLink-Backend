@@ -67,7 +67,7 @@ clientRouter.post("/verify-email", verifyEmail);
 clientRouter.post("/resetPassword/:clientId", resetPassword);
 clientRouter.post("/googleLogin", googleLogin);
 clientRouter.post("/logout", logoutClient);
-clientRouter.post("/profile/verification/:clientId", verifyToken, requireRole('client'), profileVerification);
+clientRouter.post("/profile/verify/:clientId", verifyToken, requireRole('client'), profileVerification);
 
 //Payment and New Jobpost creation phase   -------------->
 clientRouter.post("/jobPost/payment-stripe/:clientId",verifyToken, requireRole('client'), makePayment );
