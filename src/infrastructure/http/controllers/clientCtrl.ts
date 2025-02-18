@@ -491,7 +491,7 @@ export const clientController = {
     rateAndReview: async (req: Request, res: Response) => {
         try {
             const { notificationId } = req.params;
-            const { userId, rating, review } = req.body.body; 
+            const { userId, rating, review } = req.body; 
             const response = await allClientUseCases.rateAndReviewUserUseCase.execute(notificationId, userId, rating, review);
 
             res.status(HttpStatusCode.OK)
