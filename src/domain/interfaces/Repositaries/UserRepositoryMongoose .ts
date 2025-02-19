@@ -597,7 +597,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     return { updateUserWallet, updateAdminWallet };
   }
 
-  async viewContract(contractId: Id): Promise<any> {
+  async viewSingleContract(contractId: Id): Promise<any> {
     const contract: any = await ContractModel.findById(contractId);
 
     if (!contract) {

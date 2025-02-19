@@ -11,7 +11,7 @@ import mongoose, { Schema, Model } from 'mongoose';
   amount: number;
   deadline: number;
   active: Boolean;
-  status: 'on progress' | 'pending' | 'closed';
+  status: 'on progress' | 'pending' | 'submitted' | 'closed';
   createdAt: Date;
 };
 

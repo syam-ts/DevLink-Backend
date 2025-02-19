@@ -1,6 +1,7 @@
 import express from "express"; 
 const clientRouter = express.Router();
 import { clientController } from "../controllers/clientCtrl"; 
+import { userController } from "../controllers/userCtrl";
 import { verifyToken } from "../middlewares/auth/verifyToken";
 import { requireRole } from "../middlewares/auth/requireRole"; 
 
@@ -40,6 +41,8 @@ const {
   rejectProposal,
   inviteUser
 } = clientController;
+ 
+
 
 
 clientRouter.get("/getHome", verifyToken, requireRole('client'), getHomeClient);

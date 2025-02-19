@@ -439,6 +439,7 @@ export const clientController = {
 
     viewContract: async (req: Request, res: Response) => {
         try {
+            console.log('reahed here so far')
 
             const { contractId } = req.params;
             const response = await allClientUseCases.viewContractUseCase.execute(contractId);

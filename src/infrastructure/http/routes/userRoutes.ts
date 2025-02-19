@@ -37,6 +37,7 @@ const {
     bosstSuccess,
     getAllInvites,
     rejectInvite,
+    viewSingleContract
 } = userController;
 
 
@@ -50,12 +51,13 @@ userRouter.get('/jobs/view/:jobType/:userId', verifyToken, requireRole('user'), 
 userRouter.get('/all-contracts/:userId', verifyToken, requireRole('user'), allContracts);
 userRouter.get('/notifications/:userId', verifyToken, allNotifications);
 userRouter.get('/job/view/:jobPostId',  getSingleJobPost);
-userRouter.get('/job/myContracts/:userId', verifyToken, requireRole('user'), viewMyContracts);
+userRouter.get('/contract/myContracts/:userId', verifyToken, requireRole('user'), viewMyContracts);
 userRouter.get('/job/submittedContracts/:userId', verifyToken, requireRole('user'), viewSubmittedContracts);
 userRouter.get('/chat/:memberId', verifyToken, requireRole('user'), clientController.getAllChats);
 userRouter.get('/job/proposals/:userId', getAllProposals);
 userRouter.get("/wallet/:userId/view", viewWalletUser);
 userRouter.get("/invites/view/:userId", getAllInvites);
+userRouter.get("/contract/:contractId",verifyToken, requireRole('user'), viewSingleContract);
 
 userRouter.get('/allChat/view/:roleId', clientController.getAllChats);
 userRouter.get("/chat/view/:roleType/:roleId/:targetId", clientController.viewChat);

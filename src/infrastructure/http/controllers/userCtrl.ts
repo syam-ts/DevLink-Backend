@@ -605,6 +605,22 @@ export const userController = {
     },
 
 
+    viewSingleContract: async (req: Request, res: Response) => {
+        try {
+            const { contractId } = req.params;
+            const contract = await allUserUseCases.viewSingleContractUserUseCase.execute(contractId);
+
+            res
+                .status(HttpStatusCode.OK)
+                .json({ message: StatusMessage[HttpStatusCode.OK], contract, success: true });
+        } catch (err: any) {
+            res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: err.message, success: false });
+        }
+    },
+
+
     getAllInvites: async (req: Request, res: Response) => {
         try {
             const { userId } = req.params;

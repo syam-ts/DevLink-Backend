@@ -28,6 +28,7 @@ import { GetAllProposals } from "../../application/usecases/user/getAllProposals
 import { ViewWalletUser } from "../../application/usecases/user/viewWalletUser"; 
 import { GetAllInvites } from "../../application/usecases/user/getAllInvites"; 
 import { RejectInvite } from "../../application/usecases/user/rejectInvite"; 
+import { ViewSingleContractUser } from "../../application/usecases/user/viewSingleContract"; 
 
 
 import { AllClients } from "../../application/usecases/user/allClients";   
@@ -128,6 +129,7 @@ const getAllProposalsUseCase = new GetAllProposals(userRepository);
 const viewWalletUserUseCase = new ViewWalletUser(userRepository); 
 const getAllInvitesUseCase = new GetAllInvites(userRepository); 
 const rejectInviteUseCase = new RejectInvite(userRepository); 
+const viewSingleContractUserUseCase = new ViewSingleContractUser(userRepository); 
 
 
 const allClientsUseCase = new AllClients(userRepository); 
@@ -230,7 +232,7 @@ export const allUserUseCases = {
         viewWalletUserUseCase,
         getAllInvitesUseCase,
         rejectInviteUseCase,
-
+        viewSingleContractUserUseCase,
         allClientsUseCase,
 };
 
