@@ -368,4 +368,19 @@ export const adminController = {
             }
         },
 
+        viewSingleContract: async (req: any, res: any) => {
+            try{
+                 const { contractId }: {contractId: string} = req.params;
+
+                  const contract = await allAdminUseCases.viewSingleContractUseCase.execute(contractId); 
+                  res
+                  .status(HttpStatusCode.OK)
+                  .json({ message: StatusMessage[HttpStatusCode.OK], contract, success: true});
+            }catch(err: any) {
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false })
+            }
+        },
+
     }

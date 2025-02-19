@@ -94,6 +94,7 @@ import { SortUser } from '../../application/usecases/admin/sortUser';
 import { SearchClient } from '../../application/usecases/admin/searchClient';
 import { SortClient } from '../../application/usecases/admin/sortClient';
 import { GetAllContracts } from '../../application/usecases/admin/getAllContracts';
+import { ViewSingleContract } from '../../application/usecases/admin/viewSingleContract';
 
 
 
@@ -194,6 +195,7 @@ const verifyAcceptUseCase = new VerifyAccept(adminRepositary);
 const getAllRequestsUseCase = new GetAllRequests(adminRepositary);
 const getRequestedClientUseCase = new GetRequestedClient(adminRepositary);
 const getAllContractsUseCase = new GetAllContracts(adminRepositary);
+const viewSingleContractUseCase = new ViewSingleContract(adminRepositary);
  
 
 
@@ -291,5 +293,6 @@ export const allAdminUseCases = {
         verifyAcceptUseCase ,
         getAllRequestsUseCase ,
         getRequestedClientUseCase, 
-        getAllContractsUseCase
+        getAllContractsUseCase,
+        viewSingleContractUseCase
 }

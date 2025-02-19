@@ -23,7 +23,8 @@ const {
     unBlockUser,
     blockClient,
     unBlockClient,
-    getAllContracts
+    getAllContracts,
+    viewSingleContract
 } = adminController;
 
 
@@ -37,6 +38,8 @@ adminRouter.get('/request/getRequestedClient/:clientId', getRequestedClient);
 adminRouter.get('/viewRole/:roleId/:roleInfo', viewRoleInfo);
 adminRouter.get('/getWallet', getWallet); 
 adminRouter.get('/getAllContracts', getAllContracts); 
+
+adminRouter.get('/viewSingleContract/:contractId', viewSingleContract); 
 
 
 adminRouter.post('/login', loginAdmin);

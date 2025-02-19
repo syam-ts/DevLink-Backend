@@ -568,8 +568,22 @@ export class AdminRepository implements AdminRepositary {
       }
       return contracts;
       
-    } 
   }
+
+  async viewSingleContract(contractId: string): Promise<any> { 
+
+      const contract = await ContractModel.findById(contractId).exec(); 
+      if (!contract) {
+        throw new Error('Contract not found');
+      }
+      return contract;
+    }
+
+
+
+
+    } 
+ 
 
 
 
