@@ -354,4 +354,18 @@ export const adminController = {
             }
         },
 
+        getAllContracts: async (req: any, res: any) => {
+            try{
+                 
+                  const contracts = await allAdminUseCases.getAllContractsUseCase.execute(); 
+                  res
+                  .status(HttpStatusCode.OK)
+                  .json({ message: StatusMessage[HttpStatusCode.OK], contracts, success: true});
+            }catch(err: any) {
+                res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR], success: false })
+            }
+        },
+
     }

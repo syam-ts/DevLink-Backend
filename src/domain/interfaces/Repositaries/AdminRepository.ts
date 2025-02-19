@@ -5,6 +5,7 @@ import { UserModel } from '../../entities/User'
 import { NotificationModel } from '../../entities/Notification'  
 import { Client ,ClientModel} from '../../entities/Client';  
 import { AdminModel} from '../../entities/Admin' 
+import { ContractModel } from '../../entities/Contract';
  
  
 
@@ -553,6 +554,19 @@ export class AdminRepository implements AdminRepositary {
         throw new Error('Wallet not found')
       }
       return admin.wallet;
+      
+    } 
+    
+
+  async getAllContracts(): Promise<any> {
+
+    
+      const contracts: any = await ContractModel.find().exec();
+  
+      if (!contracts) {
+        throw new Error('Contracts not found');
+      }
+      return contracts;
       
     } 
   }

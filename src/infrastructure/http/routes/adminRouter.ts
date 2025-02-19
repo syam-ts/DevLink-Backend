@@ -23,6 +23,7 @@ const {
     unBlockUser,
     blockClient,
     unBlockClient,
+    getAllContracts
 } = adminController;
 
 
@@ -32,23 +33,24 @@ adminRouter.get('/dashboard', getDashboard);
 adminRouter.get('/getAllUsers', getAllUsers);
 adminRouter.get('/getAllClients', getAllClients); 
 adminRouter.get('/getRequests', getRequests);
-adminRouter.get('/request/getRequestedClient/:clientId', verifyToken, getRequestedClient);
-adminRouter.get('/viewRole/:roleId/:roleInfo', verifyToken, viewRoleInfo);
-adminRouter.get('/getWallet', verifyToken, getWallet); 
+adminRouter.get('/request/getRequestedClient/:clientId', getRequestedClient);
+adminRouter.get('/viewRole/:roleId/:roleInfo', viewRoleInfo);
+adminRouter.get('/getWallet', getWallet); 
+adminRouter.get('/getAllContracts', getAllContracts); 
 
 
 adminRouter.post('/login', loginAdmin);
 adminRouter.post('/logout', logoutAdmin);
-adminRouter.post('/getAllUsers/search?', verifyToken, searchUser);
-adminRouter.post('/getAllClients/search?', verifyToken, searchClient);
-adminRouter.post('/getAllClients/sort?', verifyToken, sortClient);
+adminRouter.post('/getAllUsers/search?', searchUser);
+adminRouter.post('/getAllClients/search?', searchClient);
+adminRouter.post('/getAllClients/sort?', sortClient);
 
 adminRouter.put('/verifyClient/accept', verifyAccept);
 
-adminRouter.patch('/blockUser/:userId', verifyToken, blockUser);
-adminRouter.patch('/unBlockUser/:userId', verifyToken, unBlockUser);
-adminRouter.patch('/blockClient/:clientId', verifyToken, blockClient);
-adminRouter.patch('/unBlockClient/:clientId', verifyToken, unBlockClient);
+adminRouter.patch('/blockUser/:userId', blockUser);
+adminRouter.patch('/unBlockUser/:userId', unBlockUser);
+adminRouter.patch('/blockClient/:clientId', blockClient);
+adminRouter.patch('/unBlockClient/:clientId', unBlockClient);
 
 
 
