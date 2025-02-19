@@ -228,7 +228,6 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     if (!updatedClient) {
       throw new Error("Client not found or password update failed.");
     }
-
     return "Password reset successfully!";
   }
 
@@ -303,7 +302,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
   async createJobPost(clientId: string, data: any): Promise<any> {
-    console.log("Enter here");
+ 
 
     const client: any = await ClientModel.findById(clientId);
 
@@ -835,32 +834,23 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       };
     }
 
-    type RateData = Rating[];
+    type RateData = Rating | null;
 
-    const rateData: RateData = await UserModel.aggregate([
-      {
-        $match: {
-          name: "SUahsnt",
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          "rating.ratingSum": 1,
-          "rating.noOfRating": 1,
-        },
-      },
-    ]);
+    const rateData: RateData = await UserModel.findById(userId);
 
-    const ratingSum: number = rateData[0].rating.ratingSum;
-    const noOfRating: number = rateData[0].rating.noOfRating;
-    const avgRating: number = Math.floor((ratingSum + rating) / (noOfRating + 1));
+    if (!rateData) throw new Error("User not found");
+
+    const ratingSum: number = rateData.rating.ratingSum;
+    const noOfRating: number = rateData.rating.noOfRating;
+    let avgRating: number = (ratingSum + rating) / (noOfRating + 1);
+    avgRating = Math.min(avgRating, 4.9);
+    const finalRating: number = Math.floor(avgRating * 10) / 10;
 
     const updateUser = await UserModel.findByIdAndUpdate(
       userId,
       {
         $inc: { "rating.ratingSum": rating, "rating.noOfRating": 1 },
-        "rating.avgRating": avgRating,
+        "rating.avgRating": finalRating,
         $push: { review: review },
       },
       { new: true }
