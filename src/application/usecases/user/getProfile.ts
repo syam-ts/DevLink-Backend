@@ -27,6 +27,7 @@ export class GetUserProfile {
             whyHireMe: user.whyHireMe,
             experience: user.experience,
             education: user.education,
+            isBoosted: user.isBoosted,
             isProfileFilled: user.isProfileFilled
         };
     }

@@ -112,8 +112,7 @@ export const userController = {
         try {
 
             const { user } = await allUserUseCases.loginUseCase.execute(req.body);
-            console.log(user)
-
+           
             if (!user) {
                 res.status(401).json({ message: "Invalid credentials", success: false });
                 return;
@@ -166,8 +165,7 @@ export const userController = {
 
 
     getHomeUser: async (req: Request, res: any) => {
-        try {
-            console.log('Reach here so far')
+        try { 
 
             const clients = await allUserUseCases.getHomeUseCase.execute();
 
@@ -418,7 +416,7 @@ export const userController = {
 
     boostAccount: async (req: Request, res: Response) => {
         try {
-            const { userId } = req.params;
+            const { userId } = req.params; 
 
             const paymentUrl = await allUserUseCases.boostAccountUseCase.execute(
                 userId
@@ -442,6 +440,7 @@ export const userController = {
     bosstSuccess: async (req: Request, res: Response) => {
         try {
             const { userId } = req.params;
+            console.log('bo', userId)
             const response = await allUserUseCases.boostSuccessUseCase.execute(
                 userId
             );
@@ -462,8 +461,7 @@ export const userController = {
 
 
     getSingleJobPost: async (req: Request, res: Response) => {
-        try {
-            console.log('Parma ', req.params)
+        try { 
 
             const { jobPostId } = req.params;
             const jobPost = await allUserUseCases.getSingleJobPostUseCase.execute(

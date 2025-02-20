@@ -17,7 +17,7 @@ import { CreateProposal } from "../../application/usecases/user/createProposal";
 import { AllContracts } from "../../application/usecases/user/allContracts"; 
 import { AllNotifications } from "../../application/usecases/user/allNotifications"; 
 import { BoostPayment } from "../../application/usecases/user/boostPayment"; 
-import { BoostSuccess } from "../../application/usecases/user/bosstSuccess"; 
+import { BoostSuccess } from "../../application/usecases/user/boostSuccess"; 
 import { GetSingleJobPost } from "../../application/usecases/user/getSingleJobPost"; 
 import { ViewMyContracts } from "../../application/usecases/user/viewContracts"; 
 import { ViewSubmittedContracts } from "../../application/usecases/user/viewSubmittedContracts";  

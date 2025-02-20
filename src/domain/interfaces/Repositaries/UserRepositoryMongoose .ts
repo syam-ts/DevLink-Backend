@@ -160,11 +160,8 @@ export class UserRepositoryMongoose implements UserRepositary {
 
   async findUserById(_id: string): Promise<any | null> {
  
-
-    const user = await UserModel.findById(_id);
-     
+    const user = await UserModel.findById(_id);    
     if (!user) throw new Error("User not found"); 
-    
     return user;
   }
 
@@ -631,16 +628,17 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-  async bosstSuccess(userId: Id): Promise<any> {
+  async boostSuccess(userId: Id): Promise<any> {
     const user: any = await UserModel.findByIdAndUpdate(
       userId,
       {
         isBoosted: true,
       },
       {
-        update: true,
+        new: true,
       }
     );
+    console.log('The user :', user)
 
     if (!user) {
       throw new Error("User not found");

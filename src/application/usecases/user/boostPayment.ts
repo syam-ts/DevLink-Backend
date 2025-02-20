@@ -36,7 +36,7 @@ export class BoostPayment {
             },
           ],
           mode: "payment",
-          success_url: `http://localhost:5173/user/profile/boost/success/${encodeURIComponent(userId)}`, // show message of success
+          success_url: `http://localhost:5173/user/profile/boost/success/${encodeURIComponent(userId)}`,  
           cancel_url: "http://localhost:5173/user/payment-failed",
           customer_email: "samplemail@gmai.com",
         }); 

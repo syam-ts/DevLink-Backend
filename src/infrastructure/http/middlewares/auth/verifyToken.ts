@@ -14,8 +14,7 @@ interface DecodedUser {
 const verifyToken = (req: any, res: Response, next: NextFunction): any => { 
     
     const token = req.headers.authorization?.split(' ')[1]; 
-    console.log(token)
-    
+      
     if(!token) {
          res
         .status(HttpStatusCode.UNAUTHORIZED)

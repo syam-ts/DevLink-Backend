@@ -1,6 +1,6 @@
  
 export interface UserRepositary {
-    bosstSuccess(userId: string): Promise< any >
+    boostSuccess(userId: string): Promise< any >
 } 
 
 
@@ -10,7 +10,7 @@ export class BoostSuccess  {
 
     async execute( userId: string ) {   
 
-           const updateUser = await this.userRepositary.bosstSuccess(userId); 
+           const updateUser = await this.userRepositary.boostSuccess(userId); 
              
 
            return updateUser;
