@@ -231,8 +231,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return "Password reset successfully!";
   }
 
-  async getClientProfile(clientId: string): Promise<any> {
-    const client = await ClientModel.findById(clientId);
+  async getClientProfile(clientId: string): Promise<any> { 
+    const client = await ClientModel.findById(clientId); 
 
     if (!client) {
       throw new Error("Client not found");

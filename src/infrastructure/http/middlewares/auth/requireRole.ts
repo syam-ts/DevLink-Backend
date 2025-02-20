@@ -4,9 +4,11 @@ import { StatusMessage } from '../../../../helper/constants/stausMessages';
 
 
 const requireRole = (role: 'user' | 'client' | 'admin'): any => {  
+   
     return (req: any, res: Response, next: NextFunction) => {
-  
+   
  
+       
         if(!req.user || req.user.role !== role)  { 
             return res.
             status(HttpStatusCode.FORBIDDEN)

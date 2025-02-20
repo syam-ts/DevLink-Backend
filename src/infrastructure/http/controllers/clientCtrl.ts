@@ -170,11 +170,10 @@ export const clientController = {
 
 
     getProfile: async (req: Request, res: Response) => {
-        try {
-            const { clientId } = req.params;
-
+        try { 
+            const { clientId } = req.params; 
             const client = await allClientUseCases.getClientProfileUseCase.execute(clientId);
-
+         
             res
                 .status(HttpStatusCode.OK)
                 .json({ message: StatusMessage[HttpStatusCode.OK], data: client, success: true });

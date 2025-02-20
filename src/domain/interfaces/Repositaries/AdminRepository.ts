@@ -454,12 +454,12 @@ export class AdminRepository implements AdminRepositary {
     editData.isVerified = true;
     editData.isEditRequest = false;
 
-    // const client = await ClientModel.findByIdAndUpdate(clientId, {
-    //   isVerified: true,
-    //   isEditRequest: false
-    // }, {
-    //   update: true
-    // });
+    const client = await ClientModel.findByIdAndUpdate(clientId, {
+      isVerified: true,
+      isEditRequest: false
+    }, {
+      new: true
+    });
  
 
     const result = await AdminModel.updateOne(
@@ -470,9 +470,9 @@ export class AdminRepository implements AdminRepositary {
         },
       });
  
-
+console.log('the editdat:', editData.editData)
         
-    const updatedClient: any = await ClientModel.findByIdAndUpdate(clientId, editData, {
+    const updatedClient: any = await ClientModel.findByIdAndUpdate(clientId, editData.editData, {
       update: true
     }).exec();
  

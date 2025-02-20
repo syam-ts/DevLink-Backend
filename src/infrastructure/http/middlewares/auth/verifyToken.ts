@@ -14,6 +14,7 @@ interface DecodedUser {
 const verifyToken = (req: any, res: Response, next: NextFunction): any => { 
     
     const token = req.headers.authorization?.split(' ')[1]; 
+    console.log('Reahc', token)
       
     if(!token) {
          res
@@ -23,6 +24,7 @@ const verifyToken = (req: any, res: Response, next: NextFunction): any => {
     };
   
           try {
+
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as DecodedUser;
         req.user = { id: decoded._id, role: decoded.role };  
         next();

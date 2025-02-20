@@ -22,6 +22,8 @@ export class GetUserProfile {
             skills: user.skills,
             profilePicture: user.profilePicture,
             domain: user.domain,
+            rating: user.rating,
+            review: user.review,
             githugLink: user.githubLink,
             description: user.description,
             whyHireMe: user.whyHireMe,

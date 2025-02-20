@@ -214,11 +214,9 @@ export const adminController = {
         
 
         verifyAccept: async (req: any, res: any) => {
-            try{
-          
+            try{ 
                   const response = await allAdminUseCases.verifyAcceptUseCase.execute(req.body);
-                   
-
+                    
                   res
                   .status(HttpStatusCode.OK)
                   .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
