@@ -55,7 +55,7 @@ userRouter.get('/contract/myContracts/:userId', verifyToken, requireRole('user')
 userRouter.get('/job/submittedContracts/:userId', verifyToken, requireRole('user'), viewSubmittedContracts);
 userRouter.get('/chat/:memberId', verifyToken, requireRole('user'), clientController.getAllChats);
 userRouter.get('/job/proposals/:userId', getAllProposals);
-userRouter.get("/wallet/:userId/view", viewWalletUser);
+userRouter.get("/wallet/view/:userId", viewWalletUser);
 userRouter.get("/invites/view/:userId", getAllInvites);
 userRouter.get("/contract/:contractId",verifyToken, requireRole('user'), viewSingleContract);
 

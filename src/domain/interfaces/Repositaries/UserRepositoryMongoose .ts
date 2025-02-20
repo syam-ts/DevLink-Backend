@@ -702,24 +702,42 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
 
-  async viewWallet(userId: string, currentPage: number): Promise<any> {
+  async viewWallet(userId: string, page: number): Promise<any> {
 
-    const page = 1;
-    const PAGE_SIZE: number = 5;
-    const skip: number = (page - 1) * PAGE_SIZE;    
+     
+const PAGE_SIZE: number = 4;
+const skip: number = (page - 1) * PAGE_SIZE;
+
+
+const wallet = await UserModel.aggregate([
+  { $match: { _id: new mongoose.Types.ObjectId(userId) } },  
+  { $project: { totalTransactions: { $size: "$wallet.transactions" } } }
+]);
+
+const totalTransactions = wallet.length > 0 ? wallet[0].totalTransactions : 0;
+
+
+const totalPages: number = totalTransactions / PAGE_SIZE
  
-  
-      const userWallets = await UserModel.aggregate([
-          { $match: { _id: new mongoose.Types.ObjectId(userId) } },  
-          { $project: { transactions: "$wallet.transactions", _id: 0 } },   
-          
-          { $skip: skip }, 
-          { $limit: PAGE_SIZE } 
-      ]);
+
+const userWallet = await UserModel.aggregate([
+    { $match: { _id: new mongoose.Types.ObjectId(userId) } },  
+    {
+        $project: {
+            transactions: {
+                $slice: ["$wallet.transactions", skip, PAGE_SIZE]
+            },
+            balance: "$wallet.balance",
+            _id: 0
+        }
+    }
+]);
  
+return {
+  ...userWallet, totalPages
+};
   
-      return userWallets;
-  }
+}
 
 
   async getAllInvites(userId: string): Promise<Invite | any> {
