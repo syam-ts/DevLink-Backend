@@ -651,6 +651,23 @@ export const userController = {
                 .json({ message: err.message, success: false });
         }
     },
+    withdrawMoneyByUser: async (req: Request, res: Response) => {
+        try {
+            const { userId, amount, accountNumber, routingNumber, currency } = req.body;
+            // Validation needs here
+
+
+            const response = await allUserUseCases.withdrawMoneyByUserUseCase.execute(userId, amount, accountNumber, routingNumber, currency);
+
+            res
+                .status(HttpStatusCode.OK)
+                .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
+        } catch (err: any) {
+            res.status(500)
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: err.message, success: false });
+        }
+    },
 };
 
 

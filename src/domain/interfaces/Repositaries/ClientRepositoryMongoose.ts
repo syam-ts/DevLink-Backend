@@ -443,14 +443,41 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return contract;
   }
 
-  async viewWallet(clientId: string): Promise<any> {
-    const client: any = await ClientModel.findById(clientId);
-    if (!client) {
-      throw new Error("Client not found");
-    }
 
-    return client.wallet;
-  }
+   async viewWallet(clientId: string, page: number): Promise<any> {
+ 
+      
+ const PAGE_SIZE: number = 4;
+ const skip: number = (page - 1) * PAGE_SIZE;
+ 
+ 
+ const wallet = await ClientModel.aggregate([
+   { $match: { _id: new mongoose.Types.ObjectId(clientId) } },  
+   { $project: { totalTransactions: { $size: "$wallet.transactions" } } }
+ ]);
+ 
+ const totalTransactions = wallet.length > 0 ? wallet[0].totalTransactions : 0; 
+ const totalPages: number = totalTransactions / PAGE_SIZE
+  
+ 
+ const clientWallet = await ClientModel.aggregate([
+     { $match: { _id: new mongoose.Types.ObjectId(clientId) } },  
+     {
+         $project: {
+             transactions: {
+                 $slice: ["$wallet.transactions", skip, PAGE_SIZE]
+             },
+             balance: "$wallet.balance",
+             _id: 0
+         }
+     }
+ ]);
+  
+ return {
+   ...clientWallet, totalPages
+ };
+   
+ }
 
   async addMoneyToAdminWallet(
     role: string,

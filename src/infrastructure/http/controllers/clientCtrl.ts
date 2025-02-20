@@ -157,13 +157,7 @@ export const clientController = {
         try {
 
             const users = await allClientUseCases.getHomeClientUseCase.execute();
-            res.cookie("jwtC", req.client.accessToken, {
-                httpOnly: true,
-                sameSite: "None",
-                secure: true,
-                maxAge: 24 * 60 * 60 * 1000
-            }
-            );
+          
             return res
                 .status(HttpStatusCode.OK)
                 .json({ message: StatusMessage[HttpStatusCode.OK], data: users, success: true });
@@ -556,10 +550,9 @@ export const clientController = {
 
     viewWallet: async (req: Request, res: Response) => {
         try {
-            const { clientId } = req.params;
-
-
-            const response = await allClientUseCases.viewWalletUseCase.execute(clientId);
+            const { clientId } = req.params; 
+            const { currentPage } = req.query;
+            const response = await allClientUseCases.viewWalletUseCase.execute(clientId, currentPage); 
            
             res
                 .status(HttpStatusCode.OK)

@@ -37,7 +37,8 @@ const {
     bosstSuccess,
     getAllInvites,
     rejectInvite,
-    viewSingleContract
+    viewSingleContract,
+    withdrawMoneyByUser,
 } = userController;
 
 
@@ -81,6 +82,9 @@ userRouter.post('/account/boost/:userId', verifyToken, requireRole('user'), boos
 userRouter.post('/chatbot', verifyToken, requireRole('user'), chatbot);
 userRouter.post('/job/createProposal', verifyToken, requireRole('user'), createProposal);
 userRouter.post('/invite/reject/:inviteId', verifyToken, requireRole('user'), rejectInvite); 
+
+
+userRouter.post('/wallet/withdraw', withdrawMoneyByUser); 
 
 
 // userRouter.post('/job/createProposal/:clientId/:userId/:jobPostId', verifyToken,  createProposal);  
