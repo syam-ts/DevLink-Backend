@@ -691,7 +691,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       {
         status: "closed",
       },
-      { update: true }
+      { new: true }
     );
 
     const finalAmount = Math.round(
@@ -798,15 +798,29 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     );
 
     //update to user workHistory ----------------
+
     const updateUser = await UserModel.findByIdAndUpdate(
       currentContract.userId,
       {
-        $push: { workHistory: jobPostId },
+        $push: {
+          workHistory: {
+            _id: currentJobPost._id,
+            title: currentJobPost.title,
+            description: currentJobPost.description,
+            expertLevel: currentJobPost.expertLevel,
+            location: currentJobPost.location,
+            amount: currentJobPost.amount,
+            paymentType: currentJobPost.paymentType,
+            estimateTimeinHours: currentJobPost.estimatetimeinHours,
+            projectType: currentJobPost.projectType,
+          },
+        },
       },
       {
-        update: true,
+        new: true,
       }
     );
+ 
 
     const newNotificationUser = await NotificationModel.create({
       type: "contract close",

@@ -1,6 +1,28 @@
-import mongoose from "mongoose";
-import validator from "validator";
-import { JobPostDocument, JobPostSchema } from "./JobPost";
+import mongoose from "mongoose"; 
+
+interface Jobs {
+  _id: string;
+  title: string;
+  description: string;
+  expertLevel: string;
+  location: string;
+  amount: number;
+  paymentType: string;
+  estimateTimeinHours: string;
+  projectType: string;
+}
+
+const jobPostSchema = {
+  _id: { type: String, required: false },
+  title: { type: String, required: false },
+  description: { type: String, required: false },
+  expertLevel: { type: String, required: false },
+  location: { type: String, required: false },
+  amount: { type: Number, required: false },
+  paymentType: { type: String, required: false },
+  estimateTimeinHours: { type: String, required: false },
+  projectType: { type: String, required: false },
+};
 
 export interface User extends mongoose.Document {
   name: string;
@@ -21,9 +43,9 @@ export interface User extends mongoose.Document {
   };
   review: [
     {
-      theReview: string,
-      rating: number,
-      companyName: string
+      theReview: string;
+      rating: number;
+      companyName: string;
     }
   ];
   totalJobs: number;
@@ -34,7 +56,7 @@ export interface User extends mongoose.Document {
   education: [string];
   completedJobs: number;
   inProgress: number;
-  workHistory: [JobPostDocument];
+  workHistory: [Jobs];
   isEditRequest: boolean;
   request: [
     {
@@ -63,19 +85,11 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
     type: String,
     required: [true, "Name is required"],
     index: true,
-    minlength: [4, "Name must be at least 4 characters long"],
-    maxlength: [50, "Name cannot exceed 50 characters"],
   },
   email: {
     type: String,
     required: [true, "Email is required"],
-    unique: true,
-    lowercase: true,
     trim: true,
-    validate: {
-      validator: (value: string) => validator.isEmail(value),
-      message: "Invalid email address",
-    },
   },
   age: {
     type: String,
@@ -84,11 +98,6 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
   password: {
     type: String,
     required: false,
-    validate(value: string) {
-      if (!validator.isStrongPassword(value)) {
-        throw new Error("Please enter strong password " + value);
-      }
-    },
   },
   mobile: { type: Number, required: false },
   profilePicture: { type: String, required: false },
@@ -102,22 +111,24 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
   rating: {
     ratingSum: { type: Number, default: 0, required: false },
     noOfRating: { type: Number, default: 0, required: false },
-    avgRating: { type: Number, default: 0, required: false }
+    avgRating: { type: Number, default: 0, required: false },
   },
-  review: [{
-    theReview: {
-      type: String,
-      required: false,
+  review: [
+    {
+      theReview: {
+        type: String,
+        required: false,
+      },
+      rating: {
+        type: Number,
+        required: false,
+      },
+      companyName: {
+        type: String,
+        required: false,
+      },
     },
-    rating: {
-      type: Number,
-      required: false,
-    },
-    companyName: {
-      type: String,
-      required: false
-    }
-  }],
+  ],
   totalJobs: { type: Number, required: false },
   totalHours: { type: Number, required: false },
   domain: { type: String, required: false },
@@ -126,7 +137,7 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
   education: { type: [String], required: false },
   completedJobs: { type: Number, required: false },
   inProgress: { type: Number, required: false },
-  workHistory: { type: [JobPostSchema], required: false },
+  workHistory: [{ type: jobPostSchema, required: false }],
   request: [
     {
       type: { type: String, required: false },
@@ -149,5 +160,5 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
   createdAt: { type: Date, required: false },
 });
 
-//user model
+ 
 export const UserModel = mongoose.model("User", UserSchema);
