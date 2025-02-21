@@ -44,19 +44,20 @@ const { USER } = allRoles;
  
  
 userRouter.get('/getHome', verifyToken, requireRole(USER), getHomeUser);
-userRouter.get('/profile/view/:userId', getProfile);
 userRouter.get('/home/:type', verifyToken, requireRole(USER), listHomeJobs);
+userRouter.get('/profile/view/:userId',verifyToken, requireRole(USER), getProfile);
 userRouter.get('/jobs/view/:jobType/:userId', verifyToken, requireRole(USER), getSelectedJobs);
-userRouter.get('/all-contracts/:userId', verifyToken, requireRole(USER), allContracts);
-userRouter.get('/notifications/:userId', verifyToken, requireRole(USER), allNotifications);
 userRouter.get('/job/view/:jobPostId',verifyToken, requireRole(USER), getSingleJobPost);
-userRouter.get('/contract/myContracts/:userId', verifyToken, requireRole(USER), viewMyContracts);
 userRouter.get('/job/submittedContracts/:userId', verifyToken, requireRole(USER), viewSubmittedContracts);
-userRouter.get('/chat/:memberId', verifyToken, requireRole(USER), clientController.getAllChats);
 userRouter.get('/job/proposals/:userId',verifyToken, requireRole(USER), getAllProposals);
+userRouter.get('/all-contracts/:userId', verifyToken, requireRole(USER), allContracts);
+userRouter.get('/contract/myContracts/:userId', verifyToken, requireRole(USER), viewMyContracts);
+userRouter.get("/contract/:contractId",verifyToken, requireRole(USER),verifyToken, requireRole(USER), viewSingleContract);
 userRouter.get("/wallet/view/:userId",verifyToken, requireRole(USER), viewWalletUser);
 userRouter.get("/invites/view/:userId",verifyToken, requireRole(USER), getAllInvites);
-userRouter.get("/contract/:contractId",verifyToken, requireRole(USER),verifyToken, requireRole(USER), viewSingleContract);
+userRouter.get('/notifications/:userId', verifyToken, requireRole(USER), allNotifications);
+userRouter.get('/chat/:memberId', verifyToken, requireRole(USER), clientController.getAllChats);
+ 
 
 userRouter.get('/allChat/view/:roleId', clientController.getAllChats);
 userRouter.get("/chat/view/:roleType/:roleId/:targetId", clientController.viewChat);

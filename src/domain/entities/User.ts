@@ -19,7 +19,12 @@ export interface User extends mongoose.Document {
     noOfRating: number;
     avgRating: number;
   };
-  review: [string];
+  review: [
+    {
+      theReview: string,
+      rating: number
+    }
+  ];
   totalJobs: number;
   totalHours: number;
   domain: string;
@@ -93,14 +98,20 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
   experience: { type: String, required: false },
   experienceDescription: { type: String, required: false },
   budget: { type: Number, required: false },
-  rating: { 
-    ratingSum: {type: Number, default: 0, required: false},
-    noOfRating: {type: Number,default: 0, required: false},
-    avgRating: {type: Number, default: 0, required: false}
-   },
-  review:[ {
-    type: String,
-    required: false,
+  rating: {
+    ratingSum: { type: Number, default: 0, required: false },
+    noOfRating: { type: Number, default: 0, required: false },
+    avgRating: { type: Number, default: 0, required: false }
+  },
+  review: [{
+    theReview: {
+      type: String,
+      required: false,
+    },
+    rating: {
+      type: Number,
+      required: false,
+    }
   }],
   totalJobs: { type: Number, required: false },
   totalHours: { type: Number, required: false },

@@ -258,22 +258,7 @@ export const userController = {
         }
     },
 
-
-
-
-
-    allClients: async (req: Request, res: Response) => {
-        try {
-            const result = await allUserUseCases.allClientsUseCase.execute()
-            res
-                .status(HttpStatusCode.OK)
-                .json({ message: StatusMessage[HttpStatusCode.OK], data: result, success: true });
-        } catch (err: any) {
-            res
-                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .json({ message: err.message, sucess: false });
-        }
-    },
+ 
 
 
 

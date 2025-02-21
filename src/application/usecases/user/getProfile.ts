@@ -1,11 +1,28 @@
-
-
-export interface UserRepositary {
-    findUserById(userId: string): Promise< any >
+interface User {
+    name: string
+    budget: number
+    location: string
+    mobile: number
+    skills: string[]
+    profilePicture: string
+    domain: string
+    rating: number
+    review: string[]
+    githubLink: string
+    description: string
+    whyHireMe: string
+    experience: string
+    education: string[]
+    isBoosted: boolean
+    isProfileFilled: boolean
+    workHistory: string[]
 }
 
- 
+export interface UserRepositary {
+    findUserById(userId: string): Promise< User >
+}
 
+  
 
 export class GetUserProfile {
     constructor(private userRepositary: UserRepositary) {}
@@ -30,7 +47,8 @@ export class GetUserProfile {
             experience: user.experience,
             education: user.education,
             isBoosted: user.isBoosted,
-            isProfileFilled: user.isProfileFilled
+            isProfileFilled: user.isProfileFilled,
+            workHistory: user.workHistory,
         };
     }
 }

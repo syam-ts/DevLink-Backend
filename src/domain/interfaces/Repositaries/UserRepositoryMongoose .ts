@@ -13,63 +13,58 @@ import { InviteModel } from "../../entities/Invite";
 type Id = string;
 
 interface User {
-  _id: string
-  name: string
-  email: string
-  password: string
-  mobile: number
-  skills: string[]
-  profilePicture: string
-  location: string
-  description: string
-  experience: string
-  education: string
-  budget: number
-  rating: number
-  domain: string
-  githubLink: string
-  totalJobs: number
-  totalHours: number
-  whyHireMe: string
-  completedJobs: string
-  inProgress: string
-  workHistory: string[]
-  isEditRequest: boolean
-  isProfileFilled: boolean
-  request: string[]
-  wallet: string[]
-  isBlocked: boolean
-  isBoosted: boolean
-  createdAt: string
+  _id: string;
+  name: string;
+  email: string;
+  password: string;
+  mobile: number;
+  skills: string[];
+  profilePicture: string;
+  location: string;
+  description: string;
+  experience: string;
+  education: string;
+  budget: number;
+  rating: number;
+  domain: string;
+  githubLink: string;
+  totalJobs: number;
+  totalHours: number;
+  whyHireMe: string;
+  completedJobs: string;
+  inProgress: string;
+  workHistory: string[];
+  isEditRequest: boolean;
+  isProfileFilled: boolean;
+  request: string[];
+  wallet: string[];
+  isBlocked: boolean;
+  isBoosted: boolean;
+  createdAt: string;
 }
 
-
-
 interface Invite {
-    clientId?: mongoose.Types.ObjectId;
-    userId?: mongoose.Types.ObjectId;
-    jobPostData?: {
-      title: string;
+  clientId?: mongoose.Types.ObjectId;
+  userId?: mongoose.Types.ObjectId;
+  jobPostData?: {
+    title: string;
     description: string;
-    expertLevel: 'beginner' | 'intermediate' | 'advanced';
+    expertLevel: "beginner" | "intermediate" | "advanced";
     location: string;
     requiredSkills: string[];
-    amount: number,
-    paymentType: 'hourly' | 'fixed',
+    amount: number;
+    paymentType: "hourly" | "fixed";
     estimateTimeinHours: Number;
-    projectType: 'ongoing project' | 'project updation';
-    };
-    status: 'pending' | 'rejected';
-    createdAt: Date;
-};
-
+    projectType: "ongoing project" | "project updation";
+  };
+  status: "pending" | "rejected";
+  createdAt: Date;
+}
 
 export class UserRepositoryMongoose implements UserRepositary {
-
   async createUser(user: User): Promise<User> {
     const salt: number = parseInt(process.env.BCRYPT_SALT as string);
     const hashedPassword = await bcrypt.hash(user.password, salt);
- 
 
     const createdUser = new UserModel({
       name: user.name,
@@ -80,7 +75,6 @@ export class UserRepositoryMongoose implements UserRepositary {
     });
 
     const savedUser = await createdUser.save();
- 
 
     return {
       name: savedUser.name,
@@ -91,25 +85,25 @@ export class UserRepositoryMongoose implements UserRepositary {
     } as User;
   }
 
-
-
   async signupUser(email: string): Promise<User | null> {
-
     const foundUser = this.findUserByEmail(email);
-    if (!foundUser) throw new Error('User Not found');
+    if (!foundUser) throw new Error("User Not found");
 
     return foundUser;
   }
 
-
   async verifyOtp(user: any): Promise<User> {
-    const { name, email, password, mobile } = user.user.data;
- 
-    if (user.mailOtp === parseInt(user.mailOtp)) { 
+    const {
+      name,
+      email,
+      password,
+      mobile,
+    }: { name: string; email: string; password: string; mobile: number } =
+      user.user.data;
 
+    if (user.mailOtp === parseInt(user.mailOtp)) {
       const salt: number = 10;
       const hashedPassword: string = await bcrypt.hash(password, salt);
- 
 
       const createdUser = new UserModel({
         name: name,
@@ -128,7 +122,10 @@ export class UserRepositoryMongoose implements UserRepositary {
           noOfRating: 0,
           avgRating: 0,
         },
-        review: [],
+        review: [{
+          theReview: "",
+          rating: 0
+        }],
         domain: "",
         githubLink: "",
         totalJobs: "",
@@ -159,9 +156,8 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
   async findUserById(_id: string): Promise<any | null> {
- 
-    const user = await UserModel.findById(_id);    
-    if (!user) throw new Error("User not found"); 
+    const user = await UserModel.findById(_id);
+    if (!user) throw new Error("User not found");
     return user;
   }
 
@@ -180,9 +176,10 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
- 
-
-  async findUserByEmailAndPassword(email: string, passwordUser: string): Promise<User | any> {
+  async findUserByEmailAndPassword(
+    email: string,
+    passwordUser: string
+  ): Promise<User | any> {
     if (!email || !passwordUser) {
       throw new Error("Email, and password are required");
     }
@@ -190,7 +187,6 @@ export class UserRepositoryMongoose implements UserRepositary {
     if (!validator.isEmail(email)) {
       throw new Error("Invalid email format");
     }
-
 
     const user = await UserModel.findOne({ email }).exec();
 
@@ -213,7 +209,6 @@ export class UserRepositoryMongoose implements UserRepositary {
       throw new Error("wrong password");
     }
 
-
     return {
       user: {
         _id: user._id,
@@ -222,7 +217,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         profilePicture: user.profilePicture,
         isBlocked: user.isBlocked,
         isProfileFilled: user.isProfileFilled,
-      }
+      },
     };
   }
 
@@ -290,7 +285,11 @@ export class UserRepositoryMongoose implements UserRepositary {
     return "Password reset successfully!";
   }
 
-  async editUserProfile(userId: string, userData: any, type: string): Promise<any> {
+  async editUserProfile(
+    userId: string,
+    userData: any,
+    type: string
+  ): Promise<any> {
     // const existingUser: any = await UserModel.findById(userId);
 
     const { editData } = userData;
@@ -298,11 +297,9 @@ export class UserRepositoryMongoose implements UserRepositary {
     editData.isProfileFilled = true;
 
     if (type === "verify") {
-
       const user = await UserModel.findByIdAndUpdate(userId, editData, {
         new: true,
       }).exec();
-
 
       if (!user) throw new Error("User not found");
       return {
@@ -313,16 +310,14 @@ export class UserRepositoryMongoose implements UserRepositary {
           profilePicture: user.profilePicture,
           isBlocked: user.isBlocked,
           isProfileFilled: user.isProfileFilled,
-        }
-      }
+        },
+      };
     } else {
-
       const user = await UserModel.findByIdAndUpdate(userId, editData, {
         new: true,
       }).exec();
 
       if (!user) throw new Error("User not found");
-
 
       return {
         user: {
@@ -332,23 +327,26 @@ export class UserRepositoryMongoose implements UserRepositary {
           profilePicture: user.profilePicture,
           isBlocked: user.isBlocked,
           isProfileFilled: user.isProfileFilled,
-        }
-      }
+        },
+      };
     }
   }
 
-
   async getAllProposals(userId: string): Promise<any> {
-
-    const findProposals: any = await ClientModel.find({ proposals: { $elemMatch: { userId } } }).exec();
-    if (!findProposals) throw new Error('No proposal found');
+    const findProposals: any = await ClientModel.find({
+      proposals: { $elemMatch: { userId } },
+    }).exec();
+    if (!findProposals) throw new Error("No proposal found");
     return findProposals[0].proposals;
-  };
+  }
 
-
-  async createProposal(userId: Id, jobPostId: Id, description: Id, bidAmount: number, bidDeadline: number): Promise<any> {
-
-
+  async createProposal(
+    userId: Id,
+    jobPostId: Id,
+    description: Id,
+    bidAmount: number,
+    bidDeadline: number
+  ): Promise<any> {
     const user = await UserModel.findById(userId);
 
     if (!user) {
@@ -362,26 +360,21 @@ export class UserRepositoryMongoose implements UserRepositary {
       ],
     });
 
-
     if (existingProposal.length !== 0) {
       throw new Error("Proposal alredy send");
     } else {
-      const jobpost: any = await JobPostModel.findByIdAndUpdate(jobPostId,
+      const jobpost: any = await JobPostModel.findByIdAndUpdate(
+        jobPostId,
         {
-          $inc: { proposalCount: 1 }
+          $inc: { proposalCount: 1 },
         },
         {
-          new: true
+          new: true,
         }
       );
- 
 
       // deletes invite doc if exists
-      const clearInvite = await InviteModel.deleteOne({jobPostId: jobPostId});
-
-
-
-
+      const clearInvite = await InviteModel.deleteOne({ jobPostId: jobPostId });
 
       const newProposal = {
         type: "New Job Proposal ",
@@ -423,15 +416,12 @@ export class UserRepositoryMongoose implements UserRepositary {
       newNotificationUser.save();
       newNotificationClient.save();
 
-
       return { proposal, notification: newNotificationUser };
     }
   }
 
-
-
   async listHomeJobs(type: string): Promise<any> {
-    if (type === 'listAllJobs') {
+    if (type === "listAllJobs") {
       const totalJobs = await JobPostModel.countDocuments();
 
       const verifiedAccounts = await ClientModel.countDocuments({
@@ -449,22 +439,17 @@ export class UserRepositoryMongoose implements UserRepositary {
       } else {
         return { allJobs, totalJobs, totalHours, verifiedAccounts };
       }
-    } else if (type === 'latestJobs') {
+    } else if (type === "latestJobs") {
       const latestJobs = await JobPostModel.find({})
-        .sort({ createdAt: -1 }).limit(6)
+        .sort({ createdAt: -1 })
+        .limit(6)
         .exec();
 
       return latestJobs;
     } else {
-      throw new Error('Jobs not founded');
+      throw new Error("Jobs not founded");
     }
   }
-
-
-
-
-
-
 
   async allContracts(userId: Id): Promise<any> {
     const contract = await ContractModel.find({ userId: userId }).exec();
@@ -479,7 +464,9 @@ export class UserRepositoryMongoose implements UserRepositary {
   async allNotifications(userId: Id): Promise<any> {
     const notifications: any = await NotificationModel.find({
       reciever_id: userId,
-    }).sort({ createdAt: -1 }).exec();
+    })
+      .sort({ createdAt: -1 })
+      .exec();
 
     return notifications;
   }
@@ -491,24 +478,25 @@ export class UserRepositoryMongoose implements UserRepositary {
       throw new Error("User has no skills or does not exist.");
     }
 
-    if (jobType === 'listAllJobs') {
-
+    if (jobType === "listAllJobs") {
       const jobs = await JobPostModel.find({ status: "pending" }).exec();
 
-      if (!jobs) throw new Error('No jobs found')
+      if (!jobs) throw new Error("No jobs found");
       return jobs;
-
-    } else if (jobType === 'trendingJobs') {
-
-      const jobs = await JobPostModel.find({ status: "pending" }).sort({ proposalCount: -1 });
+    } else if (jobType === "trendingJobs") {
+      const jobs = await JobPostModel.find({ status: "pending" }).sort({
+        proposalCount: -1,
+      });
 
       return jobs;
-
-    } else if (jobType === 'bestMatches') {
+    } else if (jobType === "bestMatches") {
       const userSkills = user.skills;
 
       const matchJobs = await JobPostModel.find({
-        $and: [{ status: "pending" }, { requiredSkills: { $elemMatch: { $in: userSkills } } }]
+        $and: [
+          { status: "pending" },
+          { requiredSkills: { $elemMatch: { $in: userSkills } } },
+        ],
       }).exec();
 
       if (!matchJobs || matchJobs.length === 0) {
@@ -517,10 +505,8 @@ export class UserRepositoryMongoose implements UserRepositary {
         return matchJobs;
       }
     } else {
-      throw new Error('Invalid selection');
+      throw new Error("Invalid selection");
     }
-
-
   }
 
   async closeContract(
@@ -633,7 +619,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         new: true,
       }
     );
-    console.log('The user :', user)
+    console.log("The user :", user);
 
     if (!user) {
       throw new Error("User not found");
@@ -651,114 +637,101 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
   async submitProject(contractId: string, body: any): Promise<any> {
- 
-      const contract: any = await ContractModel.findByIdAndUpdate(
-        contractId,
-        {
-          status: "submitted",
-        },
-        {
-          update: true,
-        }
-      );
+    const contract: any = await ContractModel.findByIdAndUpdate(
+      contractId,
+      {
+        status: "submitted",
+      },
+      {
+        update: true,
+      }
+    );
 
-      const clientId = contract.clientId;
-      const jobPostId = contract.jobPostId;
+    const clientId = contract.clientId;
+    const jobPostId = contract.jobPostId;
 
-      const jobPost: any = await JobPostModel.findById(jobPostId).exec();
+    const jobPost: any = await JobPostModel.findById(jobPostId).exec();
 
-      const submissionBody = {
-        contractId: contractId,
-        description: body.description,
-        progress: body.progress,
-        attachedFile: body.attachedFile,
-        jobPostData: {
-          jobPostId: jobPost._id,
-          title: jobPost.title,
-          amount: jobPost.amount,
-        },
-        createdAt: new Date(),
-      };
+    const submissionBody = {
+      contractId: contractId,
+      description: body.description,
+      progress: body.progress,
+      attachedFile: body.attachedFile,
+      jobPostData: {
+        jobPostId: jobPost._id,
+        title: jobPost.title,
+        amount: jobPost.amount,
+      },
+      createdAt: new Date(),
+    };
 
-      const addRequestToClient = await ClientModel.findByIdAndUpdate(
-        clientId,
-        {
-          $push: { projectSubmissions: submissionBody },
-        },
-        {
-          new: true,
-        }
-      );
+    const addRequestToClient = await ClientModel.findByIdAndUpdate(
+      clientId,
+      {
+        $push: { projectSubmissions: submissionBody },
+      },
+      {
+        new: true,
+      }
+    );
 
-      return addRequestToClient;
- 
+    return addRequestToClient;
   }
-
 
   async viewWallet(userId: string, page: number): Promise<any> {
+    const PAGE_SIZE: number = 4;
+    const skip: number = (page - 1) * PAGE_SIZE;
 
-     
-const PAGE_SIZE: number = 4;
-const skip: number = (page - 1) * PAGE_SIZE;
+    const wallet = await UserModel.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(userId) } },
+      { $project: { totalTransactions: { $size: "$wallet.transactions" } } },
+    ]);
 
+    const totalTransactions =
+      wallet.length > 0 ? wallet[0].totalTransactions : 0;
 
-const wallet = await UserModel.aggregate([
-  { $match: { _id: new mongoose.Types.ObjectId(userId) } },  
-  { $project: { totalTransactions: { $size: "$wallet.transactions" } } }
-]);
+    const totalPages: number = totalTransactions / PAGE_SIZE;
 
-const totalTransactions = wallet.length > 0 ? wallet[0].totalTransactions : 0;
-
-
-const totalPages: number = totalTransactions / PAGE_SIZE
- 
-
-const userWallet = await UserModel.aggregate([
-    { $match: { _id: new mongoose.Types.ObjectId(userId) } },  
-    {
+    const userWallet = await UserModel.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(userId) } },
+      {
         $project: {
-            transactions: {
-                $slice: ["$wallet.transactions", skip, PAGE_SIZE]
-            },
-            balance: "$wallet.balance",
-            _id: 0
-        }
-    }
-]);
- 
-return {
-  ...userWallet, totalPages
-};
-  
-}
+          transactions: {
+            $slice: ["$wallet.transactions", skip, PAGE_SIZE],
+          },
+          balance: "$wallet.balance",
+          _id: 0,
+        },
+      },
+    ]);
 
+    return {
+      ...userWallet,
+      totalPages,
+    };
+  }
 
   async getAllInvites(userId: string): Promise<Invite | any> {
+    const foundedInvites = await InviteModel.find({ userId: userId });
 
-   const foundedInvites = await InviteModel.find({userId: userId});
+    if (!foundedInvites) throw new Error("Invite not Found");
 
-   if(!foundedInvites) throw new Error('Invite not Found');
- 
-
-      return foundedInvites;
+    return foundedInvites;
   }
- 
-
 
   async rejectInvite(inviteId: string): Promise<Invite | any> {
+    const updateInvite = await InviteModel.updateOne(
+      { _id: inviteId },
+      {
+        status: "rejected",
+      },
+      {
+        new: true,
+      }
+    );
 
-   const updateInvite = await InviteModel.updateOne({_id: inviteId}, {
-      status: "rejected"
-   }, {
-    new: true
-   });
+    if (!updateInvite) throw new Error("Invite not Found");
 
-   if(!updateInvite) throw new Error('Invite not Found');
-
-      return updateInvite;
+    return updateInvite;
   }
- 
-
-
-
 }
