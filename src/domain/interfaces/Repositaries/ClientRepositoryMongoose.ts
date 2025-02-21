@@ -427,7 +427,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async getallDevelopers(): Promise<any> {
     //  const developers = await UserModel.find({isProfileFilled: true}).exec();
-    const developers = await UserModel.find().exec();
+    const developers = await UserModel.find({isProfileFilled: true}).exec();
 
     if (!developers) throw new Error("Developers not found");
 

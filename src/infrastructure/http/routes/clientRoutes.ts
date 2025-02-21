@@ -84,7 +84,7 @@ clientRouter.post("/invite/user", inviteUser);
 // clientRouter.post( "/profile/edit/:clientId", editProfile);  
 
 
-clientRouter.put("/profile/edit/:clientId",verifyToken, requireRole('client'), editProfile);
+clientRouter.post("/profile/edit/:clientId",verifyToken, requireRole('client'), editProfile);
 clientRouter.put('/job/proposal/reject',verifyToken, requireRole('client'), rejectProposal);
 
 

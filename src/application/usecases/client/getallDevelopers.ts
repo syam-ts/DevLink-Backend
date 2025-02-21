@@ -14,9 +14,7 @@ export class GetallDevelopers {
  
 
           const allDevelopers = await this.clientRepository.getallDevelopers();
-       
-
-          
+        
           return allDevelopers;
     }
 }
