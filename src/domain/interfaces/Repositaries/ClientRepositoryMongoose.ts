@@ -231,8 +231,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return "Password reset successfully!";
   }
 
-  async getClientProfile(clientId: string): Promise<any> { 
-    const client = await ClientModel.findById(clientId); 
+  async getClientProfile(clientId: string): Promise<any> {
+    const client = await ClientModel.findById(clientId);
 
     if (!client) {
       throw new Error("Client not found");
@@ -302,7 +302,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
   async createJobPost(clientId: string, data: any): Promise<any> {
- 
+
 
     const client: any = await ClientModel.findById(clientId);
 
@@ -427,7 +427,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async getallDevelopers(): Promise<any> {
     //  const developers = await UserModel.find({isProfileFilled: true}).exec();
-    const developers = await UserModel.find({isProfileFilled: true}).exec();
+    const developers = await UserModel.find({ isProfileFilled: true }).exec();
 
     if (!developers) throw new Error("Developers not found");
 
@@ -444,40 +444,40 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
 
-   async viewWallet(clientId: string, page: number): Promise<any> {
- 
-      
- const PAGE_SIZE: number = 4;
- const skip: number = (page - 1) * PAGE_SIZE;
- 
- 
- const wallet = await ClientModel.aggregate([
-   { $match: { _id: new mongoose.Types.ObjectId(clientId) } },  
-   { $project: { totalTransactions: { $size: "$wallet.transactions" } } }
- ]);
- 
- const totalTransactions = wallet.length > 0 ? wallet[0].totalTransactions : 0; 
- const totalPages: number = totalTransactions / PAGE_SIZE
-  
- 
- const clientWallet = await ClientModel.aggregate([
-     { $match: { _id: new mongoose.Types.ObjectId(clientId) } },  
-     {
-         $project: {
-             transactions: {
-                 $slice: ["$wallet.transactions", skip, PAGE_SIZE]
-             },
-             balance: "$wallet.balance",
-             _id: 0
-         }
-     }
- ]);
-  
- return {
-   ...clientWallet, totalPages
- };
-   
- }
+  async viewWallet(clientId: string, page: number): Promise<any> {
+
+
+    const PAGE_SIZE: number = 4;
+    const skip: number = (page - 1) * PAGE_SIZE;
+
+
+    const wallet = await ClientModel.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(clientId) } },
+      { $project: { totalTransactions: { $size: "$wallet.transactions" } } }
+    ]);
+
+    const totalTransactions = wallet.length > 0 ? wallet[0].totalTransactions : 0;
+    const totalPages: number = totalTransactions / PAGE_SIZE
+
+
+    const clientWallet = await ClientModel.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(clientId) } },
+      {
+        $project: {
+          transactions: {
+            $slice: ["$wallet.transactions", skip, PAGE_SIZE]
+          },
+          balance: "$wallet.balance",
+          _id: 0
+        }
+      }
+    ]);
+
+    return {
+      ...clientWallet, totalPages
+    };
+
+  }
 
   async addMoneyToAdminWallet(
     role: string,
@@ -854,6 +854,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     rating: number,
     review: string
   ): Promise<any> {
+
+    console.log('u', userId, notificationId, rating, review)
+
     interface Rating {
       rating: {
         ratingSum: number;
@@ -872,13 +875,22 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     let avgRating: number = (ratingSum + rating) / (noOfRating + 1);
     avgRating = Math.min(avgRating, 4.9);
     const finalRating: number = Math.floor(avgRating * 10) / 10;
+    const reviewData = {
+      theReview: review,
+      rating: rating
+    }
 
     const updateUser = await UserModel.findByIdAndUpdate(
       userId,
       {
         $inc: { "rating.ratingSum": rating, "rating.noOfRating": 1 },
         "rating.avgRating": finalRating,
-        $push: { review: review },
+        $push: {
+          review: {
+            theReview: review,
+            rating: rating
+          }
+        },
       },
       { new: true }
     );

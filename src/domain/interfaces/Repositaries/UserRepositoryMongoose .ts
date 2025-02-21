@@ -122,10 +122,7 @@ export class UserRepositoryMongoose implements UserRepositary {
           noOfRating: 0,
           avgRating: 0,
         },
-        review: [{
-          theReview: "",
-          rating: 0
-        }],
+        review: [],
         domain: "",
         githubLink: "",
         totalJobs: "",
