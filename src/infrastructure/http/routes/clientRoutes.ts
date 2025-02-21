@@ -77,9 +77,9 @@ clientRouter.post("/logout", logoutClient);
 
 clientRouter.post("/profile/verify/:clientId", verifyToken, requireRole(CLIENT), profileVerification);
 clientRouter.post("/jobPost/payment-stripe/:clientId",verifyToken, requireRole(CLIENT), makePayment );
-clientRouter.post("/payment/success/:clientId", createJobPost);
-clientRouter.post("/rate-user/:notificationId", rateAndReview); 
-clientRouter.post("/project/submit/approval", closeContract);
+clientRouter.post("/payment/success/:clientId", verifyToken, requireRole(CLIENT),createJobPost);
+clientRouter.post("/rate-user/:notificationId",verifyToken, requireRole(CLIENT), rateAndReview); 
+clientRouter.post("/project/submit/approval", verifyToken, requireRole(CLIENT),closeContract);
 clientRouter.post('/job/createContract', verifyToken, requireRole(CLIENT), createContract); 
 clientRouter.post("/chat/sendMessage", verifyToken, requireRole(CLIENT), sendMessage);
 clientRouter.post("/invite/user",verifyToken, requireRole(CLIENT), inviteUser); 

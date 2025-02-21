@@ -22,7 +22,8 @@ export interface User extends mongoose.Document {
   review: [
     {
       theReview: string,
-      rating: number
+      rating: number,
+      companyName: string
     }
   ];
   totalJobs: number;
@@ -111,6 +112,10 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
     rating: {
       type: Number,
       required: false,
+    },
+    companyName: {
+      type: String,
+      required: false
     }
   }],
   totalJobs: { type: Number, required: false },

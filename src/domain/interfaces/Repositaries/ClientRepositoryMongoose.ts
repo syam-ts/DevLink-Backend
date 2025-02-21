@@ -850,22 +850,25 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async rateAndReviewUser(
     userId: string,
+    clientId: string,
     notificationId: string,
     rating: number,
     review: string
   ): Promise<any> {
 
-    console.log('u', userId, notificationId, rating, review)
+    console.log('u', userId, clientId, notificationId, rating, review)
+ 
+    
+    const client: any = await ClientModel.findById(clientId);
 
     interface Rating {
       rating: {
         ratingSum: number;
         noOfRating: number;
       };
-    }
-
-    type RateData = Rating | null;
-
+    }; 
+    
+    type RateData = Rating | null; 
     const rateData: RateData = await UserModel.findById(userId);
 
     if (!rateData) throw new Error("User not found");
@@ -888,7 +891,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         $push: {
           review: {
             theReview: review,
-            rating: rating
+            rating: rating,
+            companyName: client.companyName
           }
         },
       },
