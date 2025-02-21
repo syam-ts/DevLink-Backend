@@ -6,6 +6,17 @@ import generateTokens from "../../../utils/generateTokens";
 
 type Id = string;
 
+interface RequestRole {
+  user: {id: Id, role: string},
+  role: string 
+  body: {
+    contractId: Id,
+    notificationId: Id, 
+    wishlistId: Id, 
+    inviteId: Id, 
+  }
+};
+
 export const clientController = {
   signupClient: async (req: Request, res: Response) => {
     try {
@@ -195,9 +206,9 @@ export const clientController = {
     }
   },
 
-  profileVerification: async (req: Request, res: Response) => {
+  profileVerification: async (req: any, res: Response) => {
     try {
-      const { clientId } = req.params;
+      const clientId = req.user.id;
 
       const response =
         await allClientUseCases.profileVerificationUseCase.execute(
@@ -215,9 +226,9 @@ export const clientController = {
     }
   },
 
-  editProfile: async (req: Request, res: Response) => {
+  editProfile: async (req: any, res: Response) => {
     try {
-      const { clientId } = req.params;
+      const clientId = req.user.id;
       const response = await allClientUseCases.editClientProfileUseCase.execute(
         clientId,
         req.body
@@ -579,33 +590,29 @@ export const clientController = {
     }
   },
 
-  rateAndReview: async (req: Request, res: Response) => {
+  rateAndReview: async (req: any, res: Response) => {
 
     try {
- 
-        const clientId: Id = req.user.id;
-      const { notificationId } = req.params; 
+      const clientId: Id = req.user.id;
+      const { notificationId } = req.params;
       const {
-        userId, 
+        userId,
         rating,
         review,
-      }: { userId: Id; rating: number; review: string } =
-        req.body;
+      }: { userId: Id; rating: number; review: string } = req.body;
       const response = await allClientUseCases.rateAndReviewUserUseCase.execute(
-          userId,
-          clientId,
-          notificationId,
+        userId,
+        clientId,
+        notificationId,
         rating,
         review
       );
 
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          data: response,
-          success: true,
-        });
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        data: response,
+        success: true,
+      });
     } catch (err: any) {
       res
         .status(500)
@@ -717,6 +724,28 @@ export const clientController = {
         .json({
           message: StatusMessage[HttpStatusCode.OK],
           developers: response,
+          success: true,
+        });
+    } catch (err: any) {
+      res
+        .status(500)
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: err.message, success: false });
+    }
+  },
+
+  rejectContract: async (req: any, res: Response) => {
+    try {
+      const { contractId } = req.body;
+      const clientId = req.user.id;
+      const response =
+        await allClientUseCases.rejectContractUseCase.execute(contractId, clientId);
+
+      res
+        .status(HttpStatusCode.OK)
+        .json({
+          message: StatusMessage[HttpStatusCode.OK],
+          response,
           success: true,
         });
     } catch (err: any) {

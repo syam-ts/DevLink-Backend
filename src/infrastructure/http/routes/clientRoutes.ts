@@ -5,8 +5,7 @@ import { userController } from "../controllers/userCtrl";
 import { verifyToken } from "../middlewares/auth/verifyToken";
 import { requireRole } from "../middlewares/auth/requireRole"; 
 import allRoles from '../../../helper/constants/role';
-
-
+ 
 const {
   getHomeClient,
   getProfile,
@@ -40,15 +39,15 @@ const {
   createContract,
   sendMessage,
   rejectProposal,
-  inviteUser
+  inviteUser,
+  rejectContract
 } = clientController;
 const {
   getSingleJobPost
 } = userController;
  const { CLIENT }: {CLIENT: string} = allRoles;
 
-
-
+ 
 clientRouter.get("/getHome", verifyToken, requireRole(CLIENT), getHomeClient);
 clientRouter.get("/profile/view/:clientId", verifyToken, requireRole(CLIENT), getProfile);
 clientRouter.get("/notifications/:clientId", verifyToken, requireRole(CLIENT), getAllNotifications);
@@ -75,17 +74,18 @@ clientRouter.post("/resetPassword/:clientId", resetPassword);
 clientRouter.post("/googleLogin", googleLogin);
 clientRouter.post("/logout", logoutClient);
 
-clientRouter.post("/profile/verify/:clientId", verifyToken, requireRole(CLIENT), profileVerification);
+clientRouter.post("/profile-verify/", verifyToken, requireRole(CLIENT), profileVerification);
+clientRouter.post("/profile-edit/",verifyToken, requireRole(CLIENT), editProfile);
 clientRouter.post("/jobPost/payment-stripe/:clientId",verifyToken, requireRole(CLIENT), makePayment );
-clientRouter.post("/payment/success/:clientId", verifyToken, requireRole(CLIENT),createJobPost);
-clientRouter.post("/rate-user/:notificationId",verifyToken, requireRole(CLIENT), rateAndReview); 
-clientRouter.post("/project/submit/approval", verifyToken, requireRole(CLIENT),closeContract);
-clientRouter.post('/job/createContract', verifyToken, requireRole(CLIENT), createContract); 
-clientRouter.post("/chat/sendMessage", verifyToken, requireRole(CLIENT), sendMessage);
 clientRouter.post("/invite/user",verifyToken, requireRole(CLIENT), inviteUser); 
+clientRouter.post("/payment/success/:clientId", verifyToken, requireRole(CLIENT),createJobPost);
+clientRouter.post('/job/createContract', verifyToken, requireRole(CLIENT), createContract); 
+clientRouter.post("/project-submit/approval", verifyToken, requireRole(CLIENT),closeContract);
+clientRouter.post("/project-submit/reject", verifyToken, requireRole(CLIENT), rejectContract);
+clientRouter.post("/rate-user/:notificationId",verifyToken, requireRole(CLIENT), rateAndReview); 
+clientRouter.post("/chat/sendMessage", verifyToken, requireRole(CLIENT), sendMessage);
 // clientRouter.post( "/profile/edit/:clientId", editProfile);   
-clientRouter.post("/profile/edit/:clientId",verifyToken, requireRole(CLIENT), editProfile);
-clientRouter.put('/job/proposal/reject',verifyToken, requireRole(CLIENT), rejectProposal);
+clientRouter.put('/job-proposal/reject',verifyToken, requireRole(CLIENT), rejectProposal);
 
  
 

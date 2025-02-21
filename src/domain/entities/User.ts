@@ -1,4 +1,4 @@
-import mongoose from "mongoose"; 
+import mongoose from "mongoose";
 
 interface Jobs {
   _id: string;
@@ -10,6 +10,7 @@ interface Jobs {
   paymentType: string;
   estimateTimeinHours: string;
   projectType: string;
+  requiredSkills: [string];
 }
 
 const jobPostSchema = {
@@ -22,6 +23,7 @@ const jobPostSchema = {
   paymentType: { type: String, required: false },
   estimateTimeinHours: { type: String, required: false },
   projectType: { type: String, required: false },
+  requiredSkills: { type: [String], required: false },
 };
 
 export interface User extends mongoose.Document {
@@ -160,5 +162,4 @@ export const UserSchema: mongoose.Schema = new mongoose.Schema({
   createdAt: { type: Date, required: false },
 });
 
- 
 export const UserModel = mongoose.model("User", UserSchema);

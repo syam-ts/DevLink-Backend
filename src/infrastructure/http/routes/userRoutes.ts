@@ -6,8 +6,7 @@ import { clientController } from '../controllers/clientCtrl';
 import refreshToken from '../middlewares/auth/refreshToken';
 import { requireRole } from '../middlewares/auth/requireRole';
 import allRoles from '../../../helper/constants/role';
-
-
+ 
 const { 
     getHomeUser,
     getProfile,
@@ -40,7 +39,7 @@ const {
     viewSingleContract,
     withdrawMoneyByUser,
 } = userController;
-const { USER } = allRoles;
+const { USER }: {USER: string} = allRoles;
  
  
 userRouter.get('/getHome', verifyToken, requireRole(USER), getHomeUser);

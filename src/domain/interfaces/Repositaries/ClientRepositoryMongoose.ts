@@ -12,22 +12,23 @@ import allCronJobs from "../../../helper/cron-jobs/index";
 import mongoose from "mongoose";
 import { InviteModel } from "../../entities/Invite";
 
+type Id = string;
 export interface Notification {
   type: string;
   message: string;
-  sender_id: string;
-  reciever_id: string;
+  sender_id: Id;
+  reciever_id: Id;
   extra: Extra;
   createdAt: string;
 }
 
 export interface Extra {
-  userId: string;
+  userId: Id;
 }
 
 interface Invite {
-  clientId?: mongoose.Types.ObjectId;
-  userId?: mongoose.Types.ObjectId;
+  clientId?: Id;
+  userId?: Id;
   description: String;
   jobPostData?: {
     title: string;
@@ -50,6 +51,7 @@ interface Invite {
 }
 
 export class ClientRepositoryMongoose implements ClientRepositary {
+
   async createClient(client: Client | any): Promise<Client | any> {
     const salt: number = 10;
     const hashedPassword = await bcrypt.hash(client.password, salt);
@@ -218,7 +220,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
   }
 
-  async resetPassword(clientId: string, password: string): Promise<User | any> {
+  async resetPassword(clientId: Id, password: string): Promise<User | any> {
     const pass = { password: password };
 
     const updatedClient = await ClientModel.findByIdAndUpdate(clientId, pass, {
@@ -231,7 +233,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return "Password reset successfully!";
   }
 
-  async getClientProfile(clientId: string): Promise<any> {
+  async getClientProfile(clientId: Id): Promise<any> {
     const client = await ClientModel.findById(clientId);
 
     if (!client) {
@@ -241,7 +243,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return client;
   }
 
-  async profileVerification(clientId: any, data: any): Promise<any> {
+  async profileVerification(clientId: Id, data: any): Promise<any> {
     const adminId = process.env.ADMIN_OBJECT_ID;
     const existingClient: any = await ClientModel.findById(clientId);
 
@@ -271,7 +273,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return updatedAdmin;
   }
 
-  async editClientProfile(clientId: string, editData: any): Promise<any> {
+  async editClientProfile(clientId: Id, editData: any): Promise<any> {
     const adminId = process.env.ADMIN_OBJECT_ID;
     const existingClient: any = await ClientModel.findById(clientId);
 
@@ -301,7 +303,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return updatedAdmin;
   }
 
-  async createJobPost(clientId: string, data: any): Promise<any> {
+  async createJobPost(clientId: Id, data: any): Promise<any> {
     const client: any = await ClientModel.findById(clientId);
 
     const parsedEstimatedTimeInHours = parseInt(data.estimateTime);
@@ -354,7 +356,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return { savedJobPost };
   }
 
-  async getAllNotifications(clientId: any): Promise<any> {
+  async getAllNotifications(clientId: Id): Promise<any> {
     const notifications = await NotificationModel.aggregate([
       {
         $match: { reciever_id: clientId },
@@ -381,7 +383,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
   }
 
-  async getUserProfile(userId: string): Promise<any> {
+  async getUserProfile(userId: Id): Promise<any> {
     const user = await UserModel.findById(userId).exec();
 
     if (!user) {
@@ -412,7 +414,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
   }
 
-  async getProposals(clientId: string): Promise<any> {
+  async getProposals(clientId: Id): Promise<any> {
     const client: any = await ClientModel.findById(clientId);
     if (!client) {
       throw new Error("Client not found");
@@ -432,7 +434,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return developers;
   }
 
-  async viewContract(contractId: string): Promise<any> {
+  async viewContract(contractId: Id): Promise<any> {
     const contract: any = await ContractModel.findById(contractId);
     if (!contract) {
       throw new Error("contract not found");
@@ -441,7 +443,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return contract;
   }
 
-  async viewWallet(clientId: string, page: number): Promise<any> {
+  async viewWallet(clientId: Id, page: number): Promise<any> {
     const PAGE_SIZE: number = 4;
     const skip: number = (page - 1) * PAGE_SIZE;
 
@@ -475,7 +477,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async addMoneyToAdminWallet(
     role: string,
-    roleId: any,
+    roleId: Id,
     amount: number
   ): Promise<any> {
     const adminId = process.env.ADMIN_OBJECT_ID;
@@ -509,7 +511,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return "success";
   }
 
-  async getMyJobs(clientId: string): Promise<any> {
+  async getMyJobs(clientId: Id): Promise<any> {
     const jobs: any = await JobPostModel.find({ clientId: clientId });
     if (!jobs) {
       throw new Error("No job found");
@@ -526,7 +528,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return jobs;
   }
 
-  async myContracts(clientId: string): Promise<any> {
+  async myContracts(clientId: Id): Promise<any> {
     const jobs: any = await ContractModel.find({
       $and: [{ clientId: clientId }, { status: "on progress" }],
     }).exec();
@@ -537,7 +539,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return jobs;
   }
 
-  async viewSubmissions(clientId: string): Promise<any> {
+  async viewSubmissions(clientId: Id): Promise<any> {
     const client: any = await ClientModel.findById(clientId).exec();
 
     if (!client) throw new Error("Client not found");
@@ -546,9 +548,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
   async createContract(
-    clientId: string,
-    userId: string,
-    jobPostId: string,
+    clientId: Id,
+    userId: Id,
+    jobPostId: Id,
     bidAmount: number,
     bidDeadline: string
   ): Promise<any> {
@@ -644,9 +646,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
   async rejectProposal(
-    clientId: any,
-    userId: any,
-    jobPostId: any
+    clientId: Id,
+    userId: Id,
+    jobPostId: Id
   ): Promise<any> {
     const proposal = await ClientModel.findOneAndUpdate(
       {
@@ -666,7 +668,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return proposal;
   }
 
-  async closeContract(contractId: string, progress: number): Promise<any> {
+  async closeContract(contractId: Id, progress: number): Promise<any> {
     //update contract status as closed ----------------
     if (!progress) throw new Error("Progress data missing");
 
@@ -813,6 +815,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
             paymentType: currentJobPost.paymentType,
             estimateTimeinHours: currentJobPost.estimatetimeinHours,
             projectType: currentJobPost.projectType,
+            requiredSkills: currentJobPost.requiredSkills
           },
         },
       },
@@ -857,9 +860,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
   async rateAndReviewUser(
-    userId: string,
-    clientId: string,
-    notificationId: string,
+    userId: Id,
+    clientId: Id,
+    notificationId: Id,
     rating: number,
     review: string
   ): Promise<any> {
@@ -913,11 +916,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
   async inviteUser(
-    userId: string,
-    clientId: string,
-    jobPostId: string,
+    userId: Id,
+    clientId: Id,
+    jobPostId: Id,
     description: string
-  ): Promise<Invite> {
+  ): Promise<any> {
     const jobPostData: any = await JobPostModel.findById(jobPostId);
     const client: any = await ClientModel.findById(clientId);
 
@@ -948,5 +951,36 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     const savedInvite = await inviteFn.save();
 
     return savedInvite;
+  }
+
+  async rejectContract(contractId: Id, clientId: Id): Promise<any> {
+
+    const adminId = process.env.ADMIN_OBJECT_ID;
+
+    const contract: any = await ContractModel.findByIdAndUpdate(contractId, {
+      status: "rejected"
+    }, {
+      new : true
+    });
+
+    const finalAmount: number = Math.floor(contract.amount % 10) * 100;
+
+
+    // 10% cut for admin
+    const adminWallet = await AdminModel.findByIdAndUpdate(adminId, {
+      $inc: {"wallet.balance": finalAmount}
+    }, {
+      new : true
+    });
+
+    // final amount go to client wallet
+    const updateClientWallet = await ClientModel.findByIdAndUpdate(clientId, {
+      $inc: {"wallet.balance": finalAmount}
+    }, {
+      new : true
+    });
+
+    return contract;
+  
   }
 }

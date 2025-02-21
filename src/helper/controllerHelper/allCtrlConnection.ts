@@ -69,6 +69,7 @@ import { GetAllChats } from '../../application/usecases/client/getAllChats';
 import { ViewWallet } from '../../application/usecases/client/viewWallet';
 import { ViewChat } from '../../application/usecases/client/viewChat';
 import { InviteUser } from '../../application/usecases/client/inviteUser';
+import { RejectContract } from '../../application/usecases/client/rejectContract';
 import { GetallDevelopers } from '../../application/usecases/client/getallDevelopers';
 import { ChatRepositoryMongoose } from "../../domain/interfaces/Repositaries/ChatRepository";
 import { WishlistRepositoryMongoose } from "../../domain/interfaces/WishlistRepository";
@@ -165,6 +166,7 @@ const rateAndReviewUserUseCase = new RateAndReview(ClientRepository);
 const viewWalletUseCase = new ViewWallet(ClientRepository);
 const getallDevelopersUseCase = new GetallDevelopers(ClientRepository);
 const inviteUserUseCase = new InviteUser(ClientRepository);
+const rejectContractUseCase = new RejectContract(ClientRepository);
 const chatBotUseCase = new ChatBot(ClientRepository);
 const sendMessageUseCase = new SendMessage(ChatRepository);
 const getAllChatsUseCase = new GetAllChats(ChatRepository);
@@ -264,6 +266,7 @@ export const allClientUseCases = {
      closeContractUseCase,
      rateAndReviewUserUseCase, 
      inviteUserUseCase, 
+     rejectContractUseCase, 
      sendMessageUseCase,
      getAllChatsUseCase,
      viewChatUseCase,  
