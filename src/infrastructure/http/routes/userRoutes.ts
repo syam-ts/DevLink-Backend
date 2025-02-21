@@ -53,7 +53,7 @@ userRouter.get('/job/proposals/:userId',verifyToken, requireRole(USER), getAllPr
 userRouter.get('/all-contracts/:userId', verifyToken, requireRole(USER), allContracts);
 userRouter.get('/contract/myContracts/:userId', verifyToken, requireRole(USER), viewMyContracts);
 userRouter.get("/contract/:contractId",verifyToken, requireRole(USER),verifyToken, requireRole(USER), viewSingleContract);
-userRouter.get("/wallet/view/:userId",verifyToken, requireRole(USER), viewWalletUser);
+userRouter.get("/wallet-view/:userId",verifyToken, requireRole(USER), viewWalletUser);
 userRouter.get("/invites/view/:userId",verifyToken, requireRole(USER), getAllInvites);
 userRouter.get('/notifications/:userId', verifyToken, requireRole(USER), allNotifications);
 userRouter.get('/chat/:memberId', verifyToken, requireRole(USER), clientController.getAllChats);

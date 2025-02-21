@@ -8,7 +8,7 @@ export interface ClientRepository {
 export class RateAndReview {
     constructor(private clientRepository: ClientRepository) {}; 
     async execute(userId: Id, clientId: Id, notificationId: Id, rating: number, review: string) { 
-   console.log('TH eclient ', clientId)
+ 
         const response = await this.clientRepository.rateAndReviewUser(userId, clientId, notificationId, rating, review);
         return response;
     }

@@ -62,7 +62,7 @@ clientRouter.get("/job/myContracts/:clientId", verifyToken, requireRole(CLIENT),
 clientRouter.get("/contract/:contractId", verifyToken, requireRole(CLIENT), viewContract);
 clientRouter.get("/contracts/submissions/:clientId", verifyToken, requireRole(CLIENT), viewSubmissions);
 clientRouter.get("/developers/allDevelopers", verifyToken, requireRole(CLIENT), getallDevelopers);
-clientRouter.get("/wallet/view/:clientId", verifyToken, requireRole(CLIENT), viewWallet);
+clientRouter.get("/wallet-view/:clientId", verifyToken, requireRole(CLIENT), viewWallet);
 clientRouter.get("/allChat/view/:roleId", verifyToken, requireRole(CLIENT), getAllChats);
 clientRouter.get("/chat/view/:roleType/:roleId/:targetId", verifyToken, requireRole(CLIENT), clientController.viewChat);
 

@@ -302,8 +302,6 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
   async createJobPost(clientId: string, data: any): Promise<any> {
-
-
     const client: any = await ClientModel.findById(clientId);
 
     const parsedEstimatedTimeInHours = parseInt(data.estimateTime);
@@ -443,40 +441,36 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return contract;
   }
 
-
   async viewWallet(clientId: string, page: number): Promise<any> {
-
-
     const PAGE_SIZE: number = 4;
     const skip: number = (page - 1) * PAGE_SIZE;
 
-
     const wallet = await ClientModel.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(clientId) } },
-      { $project: { totalTransactions: { $size: "$wallet.transactions" } } }
+      { $project: { totalTransactions: { $size: "$wallet.transactions" } } },
     ]);
 
-    const totalTransactions = wallet.length > 0 ? wallet[0].totalTransactions : 0;
-    const totalPages: number = totalTransactions / PAGE_SIZE
-
+    const totalTransactions =
+      wallet.length > 0 ? wallet[0].totalTransactions : 0;
+    const totalPages: number = totalTransactions / PAGE_SIZE;
 
     const clientWallet = await ClientModel.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(clientId) } },
       {
         $project: {
           transactions: {
-            $slice: ["$wallet.transactions", skip, PAGE_SIZE]
+            $slice: ["$wallet.transactions", skip, PAGE_SIZE],
           },
           balance: "$wallet.balance",
-          _id: 0
-        }
-      }
+          _id: 0,
+        },
+      },
     ]);
 
     return {
-      ...clientWallet, totalPages
+      ...clientWallet,
+      totalPages,
     };
-
   }
 
   async addMoneyToAdminWallet(
@@ -855,20 +849,14 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     rating: number,
     review: string
   ): Promise<any> {
-
-    console.log('u', userId, clientId, notificationId, rating, review)
- 
-    
-    const client: any = await ClientModel.findById(clientId);
-
     interface Rating {
       rating: {
         ratingSum: number;
         noOfRating: number;
       };
-    }; 
-    
-    type RateData = Rating | null; 
+    }
+
+    type RateData = Rating | null;
     const rateData: RateData = await UserModel.findById(userId);
 
     if (!rateData) throw new Error("User not found");
@@ -880,8 +868,10 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     const finalRating: number = Math.floor(avgRating * 10) / 10;
     const reviewData = {
       theReview: review,
-      rating: rating
-    }
+      rating: rating,
+    };
+
+    const client: any = await ClientModel.findById(clientId);
 
     const updateUser = await UserModel.findByIdAndUpdate(
       userId,
@@ -892,8 +882,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
           review: {
             theReview: review,
             rating: rating,
-            companyName: client.companyName
-          }
+            companyName: client.companyName,
+          },
         },
       },
       { new: true }
