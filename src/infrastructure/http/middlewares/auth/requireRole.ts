@@ -3,12 +3,10 @@ import { HttpStatusCode } from '../../../../helper/constants/enums';
 import { StatusMessage } from '../../../../helper/constants/stausMessages';
 
 
-const requireRole = (role: 'user' | 'client' | 'admin'): any => {  
+const requireRole = (role: string): any => {  
    
     return (req: any, res: Response, next: NextFunction) => {
-   
- 
-       
+     
         if(!req.user || req.user.role !== role)  { 
             return res.
             status(HttpStatusCode.FORBIDDEN)

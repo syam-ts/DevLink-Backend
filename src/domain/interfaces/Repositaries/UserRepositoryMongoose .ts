@@ -180,12 +180,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-
-  async allClients(): Promise<any | null> {
-    const clients = await ClientModel.find().exec();
-
-    return clients
-  }
+ 
 
   async findUserByEmailAndPassword(email: string, passwordUser: string): Promise<User | any> {
     if (!email || !passwordUser) {

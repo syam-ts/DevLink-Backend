@@ -111,8 +111,7 @@ export const userController = {
     loginUser: async (req: Request, res: any) => {
         try {
 
-            const { user } = await allUserUseCases.loginUseCase.execute(req.body);
-           
+            const { user } = await allUserUseCases.loginUseCase.execute(req.body); 
             if (!user) {
                 res.status(401).json({ message: "Invalid credentials", success: false });
                 return;
@@ -144,18 +143,30 @@ export const userController = {
 
     googleLogin: async (req: Request, res: any) => {
         try {
-            const user = await allUserUseCases.GoogleLoginUserUseCase.execute(
+            const user: any = await allUserUseCases.GoogleLoginUserUseCase.execute(
                 req.body
             );
-            res.cookie("jwtU", user.jwt, {
+            if (!user) {
+                res.status(401).json({ message: "Invalid credentials", success: false });
+                return;
+            };
+            
+            user.role = "user";
+            const { accessToken, refreshToken } = generateTokens(user);
+
+            res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
-                sameSite: "None",
-                secure: true,
-                maxAge: 24 * 60 * 60 * 1000,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict'
             });
-            res
-                .status(HttpStatusCode.OK)
-                .json({ message: StatusMessage[HttpStatusCode.OK], user: user, success: true });
+
+            res.status(HttpStatusCode.OK).json({
+                message: StatusMessage[HttpStatusCode.OK],
+                user,
+                accessToken,
+                refreshToken,
+                success: true,
+            });
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)

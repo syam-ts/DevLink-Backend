@@ -31,9 +31,7 @@ import { RejectInvite } from "../../application/usecases/user/rejectInvite";
 import { ViewSingleContractUser } from "../../application/usecases/user/viewSingleContract"; 
 import { WithdrawMoneyByUser } from "../../application/usecases/user/withdrawMoneyByUser"; 
 
-
-import { AllClients } from "../../application/usecases/user/allClients";   
-
+ 
 
 
 // Client imports ---------------->
@@ -132,11 +130,7 @@ const getAllInvitesUseCase = new GetAllInvites(userRepository);
 const rejectInviteUseCase = new RejectInvite(userRepository); 
 const viewSingleContractUserUseCase = new ViewSingleContractUser(userRepository); 
 const withdrawMoneyByUserUseCase = new WithdrawMoneyByUser(); 
-
-
-const allClientsUseCase = new AllClients(userRepository); 
-
-
+ 
 
 // Client Repo instance -------------->
 
@@ -234,8 +228,7 @@ export const allUserUseCases = {
         viewWalletUserUseCase,
         getAllInvitesUseCase,
         rejectInviteUseCase,
-        viewSingleContractUserUseCase,
-        allClientsUseCase,
+        viewSingleContractUserUseCase, 
         withdrawMoneyByUserUseCase,
 };
 
