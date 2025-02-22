@@ -566,8 +566,8 @@ export const userController = {
 
     addToWishlist: async (req: Request, res: any) => {
         try {
-            const { jobPostId, userId } = req.body;
-            // const userId = req.user.id;
+            const { jobPostId } = req.body;
+              const userId = req.user.id;
             const response = await allUserUseCases.addToWishlistUseCase.execute(
                 userId,
                 jobPostId
@@ -576,6 +576,23 @@ export const userController = {
             res
                 .status(HttpStatusCode.CREATED)
                 .json({ message: StatusMessage[HttpStatusCode.CREATED], success: true });
+        } catch (err: any) {
+            res
+                .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                .json({ message: err.message, success: false });
+        }
+    },
+
+    viewAllWishlist: async (req: Request, res: any) => {
+        try { 
+            const userId = req.user.id; 
+            const wishlist = await allUserUseCases.viewAllWishlistUseCase.execute(
+                userId
+            );
+
+            res
+                .status(HttpStatusCode.OK)
+                .json({ message: StatusMessage[HttpStatusCode.OK], wishlist, success: true });
         } catch (err: any) {
             res
                 .status(HttpStatusCode.INTERNAL_SERVER_ERROR)

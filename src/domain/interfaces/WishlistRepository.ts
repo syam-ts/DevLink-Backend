@@ -1,9 +1,9 @@
-import { WishlistModel } from "../entities/WIshlist";
-import { Jobs, jobPostSchema } from "../entities/User";
+import { Wishlist, WishlistModel } from "../entities/WIshlist";
+import { Jobs } from "../entities/User";
 import { JobPostModel } from "../entities/JobPost";
 
 export class WishlistRepositoryMongoose {
-  async addToWishlist(userId: string, jobPostId: string): Promise<any> {
+  async addToWishlist(userId: string, jobPostId: string): Promise<Wishlist> {
     const jobPost = await JobPostModel.findById(jobPostId).exec();
 
     if (!jobPost) throw new Error("Job post not found");
@@ -47,9 +47,11 @@ export class WishlistRepositoryMongoose {
     return wishlist;
   }
 
-  async getWishlist(recipeanId: string): Promise<any> {
-    const wishlist = await WishlistModel.find({ recipeanId: recipeanId });
+  async viewAllWishlist(userId: string): Promise<any> {
+    const wishlist = await WishlistModel.find({ userId: userId }).exec();
 
     if (!wishlist) throw new Error("No wishlist founded");
+
+    return wishlist;
   }
 }

@@ -24,6 +24,7 @@ import { ViewSubmittedContracts } from "../../application/usecases/user/viewSubm
 import { SubmitProject } from "../../application/usecases/user/sumbitProject";  
 import { ChatBot } from "../../application/usecases/user/ChatBot";   
 import { AddToWishlist } from "../../application/usecases/user/addToWishlist";   
+import { ViewAllWishlist } from "../../application/usecases/user/viewAllWishlist";   
 import { GetAllProposals } from "../../application/usecases/user/getAllProposals"; 
 import { ViewWalletUser } from "../../application/usecases/user/viewWalletUser"; 
 import { GetAllInvites } from "../../application/usecases/user/getAllInvites"; 
@@ -100,7 +101,6 @@ import { ViewSingleContract } from '../../application/usecases/admin/viewSingleC
 
 
 // User Respo instance  ---------->
-
 const userRepository = new UserRepositoryMongoose();
 const wishlistRepository = new WishlistRepositoryMongoose();
 const signupUseCase = new SignupUser(userRepository);
@@ -125,6 +125,7 @@ const viewMyContractsUseCase = new ViewMyContracts(userRepository);
 const viewSubmittedContractsUseCase = new ViewSubmittedContracts(userRepository);
 const submitProjectUseCase = new SubmitProject(userRepository); 
 const addToWishlistUseCase = new AddToWishlist(wishlistRepository); 
+const viewAllWishlistUseCase = new ViewAllWishlist(wishlistRepository); 
 const getAllProposalsUseCase = new GetAllProposals(userRepository); 
 const viewWalletUserUseCase = new ViewWalletUser(userRepository); 
 const getAllInvitesUseCase = new GetAllInvites(userRepository); 
@@ -226,6 +227,7 @@ export const allUserUseCases = {
         submitProjectUseCase ,
         chatBotUseCase,
         addToWishlistUseCase,
+        viewAllWishlistUseCase,
         getAllProposalsUseCase,
         viewWalletUserUseCase,
         getAllInvitesUseCase,

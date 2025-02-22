@@ -38,6 +38,7 @@ const {
     rejectInvite,
     viewSingleContract,
     withdrawMoneyByUser,
+    viewAllWishlist
 } = userController;
 const { USER }: {USER: string} = allRoles;
  
@@ -55,6 +56,7 @@ userRouter.get("/contract/:contractId",verifyToken, requireRole(USER),verifyToke
 userRouter.get("/wallet-view/:userId",verifyToken, requireRole(USER), viewWalletUser);
 userRouter.get("/invites/view/:userId",verifyToken, requireRole(USER), getAllInvites);
 userRouter.get('/notifications/:userId', verifyToken, requireRole(USER), allNotifications);
+userRouter.get('/wishlist-view', verifyToken, requireRole(USER), viewAllWishlist);
 userRouter.get('/chat/:memberId', verifyToken, requireRole(USER), clientController.getAllChats);
  
 
@@ -79,7 +81,7 @@ userRouter.post('/chatbot', verifyToken, requireRole(USER), chatbot);
 userRouter.post('/job/createProposal', verifyToken, requireRole(USER), createProposal);
 userRouter.post('/invite/reject/:inviteId', verifyToken, requireRole(USER), rejectInvite);  
 userRouter.post('/wallet/withdraw',verifyToken, requireRole(USER), withdrawMoneyByUser); 
-userRouter.post('/addToWishlist', addToWishlist);
+userRouter.post('/addToWishlist', verifyToken, requireRole(USER), addToWishlist);
 
 
 // userRouter.post('/job/createProposal/:clientId/:userId/:jobPostId', verifyToken,  createProposal);  
