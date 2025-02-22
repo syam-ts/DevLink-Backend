@@ -27,7 +27,7 @@ const {
     loginUser,
     googleLogin,
     logoutUser,
-    addUserToWishlist,
+    addToWishlist,
     submitProject,
     boostAccount,
     chatbot,
@@ -73,13 +73,13 @@ userRouter.post('/logout', logoutUser);
 
 //chat -----
 userRouter.post('/chat/sendMessage', verifyToken, requireRole(USER), clientController.sendMessage);
-userRouter.post('/wishlist/add', verifyToken, requireRole(USER), addUserToWishlist);
 userRouter.post('/project/submit/:contractId',verifyToken, requireRole(USER), submitProject);
 userRouter.post('/account/boost/:userId', verifyToken, requireRole(USER), boostAccount);
 userRouter.post('/chatbot', verifyToken, requireRole(USER), chatbot);
 userRouter.post('/job/createProposal', verifyToken, requireRole(USER), createProposal);
 userRouter.post('/invite/reject/:inviteId', verifyToken, requireRole(USER), rejectInvite);  
 userRouter.post('/wallet/withdraw',verifyToken, requireRole(USER), withdrawMoneyByUser); 
+userRouter.post('/addToWishlist', addToWishlist);
 
 
 // userRouter.post('/job/createProposal/:clientId/:userId/:jobPostId', verifyToken,  createProposal);  

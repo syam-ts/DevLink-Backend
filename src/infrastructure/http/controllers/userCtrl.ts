@@ -564,9 +564,10 @@ export const userController = {
     },
 
 
-    addUserToWishlist: async (req: Request, res: any) => {
+    addToWishlist: async (req: Request, res: any) => {
         try {
-            const { userId, jobPostId } = req.body;
+            const { jobPostId, userId } = req.body;
+            // const userId = req.user.id;
             const response = await allUserUseCases.addToWishlistUseCase.execute(
                 userId,
                 jobPostId

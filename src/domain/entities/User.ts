@@ -1,27 +1,27 @@
 import mongoose from "mongoose";
 
-interface Jobs {
-  _id: string;
+export interface Jobs {
+  _id: string | unknown;
   title: string;
   description: string;
   expertLevel: string;
   location: string;
   amount: number;
   paymentType: string;
-  estimateTimeinHours: string;
+  estimateTimeinHours: number;
   projectType: string;
   requiredSkills: [string];
 }
 
-const jobPostSchema = {
+export const jobPostSchema = {
   _id: { type: String, required: false },
   title: { type: String, required: false },
   description: { type: String, required: false },
   expertLevel: { type: String, required: false },
   location: { type: String, required: false },
   amount: { type: Number, required: false },
-  paymentType: { type: String, required: false },
-  estimateTimeinHours: { type: String, required: false },
+  paymentType: { type: String, required: false, enums: ["hourly", "fixed"] },
+  estimateTimeinHours: { type: Number, required: false },
   projectType: { type: String, required: false },
   requiredSkills: { type: [String], required: false },
 };
