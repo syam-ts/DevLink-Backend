@@ -23,6 +23,12 @@ export class WishlistRepositoryMongoose {
 
     const existingWishlist = await WishlistModel.find({ userId: userId });
 
+    const existingJobPost = await WishlistModel.find({
+      $and: [{ userId: userId }, { "jobPostData._id": { $in: [jobPostId] } }],
+    });
+
+    if (existingJobPost.length > 0) throw new Error("Post already added");
+
     let wishlist;
     if (existingWishlist.length === 0) {
       const newWishlist: any = new WishlistModel({
@@ -32,15 +38,9 @@ export class WishlistRepositoryMongoose {
       wishlist = await newWishlist.save();
     } else {
       wishlist = await WishlistModel.findOneAndUpdate(
-        {
-          userId: userId,
-        },
-        {
-          $push: { jobPostData: jobPostData },
-        },
-        {
-          new: true,
-        }
+        { userId: userId },
+        { $push: { jobPostData: jobPostData } },
+        { new: true }
       );
     }
 
