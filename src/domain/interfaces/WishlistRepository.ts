@@ -4,8 +4,8 @@ import { JobPostModel } from "../entities/JobPost";
 
 export class WishlistRepositoryMongoose {
   async addToWishlist(userId: string, jobPostId: string): Promise<Wishlist> {
-    const jobPost = await JobPostModel.findById(jobPostId).exec();
 
+    const jobPost = await JobPostModel.findById(jobPostId).exec();
     if (!jobPost) throw new Error("Job post not found");
 
     const jobPostData: Jobs = {
@@ -21,16 +21,17 @@ export class WishlistRepositoryMongoose {
       requiredSkills: jobPost?.requiredSkills,
     };
 
-    const existingWishlist = await WishlistModel.find({ userId: userId });
+    const existingWishlistOfUser = await WishlistModel.find({ userId: userId });
 
-    const existingJobPost = await WishlistModel.find({
+    const existingJobPostInWishlist = await WishlistModel.find({
       $and: [{ userId: userId }, { "jobPostData._id": { $in: [jobPostId] } }],
     });
 
-    if (existingJobPost.length > 0) throw new Error("Post already added");
+    if (existingJobPostInWishlist.length > 0)
+      throw new Error("Post already added");
 
     let wishlist;
-    if (existingWishlist.length === 0) {
+    if (existingWishlistOfUser.length === 0) {
       const newWishlist: any = new WishlistModel({
         userId: userId,
         jobPostData: [jobPostData],
@@ -48,10 +49,25 @@ export class WishlistRepositoryMongoose {
   }
 
   async viewAllWishlist(userId: string): Promise<any> {
-    const wishlist = await WishlistModel.find({ userId: userId }).exec();
-
+    const wishlist = await WishlistModel.find({ userId: userId }).exec(); 
     if (!wishlist) throw new Error("No wishlist founded");
 
     return wishlist;
+  }
+
+  async removeFromWishlist(
+    wishlistId: string,
+    jobPostId: string
+  ): Promise<Wishlist> {
+
+    const deleteWishlist = await WishlistModel.findOneAndUpdate(
+      { _id: wishlistId },
+      { $pull: { jobPostData: { _id: jobPostId } } },
+      { new: true }
+    );
+ 
+    if (!deleteWishlist) throw Error("Wishlist not found"); 
+
+    return deleteWishlist;
   }
 }

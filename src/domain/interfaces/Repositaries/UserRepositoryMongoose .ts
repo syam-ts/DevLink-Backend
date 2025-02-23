@@ -9,6 +9,7 @@ import { AdminModel } from "../../entities/Admin";
 import { NotificationModel } from "../../entities/Notification";
 import mongoose from "mongoose";
 import { InviteModel } from "../../entities/Invite";
+import { WishlistModel } from "../../entities/WIshlist";
 
 type Id = string;
 
@@ -707,6 +708,8 @@ export class UserRepositoryMongoose implements UserRepositary {
       totalPages,
     };
   }
+
+  
 
   async getAllInvites(userId: string): Promise<Invite | any> {
     const foundedInvites = await InviteModel.find({ userId: userId });

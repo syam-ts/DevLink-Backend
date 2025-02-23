@@ -28,6 +28,8 @@ const {
     googleLogin,
     logoutUser,
     addToWishlist,
+    viewAllWishlist,
+    removeFromWishlist,
     submitProject,
     boostAccount,
     chatbot,
@@ -37,8 +39,7 @@ const {
     getAllInvites,
     rejectInvite,
     viewSingleContract,
-    withdrawMoneyByUser,
-    viewAllWishlist
+    withdrawMoneyByUser, 
 } = userController;
 const { USER }: {USER: string} = allRoles;
  
@@ -79,15 +80,18 @@ userRouter.post('/project/submit/:contractId',verifyToken, requireRole(USER), su
 userRouter.post('/account/boost/:userId', verifyToken, requireRole(USER), boostAccount);
 userRouter.post('/chatbot', verifyToken, requireRole(USER), chatbot);
 userRouter.post('/job/createProposal', verifyToken, requireRole(USER), createProposal);
-userRouter.post('/invite/reject/:inviteId', verifyToken, requireRole(USER), rejectInvite);  
-userRouter.post('/wallet/withdraw',verifyToken, requireRole(USER), withdrawMoneyByUser); 
+userRouter.post('/invite-reject/:inviteId', verifyToken, requireRole(USER), rejectInvite); 
+
+
+//optimized
+userRouter.post('/wallet-withdraw',verifyToken, requireRole(USER), withdrawMoneyByUser); 
 userRouter.post('/addToWishlist', verifyToken, requireRole(USER), addToWishlist);
 
 
 // userRouter.post('/job/createProposal/:clientId/:userId/:jobPostId', verifyToken,  createProposal);  
 userRouter.put('/profile/:type/:userId', verifyToken, requireRole(USER), editProfile);
 userRouter.patch('/profile/boost/success/:userId', verifyToken, requireRole(USER), bosstSuccess); // ADD USERAUTH
-
+userRouter.delete('/removeFromWishlist', removeFromWishlist)
 userRouter.post('/refresh-token', refreshToken);
 
 
