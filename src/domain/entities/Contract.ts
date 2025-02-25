@@ -1,7 +1,7 @@
 import mongoose, { Schema, Model } from 'mongoose';
 
 
- interface ContractDocument extends Document {
+ export interface ContractDocument extends Document {
   clientId?: mongoose.Types.ObjectId;
   userId?: mongoose.Types.ObjectId;
   jobPostId?: mongoose.Types.ObjectId;

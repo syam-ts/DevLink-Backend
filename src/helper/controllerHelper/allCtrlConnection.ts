@@ -16,13 +16,12 @@ import { ViewProposals } from "../../application/usecases/user/viewProposals";
 import { EditUserProfile } from "../../application/usecases/user/editProfile"; 
 import { GetUserProfile } from "../../application/usecases/user/getProfile";
 import { GetSelectedJobs } from "../../application/usecases/user/getSelectedJobs";
-import { CreateProposal } from "../../application/usecases/user/createProposal";  
-import { AllContracts } from "../../application/usecases/user/allContracts"; 
+import { CreateProposal } from "../../application/usecases/user/createProposal";   
 import { AllNotifications } from "../../application/usecases/user/allNotifications"; 
 import { BoostPayment } from "../../application/usecases/user/boostPayment"; 
 import { BoostSuccess } from "../../application/usecases/user/boostSuccess"; 
 import { GetSingleJobPost } from "../../application/usecases/user/getSingleJobPost"; 
-import { ViewMyContracts } from "../../application/usecases/user/viewContracts"; 
+import { ViewContracts } from "../../application/usecases/user/viewContracts"; 
 import { ViewSubmittedContracts } from "../../application/usecases/user/viewSubmittedContracts";  
 import { SubmitProject } from "../../application/usecases/user/sumbitProject";  
 import { ChatBot } from "../../application/usecases/user/ChatBot";   
@@ -120,13 +119,12 @@ const getProfileUseCase = new GetUserProfile(userRepository);
 const listHomeJobsUseCase = new ListHomeJobs(userRepository);
 const getSelectedJobsUseCase = new GetSelectedJobs(userRepository);
 const viewProposalsUseCase = new ViewProposals(userRepository); 
-const createProposalUseCase = new CreateProposal(userRepository); 
-const allContractsUseCase = new AllContracts(userRepository);
+const createProposalUseCase = new CreateProposal(userRepository);  
 const allNotificationsUseCase = new AllNotifications(userRepository);
 const boostAccountUseCase = new BoostPayment(userRepository);
 const boostSuccessUseCase = new BoostSuccess(userRepository);
 const getSingleJobPostUseCase = new GetSingleJobPost(userRepository);
-const viewMyContractsUseCase = new ViewMyContracts(userRepository);
+const viewContractsUseCase = new ViewContracts(userRepository);
 const viewSubmittedContractsUseCase = new ViewSubmittedContracts(userRepository);
 const submitProjectUseCase = new SubmitProject(userRepository); 
 const addToWishlistUseCase = new AddToWishlist(wishlistRepository); 
@@ -221,9 +219,8 @@ export const allUserUseCases = {
         listHomeJobsUseCase ,
         getSelectedJobsUseCase ,
         createProposalUseCase ,
-        closeContractUseCase ,
-        allContractsUseCase ,
-        viewMyContractsUseCase ,
+        closeContractUseCase , 
+        viewContractsUseCase ,
         viewSubmittedContractsUseCase ,
         allNotificationsUseCase ,
         boostAccountUseCase ,

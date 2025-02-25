@@ -4,10 +4,10 @@ import { UserModel } from "../../entities/User";
 import { Client, ClientModel } from "../../entities/Client";
 import { JobPostDocument, JobPostModel } from "../../entities/JobPost";
 import { UserRepositary } from "../../../application/usecases/user/signupUser";
-import { ContractModel } from "../../entities/Contract";
+import { ContractDocument, ContractModel } from "../../entities/Contract";
 import { AdminModel } from "../../entities/Admin";
 import { NotificationModel } from "../../entities/Notification";
-import mongoose from "mongoose";
+import mongoose, { isObjectIdOrHexString } from "mongoose";
 import { InviteModel } from "../../entities/Invite";
 import { WishlistModel } from "../../entities/WIshlist";
 
@@ -456,16 +456,6 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-  async allContracts(userId: Id): Promise<any> {
-    const contract = await ContractModel.find({ userId: userId }).exec();
-
-    if (!contract) {
-      throw new Error("Contract not found");
-    } else {
-      return contract;
-    }
-  }
-
   async allNotifications(userId: Id): Promise<any> {
     const notifications: any = await NotificationModel.find({
       reciever_id: userId,
@@ -616,6 +606,8 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
   async viewSingleContract(contractId: Id): Promise<any> {
+
+    
     const contract: any = await ContractModel.findById(contractId);
 
     if (!contract) {
@@ -625,11 +617,34 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-  async viewMyContracts(userId: Id): Promise<any> {
-    const contract: any = await ContractModel.find({
-      $and: [{ userId: userId }, { status: "on progress" }],
-    }).exec();
+  async viewContracts(
+    userId: Id,
+    contractViewType: string
+  ): Promise<ContractDocument> {
 
+let contract;
+ 
+  
+ 
+    if (contractViewType === "pending") {
+
+      contract = await ContractModel.find({
+        $and: [{ userId: userId }, { status: "on progress" }],
+      }).exec();
+       
+    } else if (contractViewType === "rejected") {
+      contract = await ContractModel.find({
+        $and: [{ userId: userId }, { status: "rejected" }],
+      }).exec();
+    } else if (contractViewType === "completed") {
+      contract = await ContractModel.find({
+        $and: [{ userId: userId }, { status: "closed" }],
+      }).exec();
+    } else {
+      throw new Error("Bad selection");
+    }
+
+   
     if (!contract) {
       throw new Error("contract not found");
     } else {

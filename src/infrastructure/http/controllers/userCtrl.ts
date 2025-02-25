@@ -323,25 +323,7 @@ export const userController = {
     }
   },
 
-  allContracts: async (req: Request, res: Response) => {
-    try {
-      const { userId } = req.params;
-      const allContracts = await allUserUseCases.allContractsUseCase.execute(
-        userId
-      );
-
-      res.status(HttpStatusCode.OK).json({
-        message: StatusMessage[HttpStatusCode.OK],
-        contracts: allContracts,
-        success: true,
-      });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
-    }
-  },
-
+ 
   allNotifications: async (req: Request, res: Response) => {
     try {
       const { userId } = req.params;
@@ -431,11 +413,13 @@ export const userController = {
     }
   },
 
-  viewMyContracts: async (req: Request, res: Response) => {
+  viewContracts: async (req: Request, res: Response) => {
     try {
-      const { userId } = req.params;
-      const contracts = await allUserUseCases.viewMyContractsUseCase.execute(
-        userId
+      const { id: userId } = req.user;
+      const { contractViewType } = req.params;
+      const contracts = await allUserUseCases.viewContractsUseCase.execute(
+        userId,
+        contractViewType
       );
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],

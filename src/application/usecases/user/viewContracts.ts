@@ -1,21 +1,16 @@
-
-
- 
-
 export interface UserRepositary {
-    viewMyContracts(userId: string): Promise< any >
-} 
+  viewContracts(userId: string, contractViewType: string): void;
+}
 
+export class ViewContracts {
+  constructor(private userRepositary: UserRepositary) {}
 
+  async execute(userId: string, contractViewType: string) {
+    const response = await this.userRepositary.viewContracts(
+      userId,
+      contractViewType
+    );
 
-export class ViewMyContracts {
-    constructor(private userRepositary: UserRepositary) {}
-
-    async execute( userId: string ) {   
-
-           const response = await this.userRepositary.viewMyContracts(userId); 
-             
-
-           return response;
-    }
+    return response;
+  }
 }

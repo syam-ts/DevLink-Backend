@@ -8,19 +8,6 @@ import { requireRole } from '../middlewares/auth/requireRole';
 import {allRoles} from '../../../helper/constants/enums';
  
 const { 
-    getHomeUser,
-    listHomeJobs,
-    getSelectedJobs,
-    
-    viewProposals,
-
-    getProfile,
-    allContracts,
-    allNotifications,
-    getSingleJobPost,
-    viewMyContracts,
-    viewSubmittedContracts,
-    viewWalletUser,
     signupUser,
     verifyOtp,
     resendOtp,
@@ -29,6 +16,18 @@ const {
     loginUser,
     googleLogin,
     logoutUser,
+    getHomeUser,
+    listHomeJobs,
+    getSelectedJobs, 
+    viewProposals,
+ 
+    viewContracts,
+
+
+    getProfile,
+    getSingleJobPost,
+    viewSubmittedContracts,
+    viewWalletUser,
     addToWishlist,
     viewAllWishlist,
     removeFromWishlist,
@@ -39,6 +38,7 @@ const {
     editProfile,
     bosstSuccess,
     getAllInvites,
+    allNotifications,
     rejectInvite,
     viewSingleContract,
     withdrawMoneyByUser, 
@@ -49,8 +49,11 @@ const { USER }: {USER: string} = allRoles;
 userRouter.get('/getHome', verifyToken, requireRole(USER), getHomeUser);
 userRouter.get('/home/:type', verifyToken, requireRole(USER), listHomeJobs);
 userRouter.get('/jobs/:jobsType', verifyToken, requireRole(USER), getSelectedJobs);
-
 userRouter.get('/proposals/:proposalType',verifyToken, requireRole(USER), viewProposals);
+
+userRouter.get('/contracts/:contractViewType', verifyToken, requireRole(USER), viewContracts); 
+userRouter.get("/contract/:contractId",verifyToken, requireRole(USER),verifyToken, requireRole(USER), viewSingleContract);
+
 
 
 
@@ -61,9 +64,6 @@ userRouter.get('/job/submittedContracts/:userId', verifyToken, requireRole(USER)
 
 
 userRouter.get('/profile/view/:userId',verifyToken, requireRole(USER), getProfile);
-userRouter.get('/all-contracts/:userId', verifyToken, requireRole(USER), allContracts);
-userRouter.get('/contract/myContracts/:userId', verifyToken, requireRole(USER), viewMyContracts);
-userRouter.get("/contract/:contractId",verifyToken, requireRole(USER),verifyToken, requireRole(USER), viewSingleContract);
 userRouter.get("/wallet-view/:userId",verifyToken, requireRole(USER), viewWalletUser);
 userRouter.get("/invites/view/:userId",verifyToken, requireRole(USER), getAllInvites);
 userRouter.get('/notifications/:userId', verifyToken, requireRole(USER), allNotifications);
