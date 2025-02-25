@@ -330,10 +330,15 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-  async getAllProposals(userId: string): Promise<any> {
-    const findProposals: any = await ClientModel.find({
-      proposals: { $elemMatch: { userId } },
+  async viewProposals(userId: string): Promise<any> {
+    let findProposals = await ClientModel.find({
+      $and: [
+        {
+          proposals: { $elemMatch: { userId } },
+        },
+      ],
     }).exec();
+
     if (!findProposals) throw new Error("No proposal found");
     return findProposals[0].proposals;
   }
@@ -426,7 +431,9 @@ export class UserRepositoryMongoose implements UserRepositary {
         isVerified: true,
       });
 
-      const allJobs = await JobPostModel.find({ status: "pending" }).exec();
+      const allJobs = await JobPostModel.find({ status: "pending" })
+        .limit(3)
+        .exec();
 
       const totalHours = await JobPostModel.aggregate([
         { $group: { _id: null, sum: { $sum: "$estimateTimeinHours" } } },
@@ -440,7 +447,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     } else if (type === "latestJobs") {
       const latestJobs = await JobPostModel.find({})
         .sort({ createdAt: -1 })
-        .limit(6)
+        .limit(3)
         .exec();
 
       return latestJobs;
@@ -474,7 +481,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     jobType: string,
     currentPage: number
   ): Promise<JobPostDocument | any> {
-    const page_size: number = 2;
+    const page_size: number = 5;
     const skip: number = (currentPage - 1) * page_size;
 
     const user: any = await UserModel.findById(userId).exec();
@@ -484,8 +491,9 @@ export class UserRepositoryMongoose implements UserRepositary {
       throw new Error("User has no skills or does not exist.");
 
     if (jobType === "listAllJobs") {
-       const totalJobs = await JobPostModel.countDocuments();
-        totalPages = Math.round(totalJobs/ page_size); 
+      const totalJobs = await JobPostModel.countDocuments();
+
+      totalPages = Math.ceil(totalJobs / page_size);
       const jobs = await JobPostModel.find({ status: "pending" })
         .skip(skip)
         .limit(page_size);
@@ -494,11 +502,11 @@ export class UserRepositoryMongoose implements UserRepositary {
 
       return {
         jobs,
-        totalPages
+        totalPages,
       };
     } else if (jobType === "trendingJobs") {
-        const totalJobs = await JobPostModel.countDocuments();
-        totalPages = Math.round(totalJobs/ page_size); 
+      const totalJobs = await JobPostModel.countDocuments();
+      totalPages = Math.ceil(totalJobs / page_size);
       const jobs = await JobPostModel.find({ status: "pending" })
         .sort({
           proposalCount: -1,
@@ -509,18 +517,18 @@ export class UserRepositoryMongoose implements UserRepositary {
 
       return {
         jobs,
-        totalPages
+        totalPages,
       };
     } else if (jobType === "bestMatches") {
       const userSkills = user.skills;
 
-        const totalJobs = await JobPostModel.countDocuments({
+      const totalJobs = await JobPostModel.countDocuments({
         $and: [
           { status: "pending" },
           { requiredSkills: { $elemMatch: { $in: userSkills } } },
         ],
       });
-      totalPages = Math.round(totalJobs/ page_size); 
+      totalPages = Math.ceil(totalJobs / page_size);
       const jobs = await JobPostModel.find({
         $and: [
           { status: "pending" },
@@ -530,12 +538,11 @@ export class UserRepositoryMongoose implements UserRepositary {
         .skip(skip)
         .limit(page_size);
 
-      if (!jobs || jobs.length === 0)
-        throw new Error("No matched job found ");
+      if (!jobs || jobs.length === 0) throw new Error("No matched job found ");
 
       return {
         jobs,
-        totalPages
+        totalPages,
       };
     } else {
       throw new Error("Invalid selection");
@@ -652,7 +659,6 @@ export class UserRepositoryMongoose implements UserRepositary {
         new: true,
       }
     );
-    console.log("The user :", user);
 
     if (!user) {
       throw new Error("User not found");

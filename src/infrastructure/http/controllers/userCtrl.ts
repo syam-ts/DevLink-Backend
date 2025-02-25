@@ -259,7 +259,7 @@ export const userController = {
     try {
       const { jobsType } = req.params;
       const { id: userId } = req.user;
-      const { currentPage } = req.query;
+      const currentPage : number = Number(req.query.currentPage) || 1; 
 
       const response = await allUserUseCases.getSelectedJobsUseCase.execute(
         userId,
@@ -302,11 +302,13 @@ export const userController = {
     }
   },
 
-  getAllProposals: async (req: Request, res: Response) => {
+  viewProposals: async (req: Request, res: Response) => {
     try {
-      const { userId } = req.params;
-      const response = await allUserUseCases.getAllProposalsUseCase.execute(
-        userId
+ 
+      const {id: userId} = req.user;   
+      
+      const response = await allUserUseCases.viewProposalsUseCase.execute(
+        userId 
       );
 
       res.status(HttpStatusCode.OK).json({

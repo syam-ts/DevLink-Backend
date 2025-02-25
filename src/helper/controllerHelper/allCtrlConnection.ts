@@ -10,6 +10,8 @@ import { ResetPassword } from "../../application/usecases/user/resetPassword";
 import { getHomeUser } from "../../application/usecases/user/getHome";
 import { ListHomeJobs } from "../../application/usecases/user/getHome";
 
+import { ViewProposals } from "../../application/usecases/user/viewProposals"; 
+
 
 import { EditUserProfile } from "../../application/usecases/user/editProfile"; 
 import { GetUserProfile } from "../../application/usecases/user/getProfile";
@@ -27,7 +29,6 @@ import { ChatBot } from "../../application/usecases/user/ChatBot";
 import { AddToWishlist } from "../../application/usecases/user/addToWishlist";   
 import { ViewAllWishlist } from "../../application/usecases/user/viewAllWishlist";   
 import { RemoveFromWishlist } from "../../application/usecases/user/removeFromWishlist";   
-import { GetAllProposals } from "../../application/usecases/user/getAllProposals"; 
 import { ViewWalletUser } from "../../application/usecases/user/viewWalletUser"; 
 import { GetAllInvites } from "../../application/usecases/user/getAllInvites"; 
 import { RejectInvite } from "../../application/usecases/user/rejectInvite"; 
@@ -118,6 +119,7 @@ const editProfileUseCase = new EditUserProfile(userRepository);
 const getProfileUseCase = new GetUserProfile(userRepository);
 const listHomeJobsUseCase = new ListHomeJobs(userRepository);
 const getSelectedJobsUseCase = new GetSelectedJobs(userRepository);
+const viewProposalsUseCase = new ViewProposals(userRepository); 
 const createProposalUseCase = new CreateProposal(userRepository); 
 const allContractsUseCase = new AllContracts(userRepository);
 const allNotificationsUseCase = new AllNotifications(userRepository);
@@ -130,7 +132,6 @@ const submitProjectUseCase = new SubmitProject(userRepository);
 const addToWishlistUseCase = new AddToWishlist(wishlistRepository); 
 const viewAllWishlistUseCase = new ViewAllWishlist(wishlistRepository); 
 const removeFromWishlistUseCase = new RemoveFromWishlist(wishlistRepository); 
-const getAllProposalsUseCase = new GetAllProposals(userRepository); 
 const viewWalletUserUseCase = new ViewWalletUser(userRepository); 
 const getAllInvitesUseCase = new GetAllInvites(userRepository); 
 const rejectInviteUseCase = new RejectInvite(userRepository); 
@@ -233,7 +234,7 @@ export const allUserUseCases = {
         addToWishlistUseCase,
         viewAllWishlistUseCase,
         removeFromWishlistUseCase,
-        getAllProposalsUseCase,
+        viewProposalsUseCase,
         viewWalletUserUseCase,
         getAllInvitesUseCase,
         rejectInviteUseCase,

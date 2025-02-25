@@ -11,6 +11,8 @@ const {
     getHomeUser,
     listHomeJobs,
     getSelectedJobs,
+    
+    viewProposals,
 
     getProfile,
     allContracts,
@@ -18,7 +20,6 @@ const {
     getSingleJobPost,
     viewMyContracts,
     viewSubmittedContracts,
-    getAllProposals,
     viewWalletUser,
     signupUser,
     verifyOtp,
@@ -47,11 +48,14 @@ const { USER }: {USER: string} = allRoles;
  
 userRouter.get('/getHome', verifyToken, requireRole(USER), getHomeUser);
 userRouter.get('/home/:type', verifyToken, requireRole(USER), listHomeJobs);
-
 userRouter.get('/jobs/:jobsType', verifyToken, requireRole(USER), getSelectedJobs);
+
+userRouter.get('/proposals/:proposalType',verifyToken, requireRole(USER), viewProposals);
+
+
+
 userRouter.get('/job-view/:jobPostId',verifyToken, requireRole(USER), getSingleJobPost);
 userRouter.get('/job/submittedContracts/:userId', verifyToken, requireRole(USER), viewSubmittedContracts);
-userRouter.get('/job/proposals/:userId',verifyToken, requireRole(USER), getAllProposals);
 
 
 
