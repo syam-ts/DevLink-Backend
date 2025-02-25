@@ -49,8 +49,8 @@ export class WishlistRepositoryMongoose {
   }
 
   async viewAllWishlist(userId: string): Promise<any> {
-    const wishlist = await WishlistModel.find({ userId: userId }).exec(); 
-    if (!wishlist) throw new Error("No wishlist founded");
+    const wishlist = await WishlistModel.findOne({ userId: userId }).exec(); 
+    if (!wishlist) throw new Error("No wishlist founded"); 
 
     return wishlist;
   }
@@ -70,4 +70,6 @@ export class WishlistRepositoryMongoose {
 
     return deleteWishlist;
   }
-}
+};
+
+

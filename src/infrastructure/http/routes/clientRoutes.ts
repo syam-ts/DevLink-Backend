@@ -4,7 +4,7 @@ import { clientController } from "../controllers/clientCtrl";
 import { userController } from "../controllers/userCtrl";
 import { verifyToken } from "../middlewares/auth/verifyToken";
 import { requireRole } from "../middlewares/auth/requireRole"; 
-import allRoles from '../../../helper/constants/role';
+import {allRoles} from '../../../helper/constants/enums';
  
 const {
   getHomeClient,

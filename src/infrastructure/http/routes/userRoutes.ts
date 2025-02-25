@@ -5,7 +5,7 @@ import { verifyToken } from '../middlewares/auth/verifyToken';
 import { clientController } from '../controllers/clientCtrl';
 import refreshToken from '../middlewares/auth/refreshToken';
 import { requireRole } from '../middlewares/auth/requireRole';
-import allRoles from '../../../helper/constants/role';
+import {allRoles} from '../../../helper/constants/enums';
  
 const { 
     getHomeUser,
@@ -91,7 +91,7 @@ userRouter.post('/addToWishlist', verifyToken, requireRole(USER), addToWishlist)
 // userRouter.post('/job/createProposal/:clientId/:userId/:jobPostId', verifyToken,  createProposal);  
 userRouter.put('/profile/:type/:userId', verifyToken, requireRole(USER), editProfile);
 userRouter.patch('/profile/boost/success/:userId', verifyToken, requireRole(USER), bosstSuccess); // ADD USERAUTH
-userRouter.delete('/removeFromWishlist', removeFromWishlist)
+userRouter.patch('/removeFromWishlist', removeFromWishlist)
 userRouter.post('/refresh-token', refreshToken);
 
 

@@ -9,6 +9,14 @@ export enum HttpStatusCode {
     GONE = 410,
     INTERNAL_SERVER_ERROR = 500,
     SERVICE_UNAVAILABLE = 503,
-    NETWORK_CONNECT_TIMEOUT_ERROR = 599,
+    NETWORK_CONNECT_TIMEOUT_ERROR = 599, 
+};
 
-}
+
+export enum allRoles {
+    USER = "user",
+    CLIENT = "client",
+    ADMIN = "admin",
+  };
+
+ 
