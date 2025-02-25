@@ -257,10 +257,14 @@ export const userController = {
 
   getSelectedJobs: async (req: Request, res: Response) => {
     try {
-      const { userId, jobType } = req.params;
+      const { jobsType } = req.params;
+      const { id: userId } = req.user;
+      const { currentPage } = req.query;
+
       const response = await allUserUseCases.getSelectedJobsUseCase.execute(
         userId,
-        jobType
+        jobsType,
+        currentPage
       );
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
@@ -508,12 +512,10 @@ export const userController = {
         jobPostId
       );
 
-      res
-        .status(HttpStatusCode.CREATED)
-        .json({
-          message: StatusMessage[HttpStatusCode.CREATED],
-          success: true,
-        });
+      res.status(HttpStatusCode.CREATED).json({
+        message: StatusMessage[HttpStatusCode.CREATED],
+        success: true,
+      });
     } catch (err: any) {
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
@@ -528,13 +530,11 @@ export const userController = {
         userId
       );
 
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          wishlist,
-          success: true,
-        });
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        wishlist,
+        success: true,
+      });
     } catch (err: any) {
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
@@ -567,13 +567,11 @@ export const userController = {
         currentPage
       );
 
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          wallet: response,
-          success: true,
-        });
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        wallet: response,
+        success: true,
+      });
     } catch (err: any) {
       res
         .status(500)
@@ -588,13 +586,11 @@ export const userController = {
       const contract =
         await allUserUseCases.viewSingleContractUserUseCase.execute(contractId);
 
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          contract,
-          success: true,
-        });
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        contract,
+        success: true,
+      });
     } catch (err: any) {
       res
         .status(500)
@@ -610,13 +606,11 @@ export const userController = {
         userId
       );
 
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          invites: response,
-          success: true,
-        });
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        invites: response,
+        success: true,
+      });
     } catch (err: any) {
       res
         .status(500)

@@ -1,17 +1,17 @@
  
 
-export interface UserRepositary {
+export interface UserRepository {
     allContracts(userId: string): Promise< any >
 } 
 
 
 
 export class AllContracts {
-    constructor(private userRepositary: UserRepositary) {}
+    constructor(private userRepository: UserRepository) {}
 
     async execute( userId: string ) {   
 
-           const response = await this.userRepositary.allContracts(userId); 
+           const response = await this.userRepository.allContracts(userId); 
             
     
 

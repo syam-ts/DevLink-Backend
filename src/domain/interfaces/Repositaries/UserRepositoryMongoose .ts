@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import validator from "validator";
 import { UserModel } from "../../entities/User";
 import { Client, ClientModel } from "../../entities/Client";
-import { JobPostModel } from "../../entities/JobPost";
+import { JobPostDocument, JobPostModel } from "../../entities/JobPost";
 import { UserRepositary } from "../../../application/usecases/user/signupUser";
 import { ContractModel } from "../../entities/Contract";
 import { AdminModel } from "../../entities/Admin";
@@ -469,39 +469,74 @@ export class UserRepositoryMongoose implements UserRepositary {
     return notifications;
   }
 
-  async getSelectedJobs(userId: string, jobType: string): Promise<any> {
-    const user: any = await UserModel.findById(userId).exec();
+  async getSelectedJobs(
+    userId: string,
+    jobType: string,
+    currentPage: number
+  ): Promise<JobPostDocument | any> {
+    const page_size: number = 2;
+    const skip: number = (currentPage - 1) * page_size;
 
-    if (!user || !user.skills || user.skills.length === 0) {
+    const user: any = await UserModel.findById(userId).exec();
+    let totalPages: number;
+
+    if (!user || !user.skills || user.skills.length === 0)
       throw new Error("User has no skills or does not exist.");
-    }
 
     if (jobType === "listAllJobs") {
-      const jobs = await JobPostModel.find({ status: "pending" }).exec();
+       const totalJobs = await JobPostModel.countDocuments();
+        totalPages = Math.round(totalJobs/ page_size); 
+      const jobs = await JobPostModel.find({ status: "pending" })
+        .skip(skip)
+        .limit(page_size);
 
       if (!jobs) throw new Error("No jobs found");
-      return jobs;
-    } else if (jobType === "trendingJobs") {
-      const jobs = await JobPostModel.find({ status: "pending" }).sort({
-        proposalCount: -1,
-      });
 
-      return jobs;
+      return {
+        jobs,
+        totalPages
+      };
+    } else if (jobType === "trendingJobs") {
+        const totalJobs = await JobPostModel.countDocuments();
+        totalPages = Math.round(totalJobs/ page_size); 
+      const jobs = await JobPostModel.find({ status: "pending" })
+        .sort({
+          proposalCount: -1,
+        })
+        .skip(skip)
+        .limit(page_size);
+      if (!jobs) throw new Error("No jobs found");
+
+      return {
+        jobs,
+        totalPages
+      };
     } else if (jobType === "bestMatches") {
       const userSkills = user.skills;
 
-      const matchJobs = await JobPostModel.find({
+        const totalJobs = await JobPostModel.countDocuments({
         $and: [
           { status: "pending" },
           { requiredSkills: { $elemMatch: { $in: userSkills } } },
         ],
-      }).exec();
+      });
+      totalPages = Math.round(totalJobs/ page_size); 
+      const jobs = await JobPostModel.find({
+        $and: [
+          { status: "pending" },
+          { requiredSkills: { $elemMatch: { $in: userSkills } } },
+        ],
+      })
+        .skip(skip)
+        .limit(page_size);
 
-      if (!matchJobs || matchJobs.length === 0) {
+      if (!jobs || jobs.length === 0)
         throw new Error("No matched job found ");
-      } else {
-        return matchJobs;
-      }
+
+      return {
+        jobs,
+        totalPages
+      };
     } else {
       throw new Error("Invalid selection");
     }
@@ -676,9 +711,9 @@ export class UserRepositoryMongoose implements UserRepositary {
     return addRequestToClient;
   }
 
-  async viewWallet(userId: string, page: number): Promise<any> {
-    const PAGE_SIZE: number = 4;
-    const skip: number = (page - 1) * PAGE_SIZE;
+  async viewWallet(userId: string, currentPage: number): Promise<any> {
+    const page_size: number = 4;
+    const skip: number = (currentPage - 1) * page_size;
 
     const wallet = await UserModel.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(userId) } },
@@ -688,14 +723,14 @@ export class UserRepositoryMongoose implements UserRepositary {
     const totalTransactions =
       wallet.length > 0 ? wallet[0].totalTransactions : 0;
 
-    const totalPages: number = totalTransactions / PAGE_SIZE;
+    const totalPages: number = totalTransactions / page_size;
 
     const userWallet = await UserModel.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(userId) } },
       {
         $project: {
           transactions: {
-            $slice: ["$wallet.transactions", skip, PAGE_SIZE],
+            $slice: ["$wallet.transactions", skip, page_size],
           },
           balance: "$wallet.balance",
           _id: 0,
@@ -708,8 +743,6 @@ export class UserRepositoryMongoose implements UserRepositary {
       totalPages,
     };
   }
-
-  
 
   async getAllInvites(userId: string): Promise<Invite | any> {
     const foundedInvites = await InviteModel.find({ userId: userId });
