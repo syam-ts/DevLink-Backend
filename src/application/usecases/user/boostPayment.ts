@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 export class BoostPayment {
   constructor(private userRepositary: UserRepositary) {}
 
-  async execute(userId: Id) {
+  async execute() {
     const product = await stripe.products.create({
       name: "Boost-User",
     });

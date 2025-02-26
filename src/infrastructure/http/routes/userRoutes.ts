@@ -25,13 +25,15 @@ const {
     alterProfile,
     boostAccount,
     bosstSuccess,
+    viewAllWishlist,
+    addToWishlist,
+    removeFromWishlist,
 
+    viewWalletUser,
+
+    
     getSingleJobPost,
     viewSubmittedContracts,
-    viewWalletUser,
-    addToWishlist,
-    viewAllWishlist,
-    removeFromWishlist,
     submitProject,
     chatbot,
     createProposal,
@@ -49,25 +51,24 @@ userRouter.get('/home/:type', verifyToken, requireRole(USER), listHomeJobs);
 userRouter.get('/jobs/:jobsType', verifyToken, requireRole(USER), getSelectedJobs);
 userRouter.get('/proposals/:proposalType',verifyToken, requireRole(USER), viewProposals);
 userRouter.get('/contracts/:contractViewType', verifyToken, requireRole(USER), viewContracts); 
-userRouter.get('/profile/:type',verifyToken, requireRole(USER), getProfile);
-
+userRouter.get('/profile/:type',verifyToken, requireRole(USER), getProfile); 
 userRouter.put('/profileAlter/:type', verifyToken, requireRole(USER), alterProfile);
 userRouter.post('/boostProfile', verifyToken, requireRole(USER), boostAccount);
-userRouter.patch('/profileBoostSuccess', verifyToken, requireRole(USER), bosstSuccess); 
+userRouter.patch('/profileBoostSuccess', verifyToken, requireRole(USER), bosstSuccess);  
+userRouter.get('/wishlist', verifyToken, requireRole(USER), viewAllWishlist);
+userRouter.post('/addToWishlist', verifyToken, requireRole(USER), addToWishlist);
+userRouter.patch('/removeFromWishlist',verifyToken, requireRole(USER), removeFromWishlist)
 
 
-
-
+userRouter.get("/wallet",verifyToken, requireRole(USER), viewWalletUser);
 
 
 
 userRouter.get("/contract/:contractId",verifyToken, requireRole(USER),viewSingleContract);
 userRouter.get('/job-view/:jobPostId',verifyToken, requireRole(USER), getSingleJobPost);
 userRouter.get('/job/submittedContracts/:userId', verifyToken, requireRole(USER), viewSubmittedContracts);
-userRouter.get("/wallet-view/:userId",verifyToken, requireRole(USER), viewWalletUser);
 userRouter.get("/invites/view/:userId",verifyToken, requireRole(USER), getAllInvites);
 userRouter.get('/notifications/:userId', verifyToken, requireRole(USER), allNotifications);
-userRouter.get('/wishlist-view', verifyToken, requireRole(USER), viewAllWishlist);
 userRouter.get('/chat/:memberId', verifyToken, requireRole(USER), clientController.getAllChats);
 
 
@@ -94,11 +95,9 @@ userRouter.post('/invite-reject/:inviteId', verifyToken, requireRole(USER), reje
 
 //optimized
 userRouter.post('/wallet-withdraw',verifyToken, requireRole(USER), withdrawMoneyByUser); 
-userRouter.post('/addToWishlist', verifyToken, requireRole(USER), addToWishlist);
 
 
 // userRouter.post('/job/createProposal/:clientId/:userId/:jobPostId', verifyToken,  createProposal);  
-userRouter.patch('/removeFromWishlist', removeFromWishlist)
 userRouter.post('/refresh-token', refreshToken);
 
 
