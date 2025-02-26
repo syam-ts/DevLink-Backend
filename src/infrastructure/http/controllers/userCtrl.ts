@@ -181,8 +181,8 @@ export const userController = {
   },
 
   getProfile: async (req: Request, res: Response) => {
-    try {
-      const { userId } = req.params;
+    try { 
+      const { id: userId } = req.user;
       const user = await allUserUseCases.getProfileUseCase.execute(userId);
 
       res.status(HttpStatusCode.OK).json({
@@ -197,12 +197,13 @@ export const userController = {
     }
   },
 
-  editProfile: async (req: Request, res: Response) => {
+  alterProfile: async (req: Request, res: Response) => {
     try {
-      const { userId, type } = req.params;
-      const profileData = req.body;
+      const { type } = req.params;
+      const { id: userId } = req.user;
+      const profileData = req.body; 
 
-      const response = await allUserUseCases.editProfileUseCase.execute(
+      const response = await allUserUseCases.alterProfileUseCase.execute(
         userId,
         profileData,
         type
@@ -356,8 +357,7 @@ export const userController = {
 
   boostAccount: async (req: Request, res: Response) => {
     try {
-      const { userId } = req.params;
-
+      const { id: userId } = req.user; 
       const paymentUrl = await allUserUseCases.boostAccountUseCase.execute(
         userId
       );
@@ -376,7 +376,7 @@ export const userController = {
 
   bosstSuccess: async (req: Request, res: Response) => {
     try {
-      const { userId } = req.params;
+      const { id: userId } = req.user;
       console.log("bo", userId);
       const response = await allUserUseCases.boostSuccessUseCase.execute(
         userId

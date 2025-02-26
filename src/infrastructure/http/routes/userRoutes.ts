@@ -19,12 +19,13 @@ const {
     getHomeUser,
     listHomeJobs,
     getSelectedJobs, 
-    viewProposals,
- 
-    viewContracts,
-
-
+    viewProposals, 
+    viewContracts, 
     getProfile,
+    alterProfile,
+    boostAccount,
+    bosstSuccess,
+
     getSingleJobPost,
     viewSubmittedContracts,
     viewWalletUser,
@@ -32,11 +33,8 @@ const {
     viewAllWishlist,
     removeFromWishlist,
     submitProject,
-    boostAccount,
     chatbot,
     createProposal,
-    editProfile,
-    bosstSuccess,
     getAllInvites,
     allNotifications,
     rejectInvite,
@@ -44,32 +42,34 @@ const {
     withdrawMoneyByUser, 
 } = userController;
 const { USER }: {USER: string} = allRoles;
- 
- 
+
+
 userRouter.get('/getHome', verifyToken, requireRole(USER), getHomeUser);
 userRouter.get('/home/:type', verifyToken, requireRole(USER), listHomeJobs);
 userRouter.get('/jobs/:jobsType', verifyToken, requireRole(USER), getSelectedJobs);
 userRouter.get('/proposals/:proposalType',verifyToken, requireRole(USER), viewProposals);
-
 userRouter.get('/contracts/:contractViewType', verifyToken, requireRole(USER), viewContracts); 
-userRouter.get("/contract/:contractId",verifyToken, requireRole(USER),verifyToken, requireRole(USER), viewSingleContract);
+userRouter.get('/profile/:type',verifyToken, requireRole(USER), getProfile);
+
+userRouter.put('/profileAlter/:type', verifyToken, requireRole(USER), alterProfile);
+userRouter.post('/boostProfile', verifyToken, requireRole(USER), boostAccount);
+userRouter.patch('/profileBoostSuccess', verifyToken, requireRole(USER), bosstSuccess); 
 
 
 
 
+
+
+
+userRouter.get("/contract/:contractId",verifyToken, requireRole(USER),viewSingleContract);
 userRouter.get('/job-view/:jobPostId',verifyToken, requireRole(USER), getSingleJobPost);
 userRouter.get('/job/submittedContracts/:userId', verifyToken, requireRole(USER), viewSubmittedContracts);
-
-
-
-
-userRouter.get('/profile/view/:userId',verifyToken, requireRole(USER), getProfile);
 userRouter.get("/wallet-view/:userId",verifyToken, requireRole(USER), viewWalletUser);
 userRouter.get("/invites/view/:userId",verifyToken, requireRole(USER), getAllInvites);
 userRouter.get('/notifications/:userId', verifyToken, requireRole(USER), allNotifications);
 userRouter.get('/wishlist-view', verifyToken, requireRole(USER), viewAllWishlist);
 userRouter.get('/chat/:memberId', verifyToken, requireRole(USER), clientController.getAllChats);
- 
+
 
 userRouter.get('/allChat/view/:roleId', clientController.getAllChats);
 userRouter.get("/chat/view/:roleType/:roleId/:targetId", clientController.viewChat);
@@ -87,7 +87,6 @@ userRouter.post('/logout', logoutUser);
 //chat -----
 userRouter.post('/chat/sendMessage', verifyToken, requireRole(USER), clientController.sendMessage);
 userRouter.post('/project/submit/:contractId',verifyToken, requireRole(USER), submitProject);
-userRouter.post('/account/boost/:userId', verifyToken, requireRole(USER), boostAccount);
 userRouter.post('/chatbot', verifyToken, requireRole(USER), chatbot);
 userRouter.post('/job/createProposal', verifyToken, requireRole(USER), createProposal);
 userRouter.post('/invite-reject/:inviteId', verifyToken, requireRole(USER), rejectInvite); 
@@ -99,8 +98,6 @@ userRouter.post('/addToWishlist', verifyToken, requireRole(USER), addToWishlist)
 
 
 // userRouter.post('/job/createProposal/:clientId/:userId/:jobPostId', verifyToken,  createProposal);  
-userRouter.put('/profile/:type/:userId', verifyToken, requireRole(USER), editProfile);
-userRouter.patch('/profile/boost/success/:userId', verifyToken, requireRole(USER), bosstSuccess); // ADD USERAUTH
 userRouter.patch('/removeFromWishlist', removeFromWishlist)
 userRouter.post('/refresh-token', refreshToken);
 

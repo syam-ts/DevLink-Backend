@@ -1,18 +1,13 @@
- 
 export interface UserRepositary {
-    boostSuccess(userId: string): Promise< any >
-} 
+  boostSuccess(userId: string): Promise<any>;
+}
 
+export class BoostSuccess {
+  constructor(private userRepositary: UserRepositary) {}
 
+  async execute(userId: string) {
+    const updateUser = await this.userRepositary.boostSuccess(userId);
 
-export class BoostSuccess  {
-    constructor(private userRepositary: UserRepositary) {}
-
-    async execute( userId: string ) {   
-
-           const updateUser = await this.userRepositary.boostSuccess(userId); 
-             
-
-           return updateUser;
-    }
+    return updateUser;
+  }
 }

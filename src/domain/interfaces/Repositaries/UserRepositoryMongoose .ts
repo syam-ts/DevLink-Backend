@@ -283,17 +283,14 @@ export class UserRepositoryMongoose implements UserRepositary {
     return "Password reset successfully!";
   }
 
-  async editUserProfile(
+  async alterUserProfile(
     userId: string,
     userData: any,
     type: string
-  ): Promise<any> {
-    // const existingUser: any = await UserModel.findById(userId);
+  ): Promise<any> { 
 
-    const { editData } = userData;
-
-    editData.isProfileFilled = true;
-
+    const { editData } = userData; 
+    editData.isProfileFilled = true; 
     if (type === "verify") {
       const user = await UserModel.findByIdAndUpdate(userId, editData, {
         new: true,
@@ -326,9 +323,9 @@ export class UserRepositoryMongoose implements UserRepositary {
           isBlocked: user.isBlocked,
           isProfileFilled: user.isProfileFilled,
         },
-      };
+      }
     }
-  }
+  };
 
   async viewProposals(userId: string): Promise<any> {
     let findProposals = await ClientModel.find({

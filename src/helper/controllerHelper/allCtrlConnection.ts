@@ -13,7 +13,7 @@ import { ListHomeJobs } from "../../application/usecases/user/getHome";
 import { ViewProposals } from "../../application/usecases/user/viewProposals"; 
 
 
-import { EditUserProfile } from "../../application/usecases/user/editProfile"; 
+import { AlterUserProfile } from "../../application/usecases/user/alterProfile"; 
 import { GetUserProfile } from "../../application/usecases/user/getProfile";
 import { GetSelectedJobs } from "../../application/usecases/user/getSelectedJobs";
 import { CreateProposal } from "../../application/usecases/user/createProposal";   
@@ -114,7 +114,7 @@ const verifyEmailUseCase = new VerifyEmail(userRepository);
 const resetPasswordUseCase = new ResetPassword(userRepository);
 const verifyUserUseCase = new verifyOtp(userRepository);
 const GoogleLoginUserUseCase = new GoogleLoginUser(userRepository);
-const editProfileUseCase = new EditUserProfile(userRepository);
+const alterProfileUseCase = new AlterUserProfile(userRepository);
 const getProfileUseCase = new GetUserProfile(userRepository);
 const listHomeJobsUseCase = new ListHomeJobs(userRepository);
 const getSelectedJobsUseCase = new GetSelectedJobs(userRepository);
@@ -214,7 +214,7 @@ export const allUserUseCases = {
         resetPasswordUseCase ,
         verifyUserUseCase ,
         GoogleLoginUserUseCase ,
-        editProfileUseCase ,
+        alterProfileUseCase ,
         getProfileUseCase ,
         listHomeJobsUseCase ,
         getSelectedJobsUseCase ,
