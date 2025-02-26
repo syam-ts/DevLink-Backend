@@ -24,7 +24,8 @@ export interface Client extends mongoose.Document {
         description?: string,
         status?: string,
         bidamount: number,
-        bidDeadline: number
+        bidDeadline: number,
+        createdAt: Date
     }],
     wallet: {
         balance: { type: Number, required: false },
@@ -80,7 +81,8 @@ const ClientSchema: mongoose.Schema = new mongoose.Schema({
             description: { type: String, required: false },
             status: { type: String, required: false },
             bidAmount: { type: Number, required: false },
-            bidDeadline: { type: Number, required: false }
+            bidDeadline: { type: Number, required: false },
+            createdAt: { type: Date, required: false },
         }
     ],
     wallet: {

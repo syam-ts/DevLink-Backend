@@ -338,7 +338,7 @@ export class UserRepositoryMongoose implements UserRepositary {
 
     if (!findProposals) throw new Error("No proposal found");
     return findProposals[0].proposals;
-  }
+  };
 
   async createProposal(
     userId: Id,
@@ -388,6 +388,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         status: "pending",
         bidAmount: bidAmount,
         bidDeadline: bidDeadline,
+        createdAt: new Date()
       };
 
       const proposal = await ClientModel.findByIdAndUpdate(
@@ -673,18 +674,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-  async viewSubmittedContracts(userId: Id): Promise<any> {
-    const contracts: any = await ContractModel.find({
-      $and: [{ userId: userId }, { status: "submitted" }],
-    }).exec();
-
-    if (!contracts) {
-      throw new Error("contract not found");
-    } else {
-      return contracts;
-    }
-  }
-
+  
   async boostSuccess(userId: Id): Promise<any> {
     const user: any = await UserModel.findByIdAndUpdate(
       userId,

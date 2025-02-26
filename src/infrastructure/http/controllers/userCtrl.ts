@@ -434,23 +434,7 @@ export const userController = {
         .json({ message: err.message, success: false });
     }
   },
-
-  viewSubmittedContracts: async (req: Request, res: Response) => {
-    try {
-      const { userId } = req.params;
-      const contracts =
-        await allUserUseCases.viewSubmittedContractsUseCase.execute(userId);
-      res.status(HttpStatusCode.OK).json({
-        message: StatusMessage[HttpStatusCode.OK],
-        data: contracts,
-        success: true,
-      });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
-    }
-  },
+ 
 
   submitProject: async (req: Request, res: Response) => {
     try {

@@ -21,8 +21,7 @@ import { AllNotifications } from "../../application/usecases/user/allNotificatio
 import { BoostPayment } from "../../application/usecases/user/boostPayment"; 
 import { BoostSuccess } from "../../application/usecases/user/boostSuccess"; 
 import { GetSingleJobPost } from "../../application/usecases/user/getSingleJobPost"; 
-import { ViewContracts } from "../../application/usecases/user/viewContracts"; 
-import { ViewSubmittedContracts } from "../../application/usecases/user/viewSubmittedContracts";  
+import { ViewContracts } from "../../application/usecases/user/viewContracts";  
 import { SubmitProject } from "../../application/usecases/user/sumbitProject";  
 import { ChatBot } from "../../application/usecases/user/ChatBot";   
 import { AddToWishlist } from "../../application/usecases/user/addToWishlist";   
@@ -124,8 +123,7 @@ const allNotificationsUseCase = new AllNotifications(userRepository);
 const boostAccountUseCase = new BoostPayment(userRepository);
 const boostSuccessUseCase = new BoostSuccess(userRepository);
 const getSingleJobPostUseCase = new GetSingleJobPost(userRepository);
-const viewContractsUseCase = new ViewContracts(userRepository);
-const viewSubmittedContractsUseCase = new ViewSubmittedContracts(userRepository);
+const viewContractsUseCase = new ViewContracts(userRepository); 
 const submitProjectUseCase = new SubmitProject(userRepository); 
 const addToWishlistUseCase = new AddToWishlist(wishlistRepository); 
 const viewAllWishlistUseCase = new ViewAllWishlist(wishlistRepository); 
@@ -220,8 +218,7 @@ export const allUserUseCases = {
         getSelectedJobsUseCase ,
         createProposalUseCase ,
         closeContractUseCase , 
-        viewContractsUseCase ,
-        viewSubmittedContractsUseCase ,
+        viewContractsUseCase , 
         allNotificationsUseCase ,
         boostAccountUseCase ,
         boostSuccessUseCase ,
