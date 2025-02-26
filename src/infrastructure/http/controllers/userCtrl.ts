@@ -417,9 +417,11 @@ export const userController = {
     try {
       const { id: userId } = req.user;
       const { contractViewType } = req.params;
+      const currentPage : number = Number(req.query.currentPage) || 1; 
       const contracts = await allUserUseCases.viewContractsUseCase.execute(
         userId,
-        contractViewType
+        contractViewType,
+        currentPage
       );
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],

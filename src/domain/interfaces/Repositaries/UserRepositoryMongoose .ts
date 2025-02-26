@@ -606,8 +606,6 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
   async viewSingleContract(contractId: Id): Promise<any> {
-
-    
     const contract: any = await ContractModel.findById(contractId);
 
     if (!contract) {
@@ -619,36 +617,51 @@ export class UserRepositoryMongoose implements UserRepositary {
 
   async viewContracts(
     userId: Id,
-    contractViewType: string
-  ): Promise<ContractDocument> {
+    contractViewType: string,
+    currentPage: number
+  ): Promise<ContractDocument | any> {
+    const page_size: number = 3;
+    const skip: number = (currentPage - 1) * page_size;
 
-let contract;
- 
-  
- 
+    let contract, totalContracts;
     if (contractViewType === "pending") {
-
+      totalContracts = await ContractModel.countDocuments({
+        $and: [{ userId: userId }, { status: "on progress" }],
+      });
       contract = await ContractModel.find({
         $and: [{ userId: userId }, { status: "on progress" }],
-      }).exec();
-       
+      })
+        .skip(skip)
+        .limit(page_size);
     } else if (contractViewType === "rejected") {
+      totalContracts = await ContractModel.countDocuments({
+        $and: [{ userId: userId }, { status: "rejected" }],
+      });
+
       contract = await ContractModel.find({
         $and: [{ userId: userId }, { status: "rejected" }],
-      }).exec();
+      })
+        .skip(skip)
+        .limit(page_size);
     } else if (contractViewType === "completed") {
+      totalContracts = await ContractModel.countDocuments({
+        $and: [{ userId: userId }, { status: "closed" }],
+      });
+
       contract = await ContractModel.find({
         $and: [{ userId: userId }, { status: "closed" }],
-      }).exec();
+      })
+        .skip(skip)
+        .limit(page_size);
     } else {
       throw new Error("Bad selection");
     }
 
-   
     if (!contract) {
       throw new Error("contract not found");
     } else {
-      return contract;
+      const totalPages = Math.ceil(totalContracts / page_size);
+      return { contract, totalPages };
     }
   }
 
