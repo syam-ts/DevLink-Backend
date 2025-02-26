@@ -27,8 +27,7 @@ const {
     bosstSuccess,
     viewAllWishlist,
     addToWishlist,
-    removeFromWishlist,
-
+    removeFromWishlist, 
     viewWalletUser,
 
     

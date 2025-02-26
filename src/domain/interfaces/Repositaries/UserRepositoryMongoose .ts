@@ -630,7 +630,18 @@ export class UserRepositoryMongoose implements UserRepositary {
       })
         .skip(skip)
         .limit(page_size);
-    } else if (contractViewType === "rejected") {
+    } else if(contractViewType === "submitted") {
+      totalContracts = await ContractModel.countDocuments({
+        $and: [{ userId: userId }, { status: "submitted" }],
+      });
+
+      contract = await ContractModel.find({
+        $and: [{ userId: userId }, { status: "submitted" }],
+      })
+        .skip(skip)
+        .limit(page_size);
+    }
+    else if (contractViewType === "rejected") {
       totalContracts = await ContractModel.countDocuments({
         $and: [{ userId: userId }, { status: "rejected" }],
       });
