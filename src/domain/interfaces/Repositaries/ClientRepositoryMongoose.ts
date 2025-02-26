@@ -3,7 +3,7 @@ import { User } from "../../entities/User";
 import { ClientRepositary } from "../../../application/usecases/client/signupClient";
 import { UserModel } from "../../entities/User";
 import { NotificationModel } from "../../entities/Notification";
-import { JobPostModel } from "../../entities/JobPost";
+import { JobPostDocument, JobPostModel } from "../../entities/JobPost";
 import { AdminModel } from "../../entities/Admin";
 import { ContractModel } from "../../entities/Contract";
 import bcrypt from "bcrypt";
@@ -179,10 +179,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
     if (!isValidPassword) {
       throw new Error("wrong password");
-    }
-
-    await client.save();
-
+    } 
+    await client.save(); 
     return client;
   }
 
@@ -202,8 +200,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         email: email,
       });
 
-      const savedClient = await createdClient.save();
-
+      const savedClient = await createdClient.save(); 
       return {
         companyName: savedClient.companyName,
         email: savedClient.email,
@@ -211,14 +208,18 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
   }
 
-  async findAllUsers(): Promise<User | any> {
-    const users: any = await UserModel.find().limit(4).exec();
-    if (users) {
-      return {
-        ...users,
-      } as User;
-    }
-  }
+  async findAllUsers(): Promise<any > {
+    const users = await UserModel.find({$and: [{isProfileFilled: true},{isBlocked: false}]}).limit(4).exec();
+    if(!users) throw new Error('Users not found');
+  
+    return users 
+  };
+
+  async trendingJobs(): Promise<any > {
+    const jobs = await JobPostModel.find().limit(3).exec();
+    if(!jobs) throw new Error('Jobs not found'); 
+    return jobs 
+  };
 
   async resetPassword(clientId: Id, password: string): Promise<User | any> {
     const pass = { password: password };

@@ -1,5 +1,4 @@
 // User imports ---------------->
-
 import { SignupUser } from "../../application/usecases/user/signupUser";
 import { LoginUser } from "../../application/usecases/user/loginUser";
 import { GoogleLoginUser } from "../../application/usecases/user/GoogleLoginUser";
@@ -8,11 +7,8 @@ import { verifyOtp } from "../../application/usecases/user/otpUser";
 import { VerifyEmail } from "../../application/usecases/user/verifyEmail";
 import { ResetPassword } from "../../application/usecases/user/resetPassword";
 import { getHomeUser } from "../../application/usecases/user/getHome";
-import { ListHomeJobs } from "../../application/usecases/user/getHome";
-
-import { ViewProposals } from "../../application/usecases/user/viewProposals"; 
-
-
+import { ListHomeJobs } from "../../application/usecases/user/getHome"; 
+import { ViewProposals } from "../../application/usecases/user/viewProposals";  
 import { AlterUserProfile } from "../../application/usecases/user/alterProfile"; 
 import { GetUserProfile } from "../../application/usecases/user/getProfile";
 import { GetSelectedJobs } from "../../application/usecases/user/getSelectedJobs";
@@ -33,21 +29,20 @@ import { RejectInvite } from "../../application/usecases/user/rejectInvite";
 import { ViewSingleContractUser } from "../../application/usecases/user/viewSingleContract"; 
 import { WithdrawMoneyByUser } from "../../application/usecases/user/withdrawMoneyByUser"; 
 import { UserRepositoryMongoose } from "../../domain/interfaces/Repositaries/UserRepositoryMongoose ";
-
  
-
-
-// Client imports ---------------->
-
+// Client imports ----------------> 
 import { SignupClient } from '../../application/usecases/client/signupClient';
 import { LoginClient } from '../../application/usecases/client/loginClient';
 import { GoogleLoginClient } from '../../application/usecases/client/GoogleLoginClient';
 import { ClientRepositoryMongoose } from '../../domain/interfaces/Repositaries/ClientRepositoryMongoose';  
-import { getHomeClient } from '../../application/usecases/client/getHomeClient';
 import { LogoutClient } from '../../application/usecases/client/logoutClient';
 import { VerifyEmailClient } from '../../application/usecases/client/verifyEmail';
 import { ResetPasswordClient } from '../../application/usecases/client/resetPassword';
 import { verifyOtpClient } from '../../application/usecases/client/verifyOtpClient';
+import { getHomeClient } from '../../application/usecases/client/getHome';
+import { TrendingJobs } from '../../application/usecases/client/getHome';
+
+
 import { EditClientProfile } from '../../application/usecases/client/EditClientProfile';
 import { GetClientProfile } from '../../application/usecases/client/getProfile';
 import { ProfileVerification } from '../../application/usecases/client/profileVerification';
@@ -76,10 +71,8 @@ import { RejectContract } from '../../application/usecases/client/rejectContract
 import { GetallDevelopers } from '../../application/usecases/client/getallDevelopers';
 import { ChatRepositoryMongoose } from "../../domain/interfaces/Repositaries/ChatRepository";
 import { WishlistRepositoryMongoose } from "../../domain/interfaces/WishlistRepository";
- 
-
-// admin imports ----->
-
+  
+// admin imports -----> 
 import { LoginAdmin } from '../../application/usecases/admin/loginAdmin';
 import { AdminRepository } from '../../domain/interfaces/Repositaries/AdminRepository';
 import { GetDashboard } from '../../application/usecases/admin/getDashboard';
@@ -99,9 +92,7 @@ import { SearchClient } from '../../application/usecases/admin/searchClient';
 import { SortClient } from '../../application/usecases/admin/sortClient';
 import { GetAllContracts } from '../../application/usecases/admin/getAllContracts';
 import { ViewSingleContract } from '../../application/usecases/admin/viewSingleContract';
-
-
-
+ 
 // User Respo instance  ---------->
 const userRepository = new UserRepositoryMongoose();
 const wishlistRepository = new WishlistRepositoryMongoose();
@@ -133,20 +124,21 @@ const getAllInvitesUseCase = new GetAllInvites(userRepository);
 const rejectInviteUseCase = new RejectInvite(userRepository); 
 const viewSingleContractUserUseCase = new ViewSingleContractUser(userRepository); 
 const withdrawMoneyByUserUseCase = new WithdrawMoneyByUser(); 
- 
-
-// Client Repo instance -------------->
-
+  
+// Client Repo instance -------------->  
 const ClientRepository = new ClientRepositoryMongoose();
 const ChatRepository = new ChatRepositoryMongoose();
 const signupClientUseCase = new SignupClient(ClientRepository); 
 const loginClientUseCase = new LoginClient(ClientRepository);
-const getHomeClientUseCase = new getHomeClient(ClientRepository);
 const logoutClientUseCase = new LogoutClient(ClientRepository);
 const verifyClientUseCase = new verifyOtpClient(ClientRepository);
 const verifyEmailClientUseCase = new VerifyEmailClient(ClientRepository);
 const resetPasswordClientUseCase = new ResetPassword(ClientRepository);
 const GoogleLoginClientUseCase = new GoogleLoginClient(ClientRepository);
+const getHomeClientUseCase = new getHomeClient(ClientRepository);
+const trendingJobsUseCase = new TrendingJobs(ClientRepository);
+
+
 const editClientProfileUseCase = new EditClientProfile(ClientRepository);
 const getClientProfileUseCase = new GetClientProfile(ClientRepository);
 const profileVerificationUseCase = new ProfileVerification(ClientRepository);
@@ -173,11 +165,8 @@ const chatBotUseCase = new ChatBot(ClientRepository);
 const sendMessageUseCase = new SendMessage(ChatRepository);
 const getAllChatsUseCase = new GetAllChats(ChatRepository);
 const viewChatUseCase = new ViewChat(ChatRepository);
- 
-
-
-// Admin repo intances ------->
-
+    
+// Admin repo intances -------> 
 const adminRepositary = new AdminRepository();
 const loginAdminUseCase = new LoginAdmin(adminRepositary);
 const getDashboardUseCase = new GetDashboard(adminRepositary);
@@ -198,10 +187,7 @@ const getAllRequestsUseCase = new GetAllRequests(adminRepositary);
 const getRequestedClientUseCase = new GetRequestedClient(adminRepositary);
 const getAllContractsUseCase = new GetAllContracts(adminRepositary);
 const viewSingleContractUseCase = new ViewSingleContract(adminRepositary);
- 
-
-
-
+  
 // export all user usecases
 export const allUserUseCases = {
         signupUseCase ,
@@ -234,19 +220,21 @@ export const allUserUseCases = {
         rejectInviteUseCase,
         viewSingleContractUserUseCase, 
         withdrawMoneyByUserUseCase,
-};
-
+}; 
 
 // exports all Client Usecases ------->
 export const allClientUseCases = {
      signupClientUseCase, 
      loginClientUseCase,
-     getHomeClientUseCase,
      logoutClientUseCase,
      verifyClientUseCase,
      verifyEmailClientUseCase,
      resetPasswordClientUseCase,
      GoogleLoginClientUseCase,
+     getHomeClientUseCase,
+     trendingJobsUseCase,
+
+
      editClientProfileUseCase,
      getClientProfileUseCase,
      profileVerificationUseCase,
@@ -272,9 +260,7 @@ export const allClientUseCases = {
      sendMessageUseCase,
      getAllChatsUseCase,
      viewChatUseCase,  
-}
-
-
+}; 
 
 // exports all Admin usecases  ------->
 export const allAdminUseCases = {
@@ -298,4 +284,4 @@ export const allAdminUseCases = {
         getRequestedClientUseCase, 
         getAllContractsUseCase,
         viewSingleContractUseCase
-}
+};

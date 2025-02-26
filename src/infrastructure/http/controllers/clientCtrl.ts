@@ -187,6 +187,24 @@ export const clientController = {
     }
   },
 
+  trendingJobs: async (req: any, res: any) => {
+    try {
+      const jobs = await allClientUseCases.trendingJobsUseCase.execute(); 
+
+      return res
+        .status(HttpStatusCode.OK)
+        .json({
+          message: StatusMessage[HttpStatusCode.OK],
+          data: jobs,
+          success: true,
+        });
+    } catch (err: any) {
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: err.message, sucess: false });
+    }
+  },
+
   getProfile: async (req: Request, res: Response) => {
     try {
       const { clientId } = req.params;

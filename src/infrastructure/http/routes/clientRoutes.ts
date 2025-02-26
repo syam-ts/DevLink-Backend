@@ -7,7 +7,18 @@ import { requireRole } from "../middlewares/auth/requireRole";
 import {allRoles} from '../../../helper/constants/enums';
  
 const {
+  signupClient,
+  verifyOtp,
+  resendOtp,
+  loginClient,
+  verifyEmail,
+  resetPassword,
+  googleLogin,
+  logoutClient,
   getHomeClient,
+  trendingJobs,
+
+  
   getProfile,
   getAllNotifications,
   getUserProfile,
@@ -22,14 +33,6 @@ const {
   viewWallet,
   getAllChats,
   viewChat,
-  signupClient,
-  verifyOtp,
-  resendOtp,
-  loginClient,
-  verifyEmail,
-  resetPassword,
-  googleLogin,
-  logoutClient,
   editProfile,
   profileVerification,
   makePayment,
@@ -49,6 +52,9 @@ const {
 
  
 clientRouter.get("/getHome", verifyToken, requireRole(CLIENT), getHomeClient);
+clientRouter.get("/trendingJobs", verifyToken, requireRole(CLIENT), trendingJobs);
+
+
 clientRouter.get("/profile/view/:clientId", verifyToken, requireRole(CLIENT), getProfile);
 clientRouter.get("/notifications/:clientId", verifyToken, requireRole(CLIENT), getAllNotifications);
 clientRouter.get("/userProfile/view/:userId", verifyToken, requireRole(CLIENT), getUserProfile);

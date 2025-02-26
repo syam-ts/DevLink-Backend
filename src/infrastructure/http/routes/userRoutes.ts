@@ -30,16 +30,15 @@ const {
     removeFromWishlist, 
     viewWalletUser,
     getSingleJobPost, 
-
-
-    viewSingleContract,
-    submitProject,
     createProposal,
+    viewSingleContract,
+
+    submitProject,
     getAllInvites,
     rejectInvite,
     chatbot,
-    allNotifications,
     withdrawMoneyByUser, 
+    allNotifications,
 } = userController;
 const { USER }: {USER: string} = allRoles;
 
@@ -58,9 +57,7 @@ userRouter.post('/addToWishlist', verifyToken, requireRole(USER), addToWishlist)
 userRouter.patch('/removeFromWishlist',verifyToken, requireRole(USER), removeFromWishlist)
 userRouter.get("/wallet",verifyToken, requireRole(USER), viewWalletUser);
 userRouter.get('/job/:jobPostId',verifyToken, requireRole(USER), getSingleJobPost);
-
 userRouter.post('/createProposal', verifyToken, requireRole(USER), createProposal);
-
 
 userRouter.get("/contract/:contractId",verifyToken, requireRole(USER),viewSingleContract);
 userRouter.get("/invites/view/:userId",verifyToken, requireRole(USER), getAllInvites);
@@ -68,7 +65,6 @@ userRouter.get('/notifications/:userId', verifyToken, requireRole(USER), allNoti
 userRouter.get('/allChat/view/:roleId', clientController.getAllChats);
 userRouter.get('/chat/:memberId', verifyToken, requireRole(USER), clientController.getAllChats);
 userRouter.get("/chat/view/:roleType/:roleId/:targetId", clientController.viewChat);
-
 userRouter.post('/signup', signupUser);
 userRouter.post('/verify-otp', verifyOtp);
 userRouter.post('/resend-otp', resendOtp);
@@ -78,14 +74,10 @@ userRouter.post('/login', loginUser);
 userRouter.post('/googleLogin', googleLogin);
 userRouter.post('/logout', logoutUser);
 
-
+// -------Pendings----------
 userRouter.post('/project/submit/:contractId',verifyToken, requireRole(USER), submitProject);
- 
 userRouter.post('/chat/sendMessage', verifyToken, requireRole(USER), clientController.sendMessage);
 userRouter.post('/chatbot', verifyToken, requireRole(USER), chatbot);
-
-
-
 userRouter.post('/invite-reject/:inviteId', verifyToken, requireRole(USER), rejectInvite); 
 userRouter.post('/wallet-withdraw',verifyToken, requireRole(USER), withdrawMoneyByUser);  
 userRouter.post('/refresh-token', refreshToken);
