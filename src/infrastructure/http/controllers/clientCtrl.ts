@@ -398,7 +398,7 @@ export const clientController = {
 
   getProposals: async (req: Request, res: Response) => {
     try {
-      const { clientId } = req.params;
+      const { id: clientId } = req.user;
       const response = await allClientUseCases.getProposalsUseCase.execute(
         clientId
       );

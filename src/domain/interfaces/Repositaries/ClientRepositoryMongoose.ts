@@ -448,6 +448,16 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
   }
 
+  async getProposals(clientId: Id): Promise<any> { 
+    const client: any = await ClientModel.findById(clientId);
+    if (!client) {
+      throw new Error("Client not found");
+    } 
+
+    const proposals = client.proposals; 
+    return proposals;
+  }
+
   async getUserProfile(userId: Id): Promise<any> {
     const user = await UserModel.findById(userId).exec();
 
@@ -477,17 +487,6 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
       return userProfile;
     }
-  }
-
-  async getProposals(clientId: Id): Promise<any> {
-    const client: any = await ClientModel.findById(clientId);
-    if (!client) {
-      throw new Error("Client not found");
-    }
-
-    const proposals = client.proposals;
-
-    return proposals;
   }
 
   async getallDevelopers(): Promise<any> {
@@ -575,8 +574,6 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
     return "success";
   }
-
-  
 
   async myContracts(clientId: Id): Promise<any> {
     const jobs: any = await ContractModel.find({

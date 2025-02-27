@@ -304,10 +304,8 @@ export const userController = {
   },
 
   viewProposals: async (req: Request, res: Response) => {
-    try {
- 
-      const {id: userId} = req.user;   
-      
+    try { 
+      const {id: userId} = req.user;    
       const response = await allUserUseCases.viewProposalsUseCase.execute(
         userId 
       );

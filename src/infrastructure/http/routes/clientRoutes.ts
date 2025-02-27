@@ -17,16 +17,16 @@ const {
   logoutClient,
   getHomeClient,
   trendingJobs,
-
   getSelectedJobs,
    
+  getProposals,
+  createContract,
 
 
   
   getProfile,
   getAllNotifications,
   getUserProfile,
-  getProposals,
   myContracts,
   viewContract,
   viewSubmissions,
@@ -40,7 +40,6 @@ const {
   createJobPost,
   rateAndReview,
   closeContract,
-  createContract,
   sendMessage,
   rejectProposal,
   inviteUser,
@@ -58,7 +57,8 @@ clientRouter.get('/jobs/:jobsType', verifyToken, requireRole(CLIENT), getSelecte
 clientRouter.get('/job/:jobPostId',verifyToken, requireRole(CLIENT), getSingleJobPost);
 
 
-clientRouter.get("/job/proposals/:clientId", verifyToken, requireRole(CLIENT), getProposals);
+clientRouter.get("/proposals/:proposalType", verifyToken, requireRole(CLIENT), getProposals);
+clientRouter.post('/job/createContract', verifyToken, requireRole(CLIENT), createContract); 
 
 
  
@@ -91,7 +91,6 @@ clientRouter.post("/profile-edit/",verifyToken, requireRole(CLIENT), editProfile
 clientRouter.post("/jobPost/payment-stripe/:clientId",verifyToken, requireRole(CLIENT), makePayment );
 clientRouter.post("/invite/user",verifyToken, requireRole(CLIENT), inviteUser); 
 clientRouter.post("/payment/success/:clientId", verifyToken, requireRole(CLIENT),createJobPost);
-clientRouter.post('/job/createContract', verifyToken, requireRole(CLIENT), createContract); 
 clientRouter.post("/project-submit/approval", verifyToken, requireRole(CLIENT),closeContract);
 clientRouter.post("/project-submit/reject", verifyToken, requireRole(CLIENT), rejectContract);
 clientRouter.post("/rate-user/:notificationId",verifyToken, requireRole(CLIENT), rateAndReview); 
