@@ -205,6 +205,29 @@ export const clientController = {
     }
   },
 
+   getSelectedJobs: async (req: Request, res: Response) => {
+      try {
+        const { jobsType } = req.params;
+        const { id: clientId } = req.user;
+        const currentPage : number = Number(req.query.currentPage) || 1; 
+  
+        const response = await allClientUseCases.getSelectedJobsClientUseCase.execute(
+          clientId,
+          jobsType,
+          currentPage
+        );
+        res.status(HttpStatusCode.OK).json({
+          message: StatusMessage[HttpStatusCode.OK],
+          data: response,
+          success: true,
+        });
+      } catch (err: any) {
+        res
+          .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .json({ message: err.message, success: false });
+      }
+    },
+
   getProfile: async (req: Request, res: Response) => {
     try {
       const { clientId } = req.params;

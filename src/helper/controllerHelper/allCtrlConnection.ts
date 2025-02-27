@@ -41,6 +41,7 @@ import { ResetPasswordClient } from '../../application/usecases/client/resetPass
 import { verifyOtpClient } from '../../application/usecases/client/verifyOtpClient';
 import { getHomeClient } from '../../application/usecases/client/getHome';
 import { TrendingJobs } from '../../application/usecases/client/getHome';
+import { GetSelectedJobsClient } from '../../application/usecases/client/getSelectedJobs';
 
 
 import { EditClientProfile } from '../../application/usecases/client/EditClientProfile';
@@ -137,6 +138,7 @@ const resetPasswordClientUseCase = new ResetPassword(ClientRepository);
 const GoogleLoginClientUseCase = new GoogleLoginClient(ClientRepository);
 const getHomeClientUseCase = new getHomeClient(ClientRepository);
 const trendingJobsUseCase = new TrendingJobs(ClientRepository);
+const getSelectedJobsClientUseCase = new GetSelectedJobsClient(ClientRepository);
 
 
 const editClientProfileUseCase = new EditClientProfile(ClientRepository);
@@ -233,6 +235,7 @@ export const allClientUseCases = {
      GoogleLoginClientUseCase,
      getHomeClientUseCase,
      trendingJobsUseCase,
+     getSelectedJobsClientUseCase,
 
 
      editClientProfileUseCase,

@@ -18,14 +18,18 @@ const {
   getHomeClient,
   trendingJobs,
 
+  getSelectedJobs,
+  
+  listAllJobs,
+  getMyJobs,
+  latestJobs,
+
+
   
   getProfile,
   getAllNotifications,
   getUserProfile,
   getProposals,
-  listAllJobs,
-  getMyJobs,
-  latestJobs,
   myContracts,
   viewContract,
   viewSubmissions,
@@ -53,16 +57,21 @@ const {
  
 clientRouter.get("/getHome", verifyToken, requireRole(CLIENT), getHomeClient);
 clientRouter.get("/trendingJobs", verifyToken, requireRole(CLIENT), trendingJobs);
+clientRouter.get('/jobs/:jobsType', verifyToken, requireRole(CLIENT), getSelectedJobs); 
+clientRouter.get('/job/:jobPostId',verifyToken, requireRole(CLIENT), getSingleJobPost);
 
 
-clientRouter.get("/profile/view/:clientId", verifyToken, requireRole(CLIENT), getProfile);
-clientRouter.get("/notifications/:clientId", verifyToken, requireRole(CLIENT), getAllNotifications);
-clientRouter.get("/userProfile/view/:userId", verifyToken, requireRole(CLIENT), getUserProfile);
-clientRouter.get('/job-view/:jobPostId',verifyToken, requireRole(CLIENT), getSingleJobPost);
-clientRouter.get("/job/proposals/:clientId", verifyToken, requireRole(CLIENT), getProposals);
 clientRouter.get("/jobs/all-jobs/:clientId", verifyToken, requireRole(CLIENT), listAllJobs);
 clientRouter.get("/jobs/my-jobs/:clientId", verifyToken, requireRole(CLIENT), getMyJobs);
 clientRouter.get("/jobs/latest-jobs/:clientId", verifyToken, requireRole(CLIENT), latestJobs);
+
+
+
+
+clientRouter.get("/job/proposals/:clientId", verifyToken, requireRole(CLIENT), getProposals);
+clientRouter.get("/profile/view/:clientId", verifyToken, requireRole(CLIENT), getProfile);
+clientRouter.get("/notifications/:clientId", verifyToken, requireRole(CLIENT), getAllNotifications);
+clientRouter.get("/userProfile/view/:userId", verifyToken, requireRole(CLIENT), getUserProfile);
 clientRouter.get("/job/myContracts/:clientId", verifyToken, requireRole(CLIENT), myContracts);
 clientRouter.get("/contract/:contractId", verifyToken, requireRole(CLIENT), viewContract);
 clientRouter.get("/contracts/submissions/:clientId", verifyToken, requireRole(CLIENT), viewSubmissions);

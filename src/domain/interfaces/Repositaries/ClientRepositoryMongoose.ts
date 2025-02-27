@@ -51,7 +51,6 @@ interface Invite {
 }
 
 export class ClientRepositoryMongoose implements ClientRepositary {
-
   async createClient(client: Client | any): Promise<Client | any> {
     const salt: number = 10;
     const hashedPassword = await bcrypt.hash(client.password, salt);
@@ -179,8 +178,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
     if (!isValidPassword) {
       throw new Error("wrong password");
-    } 
-    await client.save(); 
+    }
+    await client.save();
     return client;
   }
 
@@ -200,7 +199,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         email: email,
       });
 
-      const savedClient = await createdClient.save(); 
+      const savedClient = await createdClient.save();
       return {
         companyName: savedClient.companyName,
         email: savedClient.email,
@@ -208,18 +207,22 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
   }
 
-  async findAllUsers(): Promise<any > {
-    const users = await UserModel.find({$and: [{isProfileFilled: true},{isBlocked: false}]}).limit(4).exec();
-    if(!users) throw new Error('Users not found');
-  
-    return users 
-  };
+  async findAllUsers(): Promise<any> {
+    const users = await UserModel.find({
+      $and: [{ isProfileFilled: true }, { isBlocked: false }],
+    })
+      .limit(4)
+      .exec();
+    if (!users) throw new Error("Users not found");
 
-  async trendingJobs(): Promise<any > {
+    return users;
+  }
+
+  async trendingJobs(): Promise<any> {
     const jobs = await JobPostModel.find().limit(3).exec();
-    if(!jobs) throw new Error('Jobs not found'); 
-    return jobs 
-  };
+    if (!jobs) throw new Error("Jobs not found");
+    return jobs;
+  }
 
   async resetPassword(clientId: Id, password: string): Promise<User | any> {
     const pass = { password: password };
@@ -381,6 +384,67 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       throw new Error("No job found");
     } else {
       return allJobs;
+    }
+  }
+
+  async getSelectedJobs(
+    clientId: string,
+    jobType: string,
+    currentPage: number
+  ): Promise<JobPostDocument | any> {
+    const page_size: number = 3;
+    const skip: number = (currentPage - 1) * page_size;
+
+    let totalPages: number;
+    if (jobType === "myJobs") {
+      const totalJobs = await JobPostModel.countDocuments({
+        $and: [{ clientId: clientId }, { status: "pending" }],
+      });
+      totalPages = Math.ceil(totalJobs / page_size);
+      const jobs = await JobPostModel.find({
+        $and: [{ clientId: clientId }, { status: "pending" }],
+      })
+        .skip(skip)
+        .limit(page_size);
+
+      if (!jobs) throw new Error("No jobs found");
+
+      return {
+        jobs,
+        totalPages,
+      };
+    } else if (jobType === "completedJobs") {
+      const totalJobs = await JobPostModel.countDocuments({
+        $and: [
+          {
+            clientId: clientId,
+          },
+          {
+            status: "closed",
+          },
+        ],
+      });
+      totalPages = Math.ceil(totalJobs / page_size);
+      const jobs = await JobPostModel.find({
+        $and: [
+          {
+            clientId: clientId,
+          },
+          {
+            status: "closed",
+          },
+        ],
+      })
+        .skip(skip)
+        .limit(page_size);
+      if (!jobs) throw new Error("No jobs found");
+
+      return {
+        jobs,
+        totalPages,
+      };
+    } else {
+      throw new Error("Invalid selection");
     }
   }
 
@@ -646,11 +710,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     };
   }
 
-  async rejectProposal(
-    clientId: Id,
-    userId: Id,
-    jobPostId: Id
-  ): Promise<any> {
+  async rejectProposal(clientId: Id, userId: Id, jobPostId: Id): Promise<any> {
     const proposal = await ClientModel.findOneAndUpdate(
       {
         _id: new mongoose.Types.ObjectId(clientId),
@@ -816,7 +876,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
             paymentType: currentJobPost.paymentType,
             estimateTimeinHours: currentJobPost.estimatetimeinHours,
             projectType: currentJobPost.projectType,
-            requiredSkills: currentJobPost.requiredSkills
+            requiredSkills: currentJobPost.requiredSkills,
           },
         },
       },
@@ -824,7 +884,6 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         new: true,
       }
     );
- 
 
     const newNotificationUser = await NotificationModel.create({
       type: "contract close",
@@ -955,33 +1014,42 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
   async rejectContract(contractId: Id, clientId: Id): Promise<any> {
-
     const adminId = process.env.ADMIN_OBJECT_ID;
 
-    const contract: any = await ContractModel.findByIdAndUpdate(contractId, {
-      status: "rejected"
-    }, {
-      new : true
-    });
+    const contract: any = await ContractModel.findByIdAndUpdate(
+      contractId,
+      {
+        status: "rejected",
+      },
+      {
+        new: true,
+      }
+    );
 
     const finalAmount: number = Math.floor(contract.amount % 10) * 100;
 
-
     // 10% cut for admin
-    const adminWallet = await AdminModel.findByIdAndUpdate(adminId, {
-      $inc: {"wallet.balance": finalAmount}
-    }, {
-      new : true
-    });
+    const adminWallet = await AdminModel.findByIdAndUpdate(
+      adminId,
+      {
+        $inc: { "wallet.balance": finalAmount },
+      },
+      {
+        new: true,
+      }
+    );
 
     // final amount go to client wallet
-    const updateClientWallet = await ClientModel.findByIdAndUpdate(clientId, {
-      $inc: {"wallet.balance": finalAmount}
-    }, {
-      new : true
-    });
+    const updateClientWallet = await ClientModel.findByIdAndUpdate(
+      clientId,
+      {
+        $inc: { "wallet.balance": finalAmount },
+      },
+      {
+        new: true,
+      }
+    );
 
     return contract;
-  
   }
 }

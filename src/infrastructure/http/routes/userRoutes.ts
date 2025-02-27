@@ -46,6 +46,7 @@ const { USER }: {USER: string} = allRoles;
 userRouter.get('/getHome', verifyToken, requireRole(USER), getHomeUser);
 userRouter.get('/home/:type', verifyToken, requireRole(USER), listHomeJobs);
 userRouter.get('/jobs/:jobsType', verifyToken, requireRole(USER), getSelectedJobs);
+userRouter.get('/job/:jobPostId',verifyToken, requireRole(USER), getSingleJobPost);
 userRouter.get('/proposals/:proposalType',verifyToken, requireRole(USER), viewProposals);
 userRouter.get('/contracts/:contractViewType', verifyToken, requireRole(USER), viewContracts); 
 userRouter.get('/profile/:type',verifyToken, requireRole(USER), getProfile); 
@@ -56,7 +57,6 @@ userRouter.get('/wishlist', verifyToken, requireRole(USER), viewAllWishlist);
 userRouter.post('/addToWishlist', verifyToken, requireRole(USER), addToWishlist);
 userRouter.patch('/removeFromWishlist',verifyToken, requireRole(USER), removeFromWishlist)
 userRouter.get("/wallet",verifyToken, requireRole(USER), viewWalletUser);
-userRouter.get('/job/:jobPostId',verifyToken, requireRole(USER), getSingleJobPost);
 userRouter.post('/createProposal', verifyToken, requireRole(USER), createProposal);
 
 userRouter.get("/contract/:contractId",verifyToken, requireRole(USER),viewSingleContract);

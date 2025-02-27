@@ -27,7 +27,7 @@ export interface JobPostDocument extends Document {
     status: 'on progress' | 'finished';
     isPayment: boolean;
     createdAt: Date;
-    clientId?: mongoose.Types.ObjectId;  
+    clientId?: mongoose.Schema.Types.ObjectId;  
   };
   
 
@@ -49,7 +49,7 @@ export interface JobPostDocument extends Document {
     status: { type: String, required: true },
     isPayment: { type: Boolean, required: true },
     createdAt: { type: Date, required: true },
-    clientId: {type: mongoose.Types.ObjectId, required: true},
+    clientId: {type: mongoose.Schema.Types.ObjectId, required: true},
   });
 
   
