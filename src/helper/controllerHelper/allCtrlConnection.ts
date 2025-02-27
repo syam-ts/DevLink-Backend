@@ -48,13 +48,10 @@ import { EditClientProfile } from '../../application/usecases/client/EditClientP
 import { GetClientProfile } from '../../application/usecases/client/getProfile';
 import { ProfileVerification } from '../../application/usecases/client/profileVerification';
 import { CreateJobPost } from '../../application/usecases/client/createJobPost';
-import { GetAllNotifications } from '../../application/usecases/client/getAllNotifications';
-import { ListAllJobsClient } from '../../application/usecases/client/listAllJobs';
+import { GetAllNotifications } from '../../application/usecases/client/getAllNotifications'; 
 import { MakePayment } from '../../application/usecases/client/makePayment';
 import { GetUserProfileClient } from '../../application/usecases/client/getUserProfile';
-import { GetProposals } from '../../application/usecases/client/getProposals';
-import { GetMyJobs } from '../../application/usecases/client/getMyJobs';
-import { LatestJobs } from '../../application/usecases/client/latestJobs';
+import { GetProposals } from '../../application/usecases/client/getProposals'; 
 import { CreateContract } from '../../application/usecases/client/createContract';
 import { RejectProposal } from '../../application/usecases/client/rejectProposal';
 import { MyContracts } from '../../application/usecases/client/myContracts'; 
@@ -145,13 +142,10 @@ const editClientProfileUseCase = new EditClientProfile(ClientRepository);
 const getClientProfileUseCase = new GetClientProfile(ClientRepository);
 const profileVerificationUseCase = new ProfileVerification(ClientRepository);
 const createJobPostUseCase = new CreateJobPost(ClientRepository);
-const getAllNotificationsUseCase = new GetAllNotifications(ClientRepository);
-const listAllJobsClientUseCase = new ListAllJobsClient(ClientRepository);
+const getAllNotificationsUseCase = new GetAllNotifications(ClientRepository); 
 const makePaymentUseCase = new MakePayment(ClientRepository);
 const getUserProfileUseCase = new GetUserProfileClient(ClientRepository);
-const getProposalsUseCase = new GetProposals(ClientRepository);
-const getMyJobsUseCase = new GetMyJobs(ClientRepository);
-const latestJobsUseCase = new LatestJobs(ClientRepository);
+const getProposalsUseCase = new GetProposals(ClientRepository); 
 const createContractUseCase = new CreateContract(ClientRepository);
 const rejectProposalUseCase = new RejectProposal(ClientRepository);
 const myContractsUseCase = new MyContracts(ClientRepository);
@@ -242,14 +236,11 @@ export const allClientUseCases = {
      getClientProfileUseCase,
      profileVerificationUseCase,
      createJobPostUseCase,
-     getAllNotificationsUseCase,
-     listAllJobsClientUseCase,
+     getAllNotificationsUseCase, 
      makePaymentUseCase,
      getUserProfileUseCase,
      getProposalsUseCase,
-     viewWalletUseCase,
-     getMyJobsUseCase,
-     latestJobsUseCase,
+     viewWalletUseCase, 
      createContractUseCase,
      rejectProposalUseCase,
      myContractsUseCase,

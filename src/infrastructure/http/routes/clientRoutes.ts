@@ -19,10 +19,7 @@ const {
   trendingJobs,
 
   getSelectedJobs,
-  
-  listAllJobs,
-  getMyJobs,
-  latestJobs,
+   
 
 
   
@@ -61,14 +58,14 @@ clientRouter.get('/jobs/:jobsType', verifyToken, requireRole(CLIENT), getSelecte
 clientRouter.get('/job/:jobPostId',verifyToken, requireRole(CLIENT), getSingleJobPost);
 
 
-clientRouter.get("/jobs/all-jobs/:clientId", verifyToken, requireRole(CLIENT), listAllJobs);
-clientRouter.get("/jobs/my-jobs/:clientId", verifyToken, requireRole(CLIENT), getMyJobs);
-clientRouter.get("/jobs/latest-jobs/:clientId", verifyToken, requireRole(CLIENT), latestJobs);
-
-
-
-
 clientRouter.get("/job/proposals/:clientId", verifyToken, requireRole(CLIENT), getProposals);
+
+
+ 
+
+
+
+
 clientRouter.get("/profile/view/:clientId", verifyToken, requireRole(CLIENT), getProfile);
 clientRouter.get("/notifications/:clientId", verifyToken, requireRole(CLIENT), getAllNotifications);
 clientRouter.get("/userProfile/view/:userId", verifyToken, requireRole(CLIENT), getUserProfile);

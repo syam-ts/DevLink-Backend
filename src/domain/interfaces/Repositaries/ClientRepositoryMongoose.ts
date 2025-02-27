@@ -576,22 +576,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return "success";
   }
 
-  async getMyJobs(clientId: Id): Promise<any> {
-    const jobs: any = await JobPostModel.find({ clientId: clientId });
-    if (!jobs) {
-      throw new Error("No job found");
-    }
-
-    return jobs;
-  }
-
-  async latestJobs(): Promise<any> {
-    const jobs: any = await JobPostModel.find().sort({ date: "desc" });
-    if (!jobs) {
-      throw new Error("No job found");
-    }
-    return jobs;
-  }
+  
 
   async myContracts(clientId: Id): Promise<any> {
     const jobs: any = await ContractModel.find({
