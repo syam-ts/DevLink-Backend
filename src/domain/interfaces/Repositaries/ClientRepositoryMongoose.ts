@@ -5,7 +5,7 @@ import { UserModel } from "../../entities/User";
 import { NotificationModel } from "../../entities/Notification";
 import { JobPostDocument, JobPostModel } from "../../entities/JobPost";
 import { AdminModel } from "../../entities/Admin";
-import { ContractModel } from "../../entities/Contract";
+import { ContractDocument, ContractModel } from "../../entities/Contract";
 import bcrypt from "bcrypt";
 import validator from "validator";
 import allCronJobs from "../../../helper/cron-jobs/index";
@@ -498,14 +498,69 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return developers;
   }
 
-  async viewContract(contractId: Id): Promise<any> {
-    const contract: any = await ContractModel.findById(contractId);
-    if (!contract) {
-      throw new Error("contract not found");
-    }
+ 
 
-    return contract;
-  }
+
+   async viewContracts(
+      clientId: Id,
+      contractViewType: string,
+      currentPage: number
+    ): Promise<ContractDocument | any> {
+      const page_size: number = 3;
+      const skip: number = (currentPage - 1) * page_size;
+  
+      let contract, totalContracts;
+      if (contractViewType === "pending") {
+        totalContracts = await ContractModel.countDocuments({
+          $and: [{ clientId: clientId }, { status: "on progress" }],
+        });
+        contract = await ContractModel.find({
+          $and: [{ clientId: clientId }, { status: "on progress" }],
+        })
+          .skip(skip)
+          .limit(page_size);
+      } else if(contractViewType === "submitted") {
+        totalContracts = await ContractModel.countDocuments({
+          $and: [{ clientId: clientId }, { status: "submitted" }],
+        });
+  
+        contract = await ContractModel.find({
+          $and: [{ clientId: clientId }, { status: "submitted" }],
+        })
+          .skip(skip)
+          .limit(page_size);
+      }
+      else if (contractViewType === "rejected") {
+        totalContracts = await ContractModel.countDocuments({
+          $and: [{ clientId: clientId }, { status: "rejected" }],
+        });
+  
+        contract = await ContractModel.find({
+          $and: [{ clientId: clientId }, { status: "rejected" }],
+        })
+          .skip(skip)
+          .limit(page_size);
+      } else if (contractViewType === "completed") {
+        totalContracts = await ContractModel.countDocuments({
+          $and: [{ clientId: clientId }, { status: "closed" }],
+        });
+  
+        contract = await ContractModel.find({
+          $and: [{ clientId: clientId }, { status: "closed" }],
+        })
+          .skip(skip)
+          .limit(page_size);
+      } else {
+        throw new Error("Bad selection");
+      }
+  
+      if (!contract) {
+        throw new Error("contract not found");
+      } else {
+        const totalPages = Math.ceil(totalContracts / page_size);
+        return { contract, totalPages };
+      }
+    }
 
   async viewWallet(clientId: Id, page: number): Promise<any> {
     const PAGE_SIZE: number = 4;

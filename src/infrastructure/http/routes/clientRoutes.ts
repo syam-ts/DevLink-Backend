@@ -18,21 +18,22 @@ const {
   getHomeClient,
   trendingJobs,
   getSelectedJobs,
-   
   getProposals,
   createContract,
 
+  myContracts,
+  viewContracts,
 
   
+
   getProfile,
   getAllNotifications,
   getUserProfile,
-  myContracts,
-  viewContract,
   viewSubmissions,
   getallDevelopers,
   viewWallet,
   getAllChats,
+  rejectProposal,
   viewChat,
   editProfile,
   profileVerification,
@@ -41,7 +42,6 @@ const {
   rateAndReview,
   closeContract,
   sendMessage,
-  rejectProposal,
   inviteUser,
   rejectContract
 } = clientController;
@@ -54,23 +54,19 @@ const {
 clientRouter.get("/getHome", verifyToken, requireRole(CLIENT), getHomeClient);
 clientRouter.get("/trendingJobs", verifyToken, requireRole(CLIENT), trendingJobs);
 clientRouter.get('/jobs/:jobsType', verifyToken, requireRole(CLIENT), getSelectedJobs); 
-clientRouter.get('/job/:jobPostId',verifyToken, requireRole(CLIENT), getSingleJobPost);
-
-
+clientRouter.get('/job/:jobPostId',verifyToken, requireRole(CLIENT), getSingleJobPost); 
 clientRouter.get("/proposals/:proposalType", verifyToken, requireRole(CLIENT), getProposals);
+
+clientRouter.get('/contracts/:contractViewType', verifyToken, requireRole(CLIENT), viewContracts); 
+
+
+
 clientRouter.post('/job/createContract', verifyToken, requireRole(CLIENT), createContract); 
-
-
- 
-
-
-
-
 clientRouter.get("/profile/view/:clientId", verifyToken, requireRole(CLIENT), getProfile);
 clientRouter.get("/notifications/:clientId", verifyToken, requireRole(CLIENT), getAllNotifications);
 clientRouter.get("/userProfile/view/:userId", verifyToken, requireRole(CLIENT), getUserProfile);
 clientRouter.get("/job/myContracts/:clientId", verifyToken, requireRole(CLIENT), myContracts);
-clientRouter.get("/contract/:contractId", verifyToken, requireRole(CLIENT), viewContract);
+// clientRouter.get("/contract/:contractId", verifyToken, requireRole(CLIENT), viewContract);
 clientRouter.get("/contracts/submissions/:clientId", verifyToken, requireRole(CLIENT), viewSubmissions);
 clientRouter.get("/developers/allDevelopers", verifyToken, requireRole(CLIENT), getallDevelopers);
 clientRouter.get("/wallet-view/:clientId", verifyToken, requireRole(CLIENT), viewWallet);

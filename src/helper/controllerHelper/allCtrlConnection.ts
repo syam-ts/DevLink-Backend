@@ -42,6 +42,7 @@ import { verifyOtpClient } from '../../application/usecases/client/verifyOtpClie
 import { getHomeClient } from '../../application/usecases/client/getHome';
 import { TrendingJobs } from '../../application/usecases/client/getHome';
 import { GetSelectedJobsClient } from '../../application/usecases/client/getSelectedJobs';
+import { ViewContractsClient } from '../../application/usecases/client/viewContracts';
 
 
 import { EditClientProfile } from '../../application/usecases/client/EditClientProfile';
@@ -54,8 +55,7 @@ import { GetUserProfileClient } from '../../application/usecases/client/getUserP
 import { GetProposals } from '../../application/usecases/client/getProposals'; 
 import { CreateContract } from '../../application/usecases/client/createContract';
 import { RejectProposal } from '../../application/usecases/client/rejectProposal';
-import { MyContracts } from '../../application/usecases/client/myContracts'; 
-import { ViewContract } from '../../application/usecases/client/viewContract';
+import { MyContracts } from '../../application/usecases/client/myContracts';  
 import { ViewSubmissions } from '../../application/usecases/client/viewSubmissions';
 import { CloseContract } from '../../application/usecases/client/closeContract';
 import { RateAndReview } from '../../application/usecases/client/rateAndReview';
@@ -136,6 +136,7 @@ const GoogleLoginClientUseCase = new GoogleLoginClient(ClientRepository);
 const getHomeClientUseCase = new getHomeClient(ClientRepository);
 const trendingJobsUseCase = new TrendingJobs(ClientRepository);
 const getSelectedJobsClientUseCase = new GetSelectedJobsClient(ClientRepository);
+const viewContractsClientUseCase = new ViewContractsClient(ClientRepository);
 
 
 const editClientProfileUseCase = new EditClientProfile(ClientRepository);
@@ -148,8 +149,7 @@ const getUserProfileUseCase = new GetUserProfileClient(ClientRepository);
 const getProposalsUseCase = new GetProposals(ClientRepository); 
 const createContractUseCase = new CreateContract(ClientRepository);
 const rejectProposalUseCase = new RejectProposal(ClientRepository);
-const myContractsUseCase = new MyContracts(ClientRepository);
-const viewContractUseCase = new ViewContract(ClientRepository);
+const myContractsUseCase = new MyContracts(ClientRepository); 
 const viewSubmissionsUseCase = new ViewSubmissions(ClientRepository);
 const closeContractUseCase = new CloseContract(ClientRepository);
 const rateAndReviewUserUseCase = new RateAndReview(ClientRepository);
@@ -230,7 +230,7 @@ export const allClientUseCases = {
      getHomeClientUseCase,
      trendingJobsUseCase,
      getSelectedJobsClientUseCase,
-
+     viewContractsClientUseCase,
 
      editClientProfileUseCase,
      getClientProfileUseCase,
@@ -243,8 +243,7 @@ export const allClientUseCases = {
      viewWalletUseCase, 
      createContractUseCase,
      rejectProposalUseCase,
-     myContractsUseCase,
-     viewContractUseCase,
+     myContractsUseCase, 
      viewSubmissionsUseCase,
      getallDevelopersUseCase,
      closeContractUseCase,

@@ -483,6 +483,30 @@ export const clientController = {
     }
   },
 
+
+  viewContracts: async (req: Request, res: Response) => {
+    try{
+ const { id: clientId } = req.user;
+      const { contractViewType } = req.params;
+      const currentPage : number = Number(req.query.currentPage) || 1; 
+      const contracts = await allClientUseCases.viewContractsClientUseCase.execute(
+        clientId,
+        contractViewType,
+        currentPage
+      );
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        data: contracts,
+        success: true,
+      });
+    } catch (err: any) {
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: err.message, success: false });
+    }
+  },
+
+
   myContracts: async (req: Request, res: Response) => {
     try {
       const { clientId } = req.params;
@@ -504,30 +528,7 @@ export const clientController = {
         .json({ message: err.message, success: false });
     }
   },
-
-  viewContract: async (req: Request, res: Response) => {
-    try {
-      console.log("reahed here so far");
-
-      const { contractId } = req.params;
-      const response = await allClientUseCases.viewContractUseCase.execute(
-        contractId
-      );
-
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          contract: response,
-          success: true,
-        });
-    } catch (err: any) {
-      res
-        .status(500)
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
-    }
-  },
+ 
 
   viewSubmissions: async (req: Request, res: Response) => {
     try {
