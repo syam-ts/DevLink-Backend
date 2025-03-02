@@ -35,16 +35,15 @@ const {
 adminRouter.get('/dashboard', getDashboard);
 adminRouter.get('/getAllUsers', getAllUsers);
 adminRouter.get('/getAllClients', getAllClients);   
-adminRouter.get('/wallet', viewWallet);   
-
-
-
-adminRouter.patch('/blockClient/:clientId', blockClient);
-adminRouter.patch('/unBlockClient/:clientId', unBlockClient); 
+adminRouter.get('/wallet', viewWallet);    
 adminRouter.patch('/blockUser/:userId', blockUser);
 adminRouter.patch('/unBlockUser/:userId', unBlockUser);
-
+adminRouter.patch('/blockClient/:clientId', blockClient);
+adminRouter.patch('/unBlockClient/:clientId', unBlockClient); 
 adminRouter.get('/getRequests', getRequests);
+
+
+
 adminRouter.get('/request/getRequestedClient/:clientId', getRequestedClient);
 adminRouter.get('/viewRole/:roleId/:roleInfo', viewRoleInfo);
 adminRouter.get('/getWallet', getWallet); 

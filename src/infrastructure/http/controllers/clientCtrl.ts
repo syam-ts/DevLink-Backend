@@ -130,7 +130,7 @@ export const clientController = {
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
       });
-
+      
       if (!client) {
         res
           .status(HttpStatusCode.NOT_FOUND)
@@ -138,7 +138,7 @@ export const clientController = {
             message: StatusMessage[HttpStatusCode.NOT_FOUND],
             sucess: false,
           });
-      } else {
+        } else {
         res.status(HttpStatusCode.OK).json({
           message: StatusMessage[HttpStatusCode.OK],
           client,
@@ -153,30 +153,30 @@ export const clientController = {
         .json({ message: err.message, sucess: false });
     }
   },
-
+  
   googleLogin: async (req: Request, res: Response) => {
     try {
       const client = await allClientUseCases.GoogleLoginClientUseCase.execute(
         req.body
       );
       res
-        .status(HttpStatusCode.OK)
-        .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
+      .status(HttpStatusCode.OK)
+      .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
     } catch (err: any) {
       res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, sucess: false });
+      .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: err.message, sucess: false });
     }
   },
-
+  
   getHomeClient: async (req: any, res: any) => {
     try {
       const users = await allClientUseCases.getHomeClientUseCase.execute();
-
+      
       return res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
+      .status(HttpStatusCode.OK)
+      .json({
+        message: StatusMessage[HttpStatusCode.OK],
           data: users,
           success: true,
         });
@@ -184,7 +184,7 @@ export const clientController = {
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
         .json({ message: err.message, sucess: false });
-    }
+      }
   },
 
   trendingJobs: async (req: any, res: any) => {
@@ -192,7 +192,7 @@ export const clientController = {
       const jobs = await allClientUseCases.trendingJobsUseCase.execute(); 
 
       return res
-        .status(HttpStatusCode.OK)
+      .status(HttpStatusCode.OK)
         .json({
           message: StatusMessage[HttpStatusCode.OK],
           data: jobs,
@@ -200,18 +200,18 @@ export const clientController = {
         });
     } catch (err: any) {
       res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, sucess: false });
+      .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: err.message, sucess: false });
     }
   },
-
-   getSelectedJobs: async (req: Request, res: Response) => {
-      try {
-        const { jobsType } = req.params;
-        const { id: clientId } = req.user;
-        const currentPage : number = Number(req.query.currentPage) || 1; 
   
-        const response = await allClientUseCases.getSelectedJobsClientUseCase.execute(
+  getSelectedJobs: async (req: Request, res: Response) => {
+    try {
+      const { jobsType } = req.params;
+      const { id: clientId } = req.user;
+      const currentPage : number = Number(req.query.currentPage) || 1; 
+      
+      const response = await allClientUseCases.getSelectedJobsClientUseCase.execute(
           clientId,
           jobsType,
           currentPage
@@ -223,11 +223,11 @@ export const clientController = {
         });
       } catch (err: any) {
         res
-          .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-          .json({ message: err.message, success: false });
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: err.message, success: false });
       }
     },
-
+    
   getProfile: async (req: Request, res: Response) => {
     try {
       const { clientId } = req.params;
@@ -236,13 +236,13 @@ export const clientController = {
       );
 
       res
-        .status(HttpStatusCode.OK)
+      .status(HttpStatusCode.OK)
         .json({
           message: StatusMessage[HttpStatusCode.OK],
           data: client,
           success: true,
         });
-    } catch (err: any) {
+      } catch (err: any) {
       res.json({ message: err.messge, sucess: false });
     }
   },
@@ -250,17 +250,17 @@ export const clientController = {
   profileVerification: async (req: any, res: Response) => {
     try {
       const clientId = req.user.id;
-
+      
       const response =
-        await allClientUseCases.profileVerificationUseCase.execute(
+      await allClientUseCases.profileVerificationUseCase.execute(
           clientId,
           req.body
         );
 
-      res
+        res
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-    } catch (err: any) {
+      } catch (err: any) {
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
         .json({ message: err.message, success: false });
@@ -276,13 +276,13 @@ export const clientController = {
       );
 
       res
-        .status(HttpStatusCode.CREATED)
+      .status(HttpStatusCode.CREATED)
         .json({
           message: StatusMessage[HttpStatusCode.CREATED],
           success: true,
         });
-    } catch (err: any) {
-      res
+      } catch (err: any) {
+        res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
         .json({ message: err.message, success: false });
     }
@@ -306,37 +306,13 @@ export const clientController = {
     }
   },
 
-  createJobPost: async (req: Request, res: Response) => {
-    try {
-      const { clientId } = req.params;
-
-      const { data } = req.body;
-
-      const jobPost = await allClientUseCases.createJobPostUseCase.execute(
-        clientId,
-        data
-      );
-
-      res
-        .status(HttpStatusCode.CREATED)
-        .json({
-          message: StatusMessage[HttpStatusCode.CREATED],
-          data: jobPost,
-          success: true,
-        });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, sucess: false });
-    }
-  },
-
+  
   getAllNotifications: async (req: Request, res: Response) => {
     try {
       const { clientId } = req.params;
       const response =
-        await allClientUseCases.getAllNotificationsUseCase.execute(clientId);
-
+      await allClientUseCases.getAllNotificationsUseCase.execute(clientId);
+      
       res
         .status(HttpStatusCode.OK)
         .json({
@@ -344,15 +320,15 @@ export const clientController = {
           notifications: response,
           success: true,
         });
-    } catch (err: any) {
-      res
+      } catch (err: any) {
+        res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
         .json({ message: err.message, sucess: false });
     }
   },
-
- 
-
+  
+  
+  
   makePayment: async (req: Request, res: Response) => {
     try {
       const { id: clientId } = req.user;
@@ -360,7 +336,7 @@ export const clientController = {
         clientId,
         req.body
       );
-
+      
       res
         .status(HttpStatusCode.OK)
         .json({
@@ -372,10 +348,35 @@ export const clientController = {
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
         .json({ message: err.message, success: false });
-    }
-  },
+      }
+    },
+    
+    createJobPost: async (req: Request, res: Response) => {
+      try {
+        const { id: clientId }: {id: string} = req.user; 
+        const { data } = req.body;
 
-  getUserProfile: async (req: Request, res: Response) => {
+        const jobPost = await allClientUseCases.createJobPostUseCase.execute(
+          clientId,
+          data
+        );
+  
+        res
+          .status(HttpStatusCode.CREATED)
+          .json({
+            message: StatusMessage[HttpStatusCode.CREATED],
+            data: jobPost,
+            success: true,
+          });
+      } catch (err: any) {
+        res
+          .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .json({ message: err.message, sucess: false });
+      }
+    },
+
+
+    getUserProfile: async (req: Request, res: Response) => {
     try {
       const { userId } = req.params;
       const response = await allClientUseCases.getUserProfileUseCase.execute(

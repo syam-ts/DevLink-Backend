@@ -307,13 +307,18 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return updatedAdmin;
   }
 
-  async createJobPost(clientId: Id, data: any): Promise<any> {
+  async createJobPost(clientId: Id, data: any): Promise<JobPostDocument> {
     const client: any = await ClientModel.findById(clientId);
+      //update client jobpost count
+      // const cilent = await ClientModel.findByIdAndUpdate(clientId, {
+      //   $inc: {totalJobs: 1}
+      // }, {
+      //   new: true
+      // });
+      // console.log('THejb', client)
 
-    const parsedEstimatedTimeInHours = parseInt(data.estimateTime);
-
-    const totalAmount = data.estimateTime * data.payment;
-
+    const parsedEstimatedTimeInHours: number = parseInt(data.estimateTime);  
+    const totalAmount: number = data.estimateTime * data.payment; 
     data.amount = totalAmount; //updatig the total amount
 
     const createdJobPost = new JobPostModel({
@@ -346,6 +351,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     });
 
     const savedJobPost = await createdJobPost.save();
+ 
+  
 
     const newNotification = await NotificationModel.create({
       type: "New Job Post",
@@ -356,9 +363,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     });
 
     newNotification.save();
+    return savedJobPost;
+  };
 
-    return { savedJobPost };
-  }
 
   async getAllNotifications(clientId: Id): Promise<any> {
     const notifications = await NotificationModel.aggregate([
@@ -448,13 +455,13 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
   }
 
-  async getProposals(clientId: Id): Promise<any> { 
+  async getProposals(clientId: Id): Promise<any> {
     const client: any = await ClientModel.findById(clientId);
     if (!client) {
       throw new Error("Client not found");
-    } 
+    }
 
-    const proposals = client.proposals; 
+    const proposals = client.proposals;
     return proposals;
   }
 
@@ -498,69 +505,65 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return developers;
   }
 
- 
+  async viewContracts(
+    clientId: Id,
+    contractViewType: string,
+    currentPage: number
+  ): Promise<ContractDocument | any> {
+    const page_size: number = 3;
+    const skip: number = (currentPage - 1) * page_size;
 
+    let contract, totalContracts;
+    if (contractViewType === "pending") {
+      totalContracts = await ContractModel.countDocuments({
+        $and: [{ clientId: clientId }, { status: "on progress" }],
+      });
+      contract = await ContractModel.find({
+        $and: [{ clientId: clientId }, { status: "on progress" }],
+      })
+        .skip(skip)
+        .limit(page_size);
+    } else if (contractViewType === "submitted") {
+      totalContracts = await ContractModel.countDocuments({
+        $and: [{ clientId: clientId }, { status: "submitted" }],
+      });
 
-   async viewContracts(
-      clientId: Id,
-      contractViewType: string,
-      currentPage: number
-    ): Promise<ContractDocument | any> {
-      const page_size: number = 3;
-      const skip: number = (currentPage - 1) * page_size;
-  
-      let contract, totalContracts;
-      if (contractViewType === "pending") {
-        totalContracts = await ContractModel.countDocuments({
-          $and: [{ clientId: clientId }, { status: "on progress" }],
-        });
-        contract = await ContractModel.find({
-          $and: [{ clientId: clientId }, { status: "on progress" }],
-        })
-          .skip(skip)
-          .limit(page_size);
-      } else if(contractViewType === "submitted") {
-        totalContracts = await ContractModel.countDocuments({
-          $and: [{ clientId: clientId }, { status: "submitted" }],
-        });
-  
-        contract = await ContractModel.find({
-          $and: [{ clientId: clientId }, { status: "submitted" }],
-        })
-          .skip(skip)
-          .limit(page_size);
-      }
-      else if (contractViewType === "rejected") {
-        totalContracts = await ContractModel.countDocuments({
-          $and: [{ clientId: clientId }, { status: "rejected" }],
-        });
-  
-        contract = await ContractModel.find({
-          $and: [{ clientId: clientId }, { status: "rejected" }],
-        })
-          .skip(skip)
-          .limit(page_size);
-      } else if (contractViewType === "completed") {
-        totalContracts = await ContractModel.countDocuments({
-          $and: [{ clientId: clientId }, { status: "closed" }],
-        });
-  
-        contract = await ContractModel.find({
-          $and: [{ clientId: clientId }, { status: "closed" }],
-        })
-          .skip(skip)
-          .limit(page_size);
-      } else {
-        throw new Error("Bad selection");
-      }
-  
-      if (!contract) {
-        throw new Error("contract not found");
-      } else {
-        const totalPages = Math.ceil(totalContracts / page_size);
-        return { contract, totalPages };
-      }
+      contract = await ContractModel.find({
+        $and: [{ clientId: clientId }, { status: "submitted" }],
+      })
+        .skip(skip)
+        .limit(page_size);
+    } else if (contractViewType === "rejected") {
+      totalContracts = await ContractModel.countDocuments({
+        $and: [{ clientId: clientId }, { status: "rejected" }],
+      });
+
+      contract = await ContractModel.find({
+        $and: [{ clientId: clientId }, { status: "rejected" }],
+      })
+        .skip(skip)
+        .limit(page_size);
+    } else if (contractViewType === "completed") {
+      totalContracts = await ContractModel.countDocuments({
+        $and: [{ clientId: clientId }, { status: "closed" }],
+      });
+
+      contract = await ContractModel.find({
+        $and: [{ clientId: clientId }, { status: "closed" }],
+      })
+        .skip(skip)
+        .limit(page_size);
+    } else {
+      throw new Error("Bad selection");
     }
+
+    if (!contract) {
+      throw new Error("contract not found");
+    } else {
+      const totalPages = Math.ceil(totalContracts / page_size);
+      return { contract, totalPages };
+    }
+  }
 
   async viewWallet(clientId: Id, page: number): Promise<any> {
     const PAGE_SIZE: number = 4;
@@ -629,8 +632,6 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
     return "success";
   }
-
- 
 
   async viewSubmissions(clientId: Id): Promise<any> {
     const client: any = await ClientModel.findById(clientId).exec();
