@@ -186,6 +186,27 @@ export const adminController = {
       });
     }
   },
+  
+
+  viewWallet: async (req: any, res: any) => {
+    try {
+      const { currentPage } = req.query;
+      const wallet = await allAdminUseCases.viewWalletAdminUseCase.execute(
+        currentPage
+      );
+
+      if (wallet) {
+        res
+          .status(HttpStatusCode.OK)
+          .json({ message: StatusMessage[HttpStatusCode.OK],wallet, success: true });
+      }
+    } catch (err: any) {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
+    }
+  },
 
   logoutAdmin: async (req: any, res: any) => {
     try {

@@ -140,7 +140,56 @@ export class AdminRepository implements AdminRepositary {
     } else {
       throw new Error("Users not Found");
     }
+  };
+
+
+ async viewWallet(currentPage: number): Promise<any> {
+    const page_size: number = 4;
+    const skip: number = (currentPage - 1) * page_size;
+    const adminId: string = process.env.ADMIN_OBJECT_ID as string;
+
+    const wallet = await AdminModel.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(adminId) } },
+      { $project: { totalTransactions: { $size: "$wallet.transactions" } } },
+    ]);
+
+    const totalTransactions =
+      wallet.length > 0 ? wallet[0].totalTransactions : 0;
+
+    const totalPages: number = Math.ceil(totalTransactions / page_size);
+
+    const adminWallet = await AdminModel.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(adminId) } },
+      {
+        $project: {
+          transactions: {
+            $slice: ["$wallet.transactions", skip, page_size],
+          },
+          balance: "$wallet.balance",
+          _id: 0,
+        },
+      },
+    ]);
+
+    return {
+      ...adminWallet,
+      totalPages,
+    };
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   async sortUser(sortingType: string): Promise<User | any> {
     const page = 1;

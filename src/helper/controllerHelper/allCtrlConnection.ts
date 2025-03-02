@@ -77,6 +77,7 @@ import { GetAllUsers } from '../../application/usecases/admin/getAllUsers';
 import { GetAllClients } from '../../application/usecases/admin/getAllClients';
 import { BlockUser, BlockClient } from '../../application/usecases/admin/blockRole';
 import { UnBlockUser, UnBlockClient } from '../../application/usecases/admin/unBlockRole'; 
+import { ViewWalletAdmin } from '../../application/usecases/admin/viewWallet'; 
 
 
 import { Create } from '../../application/usecases/admin/create';
@@ -171,6 +172,7 @@ const getAllClientsUseCase = new GetAllClients(adminRepositary);
 const blockUserUseCase = new BlockUser(adminRepositary);
 const unBlockUserUseCase = new UnBlockUser(adminRepositary);
 const blockClientUseCase = new BlockClient(adminRepositary); 
+const viewWalletAdminUseCase = new ViewWalletAdmin(adminRepositary); 
 
 
 
@@ -267,7 +269,8 @@ export const allAdminUseCases = {
         blockUserUseCase ,
         unBlockUserUseCase ,
         blockClientUseCase ,
-        unBlockClientUseCase , 
+        unBlockClientUseCase, 
+        viewWalletAdminUseCase, 
 
 
 

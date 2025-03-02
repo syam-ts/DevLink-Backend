@@ -9,7 +9,7 @@ const {
     getDashboard,
     getAllUsers,
     getAllClients, 
-
+    viewWallet,
 
     getRequests,
     getRequestedClient,
@@ -35,6 +35,7 @@ const {
 adminRouter.get('/dashboard', getDashboard);
 adminRouter.get('/getAllUsers', getAllUsers);
 adminRouter.get('/getAllClients', getAllClients);   
+adminRouter.get('/wallet', viewWallet);   
 
 
 

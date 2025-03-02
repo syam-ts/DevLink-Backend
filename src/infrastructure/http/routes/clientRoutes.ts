@@ -80,8 +80,10 @@ clientRouter.post("/resetPassword/:clientId", resetPassword);
 clientRouter.post("/googleLogin", googleLogin);
 clientRouter.post("/logout", logoutClient);
 
-clientRouter.post("/profile-verify/", verifyToken, requireRole(CLIENT), profileVerification);
-clientRouter.post("/profile-edit/",verifyToken, requireRole(CLIENT), editProfile);
+
+
+clientRouter.post("/profile/verify/:clientId", verifyToken, requireRole(CLIENT), profileVerification);
+clientRouter.post("/profile/edit/:clientId",verifyToken, requireRole(CLIENT), editProfile);
 clientRouter.post("/invite/user",verifyToken, requireRole(CLIENT), inviteUser); 
 clientRouter.post("/payment/success/:clientId", verifyToken, requireRole(CLIENT),createJobPost);
 clientRouter.post("/project-submit/reject", verifyToken, requireRole(CLIENT), rejectContract);
