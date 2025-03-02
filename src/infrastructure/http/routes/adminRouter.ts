@@ -8,7 +8,9 @@ import { requireRole } from '../middlewares/auth/requireRole';
 const {
     getDashboard,
     getAllUsers,
-    getAllClients,
+    getAllClients, 
+
+
     getRequests,
     getRequestedClient,
     viewRoleInfo,
@@ -32,11 +34,12 @@ const {
 
 adminRouter.get('/dashboard', getDashboard);
 adminRouter.get('/getAllUsers', getAllUsers);
-adminRouter.get('/getAllClients', getAllClients);  
+adminRouter.get('/getAllClients', getAllClients);   
+
+
+
 adminRouter.patch('/blockClient/:clientId', blockClient);
 adminRouter.patch('/unBlockClient/:clientId', unBlockClient); 
-
-
 adminRouter.patch('/blockUser/:userId', blockUser);
 adminRouter.patch('/unBlockUser/:userId', unBlockUser);
 

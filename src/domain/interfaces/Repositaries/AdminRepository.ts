@@ -32,14 +32,14 @@ export class AdminRepository implements AdminRepositary {
     } else {
       throw new Error("Users not Found");
     }
-  }
+  };
+
+
 
   async getAllUsers(page: number, sortType: string): Promise<User | any> {
-    
-
     const PAGE_SIZE: number = 5;
     const skip: number = (page - 1) * PAGE_SIZE;
-    const totalUsers: number = await UserModel.countDocuments({}); 
+    const totalUsers: number = await UserModel.countDocuments({});
     const totalPages = Math.ceil(totalUsers / PAGE_SIZE);
     let users;
 
@@ -73,16 +73,15 @@ export class AdminRepository implements AdminRepositary {
     return {
       users,
       totalPages,
-    };
+    }
+  };
+ 
 
-
-
-  }
 
   async getAllClients(page: number, sortType: string): Promise<Client | any> {
     const PAGE_SIZE: number = 5;
     const skip: number = (page - 1) * PAGE_SIZE;
-    const totalClients: number = await ClientModel.countDocuments({}); 
+    const totalClients: number = await ClientModel.countDocuments({});
     const totalPages = Math.ceil(totalClients / PAGE_SIZE);
     let clients;
 
@@ -224,14 +223,11 @@ export class AdminRepository implements AdminRepositary {
     }
   }
 
-
-
   async sortClients(sortingType: string): Promise<Client | any> {
     const page = 1;
     const PAGE_SIZE: number = 3;
     const skip: number = (page - 1) * PAGE_SIZE;
     const totalClients: number = await ClientModel.countDocuments({});
-     
 
     if (sortingType === "block") {
       const clients: any = await ClientModel.aggregate([
@@ -296,13 +292,12 @@ export class AdminRepository implements AdminRepositary {
   }
 
   async blockUser(userId: any): Promise<any> {
-   
     const user = await UserModel.findByIdAndUpdate(
       userId,
       { isBlocked: true },
       { new: true }
     ).exec();
- 
+
     if (!user) {
       throw new Error("User not Found");
     }
@@ -329,7 +324,7 @@ export class AdminRepository implements AdminRepositary {
       clientId,
       { isBlocked: true },
       { new: true }
-    ).exec(); 
+    ).exec();
 
     if (!client) {
       throw new Error("Client not Found");
@@ -343,7 +338,7 @@ export class AdminRepository implements AdminRepositary {
       clientId,
       { isBlocked: false },
       { new: true }
-    ).exec(); 
+    ).exec();
 
     if (!client) {
       throw new Error("Client not Found");

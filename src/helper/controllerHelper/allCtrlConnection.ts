@@ -76,7 +76,9 @@ import { GetDashboard } from '../../application/usecases/admin/getDashboard';
 import { GetAllUsers } from '../../application/usecases/admin/getAllUsers';
 import { GetAllClients } from '../../application/usecases/admin/getAllClients';
 import { BlockUser, BlockClient } from '../../application/usecases/admin/blockRole';
-import { UnBlockUser, UnBlockClient } from '../../application/usecases/admin/unBlockRole';
+import { UnBlockUser, UnBlockClient } from '../../application/usecases/admin/unBlockRole'; 
+
+
 import { Create } from '../../application/usecases/admin/create';
 import { VerifyAccept } from '../../application/usecases/admin/verifyAccept';
 import { GetAllRequests } from '../../application/usecases/admin/getAllRequests';
@@ -168,7 +170,10 @@ const getAllUsersUseCase = new GetAllUsers(adminRepositary);
 const getAllClientsUseCase = new GetAllClients(adminRepositary);
 const blockUserUseCase = new BlockUser(adminRepositary);
 const unBlockUserUseCase = new UnBlockUser(adminRepositary);
-const blockClientUseCase = new BlockClient(adminRepositary);
+const blockClientUseCase = new BlockClient(adminRepositary); 
+
+
+
 const unBlockClientUseCase = new UnBlockClient(adminRepositary);
 const viewRoleInfoUseCase = new ViewRoleInfo(adminRepositary);
 const getWalletUseCase = new GetWallet(adminRepositary);
@@ -262,7 +267,10 @@ export const allAdminUseCases = {
         blockUserUseCase ,
         unBlockUserUseCase ,
         blockClientUseCase ,
-        unBlockClientUseCase ,
+        unBlockClientUseCase , 
+
+
+
         viewRoleInfoUseCase ,
         getWalletUseCase ,
         searchUserUseCase ,

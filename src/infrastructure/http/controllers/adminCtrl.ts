@@ -40,12 +40,10 @@ export const adminController = {
         success: true,
       });
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 
@@ -61,20 +59,16 @@ export const adminController = {
       //     maxAge: 24 * 60 * 60 * 1000
       //   }
       // );
-      return res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          data: clientsAndUsers,
-          success: true,
-        });
+      return res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        data: clientsAndUsers,
+        success: true,
+      });
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 
@@ -85,22 +79,19 @@ export const adminController = {
         req.query.sortType
       );
 
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          data: users,
-          success: true,
-        });
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        data: users,
+        success: true,
+      });
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
+ 
 
   getAllClients: async (req: any, res: any) => {
     try {
@@ -109,20 +100,16 @@ export const adminController = {
         req.query.sortType
       );
 
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          data: clients,
-          success: true,
-        });
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        data: clients,
+        success: true,
+      });
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 
@@ -136,12 +123,10 @@ export const adminController = {
           .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
       }
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 
@@ -157,12 +142,10 @@ export const adminController = {
           .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
       }
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 
@@ -178,12 +161,10 @@ export const adminController = {
           .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
       }
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 
@@ -199,12 +180,10 @@ export const adminController = {
           .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
       }
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 
@@ -216,12 +195,10 @@ export const adminController = {
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 
@@ -235,12 +212,10 @@ export const adminController = {
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 
@@ -248,20 +223,16 @@ export const adminController = {
     try {
       const response = await allAdminUseCases.getAllRequestsUseCase.execute();
 
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          data: response,
-          success: true,
-        });
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        data: response,
+        success: true,
+      });
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 
@@ -272,20 +243,16 @@ export const adminController = {
         clientId
       );
 
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          data: response,
-          success: true,
-        });
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        data: response,
+        success: true,
+      });
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 
@@ -297,20 +264,16 @@ export const adminController = {
         roleInfo
       );
 
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          data: response,
-          success: true,
-        });
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        data: response,
+        success: true,
+      });
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 
@@ -318,20 +281,16 @@ export const adminController = {
     try {
       const response = await allAdminUseCases.getWalletUseCase.execute();
 
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          data: response,
-          success: true,
-        });
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        data: response,
+        success: true,
+      });
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 
@@ -341,20 +300,16 @@ export const adminController = {
       const response = await allAdminUseCases.searchUserUseCase.execute(
         inputData
       );
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          data: response,
-          success: true,
-        });
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        data: response,
+        success: true,
+      });
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 
@@ -365,20 +320,16 @@ export const adminController = {
         sortingType
       );
 
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          data: response,
-          success: true,
-        });
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        data: response,
+        success: true,
+      });
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 
@@ -389,20 +340,16 @@ export const adminController = {
         inputData
       );
 
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          data: response,
-          success: true,
-        });
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        data: response,
+        success: true,
+      });
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 
@@ -412,40 +359,32 @@ export const adminController = {
       const response = await allAdminUseCases.sortClientUseCase.execute(
         sortingType
       );
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          data: response,
-          success: true,
-        });
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        data: response,
+        success: true,
+      });
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 
   getAllContracts: async (req: any, res: any) => {
     try {
       const contracts = await allAdminUseCases.getAllContractsUseCase.execute();
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          contracts,
-          success: true,
-        });
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        contracts,
+        success: true,
+      });
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 
@@ -456,20 +395,16 @@ export const adminController = {
       const contract = await allAdminUseCases.viewSingleContractUseCase.execute(
         contractId
       );
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          contract,
-          success: true,
-        });
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        contract,
+        success: true,
+      });
     } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({
-          message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
-          success: false,
-        });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
     }
   },
 };
