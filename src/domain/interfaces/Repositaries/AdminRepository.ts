@@ -92,60 +92,43 @@ export class AdminRepository implements AdminRepositary {
   }
 
   async getAllClients(page: number, sortType: string): Promise<Client | any> {
-    const PAGE_SIZE: number = 3;
+    const PAGE_SIZE: number = 5;
     const skip: number = (page - 1) * PAGE_SIZE;
-    const totalClients: number = await ClientModel.countDocuments({});
+    const totalClients: number = await ClientModel.countDocuments({}); 
+    const totalPages = Math.ceil(totalClients / PAGE_SIZE);
+    let clients;
+
     if (sortType === "latest") {
-      const clients: any = await ClientModel.aggregate([
+      clients = await ClientModel.aggregate([
         { $match: {} },
         { $sort: { createdAt: 1 } },
         { $skip: skip },
         { $limit: PAGE_SIZE },
       ]);
-      const totalPages: number = totalClients / PAGE_SIZE;
-      if (clients) {
-        return {
-          ...clients,
-          totalPages,
-        } as Client;
-      } else {
-        throw new Error("Clients not Found");
-      }
     } else if (sortType === "block") {
-      const clients: any = await ClientModel.aggregate([
+      clients = await ClientModel.aggregate([
         { $match: {} },
         { $sort: { isBlocked: 1 } },
         { $skip: skip },
         { $limit: PAGE_SIZE },
       ]);
-
-      const totalPages: number = totalClients / PAGE_SIZE;
-      if (clients) {
-        return {
-          ...clients,
-          totalPages,
-        } as Client;
-      } else {
-        throw new Error("Clients not Found");
-      }
-    } else if (sortType === "unBlock") {
-      const clients: any = await ClientModel.aggregate([
+    } else if (sortType === "unblock") {
+      clients = await ClientModel.aggregate([
         { $match: {} },
         { $sort: { isBlocked: -1 } },
         { $skip: skip },
         { $limit: PAGE_SIZE },
       ]);
-
-      const totalPages: number = totalClients / PAGE_SIZE;
-      if (clients) {
-        return {
-          ...clients,
-          totalPages,
-        } as Client;
-      } else {
-        throw new Error("Clients not Found");
-      }
+    } else {
+      throw new Error("Wrong selection");
     }
+
+    if (!clients) throw new Error("Clients not found");
+
+    return {
+      clients,
+      totalPages,
+    };
   }
 
   async searchUser(inputData: string): Promise<User | any> {
@@ -405,7 +388,7 @@ export class AdminRepository implements AdminRepositary {
         },
       }
     );
- 
+
     let updatedClient;
     if (editData.editData) {
       updatedClient = await ClientModel.findByIdAndUpdate(
@@ -416,15 +399,10 @@ export class AdminRepository implements AdminRepositary {
         }
       ).exec();
     } else {
-      updatedClient = await ClientModel.findByIdAndUpdate(
-        clientId,
-        editData,
-        {
-          new: true,
-        }
-      ).exec();
-    };
- 
+      updatedClient = await ClientModel.findByIdAndUpdate(clientId, editData, {
+        new: true,
+      }).exec();
+    }
 
     const createNotification = new NotificationModel({
       type: "Empty",

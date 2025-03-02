@@ -355,7 +355,7 @@ export const clientController = {
 
   makePayment: async (req: Request, res: Response) => {
     try {
-      const { clientId } = req.params;
+      const { id: clientId } = req.user;
       const response = await allClientUseCases.makePaymentUseCase.execute(
         clientId,
         req.body
@@ -454,7 +454,8 @@ export const clientController = {
 
   rejectProposal: async (req: Request, res: any) => {
     try {
-      const { userId, clientId, jobPostId } = req.body;
+      const { userId, jobPostId }: {userId: string, jobPostId: string} = req.body;
+      const {id: clientId}= req.user;
 
       if (!userId && !clientId && !jobPostId) {
         return res
@@ -506,33 +507,11 @@ export const clientController = {
     }
   },
 
-
-  myContracts: async (req: Request, res: Response) => {
-    try {
-      const { clientId } = req.params;
-      const response = await allClientUseCases.myContractsUseCase.execute(
-        clientId
-      );
-
-      res
-        .status(HttpStatusCode.OK)
-        .json({
-          message: StatusMessage[HttpStatusCode.OK],
-          data: response,
-          success: true,
-        });
-    } catch (err: any) {
-      res
-        .status(500)
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
-    }
-  },
  
 
   viewSubmissions: async (req: Request, res: Response) => {
     try {
-      const { clientId } = req.params;
+      const { id: clientId } = req.user;
       const response = await allClientUseCases.viewSubmissionsUseCase.execute(
         clientId
       );

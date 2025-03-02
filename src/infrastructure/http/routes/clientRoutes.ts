@@ -1,5 +1,6 @@
 import express from "express"; 
 const clientRouter = express.Router();
+import refreshToken from '../middlewares/auth/refreshToken';
 import { clientController } from "../controllers/clientCtrl"; 
 import { userController } from "../controllers/userCtrl";
 import { verifyToken } from "../middlewares/auth/verifyToken";
@@ -19,21 +20,18 @@ const {
   trendingJobs,
   getSelectedJobs,
   getProposals,
-  createContract,
-
-  myContracts,
+  rejectProposal,
   viewContracts,
-
   
-
+  viewSubmissions,
+   
+  createContract,
   getProfile,
   getAllNotifications,
   getUserProfile,
-  viewSubmissions,
   getallDevelopers,
   viewWallet,
   getAllChats,
-  rejectProposal,
   viewChat,
   editProfile,
   profileVerification,
@@ -56,8 +54,11 @@ clientRouter.get("/trendingJobs", verifyToken, requireRole(CLIENT), trendingJobs
 clientRouter.get('/jobs/:jobsType', verifyToken, requireRole(CLIENT), getSelectedJobs); 
 clientRouter.get('/job/:jobPostId',verifyToken, requireRole(CLIENT), getSingleJobPost); 
 clientRouter.get("/proposals/:proposalType", verifyToken, requireRole(CLIENT), getProposals);
-
 clientRouter.get('/contracts/:contractViewType', verifyToken, requireRole(CLIENT), viewContracts); 
+clientRouter.get("/contractsSubmissions", verifyToken, requireRole(CLIENT), viewSubmissions);
+clientRouter.get("/developers", verifyToken, requireRole(CLIENT), getallDevelopers);
+clientRouter.post("/projectApprove", verifyToken, requireRole(CLIENT),closeContract);
+clientRouter.post("/jobPaymentStripe",verifyToken, requireRole(CLIENT), makePayment );
 
 
 
@@ -65,10 +66,7 @@ clientRouter.post('/job/createContract', verifyToken, requireRole(CLIENT), creat
 clientRouter.get("/profile/view/:clientId", verifyToken, requireRole(CLIENT), getProfile);
 clientRouter.get("/notifications/:clientId", verifyToken, requireRole(CLIENT), getAllNotifications);
 clientRouter.get("/userProfile/view/:userId", verifyToken, requireRole(CLIENT), getUserProfile);
-clientRouter.get("/job/myContracts/:clientId", verifyToken, requireRole(CLIENT), myContracts);
-// clientRouter.get("/contract/:contractId", verifyToken, requireRole(CLIENT), viewContract);
-clientRouter.get("/contracts/submissions/:clientId", verifyToken, requireRole(CLIENT), viewSubmissions);
-clientRouter.get("/developers/allDevelopers", verifyToken, requireRole(CLIENT), getallDevelopers);
+  // clientRouter.get("/contract/:contractId", verifyToken, requireRole(CLIENT), viewContract);
 clientRouter.get("/wallet-view/:clientId", verifyToken, requireRole(CLIENT), viewWallet);
 clientRouter.get("/allChat/view/:roleId", verifyToken, requireRole(CLIENT), getAllChats);
 clientRouter.get("/chat/view/:roleType/:roleId/:targetId", verifyToken, requireRole(CLIENT), clientController.viewChat);
@@ -84,15 +82,14 @@ clientRouter.post("/logout", logoutClient);
 
 clientRouter.post("/profile-verify/", verifyToken, requireRole(CLIENT), profileVerification);
 clientRouter.post("/profile-edit/",verifyToken, requireRole(CLIENT), editProfile);
-clientRouter.post("/jobPost/payment-stripe/:clientId",verifyToken, requireRole(CLIENT), makePayment );
 clientRouter.post("/invite/user",verifyToken, requireRole(CLIENT), inviteUser); 
 clientRouter.post("/payment/success/:clientId", verifyToken, requireRole(CLIENT),createJobPost);
-clientRouter.post("/project-submit/approval", verifyToken, requireRole(CLIENT),closeContract);
 clientRouter.post("/project-submit/reject", verifyToken, requireRole(CLIENT), rejectContract);
 clientRouter.post("/rate-user/:notificationId",verifyToken, requireRole(CLIENT), rateAndReview); 
 clientRouter.post("/chat/sendMessage", verifyToken, requireRole(CLIENT), sendMessage);
 // clientRouter.post( "/profile/edit/:clientId", editProfile);   
-clientRouter.put('/job-proposal/reject',verifyToken, requireRole(CLIENT), rejectProposal);
+clientRouter.put('/proposalReject',verifyToken, requireRole(CLIENT), rejectProposal);
+clientRouter.post('/refresh-token', refreshToken);
 
  
 

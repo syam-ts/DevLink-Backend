@@ -54,8 +54,7 @@ import { MakePayment } from '../../application/usecases/client/makePayment';
 import { GetUserProfileClient } from '../../application/usecases/client/getUserProfile';
 import { GetProposals } from '../../application/usecases/client/getProposals'; 
 import { CreateContract } from '../../application/usecases/client/createContract';
-import { RejectProposal } from '../../application/usecases/client/rejectProposal';
-import { MyContracts } from '../../application/usecases/client/myContracts';  
+import { RejectProposal } from '../../application/usecases/client/rejectProposal'; 
 import { ViewSubmissions } from '../../application/usecases/client/viewSubmissions';
 import { CloseContract } from '../../application/usecases/client/closeContract';
 import { RateAndReview } from '../../application/usecases/client/rateAndReview';
@@ -148,8 +147,7 @@ const makePaymentUseCase = new MakePayment(ClientRepository);
 const getUserProfileUseCase = new GetUserProfileClient(ClientRepository);
 const getProposalsUseCase = new GetProposals(ClientRepository); 
 const createContractUseCase = new CreateContract(ClientRepository);
-const rejectProposalUseCase = new RejectProposal(ClientRepository);
-const myContractsUseCase = new MyContracts(ClientRepository); 
+const rejectProposalUseCase = new RejectProposal(ClientRepository); 
 const viewSubmissionsUseCase = new ViewSubmissions(ClientRepository);
 const closeContractUseCase = new CloseContract(ClientRepository);
 const rateAndReviewUserUseCase = new RateAndReview(ClientRepository);
@@ -242,8 +240,7 @@ export const allClientUseCases = {
      getProposalsUseCase,
      viewWalletUseCase, 
      createContractUseCase,
-     rejectProposalUseCase,
-     myContractsUseCase, 
+     rejectProposalUseCase, 
      viewSubmissionsUseCase,
      getallDevelopersUseCase,
      closeContractUseCase,
