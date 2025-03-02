@@ -24,19 +24,20 @@ const {
   viewContracts,
   makePayment,
   createJobPost,
-  
-  viewSubmissions,
-   
-  createContract,
   getProfile,
+  profileVerification,
+  editProfile,
+  
+
+
+  viewSubmissions, 
+  createContract,
   getAllNotifications,
   getUserProfile,
   getallDevelopers,
   viewWallet,
   getAllChats,
   viewChat,
-  editProfile,
-  profileVerification,
   rateAndReview,
   closeContract,
   sendMessage,
@@ -60,8 +61,9 @@ clientRouter.get("/developers", verifyToken, requireRole(CLIENT), getallDevelope
 clientRouter.post("/projectApprove", verifyToken, requireRole(CLIENT),closeContract);
 clientRouter.post("/jobPaymentStripe",verifyToken, requireRole(CLIENT), makePayment );
 clientRouter.post("/paymentSuccess", verifyToken, requireRole(CLIENT),createJobPost);
-
-clientRouter.get("/profile/view/:clientId", verifyToken, requireRole(CLIENT), getProfile);
+clientRouter.get("/profile", verifyToken, requireRole(CLIENT), getProfile);
+clientRouter.post("/profile/verify", verifyToken, requireRole(CLIENT), profileVerification);
+clientRouter.post("/profile/edit",verifyToken, requireRole(CLIENT), editProfile);
 
 
 
@@ -86,9 +88,6 @@ clientRouter.get("/chat/view/:roleType/:roleId/:targetId", verifyToken, requireR
 
 
 
-
-clientRouter.post("/profile/verify/:clientId", verifyToken, requireRole(CLIENT), profileVerification);
-clientRouter.post("/profile/edit/:clientId",verifyToken, requireRole(CLIENT), editProfile);
 clientRouter.post("/invite/user",verifyToken, requireRole(CLIENT), inviteUser); 
 clientRouter.post("/project-submit/reject", verifyToken, requireRole(CLIENT), rejectContract);
 clientRouter.post("/rate-user/:notificationId",verifyToken, requireRole(CLIENT), rateAndReview); 

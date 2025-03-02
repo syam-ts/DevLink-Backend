@@ -230,7 +230,7 @@ export const clientController = {
     
   getProfile: async (req: Request, res: Response) => {
     try {
-      const { clientId } = req.params;
+      const { id: clientId }: {id: string} = req.user;
       const client = await allClientUseCases.getClientProfileUseCase.execute(
         clientId
       );
@@ -249,7 +249,7 @@ export const clientController = {
 
   profileVerification: async (req: any, res: Response) => {
     try {
-      const clientId = req.user.id;
+      const {id: clientId}: {id: string} = req.user;
       
       const response =
       await allClientUseCases.profileVerificationUseCase.execute(
@@ -269,7 +269,7 @@ export const clientController = {
 
   editProfile: async (req: any, res: Response) => {
     try {
-      const clientId = req.user.id;
+      const {id: clientId}: {id: string} = req.user;
       const response = await allClientUseCases.editClientProfileUseCase.execute(
         clientId,
         req.body
