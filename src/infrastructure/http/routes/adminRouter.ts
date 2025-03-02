@@ -32,7 +32,14 @@ const {
 
 adminRouter.get('/dashboard', getDashboard);
 adminRouter.get('/getAllUsers', getAllUsers);
-adminRouter.get('/getAllClients', getAllClients); 
+adminRouter.get('/getAllClients', getAllClients);  
+adminRouter.patch('/blockClient/:clientId', blockClient);
+adminRouter.patch('/unBlockClient/:clientId', unBlockClient); 
+
+
+adminRouter.patch('/blockUser/:userId', blockUser);
+adminRouter.patch('/unBlockUser/:userId', unBlockUser);
+
 adminRouter.get('/getRequests', getRequests);
 adminRouter.get('/request/getRequestedClient/:clientId', getRequestedClient);
 adminRouter.get('/viewRole/:roleId/:roleInfo', viewRoleInfo);
@@ -50,10 +57,6 @@ adminRouter.post('/getAllClients/sort?', sortClient);
 
 adminRouter.put('/verifyClient/accept', verifyAccept);
 
-adminRouter.patch('/blockUser/:userId', blockUser);
-adminRouter.patch('/unBlockUser/:userId', unBlockUser);
-adminRouter.patch('/blockClient/:clientId', blockClient);
-adminRouter.patch('/unBlockClient/:clientId', unBlockClient);
 
 
 
