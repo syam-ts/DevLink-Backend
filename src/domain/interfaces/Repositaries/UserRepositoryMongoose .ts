@@ -754,9 +754,8 @@ export class UserRepositoryMongoose implements UserRepositary {
 
     const totalTransactions =
       wallet.length > 0 ? wallet[0].totalTransactions : 0;
-
-    const totalPages: number = Math.ceil(totalTransactions / page_size);
-
+    const totalPages: number = Math.ceil(totalTransactions / page_size); 
+    
     const userWallet = await UserModel.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(userId) } },
       {

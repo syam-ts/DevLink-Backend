@@ -570,7 +570,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       { $match: { _id: new mongoose.Types.ObjectId(clientId) } },
       { $project: { totalTransactions: { $size: "$wallet.transactions" } } },
     ]);
-
+ 
     const totalTransactions =
       wallet.length > 0 ? wallet[0].totalTransactions : 0;
     const totalPages: number = totalTransactions / PAGE_SIZE;
@@ -586,7 +586,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
           _id: 0,
         },
       },
-    ]);
+    ]); 
 
     return {
       ...clientWallet,
@@ -1053,16 +1053,12 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     );
 
     // deleting the entire submission doc from client
-    const deleteSubmission = await ClientModel.findOneAndDelete(
-      {
-        projectSubmissions: {
-          $elemMatch: { contractId },
-        },
-      },
-      {
-        new: true,
-      }
+    const updatedClient = await ClientModel.findOneAndUpdate(
+      { "projectSubmissions.contractId": contractId },
+      { $pull: { projectSubmissions: { contractId } } },
+      { new: true }
     );
+    
 
     const finalAmount: number = Math.floor(contract.amount % 10) * 100;
     // 10% cut for admin

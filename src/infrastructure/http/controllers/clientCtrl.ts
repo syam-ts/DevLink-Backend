@@ -657,7 +657,7 @@ export const clientController = {
 
   viewWallet: async (req: Request, res: Response) => {
     try {
-      const { clientId } = req.params;
+      const { id: clientId }: {id: string} = req.user;
       const { currentPage } = req.query;
       const response = await allClientUseCases.viewWalletUseCase.execute(
         clientId,

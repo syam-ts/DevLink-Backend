@@ -27,22 +27,20 @@ const {
   profileVerification,
   editProfile,
   getUserProfile,
-  
+  createContract,
+  viewSubmissions, 
+  getallDevelopers,
+  closeContract,
   rejectContract,
+  
+  viewWallet,
 
 
   rejectProposal,
-  
-  
-  viewSubmissions, 
-  createContract,
   getAllNotifications,
-  getallDevelopers,
-  viewWallet,
   getAllChats,
   viewChat,
   rateAndReview,
-  closeContract,
   sendMessage,
   inviteUser,
 } = clientController;
@@ -81,19 +79,18 @@ clientRouter.post('/createContract', verifyToken, requireRole(CLIENT), createCon
 clientRouter.get("/contract/:contractId", verifyToken, requireRole(CLIENT), viewSingleContract);  
 clientRouter.post("/contractSubmitReject/:contractId", verifyToken, requireRole(CLIENT), rejectContract);
 
+clientRouter.get("/wallet", verifyToken, requireRole(CLIENT), viewWallet);
+
+
+
 
 clientRouter.put('/proposalReject',verifyToken, requireRole(CLIENT), rejectProposal);
-clientRouter.get("/wallet-view/:clientId", verifyToken, requireRole(CLIENT), viewWallet);
 clientRouter.get("/allChat/view/:roleId", verifyToken, requireRole(CLIENT), getAllChats);
 clientRouter.get("/chat/view/:roleType/:roleId/:targetId", verifyToken, requireRole(CLIENT), clientController.viewChat);
 clientRouter.post("/chat/sendMessage", verifyToken, requireRole(CLIENT), sendMessage);
 clientRouter.get("/notifications/:clientId", verifyToken, requireRole(CLIENT), getAllNotifications);
-clientRouter.post("/rate-user/:notificationId",verifyToken, requireRole(CLIENT), rateAndReview); 
-
-
-
-clientRouter.post("/invite/user",verifyToken, requireRole(CLIENT), inviteUser); 
-// clientRouter.post( "/profile/edit/:clientId", editProfile);   
+clientRouter.post("/rate-user/:notificationId",verifyToken, requireRole(CLIENT), rateAndReview);   
+clientRouter.post("/invite/user",verifyToken, requireRole(CLIENT), inviteUser);  
 clientRouter.post('/refresh-token', refreshToken);
 
  
