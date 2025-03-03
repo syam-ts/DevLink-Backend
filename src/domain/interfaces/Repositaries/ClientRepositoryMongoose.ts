@@ -755,6 +755,12 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return proposal;
   }
 
+  async listAllJobs(clientId: Id): Promise<any> {
+    const jobs = await JobPostModel.find({ clientId: clientId }).exec();
+    if (!jobs) throw new Error("No jobs found");
+    return jobs;
+  }
+
   async closeContract(contractId: Id, progress: number): Promise<any> {
     //update contract status as closed ----------------
     if (!progress) throw new Error("Progress data missing");

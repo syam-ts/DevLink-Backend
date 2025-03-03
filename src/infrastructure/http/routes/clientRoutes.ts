@@ -43,6 +43,7 @@ const {
   rateAndReview,
   sendMessage,
   inviteUser,
+  listAllJobs
 } = clientController;
 const {
   getSingleJobPost,
@@ -58,6 +59,7 @@ clientRouter.get('/job/:jobPostId',verifyToken, requireRole(CLIENT), getSingleJo
 clientRouter.get("/proposals/:proposalType", verifyToken, requireRole(CLIENT), getProposals);
 clientRouter.get('/contracts/:contractViewType', verifyToken, requireRole(CLIENT), viewContracts); 
 clientRouter.get("/contractsSubmissions", verifyToken, requireRole(CLIENT), viewSubmissions);
+
 clientRouter.get("/developers", verifyToken, requireRole(CLIENT), getallDevelopers);
 clientRouter.post("/projectApprove", verifyToken, requireRole(CLIENT),closeContract);
 clientRouter.post("/jobPaymentStripe",verifyToken, requireRole(CLIENT), makePayment );
@@ -65,8 +67,7 @@ clientRouter.post("/paymentSuccess", verifyToken, requireRole(CLIENT),createJobP
 clientRouter.get("/profile", verifyToken, requireRole(CLIENT), getProfile);
 clientRouter.get("/userProfile/:userId", verifyToken, requireRole(CLIENT), getUserProfile);
 clientRouter.post("/profile/verify", verifyToken, requireRole(CLIENT), profileVerification);
-clientRouter.post("/profile/edit",verifyToken, requireRole(CLIENT), editProfile); 
-
+clientRouter.post("/profile/edit",verifyToken, requireRole(CLIENT), editProfile);   
 clientRouter.post("/signup", signupClient);
 clientRouter.post("/verify-otp", verifyOtp);
 clientRouter.post("/resend-otp", resendOtp);
@@ -78,10 +79,11 @@ clientRouter.post("/logout", logoutClient);
 clientRouter.post('/createContract', verifyToken, requireRole(CLIENT), createContract); 
 clientRouter.get("/contract/:contractId", verifyToken, requireRole(CLIENT), viewSingleContract);  
 clientRouter.post("/contractSubmitReject/:contractId", verifyToken, requireRole(CLIENT), rejectContract);
-
 clientRouter.get("/wallet", verifyToken, requireRole(CLIENT), viewWallet);
 
 
+//pending
+clientRouter.get("/listAllJobs", verifyToken, requireRole(CLIENT), listAllJobs);
 
 
 clientRouter.put('/proposalReject',verifyToken, requireRole(CLIENT), rejectProposal);
