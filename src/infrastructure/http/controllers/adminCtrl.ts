@@ -20,6 +20,7 @@ export const adminController = {
 
   loginAdmin: async (req: any, res: any) => {
     try {
+      
       const admin = await allAdminUseCases.loginAdminUseCase.execute(req.body);
 
       admin.role = "admin";
