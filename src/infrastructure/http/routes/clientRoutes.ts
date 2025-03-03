@@ -6,7 +6,7 @@ import { userController } from "../controllers/userCtrl";
 import { verifyToken } from "../middlewares/auth/verifyToken";
 import { requireRole } from "../middlewares/auth/requireRole"; 
 import {allRoles} from '../../../helper/constants/enums';
- 
+
 const {
   signupClient,
   verifyOtp,
@@ -20,20 +20,23 @@ const {
   trendingJobs,
   getSelectedJobs,
   getProposals,
-  rejectProposal,
   viewContracts,
   makePayment,
   createJobPost,
   getProfile,
   profileVerification,
   editProfile,
+  getUserProfile,
   
+  rejectContract,
 
 
+  rejectProposal,
+  
+  
   viewSubmissions, 
   createContract,
   getAllNotifications,
-  getUserProfile,
   getallDevelopers,
   viewWallet,
   getAllChats,
@@ -42,10 +45,10 @@ const {
   closeContract,
   sendMessage,
   inviteUser,
-  rejectContract
 } = clientController;
 const {
-  getSingleJobPost
+  getSingleJobPost,
+  viewSingleContract
 } = userController;
  const { CLIENT }: {CLIENT: string} = allRoles;
 
@@ -62,11 +65,9 @@ clientRouter.post("/projectApprove", verifyToken, requireRole(CLIENT),closeContr
 clientRouter.post("/jobPaymentStripe",verifyToken, requireRole(CLIENT), makePayment );
 clientRouter.post("/paymentSuccess", verifyToken, requireRole(CLIENT),createJobPost);
 clientRouter.get("/profile", verifyToken, requireRole(CLIENT), getProfile);
+clientRouter.get("/userProfile/:userId", verifyToken, requireRole(CLIENT), getUserProfile);
 clientRouter.post("/profile/verify", verifyToken, requireRole(CLIENT), profileVerification);
-clientRouter.post("/profile/edit",verifyToken, requireRole(CLIENT), editProfile);
-
-
-
+clientRouter.post("/profile/edit",verifyToken, requireRole(CLIENT), editProfile); 
 
 clientRouter.post("/signup", signupClient);
 clientRouter.post("/verify-otp", verifyOtp);
@@ -75,25 +76,24 @@ clientRouter.post("/login", loginClient);
 clientRouter.post("/verify-email", verifyEmail);
 clientRouter.post("/resetPassword/:clientId", resetPassword);
 clientRouter.post("/googleLogin", googleLogin);
-clientRouter.post("/logout", logoutClient);
+clientRouter.post("/logout", logoutClient); 
+clientRouter.post('/createContract', verifyToken, requireRole(CLIENT), createContract); 
+clientRouter.get("/contract/:contractId", verifyToken, requireRole(CLIENT), viewSingleContract);  
+clientRouter.post("/contractSubmitReject/:contractId", verifyToken, requireRole(CLIENT), rejectContract);
 
 
-clientRouter.post('/job/createContract', verifyToken, requireRole(CLIENT), createContract); 
-clientRouter.get("/notifications/:clientId", verifyToken, requireRole(CLIENT), getAllNotifications);
-clientRouter.get("/userProfile/view/:userId", verifyToken, requireRole(CLIENT), getUserProfile);
-  // clientRouter.get("/contract/:contractId", verifyToken, requireRole(CLIENT), viewContract);
+clientRouter.put('/proposalReject',verifyToken, requireRole(CLIENT), rejectProposal);
 clientRouter.get("/wallet-view/:clientId", verifyToken, requireRole(CLIENT), viewWallet);
 clientRouter.get("/allChat/view/:roleId", verifyToken, requireRole(CLIENT), getAllChats);
 clientRouter.get("/chat/view/:roleType/:roleId/:targetId", verifyToken, requireRole(CLIENT), clientController.viewChat);
+clientRouter.post("/chat/sendMessage", verifyToken, requireRole(CLIENT), sendMessage);
+clientRouter.get("/notifications/:clientId", verifyToken, requireRole(CLIENT), getAllNotifications);
+clientRouter.post("/rate-user/:notificationId",verifyToken, requireRole(CLIENT), rateAndReview); 
 
 
 
 clientRouter.post("/invite/user",verifyToken, requireRole(CLIENT), inviteUser); 
-clientRouter.post("/project-submit/reject", verifyToken, requireRole(CLIENT), rejectContract);
-clientRouter.post("/rate-user/:notificationId",verifyToken, requireRole(CLIENT), rateAndReview); 
-clientRouter.post("/chat/sendMessage", verifyToken, requireRole(CLIENT), sendMessage);
 // clientRouter.post( "/profile/edit/:clientId", editProfile);   
-clientRouter.put('/proposalReject',verifyToken, requireRole(CLIENT), rejectProposal);
 clientRouter.post('/refresh-token', refreshToken);
 
  

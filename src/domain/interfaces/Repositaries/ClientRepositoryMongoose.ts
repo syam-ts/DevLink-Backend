@@ -309,16 +309,16 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async createJobPost(clientId: Id, data: any): Promise<JobPostDocument> {
     const client: any = await ClientModel.findById(clientId);
-      //update client jobpost count
-      // const cilent = await ClientModel.findByIdAndUpdate(clientId, {
-      //   $inc: {totalJobs: 1}
-      // }, {
-      //   new: true
-      // });
-      // console.log('THejb', client)
+    //update client jobpost count
+    // const cilent = await ClientModel.findByIdAndUpdate(clientId, {
+    //   $inc: {totalJobs: 1}
+    // }, {
+    //   new: true
+    // });
+    // console.log('THejb', client)
 
-    const parsedEstimatedTimeInHours: number = parseInt(data.estimateTime);  
-    const totalAmount: number = data.estimateTime * data.payment; 
+    const parsedEstimatedTimeInHours: number = parseInt(data.estimateTime);
+    const totalAmount: number = data.estimateTime * data.payment;
     data.amount = totalAmount; //updatig the total amount
 
     const createdJobPost = new JobPostModel({
@@ -351,8 +351,6 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     });
 
     const savedJobPost = await createdJobPost.save();
- 
-  
 
     const newNotification = await NotificationModel.create({
       type: "New Job Post",
@@ -364,8 +362,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
     newNotification.save();
     return savedJobPost;
-  };
-
+  }
 
   async getAllNotifications(clientId: Id): Promise<any> {
     const notifications = await NotificationModel.aggregate([
@@ -1055,8 +1052,19 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       }
     );
 
-    const finalAmount: number = Math.floor(contract.amount % 10) * 100;
+    // deleting the entire submission doc from client
+    const deleteSubmission = await ClientModel.findOneAndDelete(
+      {
+        projectSubmissions: {
+          $elemMatch: { contractId },
+        },
+      },
+      {
+        new: true,
+      }
+    );
 
+    const finalAmount: number = Math.floor(contract.amount % 10) * 100;
     // 10% cut for admin
     const adminWallet = await AdminModel.findByIdAndUpdate(
       adminId,

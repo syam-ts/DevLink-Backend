@@ -701,7 +701,7 @@ export const clientController = {
 
   rejectContract: async (req: any, res: Response) => {
     try {
-      const { contractId } = req.body;
+      const { contractId } = req.params;
       const clientId = req.user.id;
       const response =
         await allClientUseCases.rejectContractUseCase.execute(contractId, clientId);
