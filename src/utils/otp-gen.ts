@@ -1,9 +1,7 @@
-import { randomInt } from 'node:crypto';
+import { randomInt } from "node:crypto";
 
- 
 function generateOtp(): number {
-  return randomInt(1000, 10000); 
+  return randomInt(1000, 10000);
 }
 
- 
-export default generateOtp; 
+export default generateOtp;
