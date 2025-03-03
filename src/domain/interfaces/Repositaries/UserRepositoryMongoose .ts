@@ -225,11 +225,15 @@ export class UserRepositoryMongoose implements UserRepositary {
     password: any
   ): Promise<any | null> {
     const user = await UserModel.findOne({ email }).exec();
+
     if (user) {
       return {
         _id: user._id,
         name: user.name,
         email: user.email,
+        profilePicture: user.profilePicture,
+        isBlocked: user.isBlocked,
+        isProfileFilled: user.isProfileFilled,
       } as User;
     } else {
       const salt: number = 10;
@@ -239,18 +243,41 @@ export class UserRepositoryMongoose implements UserRepositary {
         name: name,
         email: email,
         password: hashedPassword,
-        mobile: "",
-        isBlocked: false,
-        age: "",
+        mobile: 0,
+        skills: "",
+        profilePicture: "",
         location: "",
         description: "",
-        skills: "",
+        experience: "",
+        education: "",
         budget: "",
+        rating: {
+          ratingSum: 0,
+          noOfRating: 0,
+          avgRating: 0,
+        },
+        review: [],
+        domain: "",
+        githubLink: "",
+        totalJobs: "",
+        totalHours: "",
+        whyHireMe: "",
+        completedJobs: "",
+        inProgress: "",
+        workHistory: [],
+        isEditRequest: false,
+        isProfileFilled: false,
+        request: [],
+        wallet: [],
+        isBlocked: false,
+        isBoosted: false,
+        createdAt: new Date(),
       });
 
       const savedUser = await createdUser.save();
 
       return {
+        _id: savedUser._id,
         name: savedUser.name,
         email: savedUser.email,
         mobile: savedUser.mobile,
@@ -287,10 +314,9 @@ export class UserRepositoryMongoose implements UserRepositary {
     userId: string,
     userData: any,
     type: string
-  ): Promise<any> { 
-
-    const { editData } = userData; 
-    editData.isProfileFilled = true; 
+  ): Promise<any> {
+    const { editData } = userData;
+    editData.isProfileFilled = true;
     if (type === "verify") {
       const user = await UserModel.findByIdAndUpdate(userId, editData, {
         new: true,
@@ -323,9 +349,9 @@ export class UserRepositoryMongoose implements UserRepositary {
           isBlocked: user.isBlocked,
           isProfileFilled: user.isProfileFilled,
         },
-      }
+      };
     }
-  };
+  }
 
   async viewProposals(userId: string): Promise<any> {
     let findProposals = await ClientModel.find({
@@ -338,7 +364,7 @@ export class UserRepositoryMongoose implements UserRepositary {
 
     if (!findProposals) throw new Error("No proposal found");
     return findProposals[0].proposals;
-  };
+  }
 
   async createProposal(
     userId: Id,
@@ -388,7 +414,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         status: "pending",
         bidAmount: bidAmount,
         bidDeadline: bidDeadline,
-        createdAt: new Date()
+        createdAt: new Date(),
       };
 
       const proposal = await ClientModel.findByIdAndUpdate(
@@ -631,7 +657,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       })
         .skip(skip)
         .limit(page_size);
-    } else if(contractViewType === "submitted") {
+    } else if (contractViewType === "submitted") {
       totalContracts = await ContractModel.countDocuments({
         $and: [{ userId: userId }, { status: "submitted" }],
       });
@@ -641,8 +667,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       })
         .skip(skip)
         .limit(page_size);
-    }
-    else if (contractViewType === "rejected") {
+    } else if (contractViewType === "rejected") {
       totalContracts = await ContractModel.countDocuments({
         $and: [{ userId: userId }, { status: "rejected" }],
       });
@@ -674,7 +699,6 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-  
   async boostSuccess(userId: Id): Promise<any> {
     const user: any = await UserModel.findByIdAndUpdate(
       userId,
@@ -754,8 +778,8 @@ export class UserRepositoryMongoose implements UserRepositary {
 
     const totalTransactions =
       wallet.length > 0 ? wallet[0].totalTransactions : 0;
-    const totalPages: number = Math.ceil(totalTransactions / page_size); 
-    
+    const totalPages: number = Math.ceil(totalTransactions / page_size);
+
     const userWallet = await UserModel.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(userId) } },
       {

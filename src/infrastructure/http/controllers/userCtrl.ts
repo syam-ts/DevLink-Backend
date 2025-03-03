@@ -142,7 +142,9 @@ export const userController = {
       }
 
       user.role = "user";
+      console.log('google return: ', user)
       const { accessToken, refreshToken } = generateTokens(user);
+      console.log('Acc: ', accessToken, 'REFRSH: ', refreshToken)
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,

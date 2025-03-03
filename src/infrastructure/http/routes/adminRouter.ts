@@ -58,11 +58,10 @@ adminRouter.post('/logout', logoutAdmin);
 adminRouter.post('/getAllUsers/search?', searchUser);
 adminRouter.post('/getAllClients/search?', searchClient);
 adminRouter.post('/getAllClients/sort?', sortClient);
-
-adminRouter.put('/verifyClient/accept', verifyAccept);
-
+adminRouter.put('/verifyClient/accept', verifyAccept); 
 
 
+adminRouter.post('/refresh-token', refreshToken); 
 
 
 export default adminRouter;

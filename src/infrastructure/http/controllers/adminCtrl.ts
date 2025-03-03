@@ -74,7 +74,7 @@ export const adminController = {
   },
 
   getAllUsers: async (req: any, res: any) => {
-    try {
+    try { 
       const users = await allAdminUseCases.getAllUsersUseCase.execute(
         req.query.page,
         req.query.sortType
