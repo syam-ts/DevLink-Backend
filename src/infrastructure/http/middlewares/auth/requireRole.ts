@@ -1,20 +1,16 @@
-import { Response, NextFunction } from 'express';
-import { HttpStatusCode } from '../../../../helper/constants/enums';
-import { StatusMessage } from '../../../../helper/constants/stausMessages';
+import { Response, NextFunction } from "express";
+import { HttpStatusCode } from "../../../../helper/constants/enums";
+import { StatusMessage } from "../../../../helper/constants/stausMessages";
 
-
-const requireRole = (role: string): any => {  
-   
-    return (req: any, res: Response, next: NextFunction) => {
-     
-        if(!req.user || req.user.role !== role)  { 
-            return res.
-            status(HttpStatusCode.FORBIDDEN)
-            .json({ message: StatusMessage[HttpStatusCode.FORBIDDEN] });
-        }
-        next();
+const requireRole = (role: string): any => {
+  return (req: any, res: Response, next: NextFunction) => {
+    if (!req.user || req.user.role !== role) {
+      return res
+        .status(HttpStatusCode.FORBIDDEN)
+        .json({ message: StatusMessage[HttpStatusCode.FORBIDDEN] });
     }
+    next();
+  };
 };
 
-
- export { requireRole };
+export { requireRole };

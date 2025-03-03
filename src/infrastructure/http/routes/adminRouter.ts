@@ -1,9 +1,10 @@
 import express from 'express';
 const adminRouter = express.Router();
 import { adminController } from '../controllers/adminCtrl';
-import { verifyToken } from '../middlewares/auth/verifyToken';
+import { verifyToken } from '../middlewares/auth/verifyToken'; 
+import refreshToken from '../middlewares/auth/refreshToken';
 import { requireRole } from '../middlewares/auth/requireRole';
-// import { requireRole } from '../middlewares/auth/requireRole'; 
+import {allRoles} from '../../../helper/constants/enums';
 
 const {
     getDashboard,
@@ -28,19 +29,19 @@ const {
     getAllContracts,
     viewSingleContract
 } = adminController;
-
+const {ADMIN}: {ADMIN: string} = allRoles;
 
 // adminRouter.post('/signup', adminController.signUpAdmin);
 
-adminRouter.get('/dashboard', getDashboard);
-adminRouter.get('/getAllUsers', getAllUsers);
-adminRouter.get('/getAllClients', getAllClients);   
-adminRouter.get('/wallet', viewWallet);    
-adminRouter.patch('/blockUser/:userId', blockUser);
-adminRouter.patch('/unBlockUser/:userId', unBlockUser);
-adminRouter.patch('/blockClient/:clientId', blockClient);
-adminRouter.patch('/unBlockClient/:clientId', unBlockClient); 
-adminRouter.get('/getRequests', getRequests);
+adminRouter.get('/dashboard',verifyToken,requireRole(ADMIN), getDashboard);
+adminRouter.get('/getAllUsers', verifyToken,requireRole(ADMIN), getAllUsers);
+adminRouter.get('/getAllClients', verifyToken,requireRole(ADMIN), getAllClients);   
+adminRouter.get('/wallet', verifyToken,requireRole(ADMIN), viewWallet);    
+adminRouter.patch('/blockUser/:userId', verifyToken,requireRole(ADMIN), blockUser);
+adminRouter.patch('/unBlockUser/:userId', verifyToken,requireRole(ADMIN), unBlockUser);
+adminRouter.patch('/blockClient/:clientId', verifyToken,requireRole(ADMIN), blockClient);
+adminRouter.patch('/unBlockClient/:clientId', verifyToken,requireRole(ADMIN), unBlockClient); 
+adminRouter.get('/getRequests', verifyToken,requireRole(ADMIN), getRequests);
 
 
 

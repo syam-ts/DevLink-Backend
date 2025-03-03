@@ -24,7 +24,7 @@ export const adminController = {
       const admin = await allAdminUseCases.loginAdminUseCase.execute(req.body);
 
       admin.role = "admin";
-
+ 
       const { accessToken, refreshToken } = generateTokens(admin);
 
       res.cookie("refreshToken", refreshToken, {

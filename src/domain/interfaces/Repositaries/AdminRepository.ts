@@ -9,7 +9,7 @@ import { ContractModel } from "../../entities/Contract";
 
 export class AdminRepository implements AdminRepositary {
   async findAdmin(name: string, password: string): Promise<any> {
-    console.log('na', name, password)
+   
     
     if (name !== process.env.ADMIN_USERNAME) {
       throw new Error("Username is incorrect");
@@ -18,7 +18,7 @@ export class AdminRepository implements AdminRepositary {
       throw new Error("Password is incorrect");
     }
 
-    return { _id: process.env.ADMIN_OBJECT_ID, name };
+    return { _id: process.env.ADMIN_OBJECT_ID };
   }
 
   async findAllUsers(): Promise<User | any> {

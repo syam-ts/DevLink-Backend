@@ -123,7 +123,7 @@ export const clientController = {
       );
 
       client.role = "client";
-      const { accessToken, refreshToken } = generateTokens(client);
+      const { accessToken, refreshToken } = generateTokens(client); 
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
