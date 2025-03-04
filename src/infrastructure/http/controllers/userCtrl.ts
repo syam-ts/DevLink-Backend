@@ -573,7 +573,7 @@ export const userController = {
 
   getAllInvites: async (req: Request, res: Response) => {
     try {
-      const { userId } = req.params;
+      const { id: userId }: {id: string} = req.user;
       const response = await allUserUseCases.getAllInvitesUseCase.execute(
         userId
       );

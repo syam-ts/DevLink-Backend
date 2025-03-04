@@ -59,8 +59,9 @@ userRouter.patch('/removeFromWishlist',verifyToken, requireRole(USER), removeFro
 userRouter.get("/wallet",verifyToken, requireRole(USER), viewWalletUser);
 userRouter.post('/createProposal', verifyToken, requireRole(USER), createProposal);
 
+userRouter.get("/invites",verifyToken, requireRole(USER), getAllInvites);
+
 userRouter.get("/contract/:contractId",verifyToken, requireRole(USER),viewSingleContract);
-userRouter.get("/invites/view/:userId",verifyToken, requireRole(USER), getAllInvites);
 userRouter.get('/notifications/:userId', verifyToken, requireRole(USER), allNotifications);
 userRouter.get('/allChat/view/:roleId', clientController.getAllChats);
 userRouter.get('/chat/:memberId', verifyToken, requireRole(USER), clientController.getAllChats);

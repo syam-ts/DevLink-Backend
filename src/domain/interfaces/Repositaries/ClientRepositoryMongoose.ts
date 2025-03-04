@@ -1018,7 +1018,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     const client: any = await ClientModel.findById(clientId);
 
     const existingInvite = await InviteModel.find({
-      "jobPostData._id": jobPostId,
+      $and: [{"jobPostData._id": jobPostId},{userId: userId}]
     });
 
     if (existingInvite.length !== 0) throw new Error("Invite already send");

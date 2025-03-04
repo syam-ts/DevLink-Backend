@@ -1,18 +1,13 @@
-
-
 export interface UserRepositary {
-    getAllInvites (userId: string): Promise< any >
-} 
+  getAllInvites(userId: string): void;
+}
 
+export class GetAllInvites {
+  constructor(private userRepositary: UserRepositary) {}
 
+  async execute(userId: string) {
+    const response = await this.userRepositary.getAllInvites(userId);
 
-export class GetAllInvites  {
-    constructor(private userRepositary: UserRepositary) {}
-
-    async execute( userId: string ) {   
-
-           const response = await this.userRepositary.getAllInvites(userId);  
-
-           return response;
-    }
+    return response;
+  }
 }
