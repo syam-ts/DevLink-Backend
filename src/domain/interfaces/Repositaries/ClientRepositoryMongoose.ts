@@ -469,6 +469,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       throw new Error("User not found");
     } else {
       const userProfile = {
+        _id: user._id,
         name: user.name,
         email: user.email,
         mobile: user.mobile,
@@ -1016,11 +1017,18 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     const jobPostData: any = await JobPostModel.findById(jobPostId);
     const client: any = await ClientModel.findById(clientId);
 
+    const existingInvite = await InviteModel.find({
+      "jobPostData._id": jobPostId,
+    });
+
+    if (existingInvite.length !== 0) throw new Error("Invite already send");
+
     const inviteFn = new InviteModel({
       clientId,
       userId,
       description,
       jobPostData: {
+        _id: jobPostData._id,
         title: jobPostData.title,
         description: jobPostData.description,
         expertLevel: jobPostData.expertLevel,

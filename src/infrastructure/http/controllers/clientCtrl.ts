@@ -695,19 +695,19 @@ export const clientController = {
     try {
       const {
         userId,
-        clientId,
-        jobPostId,
+        selectJobId,
         description,
       }: {
         userId: string;
-        clientId: string;
-        jobPostId: string;
+        selectJobId: string;
         description: string;
       } = req.body;
+      const { id: clientId }: { id: string } = req.user;
+      
       const response = await allClientUseCases.inviteUserUseCase.execute(
         userId,
         clientId,
-        jobPostId,
+        selectJobId,
         description
       );
 

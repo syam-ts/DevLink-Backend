@@ -79,10 +79,9 @@ clientRouter.post("/logout", logoutClient);
 clientRouter.post('/createContract', verifyToken, requireRole(CLIENT), createContract); 
 clientRouter.get("/contract/:contractId", verifyToken, requireRole(CLIENT), viewSingleContract);  
 clientRouter.post("/contractSubmitReject/:contractId", verifyToken, requireRole(CLIENT), rejectContract);
-clientRouter.get("/wallet", verifyToken, requireRole(CLIENT), viewWallet);
+clientRouter.get("/wallet", verifyToken, requireRole(CLIENT), viewWallet); 
 
-
-//pending
+clientRouter.post('/inviteUser', verifyToken, requireRole(CLIENT), inviteUser)
 clientRouter.get("/listAllJobs", verifyToken, requireRole(CLIENT), listAllJobs);
 
 
@@ -91,8 +90,7 @@ clientRouter.get("/allChat/view/:roleId", verifyToken, requireRole(CLIENT), getA
 clientRouter.get("/chat/view/:roleType/:roleId/:targetId", verifyToken, requireRole(CLIENT), clientController.viewChat);
 clientRouter.post("/chat/sendMessage", verifyToken, requireRole(CLIENT), sendMessage);
 clientRouter.get("/notifications/:clientId", verifyToken, requireRole(CLIENT), getAllNotifications);
-clientRouter.post("/rate-user/:notificationId",verifyToken, requireRole(CLIENT), rateAndReview);   
-clientRouter.post("/invite/user",verifyToken, requireRole(CLIENT), inviteUser);  
+clientRouter.post("/rate-user/:notificationId",verifyToken, requireRole(CLIENT), rateAndReview);  
 clientRouter.post('/refresh-token', refreshToken);
 
  

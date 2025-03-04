@@ -1,42 +1,38 @@
-import mongoose, { Schema, Model } from 'mongoose';
+import mongoose, { Schema, Model } from "mongoose";
 
 interface JobPostData {
+    _id: string;
     title: string;
     description: string;
-    expertLevel: 'beginner' | 'intermediate' | 'advanced';
+    expertLevel: "beginner" | "intermediate" | "advanced";
     location: string;
     requiredSkills: string[];
-    amount: number,
-    paymentType: 'hourly' | 'fixed',
+    amount: number;
+    paymentType: "hourly" | "fixed";
     estimateTimeinHours: Number;
-    projectType: 'ongoing project' | 'project updation';
-};
+    projectType: "ongoing project" | "project updation";
+}
 
 interface ClientData {
     companyName: string;
     email: string;
     location: string;
-
-};
-
+}
 
 interface InviteDocument extends Document {
-    clientId?: mongoose.Types.ObjectId;
     userId?: mongoose.Types.ObjectId;
     description: String;
     jobPostData?: JobPostData;
     clientData: ClientData;
-    status: 'pending' | 'rejected';
+    status: "pending" | "rejected";
     createdAt: Date;
-};
-
-
+}
 
 const InviteSchema = new Schema<InviteDocument>({
-    clientId: { type: mongoose.Types.ObjectId, required: true },
     userId: { type: mongoose.Types.ObjectId, required: true },
     description: { type: String, required: true },
     jobPostData: {
+        _id: { type: String, required: true },
         title: { type: String, required: true },
         description: { type: String, required: true },
         expertLevel: { type: String, required: false },
@@ -52,8 +48,9 @@ const InviteSchema = new Schema<InviteDocument>({
         email: { type: String, required: true },
         location: { type: String, required: false },
     },
-    status: { type: String, required: true, default: 'pending' },
+    status: { type: String, required: true, default: "pending" },
     createdAt: { type: Date, required: true },
 });
 
-export const InviteModel: Model<InviteDocument> = mongoose.model<InviteDocument>('Invite', InviteSchema);
+export const InviteModel: Model<InviteDocument> =
+    mongoose.model<InviteDocument>("Invite", InviteSchema);
