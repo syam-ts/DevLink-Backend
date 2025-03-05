@@ -33,11 +33,13 @@ const {
     createProposal,
     viewSingleContract,
 
+    withdrawMoneyByUser,
+    
+    
     submitProject,
     getAllInvites,
     rejectInvite,
     chatbot,
-    withdrawMoneyByUser, 
     allNotifications,
 } = userController;
 const { USER }: {USER: string} = allRoles;
@@ -58,8 +60,12 @@ userRouter.post('/addToWishlist', verifyToken, requireRole(USER), addToWishlist)
 userRouter.patch('/removeFromWishlist',verifyToken, requireRole(USER), removeFromWishlist)
 userRouter.get("/wallet",verifyToken, requireRole(USER), viewWalletUser);
 userRouter.post('/createProposal', verifyToken, requireRole(USER), createProposal);
-
 userRouter.get("/invites",verifyToken, requireRole(USER), getAllInvites);
+
+userRouter.post('/withdrawMoney', withdrawMoneyByUser);  
+
+
+
 
 userRouter.get("/contract/:contractId",verifyToken, requireRole(USER),viewSingleContract);
 userRouter.get('/notifications/:userId', verifyToken, requireRole(USER), allNotifications);
@@ -80,7 +86,6 @@ userRouter.post('/project/submit/:contractId',verifyToken, requireRole(USER), su
 userRouter.post('/chat/sendMessage', verifyToken, requireRole(USER), clientController.sendMessage);
 userRouter.post('/chatbot', verifyToken, requireRole(USER), chatbot);
 userRouter.post('/invite-reject/:inviteId', verifyToken, requireRole(USER), rejectInvite); 
-userRouter.post('/wallet-withdraw',verifyToken, requireRole(USER), withdrawMoneyByUser);  
 userRouter.post('/refresh-token', refreshToken);
 
 

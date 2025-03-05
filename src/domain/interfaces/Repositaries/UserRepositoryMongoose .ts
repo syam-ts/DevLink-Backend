@@ -379,6 +379,8 @@ export class UserRepositoryMongoose implements UserRepositary {
       throw new Error("User not found");
     }
 
+    //REMOVE INVITE DOC IF EXISTS
+
     const existingProposal = await ClientModel.find({
       $and: [
         { "proposals.userId": userId },
@@ -802,10 +804,10 @@ export class UserRepositoryMongoose implements UserRepositary {
   async getAllInvites(userId: string): Promise<Invite | any> {
     const foundedInvites = await InviteModel.find({ userId: userId });
 
-    if (!foundedInvites) throw new Error("Invite not Found"); 
+    if (!foundedInvites) throw new Error("Invite not Found");
     return foundedInvites;
   };
-  
+
 
   async rejectInvite(inviteId: string): Promise<Invite | any> {
     const updateInvite = await InviteModel.updateOne(
@@ -821,5 +823,28 @@ export class UserRepositoryMongoose implements UserRepositary {
     if (!updateInvite) throw new Error("Invite not Found");
 
     return updateInvite;
+  }
+
+  async withdrawMoney(userId: Id, amount: number, accountNumber: number): Promise<Invite | any> {
+
+    const adminId: string = process.env.ADMIN_OBJECT_ID as string;
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      throw new Error("Invalid userId: Must be a 24-character hex string.");
+  }
+    const withdrawRequestObject = {
+      roleId: new mongoose.Types.ObjectId(userId), 
+      amount: amount,
+      accountNumber: accountNumber.toString(),  
+      createdAt: new Date(),
+  };
+  const withdrawRequest = await AdminModel.findByIdAndUpdate(
+    adminId,
+    { $push: { withdrawRequest: withdrawRequestObject } },
+    { new: true }  
+);
+ 
+
+    return
+
   }
 }

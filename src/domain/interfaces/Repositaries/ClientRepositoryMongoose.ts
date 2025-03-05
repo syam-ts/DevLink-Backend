@@ -1053,6 +1053,14 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return savedInvite;
   }
 
+  async getSingleJobPost(jobPostId: string): Promise<any> {
+    const jobPost = await JobPostModel.findById(jobPostId).exec();
+
+    if (!jobPost) throw new Error("Job Post didnt found");
+
+    return jobPost;
+  }
+
   async rejectContract(contractId: Id, clientId: Id): Promise<any> {
     const adminId = process.env.ADMIN_OBJECT_ID;
 

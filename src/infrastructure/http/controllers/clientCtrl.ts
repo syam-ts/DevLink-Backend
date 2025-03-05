@@ -3,6 +3,7 @@ import { allClientUseCases } from "../../../helper/controllerHelper/allCtrlConne
 import { HttpStatusCode } from "../../../helper/constants/enums";
 import { StatusMessage } from "../../../helper/constants/stausMessages";
 import generateTokens from "../../../utils/generateTokens";
+import { GetSingleJobPost } from "../../../application/usecases/user/getSingleJobPost";
 
 type Id = string;
 
@@ -722,4 +723,24 @@ export const clientController = {
         .json({ message: err.message, success: false });
     }
   },
+
+   getSingleJobPost: async (req: Request, res: Response) => {
+      try {
+        
+        const { jobPostId } = req.params;
+        const jobPost = await allClientUseCases.getSingleJobPostClientUseCase.execute(
+          jobPostId
+        );
+  
+        res.status(HttpStatusCode.OK).json({
+          message: StatusMessage[HttpStatusCode.OK],
+          jobPost,
+          success: true,
+        });
+      } catch (err: any) {
+        res
+          .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .json({ message: err.message, success: false });
+      }
+    },
 };

@@ -395,7 +395,8 @@ export const userController = {
   },
 
   getSingleJobPost: async (req: Request, res: Response) => {
-    try {
+    try { 
+      
       const { jobPostId } = req.params;
       const jobPost = await allUserUseCases.getSingleJobPostUseCase.execute(
         jobPostId
@@ -610,21 +611,17 @@ export const userController = {
   },
   withdrawMoneyByUser: async (req: Request, res: Response) => {
     try {
-      const { userId, amount, accountNumber, routingNumber, currency } =
-        req.body;
-      // Validation needs here
+      const { userId, amount, accountNumber } = req.body; 
 
       const response = await allUserUseCases.withdrawMoneyByUserUseCase.execute(
         userId,
         amount,
-        accountNumber,
-        routingNumber,
-        currency
+        accountNumber
       );
 
       res
-        .status(HttpStatusCode.OK)
-        .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
+        .status(HttpStatusCode.CREATED)
+        .json({ message: StatusMessage[HttpStatusCode.CREATED], success: true });
     } catch (err: any) {
       res
         .status(500)

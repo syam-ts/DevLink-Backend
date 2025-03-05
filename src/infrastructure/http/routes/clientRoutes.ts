@@ -32,21 +32,18 @@ const {
   getallDevelopers,
   closeContract,
   rejectContract,
-  
   viewWallet,
-
-
+  inviteUser,
+  listAllJobs,
+  getSingleJobPost, 
   rejectProposal,
   getAllNotifications,
   getAllChats,
   viewChat,
   rateAndReview,
   sendMessage,
-  inviteUser,
-  listAllJobs
 } = clientController;
-const {
-  getSingleJobPost,
+const { 
   viewSingleContract
 } = userController;
  const { CLIENT }: {CLIENT: string} = allRoles;
