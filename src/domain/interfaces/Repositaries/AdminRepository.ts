@@ -5,12 +5,10 @@ import { UserModel } from "../../entities/User";
 import { NotificationModel } from "../../entities/Notification";
 import { Client, ClientModel } from "../../entities/Client";
 import { AdminModel } from "../../entities/Admin";
-import { ContractModel } from "../../entities/Contract";
+import { ContractDocument, ContractModel } from "../../entities/Contract";
 
 export class AdminRepository implements AdminRepositary {
   async findAdmin(name: string, password: string): Promise<any> {
-   
-    
     if (name !== process.env.ADMIN_USERNAME) {
       throw new Error("Username is incorrect");
     }
@@ -31,9 +29,7 @@ export class AdminRepository implements AdminRepositary {
     } else {
       throw new Error("Users not Found");
     }
-  };
-
-
+  }
 
   async getAllUsers(page: number, sortType: string): Promise<User | any> {
     const PAGE_SIZE: number = 5;
@@ -72,10 +68,8 @@ export class AdminRepository implements AdminRepositary {
     return {
       users,
       totalPages,
-    }
-  };
- 
-
+    };
+  }
 
   async getAllClients(page: number, sortType: string): Promise<Client | any> {
     const PAGE_SIZE: number = 5;
@@ -139,10 +133,9 @@ export class AdminRepository implements AdminRepositary {
     } else {
       throw new Error("Users not Found");
     }
-  };
+  }
 
-
- async viewWallet(currentPage: number): Promise<any> {
+  async viewWallet(currentPage: number): Promise<any> {
     const page_size: number = 4;
     const skip: number = (currentPage - 1) * page_size;
     const adminId: string = process.env.ADMIN_OBJECT_ID as string;
@@ -175,20 +168,6 @@ export class AdminRepository implements AdminRepositary {
       totalPages,
     };
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   async sortUser(sortingType: string): Promise<User | any> {
     const page = 1;
@@ -469,7 +448,7 @@ export class AdminRepository implements AdminRepositary {
     return admin.request;
   }
 
-  async findClient(clientId: any): Promise<any> {
+  async findClient(clientId: any): Promise<Client> {
     const client: any = await ClientModel.findById(clientId).exec();
 
     if (!client) {
@@ -508,7 +487,7 @@ export class AdminRepository implements AdminRepositary {
     return admin.wallet;
   }
 
-  async getAllContracts(): Promise<any> {
+  async getAllContracts(): Promise<ContractDocument> {
     const contracts: any = await ContractModel.find().exec();
 
     if (!contracts) {
@@ -517,11 +496,34 @@ export class AdminRepository implements AdminRepositary {
     return contracts;
   }
 
-  async viewSingleContract(contractId: string): Promise<any> {
+  async viewSingleContract(contractId: string): Promise<ContractDocument> {
     const contract = await ContractModel.findById(contractId).exec();
     if (!contract) {
       throw new Error("Contract not found");
     }
     return contract;
+  }
+
+  async successMoneyTransfer(
+    userId: string,
+    paymentScreenshot: string,
+    amount: number,
+    upiId: number
+  ): Promise<any> {
+    const newNotification = await NotificationModel.create({
+      type: "Withdraw Money",
+      message: "Succesfully transfer the money to bank account",
+      sender_id: process.env._ADMIN_OBJECT_ID,
+      reciever_id: userId,
+      withdrawData: {
+        paymentScreenshot: paymentScreenshot,
+        amount: amount,
+        upiId: upiId,
+      },
+      createdAt: new Date(),
+    });
+
+    newNotification.save();
+    return newNotification;
   }
 }

@@ -20,11 +20,10 @@ export const adminController = {
 
   loginAdmin: async (req: any, res: any) => {
     try {
-      
       const admin = await allAdminUseCases.loginAdminUseCase.execute(req.body);
 
       admin.role = "admin";
- 
+
       const { accessToken, refreshToken } = generateTokens(admin);
 
       res.cookie("refreshToken", refreshToken, {
@@ -74,7 +73,7 @@ export const adminController = {
   },
 
   getAllUsers: async (req: any, res: any) => {
-    try { 
+    try {
       const users = await allAdminUseCases.getAllUsersUseCase.execute(
         req.query.page,
         req.query.sortType
@@ -92,7 +91,6 @@ export const adminController = {
       });
     }
   },
- 
 
   getAllClients: async (req: any, res: any) => {
     try {
@@ -187,7 +185,6 @@ export const adminController = {
       });
     }
   },
-  
 
   viewWallet: async (req: any, res: any) => {
     try {
@@ -199,7 +196,11 @@ export const adminController = {
       if (wallet) {
         res
           .status(HttpStatusCode.OK)
-          .json({ message: StatusMessage[HttpStatusCode.OK],wallet, success: true });
+          .json({
+            message: StatusMessage[HttpStatusCode.OK],
+            wallet,
+            success: true,
+          });
       }
     } catch (err: any) {
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
@@ -420,6 +421,38 @@ export const adminController = {
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         contract,
+        success: true,
+      });
+    } catch (err: any) {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
+    }
+  },
+
+  successMoneyTransfer: async (req: any, res: any) => {
+    try {
+      const {
+        userId,
+        paymentScreenshot,
+        amount,
+        upiId,
+      }: {
+        userId: string;
+        paymentScreenshot: string;
+        amount: number;
+        upiId: number;
+      } = req.body;
+
+      const response =
+        await allAdminUseCases.successMoneyTransferUseCase.execute(userId,
+          paymentScreenshot,
+          amount,
+          upiId);
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        response,
         success: true,
       });
     } catch (err: any) {

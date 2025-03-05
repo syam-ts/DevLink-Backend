@@ -60,7 +60,7 @@ import { RateAndReview } from '../../application/usecases/client/rateAndReview';
 import { CreateChat } from '../../application/usecases/client/createChat';
 import { SendMessage } from '../../application/usecases/client/sendMessage';
 import { GetAllChats } from '../../application/usecases/client/getAllChats';
-import { ViewWallet } from '../../application/usecases/client/viewWallet';
+import { ViewWallet } from '../../application/usecases/client/viewWallet'; 
 import { ViewChat } from '../../application/usecases/client/viewChat';
 import { GetSingleJobPostClient } from '../../application/usecases/client/getSingleJobPost';
 import { InviteUser } from '../../application/usecases/client/inviteUser';
@@ -78,6 +78,7 @@ import { GetAllClients } from '../../application/usecases/admin/getAllClients';
 import { BlockUser, BlockClient } from '../../application/usecases/admin/blockRole';
 import { UnBlockUser, UnBlockClient } from '../../application/usecases/admin/unBlockRole'; 
 import { ViewWalletAdmin } from '../../application/usecases/admin/viewWallet'; 
+import { SuccessMoneyTransfer } from '../../application/usecases/admin/successMoneyTransfer'; 
 
 
 import { Create } from '../../application/usecases/admin/create';
@@ -173,6 +174,7 @@ const blockUserUseCase = new BlockUser(adminRepositary);
 const unBlockUserUseCase = new UnBlockUser(adminRepositary);
 const blockClientUseCase = new BlockClient(adminRepositary); 
 const viewWalletAdminUseCase = new ViewWalletAdmin(adminRepositary); 
+const successMoneyTransferUseCase = new SuccessMoneyTransfer(adminRepositary); 
 
 
 
@@ -272,6 +274,7 @@ export const allAdminUseCases = {
         blockClientUseCase ,
         unBlockClientUseCase, 
         viewWalletAdminUseCase, 
+        successMoneyTransferUseCase, 
    
 
 

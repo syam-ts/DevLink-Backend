@@ -12,6 +12,7 @@ const {
     getAllClients, 
     viewWallet,
     loginAdmin,
+    successMoneyTransfer,
 
     getRequests,
     getRequestedClient,
@@ -42,6 +43,7 @@ adminRouter.patch('/unBlockUser/:userId', verifyToken,requireRole(ADMIN), unBloc
 adminRouter.patch('/blockClient/:clientId', verifyToken,requireRole(ADMIN), blockClient);
 adminRouter.patch('/unBlockClient/:clientId', verifyToken,requireRole(ADMIN), unBlockClient); 
 adminRouter.get('/getRequests', verifyToken,requireRole(ADMIN), getRequests);
+adminRouter.post('/successMoneyTransfer', successMoneyTransfer);
 
 
 
