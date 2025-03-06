@@ -71,7 +71,11 @@ clientRouter.post("/resend-otp", resendOtp);
 clientRouter.post("/login", loginClient);
 clientRouter.post("/verify-email", verifyEmail);
 clientRouter.post("/resetPassword/:clientId", resetPassword);
+
+
 clientRouter.post("/googleLogin", googleLogin);
+
+
 clientRouter.post("/logout", logoutClient); 
 clientRouter.post('/createContract', verifyToken, requireRole(CLIENT), createContract); 
 clientRouter.get("/contract/:contractId", verifyToken, requireRole(CLIENT), viewSingleContract);  

@@ -62,7 +62,7 @@ userRouter.get("/wallet",verifyToken, requireRole(USER), viewWalletUser);
 userRouter.post('/createProposal', verifyToken, requireRole(USER), createProposal);
 userRouter.get("/invites",verifyToken, requireRole(USER), getAllInvites);
 
-userRouter.post('/withdrawMoney', withdrawMoneyByUser);  
+userRouter.post('/withdrawMoney',verifyToken, requireRole(USER),  withdrawMoneyByUser);  
 
 
 

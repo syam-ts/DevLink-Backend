@@ -611,13 +611,14 @@ export const userController = {
   },
   withdrawMoneyByUser: async (req: Request, res: Response) => {
     try {
-      const { amount, accountNumber } = req.body; 
+      const { amount, accountNumber, balance } = req.body;  
       const{ id: userId}: {id: string} = req.user;
 
       const response = await allUserUseCases.withdrawMoneyByUserUseCase.execute( 
         userId,
         amount,
-        accountNumber
+        accountNumber,
+        balance
       );
 
       res
