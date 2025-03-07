@@ -508,12 +508,14 @@ export class AdminRepository implements AdminRepositary {
     userId: string,
     paymentScreenshot: string,
     amount: number,
-    upiId: number
+    upiId: number,
+    requestId: string
   ): Promise<any> {
+
     const newNotification = await NotificationModel.create({
       type: "Withdraw Money",
       message: "Succesfully transfer the money to bank account",
-      sender_id: process.env._ADMIN_OBJECT_ID,
+      sender_id: process.env.ADMIN_OBJECT_ID,
       reciever_id: userId,
       withdrawData: {
         paymentScreenshot: paymentScreenshot,
@@ -524,6 +526,14 @@ export class AdminRepository implements AdminRepositary {
     });
 
     newNotification.save();
+
+    // Delete withdrawrequest from admin
+    const deleteWithdrawRequest = await AdminModel.findOneAndUpdate(
+      { "withdrawRequest._id": requestId },
+      { $pull: { withdrawRequest: { _id: requestId } } },
+      { new: true }
+    );
+    
     return newNotification;
   }
 

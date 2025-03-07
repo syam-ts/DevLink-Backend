@@ -438,26 +438,35 @@ export const adminController = {
         paymentScreenshot,
         amount,
         upiId,
+        requestId,
+        requestedAmount
       }: {
         userId: string;
         paymentScreenshot: string;
         amount: number;
         upiId: number;
-      } = req.body;
+        requestId: string
+        requestedAmount: number
+      } = req.body.body; 
 
       const response =
-        await allAdminUseCases.successMoneyTransferUseCase.execute(userId,
+        await allAdminUseCases.successMoneyTransferUseCase.execute(
+          userId,
           paymentScreenshot,
           amount,
-          upiId);
+          upiId,
+          requestId,
+          requestedAmount
+        );
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         response,
         success: true,
       });
-    } catch (err: any) {
+    } catch (error: unknown) {
+      const err = error as {message: string};
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        message: err.message,
         success: false,
       });
     }
@@ -476,6 +485,6 @@ export const adminController = {
         message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
         success: false,
       });
-    } 
+    }
   }
 };

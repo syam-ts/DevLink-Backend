@@ -44,27 +44,26 @@ adminRouter.patch('/unBlockUser/:userId', verifyToken,requireRole(ADMIN), unBloc
 adminRouter.patch('/blockClient/:clientId', verifyToken,requireRole(ADMIN), blockClient);
 adminRouter.patch('/unBlockClient/:clientId', verifyToken,requireRole(ADMIN), unBlockClient); 
 adminRouter.get('/getRequests', verifyToken,requireRole(ADMIN), getRequests);
-adminRouter.post('/successMoneyTransfer', verifyToken,requireRole(ADMIN),successMoneyTransfer); 
 adminRouter.get('/getWithdrawRequests', verifyToken,requireRole(ADMIN), getWithdrawRequests);
 
+
+
+adminRouter.post('/successMoneyTransfer', verifyToken,requireRole(ADMIN),successMoneyTransfer); 
 
 
 adminRouter.get('/request/getRequestedClient/:clientId', getRequestedClient);
 adminRouter.get('/viewRole/:roleId/:roleInfo', viewRoleInfo);
 adminRouter.get('/getWallet', getWallet); 
-adminRouter.get('/getAllContracts', getAllContracts); 
-
+adminRouter.get('/getAllContracts', getAllContracts);  
 adminRouter.get('/viewSingleContract/:contractId', viewSingleContract); 
+adminRouter.post('/getAllUsers/search?', searchUser);
+adminRouter.post('/getAllClients/search?', searchClient);
+adminRouter.post('/getAllClients/sort?', sortClient);
+adminRouter.put('/verifyClient/accept', verifyAccept);  
 
 
 adminRouter.post('/login', loginAdmin);
 adminRouter.post('/logout', logoutAdmin);
-adminRouter.post('/getAllUsers/search?', searchUser);
-adminRouter.post('/getAllClients/search?', searchClient);
-adminRouter.post('/getAllClients/sort?', sortClient);
-adminRouter.put('/verifyClient/accept', verifyAccept); 
-
-
 adminRouter.post('/refresh-token', refreshToken); 
 
 
