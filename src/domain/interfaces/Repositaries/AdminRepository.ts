@@ -526,4 +526,14 @@ export class AdminRepository implements AdminRepositary {
     newNotification.save();
     return newNotification;
   }
+
+  async getWithdrawRequests(): Promise<any> {
+    const adminId = process.env.ADMIN_OBJECT_ID;
+
+    const adminData = await AdminModel.findById(adminId);
+
+    if(!adminData)  throw new Error('Admin not found')
+
+      return adminData.withdrawRequest;
+  }
 }

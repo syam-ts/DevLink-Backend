@@ -1,5 +1,5 @@
 export interface UserRepository {
-  withdrawMoney(userId: string, amount: number, accountNumber: number): void;
+  withdrawMoney(userId: string, amount: number, accountNumber: number, type: string): void;
 }
 
 export class WithdrawMoneyByUser {
@@ -9,7 +9,8 @@ export class WithdrawMoneyByUser {
     userId: string,
     amount: number,
     accountNumber: number,
-    balance: number
+    balance: number,
+    type: string
   ) {
     if (!amount || !accountNumber) throw new Error("Please fill all fields");
 
@@ -25,7 +26,8 @@ export class WithdrawMoneyByUser {
     const result = await this.userRepository.withdrawMoney(
       userId,
       amount,
-      accountNumber
+      accountNumber,
+      type
     );
 
     return result;

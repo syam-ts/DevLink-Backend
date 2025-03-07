@@ -31,8 +31,7 @@ const {
     viewWalletUser,
     getSingleJobPost, 
     createProposal,
-    viewSingleContract,
-
+    viewSingleContract,  
     withdrawMoneyByUser,
     
     
@@ -60,9 +59,8 @@ userRouter.post('/addToWishlist', verifyToken, requireRole(USER), addToWishlist)
 userRouter.patch('/removeFromWishlist',verifyToken, requireRole(USER), removeFromWishlist)
 userRouter.get("/wallet",verifyToken, requireRole(USER), viewWalletUser);
 userRouter.post('/createProposal', verifyToken, requireRole(USER), createProposal);
-userRouter.get("/invites",verifyToken, requireRole(USER), getAllInvites);
-
-userRouter.post('/withdrawMoney',verifyToken, requireRole(USER),  withdrawMoneyByUser);  
+userRouter.get("/invites",verifyToken, requireRole(USER), getAllInvites);  
+userRouter.post('/withdrawMoney',verifyToken, requireRole(USER), withdrawMoneyByUser);  
 
 
 

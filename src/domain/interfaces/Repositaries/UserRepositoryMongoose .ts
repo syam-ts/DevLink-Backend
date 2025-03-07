@@ -825,7 +825,15 @@ export class UserRepositoryMongoose implements UserRepositary {
     return updateInvite;
   }
 
-  async withdrawMoney(userId: Id, amount: number, accountNumber: number): Promise<Invite | any> {
+  async withdrawMoney(userId: Id, amount: number, accountNumber: number, type: string): Promise<Invite | any> {
+    let userName: string; 
+    if(type === 'user') { 
+        const user: any = await UserModel.findById(userId).exec();
+        userName = user.name; 
+    } else {
+      const client: any = await ClientModel.findById(userId).exec();
+      userName= client.companyName;
+    } 
 
     const adminId: string = process.env.ADMIN_OBJECT_ID as string;
     if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -833,6 +841,7 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
     const withdrawRequestObject = {
       roleId: new mongoose.Types.ObjectId(userId), 
+      userName: userName,
       amount: amount,
       accountNumber: accountNumber.toString(),  
       createdAt: new Date(),

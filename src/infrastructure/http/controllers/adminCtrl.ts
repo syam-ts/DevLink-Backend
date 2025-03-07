@@ -462,4 +462,20 @@ export const adminController = {
       });
     }
   },
+
+  getWithdrawRequests: async (req: Request, res: any) => {
+    try {
+      const requests = await allAdminUseCases.getWithdrawRequestsUseCase.execute();
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        requests,
+        success: true,
+      });
+    } catch (err: any) {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
+    } 
+  }
 };

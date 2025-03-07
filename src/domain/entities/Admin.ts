@@ -14,6 +14,7 @@ export interface Admin extends mongoose.Document {
     withdrawRequest: [
         {
             roleId: mongoose.Types.ObjectId;
+            userName: string;
             amount: number;
             accountNumber: string;
             createdAt: Date;
@@ -31,6 +32,7 @@ export interface Admin extends mongoose.Document {
 
 const WithdrawRequestSchema = new mongoose.Schema({
     roleId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    userName: {type: String, required: true},
     amount: { type: Number, required: true },
     accountNumber: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },

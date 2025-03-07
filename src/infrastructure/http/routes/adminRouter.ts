@@ -28,7 +28,8 @@ const {
     blockClient,
     unBlockClient,
     getAllContracts,
-    viewSingleContract
+    viewSingleContract,
+    getWithdrawRequests
 } = adminController;
 const {ADMIN}: {ADMIN: string} = allRoles;
 
@@ -43,7 +44,8 @@ adminRouter.patch('/unBlockUser/:userId', verifyToken,requireRole(ADMIN), unBloc
 adminRouter.patch('/blockClient/:clientId', verifyToken,requireRole(ADMIN), blockClient);
 adminRouter.patch('/unBlockClient/:clientId', verifyToken,requireRole(ADMIN), unBlockClient); 
 adminRouter.get('/getRequests', verifyToken,requireRole(ADMIN), getRequests);
-adminRouter.post('/successMoneyTransfer', successMoneyTransfer);
+adminRouter.post('/successMoneyTransfer', verifyToken,requireRole(ADMIN),successMoneyTransfer); 
+adminRouter.get('/getWithdrawRequests', verifyToken,requireRole(ADMIN), getWithdrawRequests);
 
 
 
