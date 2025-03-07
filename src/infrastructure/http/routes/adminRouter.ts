@@ -13,7 +13,7 @@ const {
     viewWallet,
     loginAdmin,
     successMoneyTransfer,
-
+    viewContracts,
     getRequests,
     getRequestedClient,
     viewRoleInfo,
@@ -45,6 +45,7 @@ adminRouter.patch('/blockClient/:clientId', verifyToken,requireRole(ADMIN), bloc
 adminRouter.patch('/unBlockClient/:clientId', verifyToken,requireRole(ADMIN), unBlockClient); 
 adminRouter.get('/getRequests', verifyToken,requireRole(ADMIN), getRequests);
 adminRouter.get('/getWithdrawRequests', verifyToken,requireRole(ADMIN), getWithdrawRequests);
+adminRouter.get('/viewContracts', verifyToken,requireRole(ADMIN), viewContracts);
 
 
 

@@ -80,6 +80,7 @@ import { UnBlockUser, UnBlockClient } from '../../application/usecases/admin/unB
 import { ViewWalletAdmin } from '../../application/usecases/admin/viewWallet'; 
 import { SuccessMoneyTransfer } from '../../application/usecases/admin/successMoneyTransfer'; 
 import { GetWithdrawRequests } from '../../application/usecases/admin/getWithdrawRequests'; 
+import { ViewContractsAdmin } from '../../application/usecases/admin/viewContracts'; 
 
 
 import { Create } from '../../application/usecases/admin/create';
@@ -177,6 +178,7 @@ const blockClientUseCase = new BlockClient(adminRepositary);
 const viewWalletAdminUseCase = new ViewWalletAdmin(adminRepositary); 
 const successMoneyTransferUseCase = new SuccessMoneyTransfer(adminRepositary); 
 const getWithdrawRequestsUseCase = new GetWithdrawRequests(adminRepositary); 
+const viewContractsAdminUseCase = new ViewContractsAdmin(adminRepositary); 
 
 
 
@@ -278,8 +280,8 @@ export const allAdminUseCases = {
         viewWalletAdminUseCase, 
         successMoneyTransferUseCase, 
         getWithdrawRequestsUseCase, 
-   
-
+        viewContractsAdminUseCase , 
+        
 
         viewRoleInfoUseCase ,
         getWalletUseCase ,

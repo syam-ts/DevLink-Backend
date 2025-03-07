@@ -486,5 +486,21 @@ export const adminController = {
         success: false,
       });
     }
+  },
+
+  viewContracts: async (req: Request, res: any) => {
+    try {
+      const contracts = await allAdminUseCases.viewContractsAdminUseCase.execute();
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        contracts,
+        success: true,
+      });
+    } catch (err: any) {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: StatusMessage[HttpStatusCode.INTERNAL_SERVER_ERROR],
+        success: false,
+      });
+    }
   }
 };

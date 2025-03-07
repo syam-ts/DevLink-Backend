@@ -511,7 +511,6 @@ export class AdminRepository implements AdminRepositary {
     upiId: number,
     requestId: string
   ): Promise<any> {
-
     const newNotification = await NotificationModel.create({
       type: "Withdraw Money",
       message: "Succesfully transfer the money to bank account",
@@ -533,7 +532,7 @@ export class AdminRepository implements AdminRepositary {
       { $pull: { withdrawRequest: { _id: requestId } } },
       { new: true }
     );
-    
+
     return newNotification;
   }
 
@@ -542,8 +541,17 @@ export class AdminRepository implements AdminRepositary {
 
     const adminData = await AdminModel.findById(adminId);
 
-    if(!adminData)  throw new Error('Admin not found')
+    if (!adminData) throw new Error("Admin not found");
 
-      return adminData.withdrawRequest;
+    return adminData.withdrawRequest;
+  }
+
+  async viewContracts(): Promise<any> {
+    //limit to 4
+    const contracts = await ContractModel.find().limit(5).exec();
+
+    if (!contracts) throw new Error("Contracts not found");
+
+    return contracts;
   }
 }
