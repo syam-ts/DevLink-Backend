@@ -373,6 +373,11 @@ export class UserRepositoryMongoose implements UserRepositary {
     bidAmount: number,
     bidDeadline: number
   ): Promise<any> {
+    //CHECK IF MAX PROP REACHED
+    const proposals: any = await JobPostModel.findById(jobPostId).exec();
+    const { proposalCount, maxProposals } = proposals;
+    if (proposalCount === maxProposals) throw new Error("Maximum proposals reched");
+
     const user = await UserModel.findById(userId);
 
     if (!user) {
@@ -399,7 +404,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         {
           new: true,
         }
-      ); 
+      );
 
       // deletes invite doc if exists
       const clearInvite = await InviteModel.deleteOne({ jobPostId: jobPostId });
@@ -806,8 +811,7 @@ export class UserRepositoryMongoose implements UserRepositary {
 
     if (!foundedInvites) throw new Error("Invite not Found");
     return foundedInvites;
-  };
-
+  }
 
   async rejectInvite(inviteId: string): Promise<Invite | any> {
     const updateInvite = await InviteModel.updateOne(
@@ -825,35 +829,38 @@ export class UserRepositoryMongoose implements UserRepositary {
     return updateInvite;
   }
 
-  async withdrawMoney(userId: Id, amount: number, accountNumber: number, type: string): Promise<Invite | any> {
-    let userName: string; 
-    if(type === 'user') { 
-        const user: any = await UserModel.findById(userId).exec();
-        userName = user.name; 
+  async withdrawMoney(
+    userId: Id,
+    amount: number,
+    accountNumber: number,
+    type: string
+  ): Promise<Invite | any> {
+    let userName: string;
+    if (type === "user") {
+      const user: any = await UserModel.findById(userId).exec();
+      userName = user.name;
     } else {
       const client: any = await ClientModel.findById(userId).exec();
-      userName= client.companyName;
-    } 
+      userName = client.companyName;
+    }
 
     const adminId: string = process.env.ADMIN_OBJECT_ID as string;
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       throw new Error("Invalid userId: Must be a 24-character hex string.");
-  }
+    }
     const withdrawRequestObject = {
-      roleId: new mongoose.Types.ObjectId(userId), 
+      roleId: new mongoose.Types.ObjectId(userId),
       userName: userName,
       amount: amount,
-      accountNumber: accountNumber.toString(),  
+      accountNumber: accountNumber.toString(),
       createdAt: new Date(),
-  };
-  const withdrawRequest = await AdminModel.findByIdAndUpdate(
-    adminId,
-    { $push: { withdrawRequest: withdrawRequestObject } },
-    { new: true }  
-);
- 
+    };
+    const withdrawRequest = await AdminModel.findByIdAndUpdate(
+      adminId,
+      { $push: { withdrawRequest: withdrawRequestObject } },
+      { new: true }
+    );
 
-    return
-
+    return;
   }
 }

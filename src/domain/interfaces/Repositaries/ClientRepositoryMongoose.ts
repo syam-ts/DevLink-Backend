@@ -784,15 +784,13 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       { new: true }
     );
 
-    console.log('updated client: ', clientId, userId, jobPostId)
-    // decrementing count
+    // -------------- decrementing proposalCount --------------
     const updatetingCount = await JobPostModel.findByIdAndUpdate(jobPostId, {
       $inc: {proposalCount: -1}
     }, {
       new: true
     });
-  
-
+   
     
     return proposal;
   }
