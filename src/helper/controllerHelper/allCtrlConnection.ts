@@ -62,6 +62,7 @@ import { SendMessage } from '../../application/usecases/client/sendMessage';
 import { GetAllChats } from '../../application/usecases/client/getAllChats';
 import { ViewWallet } from '../../application/usecases/client/viewWallet'; 
 import { ViewChat } from '../../application/usecases/client/viewChat';
+import { ViewInviteClient } from '../../application/usecases/client/viewInvite';
 import { GetSingleJobPostClient } from '../../application/usecases/client/getSingleJobPost';
 import { InviteUser } from '../../application/usecases/client/inviteUser';
 import { RejectContract } from '../../application/usecases/client/rejectContract';
@@ -81,7 +82,7 @@ import { ViewWalletAdmin } from '../../application/usecases/admin/viewWallet';
 import { SuccessMoneyTransfer } from '../../application/usecases/admin/successMoneyTransfer'; 
 import { GetWithdrawRequests } from '../../application/usecases/admin/getWithdrawRequests'; 
 import { ViewContractsAdmin } from '../../application/usecases/admin/viewContracts'; 
-import { ViewSingleContractAdmin } from '../..//application/usecases/admin/viewSingleContract'; 
+import { ViewSingleContractAdmin } from '../..//application/usecases/admin/viewSingleContract';  
 
 
 import { Create } from '../../application/usecases/admin/create';
@@ -152,6 +153,7 @@ const getUserProfileUseCase = new GetUserProfileClient(ClientRepository);
 const getProposalsUseCase = new GetProposals(ClientRepository); 
 const createContractUseCase = new CreateContract(ClientRepository);
 const rejectProposalUseCase = new RejectProposal(ClientRepository); 
+const viewInviteUseCase = new ViewInviteClient(ClientRepository); 
 const getSingleJobPostClientUseCase = new GetSingleJobPostClient(ClientRepository); 
 const viewSubmissionsUseCase = new ViewSubmissions(ClientRepository);
 const closeContractUseCase = new CloseContract(ClientRepository);
@@ -179,6 +181,7 @@ const successMoneyTransferUseCase = new SuccessMoneyTransfer(adminRepositary);
 const getWithdrawRequestsUseCase = new GetWithdrawRequests(adminRepositary); 
 const viewContractsAdminUseCase = new ViewContractsAdmin(adminRepositary); 
 const viewSingleContractAdminUseCase = new ViewSingleContractAdmin(adminRepositary); 
+
 
 
 
@@ -252,6 +255,7 @@ export const allClientUseCases = {
      viewWalletUseCase, 
      createContractUseCase,
      rejectProposalUseCase, 
+     viewInviteUseCase,
      viewSubmissionsUseCase,
      getallDevelopersUseCase,
      getSingleJobPostClientUseCase,
@@ -279,8 +283,7 @@ export const allAdminUseCases = {
         successMoneyTransferUseCase, 
         getWithdrawRequestsUseCase, 
         viewContractsAdminUseCase,   
-        viewSingleContractAdminUseCase,   
-        
+        viewSingleContractAdminUseCase,    
 
         viewRoleInfoUseCase ,
         getWalletUseCase ,

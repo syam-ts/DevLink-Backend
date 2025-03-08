@@ -42,6 +42,7 @@ const {
   viewChat,
   rateAndReview,
   sendMessage,
+  viewInvite
 } = clientController;
 const { 
   viewSingleContract
@@ -56,6 +57,7 @@ clientRouter.get('/job/:jobPostId',verifyToken, requireRole(CLIENT), getSingleJo
 clientRouter.get("/proposals/:proposalType", verifyToken, requireRole(CLIENT), getProposals);
 clientRouter.get('/contracts/:contractViewType', verifyToken, requireRole(CLIENT), viewContracts); 
 clientRouter.get("/contractsSubmissions", verifyToken, requireRole(CLIENT), viewSubmissions);
+clientRouter.get("/invites", verifyToken, requireRole(CLIENT), viewInvite);
 
 clientRouter.get("/developers", verifyToken, requireRole(CLIENT), getallDevelopers);
 clientRouter.post("/projectApprove", verifyToken, requireRole(CLIENT),closeContract);
@@ -80,10 +82,9 @@ clientRouter.post("/logout", logoutClient);
 clientRouter.post('/createContract', verifyToken, requireRole(CLIENT), createContract); 
 clientRouter.get("/contract/:contractId", verifyToken, requireRole(CLIENT), viewSingleContract);  
 clientRouter.post("/contractSubmitReject/:contractId", verifyToken, requireRole(CLIENT), rejectContract);
-clientRouter.get("/wallet", verifyToken, requireRole(CLIENT), viewWallet); 
-
-clientRouter.post('/inviteUser', verifyToken, requireRole(CLIENT), inviteUser)
+clientRouter.get("/wallet", verifyToken, requireRole(CLIENT), viewWallet);  
 clientRouter.get("/listAllJobs", verifyToken, requireRole(CLIENT), listAllJobs);
+clientRouter.post('/inviteUser', verifyToken, requireRole(CLIENT), inviteUser)  
 
 
 clientRouter.put('/proposalReject',verifyToken, requireRole(CLIENT), rejectProposal);

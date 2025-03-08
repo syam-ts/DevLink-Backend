@@ -502,5 +502,5 @@ export const adminController = {
         success: false,
       });
     }
-  }
+  } 
 };

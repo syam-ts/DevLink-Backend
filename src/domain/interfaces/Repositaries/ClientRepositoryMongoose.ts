@@ -1053,6 +1053,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     jobPostId: Id,
     description: string
   ): Promise<any> {
+    
     const jobPostData: any = await JobPostModel.findById(jobPostId);
     const client: any = await ClientModel.findById(clientId);
 
@@ -1100,6 +1101,14 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return jobPost;
   }
 
+  async ViewInviteClient(clientId: string): Promise<any> {
+ 
+    const invite = await InviteModel.find({$and: [{clientId: clientId}, {status: 'pending'}]}).exec();
+
+    if (!invite) throw new Error("No invites found"); 
+    return invite;
+  }
+
   async rejectContract(contractId: Id, clientId: Id): Promise<any> {
     const adminId = process.env.ADMIN_OBJECT_ID;
 
@@ -1145,4 +1154,6 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
     return contract;
   }
+
+
 }

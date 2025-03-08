@@ -21,6 +21,7 @@ interface ClientData {
 
 interface InviteDocument extends Document {
     userId?: mongoose.Types.ObjectId;
+    clientId?: mongoose.Types.ObjectId;
     description: String;
     jobPostData?: JobPostData;
     clientData: ClientData;
@@ -30,6 +31,7 @@ interface InviteDocument extends Document {
 
 const InviteSchema = new Schema<InviteDocument>({
     userId: { type: mongoose.Types.ObjectId, required: true },
+    clientId: { type: mongoose.Types.ObjectId, required: true },
     description: { type: String, required: true },
     jobPostData: {
         _id: { type: String, required: true },

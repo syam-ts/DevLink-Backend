@@ -160,8 +160,8 @@ export const clientController = {
         return;
       }
 
-      client.role = "client"; 
-      const { accessToken, refreshToken } = generateTokens(client); 
+      client.role = "client";
+      const { accessToken, refreshToken } = generateTokens(client);
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
@@ -171,10 +171,12 @@ export const clientController = {
       res
         .status(HttpStatusCode.OK)
 
-        .json({ message: StatusMessage[HttpStatusCode.OK],
+        .json({
+          message: StatusMessage[HttpStatusCode.OK],
           client,
-        accessToken,
-        refreshToken, success: true });
+          accessToken,
+          refreshToken, success: true
+        });
     } catch (err: any) {
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
@@ -724,7 +726,7 @@ export const clientController = {
         description: string;
       } = req.body;
       const { id: clientId }: { id: string } = req.user;
-      
+
       const response = await allClientUseCases.inviteUserUseCase.execute(
         userId,
         clientId,
@@ -744,23 +746,42 @@ export const clientController = {
     }
   },
 
-   getSingleJobPost: async (req: Request, res: Response) => {
-      try {
-        
-        const { jobPostId } = req.params;
-        const jobPost = await allClientUseCases.getSingleJobPostClientUseCase.execute(
-          jobPostId
-        );
-  
-        res.status(HttpStatusCode.OK).json({
-          message: StatusMessage[HttpStatusCode.OK],
-          jobPost,
-          success: true,
-        });
-      } catch (err: any) {
-        res
-          .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-          .json({ message: err.message, success: false });
-      }
-    },
+  viewInvite: async (req: Request, res: Response) => {
+    try {  
+      const { id: clientId }: { id: string } = req.user;
+
+      const invites = await allClientUseCases.viewInviteUseCase.execute(clientId);
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        invites,
+        success: true,
+      });
+    } catch (error: unknown) {
+      const err = error as { message: string };
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: err.message, success: false });
+    }
+  },
+
+  getSingleJobPost: async (req: Request, res: Response) => {
+    try {
+
+      const { jobPostId } = req.params;
+      const jobPost = await allClientUseCases.getSingleJobPostClientUseCase.execute(
+        jobPostId
+      );
+
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        jobPost,
+        success: true,
+      });
+    } catch (error: unknown) {
+      const err = error as { message: string };
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: err.message, success: false });
+    }
+  },
 };
