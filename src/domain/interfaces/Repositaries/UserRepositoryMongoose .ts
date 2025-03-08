@@ -399,7 +399,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         {
           new: true,
         }
-      );
+      ); 
 
       // deletes invite doc if exists
       const clearInvite = await InviteModel.deleteOne({ jobPostId: jobPostId });

@@ -45,11 +45,14 @@ adminRouter.patch('/blockClient/:clientId', verifyToken,requireRole(ADMIN), bloc
 adminRouter.patch('/unBlockClient/:clientId', verifyToken,requireRole(ADMIN), unBlockClient); 
 adminRouter.get('/getRequests', verifyToken,requireRole(ADMIN), getRequests);
 adminRouter.get('/getWithdrawRequests', verifyToken,requireRole(ADMIN), getWithdrawRequests);
+adminRouter.post('/successMoneyTransfer', verifyToken,requireRole(ADMIN),successMoneyTransfer); 
 adminRouter.get('/viewContracts', verifyToken,requireRole(ADMIN), viewContracts);
 
 
+adminRouter.get('/contract/:contractId', verifyToken,requireRole(ADMIN), viewContracts);
 
-adminRouter.post('/successMoneyTransfer', verifyToken,requireRole(ADMIN),successMoneyTransfer); 
+
+
 
 
 adminRouter.get('/request/getRequestedClient/:clientId', getRequestedClient);

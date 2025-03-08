@@ -495,14 +495,7 @@ export class AdminRepository implements AdminRepositary {
     }
     return contracts;
   }
-
-  async viewSingleContract(contractId: string): Promise<ContractDocument> {
-    const contract = await ContractModel.findById(contractId).exec();
-    if (!contract) {
-      throw new Error("Contract not found");
-    }
-    return contract;
-  }
+ 
 
   async successMoneyTransfer(
     userId: string,
@@ -553,5 +546,12 @@ export class AdminRepository implements AdminRepositary {
     if (!contracts) throw new Error("Contracts not found");
 
     return contracts;
+  }
+
+  async viewSingleContract(contractId: string) {
+     const contract = await ContractModel.findById(contractId).exec();
+     if(!contract) throw new Error('Contract not found');
+
+     return contract;
   }
 }

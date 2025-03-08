@@ -81,6 +81,7 @@ import { ViewWalletAdmin } from '../../application/usecases/admin/viewWallet';
 import { SuccessMoneyTransfer } from '../../application/usecases/admin/successMoneyTransfer'; 
 import { GetWithdrawRequests } from '../../application/usecases/admin/getWithdrawRequests'; 
 import { ViewContractsAdmin } from '../../application/usecases/admin/viewContracts'; 
+import { ViewSingleContractAdmin } from '../..//application/usecases/admin/viewSingleContract'; 
 
 
 import { Create } from '../../application/usecases/admin/create';
@@ -92,9 +93,7 @@ import { GetWallet } from '../../application/usecases/admin/getWallet';
 import { SearchUser } from '../../application/usecases/admin/searchUser';
 import { SortUser } from '../../application/usecases/admin/sortUser';
 import { SearchClient } from '../../application/usecases/admin/searchClient';
-import { SortClient } from '../../application/usecases/admin/sortClient';
-import { GetAllContracts } from '../../application/usecases/admin/getAllContracts';
-import { ViewSingleContract } from '../../application/usecases/admin/viewSingleContract';
+import { SortClient } from '../../application/usecases/admin/sortClient'; 
  
 // User Respo instance  ---------->
 const userRepository = new UserRepositoryMongoose();
@@ -179,6 +178,7 @@ const viewWalletAdminUseCase = new ViewWalletAdmin(adminRepositary);
 const successMoneyTransferUseCase = new SuccessMoneyTransfer(adminRepositary); 
 const getWithdrawRequestsUseCase = new GetWithdrawRequests(adminRepositary); 
 const viewContractsAdminUseCase = new ViewContractsAdmin(adminRepositary); 
+const viewSingleContractAdminUseCase = new ViewSingleContractAdmin(adminRepositary); 
 
 
 
@@ -191,9 +191,7 @@ const searchClientUseCase = new SearchClient(adminRepositary);
 const sortClientUseCase = new SortClient(adminRepositary);
 const verifyAcceptUseCase = new VerifyAccept(adminRepositary);
 const getAllRequestsUseCase = new GetAllRequests(adminRepositary);
-const getRequestedClientUseCase = new GetRequestedClient(adminRepositary);
-const getAllContractsUseCase = new GetAllContracts(adminRepositary);
-const viewSingleContractUseCase = new ViewSingleContract(adminRepositary);
+const getRequestedClientUseCase = new GetRequestedClient(adminRepositary); 
   
 // export all user usecases
 export const allUserUseCases = {
@@ -280,7 +278,8 @@ export const allAdminUseCases = {
         viewWalletAdminUseCase, 
         successMoneyTransferUseCase, 
         getWithdrawRequestsUseCase, 
-        viewContractsAdminUseCase , 
+        viewContractsAdminUseCase,   
+        viewSingleContractAdminUseCase,   
         
 
         viewRoleInfoUseCase ,
@@ -291,7 +290,5 @@ export const allAdminUseCases = {
         sortClientUseCase ,
         verifyAcceptUseCase ,
         getAllRequestsUseCase ,
-        getRequestedClientUseCase, 
-        getAllContractsUseCase,
-        viewSingleContractUseCase
+        getRequestedClientUseCase,  
 };

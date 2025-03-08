@@ -16,7 +16,7 @@ export class GoogleLoginUser {
   async execute(user: User) {
     const { email, name, password } = user;
 
-    const userGoogleLogin: any = await this.userRepositary.findUserByOnlyEmail(
+    const userGoogleLogin = await this.userRepositary.findUserByOnlyEmail(
       email,
       name,
       password

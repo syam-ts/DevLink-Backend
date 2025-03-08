@@ -185,25 +185,55 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async findClientByOnlyEmail(
     email: string,
-    name: string
-  ): Promise<Client | null> {
-    const client = await ClientModel.findOne({ email }).exec();
+    name: string,
+    password: string
+  ): Promise<Client | null> { 
+    
+    const client: any = await ClientModel.findOne({ email }).exec();
+
+    name = client.companyName
+      
     if (client) {
       return {
+        _id: client._id,
         companyName: client.companyName,
         email: client.email,
+        isBlocked: client.isBlocked,
+        isVerified: client.isVerified
       } as Client;
-    } else {
-      const createdClient = new ClientModel({
-        name: name,
-        email: email,
-      });
+    } else { 
 
-      const savedClient = await createdClient.save();
-      return {
-        companyName: savedClient.companyName,
-        email: savedClient.email,
-      } as Client;
+      const salt: number = 10;
+            const hashedPassword = await bcrypt.hash(password, salt);
+            const createdClient = new ClientModel({
+              companyName: name,
+              email: email,
+              password: hashedPassword,
+              description: "",
+              numberOfEmployees: "",
+              location: "",
+              domain: "",
+              since: "",
+              totalJobs: "",
+              isVerified: false,
+              isGoogle: false,
+              totalSpend: 0,
+              totalHours: 0,
+              wallet: { },
+              request: [],
+              isBlocked: false,
+              createdAt: new Date(),
+            });
+      
+            const savedClient = await createdClient.save();
+      
+            return {
+              _id: savedClient._id,
+              companyName: savedClient.companyName,
+              email: savedClient.email,
+              password: savedClient.password,
+            } as Client; 
+ 
     }
   }
 
@@ -749,10 +779,21 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         },
       },
       {
-        $set: { "proposals.$.status": "rejected" }, // Update only the matched proposal ----------------
+        $set: { "proposals.$.status": "rejected" },  
       },
       { new: true }
     );
+
+    console.log('updated client: ', clientId, userId, jobPostId)
+    // decrementing count
+    const updatetingCount = await JobPostModel.findByIdAndUpdate(jobPostId, {
+      $inc: {proposalCount: -1}
+    }, {
+      new: true
+    });
+  
+
+    
     return proposal;
   }
 

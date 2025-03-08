@@ -149,12 +149,32 @@ export const clientController = {
 
   googleLogin: async (req: Request, res: Response) => {
     try {
-      const client = await allClientUseCases.GoogleLoginClientUseCase.execute(
+      const client: any = await allClientUseCases.GoogleLoginClientUseCase.execute(
         req.body
       );
+
+      if (!client) {
+        res
+          .status(401)
+          .json({ message: "Invalid credentials", success: false });
+        return;
+      }
+
+      client.role = "client"; 
+      const { accessToken, refreshToken } = generateTokens(client); 
+
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+      });
       res
         .status(HttpStatusCode.OK)
-        .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
+
+        .json({ message: StatusMessage[HttpStatusCode.OK],
+          client,
+        accessToken,
+        refreshToken, success: true });
     } catch (err: any) {
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)

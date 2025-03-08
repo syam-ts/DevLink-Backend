@@ -415,7 +415,7 @@ export const adminController = {
     try {
       const { contractId }: { contractId: string } = req.params;
 
-      const contract = await allAdminUseCases.viewSingleContractUseCase.execute(
+      const contract = await allAdminUseCases.viewSingleContractAdminUseCase.execute(
         contractId
       );
       res.status(HttpStatusCode.OK).json({

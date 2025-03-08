@@ -1,24 +1,31 @@
-import { Client } from '../../../domain/entities/Client';
+ interface Client {
+    email: string
+    name: string
+    password: string
+ }
 
-export interface ClientRepositary {
+export interface ClientRepository {
     createClient(client: Client): Promise<Client>;
-    findClientByOnlyEmail(email: string, name: string): Promise<Client | null>;
+    findClientByOnlyEmail(
+        email: string,
+        name: any,
+        password: any
+    ): Promise<Client | null>;
 }
 
 export class GoogleLoginClient {
-    constructor(private clientRepositary: ClientRepositary) {}
+    constructor(private clientRepository: ClientRepository) { }
 
-    async execute(client: Client) {  
-        const {email, name} = client;  
-        const existingClient = await this.clientRepositary.findClientByOnlyEmail(email, name);
+    async execute(client: Client ) {
+        const { email, name, password } = client;
+    
 
-        if(existingClient) {
-            console.log('client Found')
-            return (
-                existingClient
-            )
-        }
+        const clientGoogleLogin = await this.clientRepository.findClientByOnlyEmail(
+            email,
+            name,
+            password
+        );
 
-        return this.clientRepositary.createClient(client);
+        return clientGoogleLogin;
     }
 }
