@@ -1,20 +1,21 @@
- 
+import { ContractDocument } from "../../../domain/entities/Contract";
 
 export interface ClientRepository {
-    closeContract(contractId: string, progress: number): Promise <any>
-    
-};
+    closeContract(
+        contractId: string,
+        progress: number
+    ): Promise<ContractDocument>;
+}
 
+export class CloseContract {
+    constructor(private clientRepository: ClientRepository) { }
 
-export class CloseContract
-{
-    constructor( private clientRepository: ClientRepository) {};
+    async execute(contractId: string, progress: number) {
+        const closedContract = await this.clientRepository.closeContract(
+            contractId,
+            progress
+        );
 
-    async execute(contractId: string, progress: number) { 
-  
-          const closedContract = await this.clientRepository.closeContract(contractId, progress);
-    
-          
-          return closedContract;
+        return closedContract;
     }
 }

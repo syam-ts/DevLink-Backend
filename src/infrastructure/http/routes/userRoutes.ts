@@ -44,8 +44,8 @@ const {
 const { USER }: {USER: string} = allRoles;
 
 
-userRouter.get('/getHome', verifyToken, requireRole(USER), getHomeUser);
-userRouter.get('/home/:type', verifyToken, requireRole(USER), listHomeJobs);
+userRouter.get('/getHome', getHomeUser);
+userRouter.get('/home/:type', listHomeJobs);
 userRouter.get('/jobs/:jobsType', verifyToken, requireRole(USER), getSelectedJobs);
 userRouter.get('/job/:jobPostId',verifyToken, requireRole(USER), getSingleJobPost);
 userRouter.get('/proposals/:proposalType',verifyToken, requireRole(USER), viewProposals);
@@ -56,7 +56,12 @@ userRouter.post('/boostProfile', verifyToken, requireRole(USER), boostAccount);
 userRouter.patch('/profileBoostSuccess', verifyToken, requireRole(USER), bosstSuccess);  
 userRouter.get('/wishlist', verifyToken, requireRole(USER), viewAllWishlist);
 userRouter.post('/addToWishlist', verifyToken, requireRole(USER), addToWishlist);
-userRouter.patch('/removeFromWishlist',verifyToken, requireRole(USER), removeFromWishlist)
+
+
+
+userRouter.patch('/removeFromWishlist',verifyToken, requireRole(USER), removeFromWishlist);
+
+
 userRouter.get("/wallet",verifyToken, requireRole(USER), viewWalletUser);
 userRouter.post('/createProposal', verifyToken, requireRole(USER), createProposal);
 userRouter.get("/invites",verifyToken, requireRole(USER), getAllInvites);  

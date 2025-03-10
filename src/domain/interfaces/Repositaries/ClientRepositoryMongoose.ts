@@ -337,7 +337,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return updatedAdmin;
   }
 
-  async createJobPost(clientId: Id, data: any): Promise<JobPostDocument> {
+  async createJobPost(clientId: Id, data: JobPostDocument | any): Promise<JobPostDocument> {
     const client: any = await ClientModel.findById(clientId);
     //update client jobpost count
     // const cilent = await ClientModel.findByIdAndUpdate(clientId, {
@@ -346,9 +346,10 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     //   new: true
     // });
     // console.log('THejb', client)
+    
 
-    const parsedEstimatedTimeInHours: number = parseInt(data.estimateTime);
-    const totalAmount: number = data.estimateTime * data.payment;
+    const parsedEstimatedTimeInHours = parseInt(data.estimateTime);
+    const totalAmount = data.estimateTime * data.amount;
     data.amount = totalAmount; //updatig the total amount
 
     const createdJobPost = new JobPostModel({
@@ -359,7 +360,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       paymentType: data.paymentType,
       estimateTime: new Date(),
       estimateTimeinHours: parsedEstimatedTimeInHours,
-      amount: data.payment,
+      amount: data.amount,
       expertLevel: data.expertLevel,
       location: data.location,
       projectType: data.projectType,

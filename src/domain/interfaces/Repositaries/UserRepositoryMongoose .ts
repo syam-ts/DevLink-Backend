@@ -222,8 +222,8 @@ export class UserRepositoryMongoose implements UserRepositary {
   async findUserByOnlyEmail(
     email: string,
     name: string,
-    password: any
-  ): Promise<any | null> {
+    password: string
+  ): Promise<User> {
     const user = await UserModel.findOne({ email }).exec();
 
     if (user) {
@@ -376,7 +376,8 @@ export class UserRepositoryMongoose implements UserRepositary {
     //CHECK IF MAX PROP REACHED
     const proposals: any = await JobPostModel.findById(jobPostId).exec();
     const { proposalCount, maxProposals } = proposals;
-    if (proposalCount === maxProposals) throw new Error("Maximum proposals reched");
+    if (proposalCount === maxProposals)
+      throw new Error("Maximum proposals reched");
 
     const user = await UserModel.findById(userId);
 
@@ -429,6 +430,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         { $push: { proposals: newProposal } },
         { new: true }
       );
+      console.log("The final: ", jobpost.clientId);
 
       const newNotificationUser = await NotificationModel.create({
         type: "New Job Proposal",
@@ -502,7 +504,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     jobType: string,
     currentPage: number
   ): Promise<JobPostDocument | any> {
-    const page_size: number = 5;
+    const page_size: number = 4;
     const skip: number = (currentPage - 1) * page_size;
 
     const user: any = await UserModel.findById(userId).exec();
@@ -732,7 +734,10 @@ export class UserRepositoryMongoose implements UserRepositary {
     return jobPost;
   }
 
-  async submitProject(contractId: string, body: any): Promise<any> {
+  async submitProject(
+    contractId: string,
+    body: { description: string; progress: number; attachedFile: string }
+  ): Promise<any> {
     const contract: any = await ContractModel.findByIdAndUpdate(
       contractId,
       {
@@ -807,7 +812,9 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
   async getAllInvites(userId: string): Promise<Invite | any> {
-    const foundedInvites = await InviteModel.find({ userId: userId });
+    const foundedInvites = await InviteModel.find({
+      $and: [{ userId: userId }, { status: "pending" }],
+    });
 
     if (!foundedInvites) throw new Error("Invite not Found");
     return foundedInvites;

@@ -1,11 +1,11 @@
 export interface WishlistRepository {
-  removeFromWishlist(wishlistId: string, jobPostId: string): Promise<any>;
+  removeFromWishlist(wishlistId: string, jobPostId: string): void;
 }
 
 interface WishlistData {
-  wishlistId: string;
-  jobPostId: string;
-}
+  wishlistId: string
+  jobPostId: string
+};
 
 export class RemoveFromWishlist {
   constructor(private wishlistRepository: WishlistRepository) {}
@@ -19,4 +19,5 @@ export class RemoveFromWishlist {
     );
     return result;
   }
-}
+};
+

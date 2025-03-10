@@ -1,18 +1,22 @@
+interface Body {
+    description: string
+    progress: number
+    attachedFile: string
+};
 
-
-
-export interface UserRepositary {
-    submitProject(contractId: string, body: string): Promise<any >;
+export interface UserRepository {
+    submitProject(contractId: string, body: Body): void;
 }
 
 export class SubmitProject {
-    constructor(private userRepositary: UserRepositary) {}
+    constructor(private userRepository: UserRepository) { }
 
-    async execute(contractId: string, body: any) {   
-        
+    async execute(contractId: string, body: Body) {
+        const response = await this.userRepository.submitProject(
+            contractId,
+            body
+        );
 
-        const response:any = await this.userRepositary.submitProject(contractId, body);
- 
-           return response;
+        return response;
     }
 }

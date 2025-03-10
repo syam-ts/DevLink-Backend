@@ -3,7 +3,7 @@ export interface UserRepositary {
 }
 
 export class GetAllInvites {
-  constructor(private userRepositary: UserRepositary) {}
+  constructor(private userRepositary: UserRepositary) { }
 
   async execute(userId: string) {
     const response = await this.userRepositary.getAllInvites(userId);

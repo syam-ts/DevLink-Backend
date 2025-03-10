@@ -1,9 +1,14 @@
 export interface UserRepository {
-  withdrawMoney(userId: string, amount: number, accountNumber: number, type: string): void;
+  withdrawMoney(
+    userId: string,
+    amount: number,
+    accountNumber: number,
+    type: string
+  ): void;
 }
 
 export class WithdrawMoneyByUser {
-  constructor(private userRepository: UserRepository) { }
+  constructor(private userRepository: UserRepository) {}
 
   async execute(
     userId: string,

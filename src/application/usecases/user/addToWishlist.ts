@@ -1,5 +1,5 @@
 export interface WishlistRepository {
-  addToWishlist(userId: string, jobPostId: string): Promise<any>;
+  addToWishlist(userId: string, jobPostId: string): void;
 }
 
 export class AddToWishlist {

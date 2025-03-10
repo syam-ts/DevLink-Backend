@@ -2,7 +2,6 @@
 import { SignupUser } from "../../application/usecases/user/signupUser";
 import { LoginUser } from "../../application/usecases/user/loginUser";
 import { GoogleLoginUser } from "../../application/usecases/user/GoogleLoginUser";
-import { LogoutUser } from "../../application/usecases/user/logoutUser";
 import { verifyOtp } from "../../application/usecases/user/otpUser";
 import { VerifyEmail } from "../../application/usecases/user/verifyEmail";
 import { ResetPassword } from "../../application/usecases/user/resetPassword";
@@ -102,7 +101,6 @@ const wishlistRepository = new WishlistRepositoryMongoose();
 const signupUseCase = new SignupUser(userRepository);
 const loginUseCase = new LoginUser(userRepository);
 const getHomeUseCase = new getHomeUser(userRepository);
-const logoutUserUseCase = new LogoutUser(userRepository);
 const verifyEmailUseCase = new VerifyEmail(userRepository);
 const resetPasswordUseCase = new ResetPassword(userRepository);
 const verifyUserUseCase = new verifyOtp(userRepository);
@@ -200,8 +198,7 @@ const getRequestedClientUseCase = new GetRequestedClient(adminRepositary);
 export const allUserUseCases = {
         signupUseCase ,
         loginUseCase ,
-        getHomeUseCase ,
-        logoutUserUseCase ,
+        getHomeUseCase , 
         verifyEmailUseCase ,
         resetPasswordUseCase ,
         verifyUserUseCase ,

@@ -1,16 +1,12 @@
-
-import { sendMail } from '../../../utils/send-mail';
-
+import { sendMail } from "../../../utils/send-mail";
 
 interface User {
-    _id: string
-    name: string
-    email: string
-    password: string
-    mobile: number 
-  }
-
-  
+    _id: string;
+    name: string;
+    email: string;
+    password: string;
+    mobile: number;
+}
 
 export interface UserRepositary {
     createUser(user: User): Promise<User>;
@@ -18,24 +14,17 @@ export interface UserRepositary {
 }
 
 export class SignupUser {
-    constructor(private userRepositary: UserRepositary) {}
+    constructor(private userRepositary: UserRepositary) { }
 
-    async execute(user: User) {   
-        
+    async execute(user: User) {
+        const existingUser = await this.userRepositary.signupUser(user.email);
 
-        const existingUser = await this.userRepositary.signupUser(user.email)
-
-        
-        if(existingUser) {
-            throw new Error('User already exists');
+        if (existingUser) {
+            throw new Error("User already exists");
         } else {
-              
             const otp = await sendMail(user.email);
- 
 
             return otp;
         }
- 
-      
     }
 }

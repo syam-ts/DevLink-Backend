@@ -1,28 +1,22 @@
-import { User } from '../../../domain/entities/User';
-import bcrypt from 'bcrypt';
- 
+import { User } from "../../../domain/entities/User";
+import bcrypt from "bcrypt";
 
 export interface UserRepositary {
-    resetPassword(email: string, password: string): Promise<User | null>;
+    resetPassword(email: string, password: string): Promise<User>;
 }
 
 export class ResetPassword {
-    constructor(private userRepositary: UserRepositary) {}
+    constructor(private userRepositary: UserRepositary) { }
 
-    async execute(id :string, password: string) {   
- 
- 
+    async execute(id: string, password: string) {
+        const salt: number = 10;
+        const hashedPassword = await bcrypt.hash(password, salt);
 
-            const salt: number = 10;
-            const hashedPassword = await bcrypt.hash(password, salt);
+        const resetPassword = await this.userRepositary.resetPassword(
+            id,
+            hashedPassword
+        );
 
-        const resetPassword = await this.userRepositary.resetPassword(id , hashedPassword); 
-
-
-
-       
-        return {  };
-  
-        
+        return {};
     }
 }

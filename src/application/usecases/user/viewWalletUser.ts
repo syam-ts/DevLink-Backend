@@ -1,5 +1,7 @@
 export interface UserRepositary {
-  viewWallet(userId: string, currentPage: number | any): Promise<any>;
+
+
+  viewWallet(userId: string, currentPage: number | any): void;
 }
 
 export class ViewWalletUser {

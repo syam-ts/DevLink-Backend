@@ -6,18 +6,16 @@ export interface UserRepository {
   listHomeJobs(type: string): Promise<JobPostDocument>;
 }
 
-// view all class
 export class getHomeUser {
   constructor(private userRepository: UserRepository) {}
 
   async execute() {
-    const foundClients: any = await this.userRepository.findAllClients();
+    const foundClients = await this.userRepository.findAllClients();
 
     return foundClients;
   }
 }
 
-// view all class
 export class ListHomeJobs {
   constructor(private userRepository: UserRepository) {}
 

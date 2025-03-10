@@ -1,22 +1,29 @@
-import { User } from "../../../domain/entities/User";
- 
+interface User {
+  email: string;
+  name: string;
+  password: string;
+}
 
-export interface UserRepositary {
+export interface UserRepository {
   createUser(user: User): Promise<User>;
   findUserByOnlyEmail(
     email: string,
     name: string,
-    password: any
-  ): Promise<User | null>;
+    password: string
+  ): Promise<User>;
 }
 
 export class GoogleLoginUser {
-  constructor(private userRepositary: UserRepositary) {}
+  constructor(private userRepository: UserRepository) { }
 
   async execute(user: User) {
-    const { email, name, password } = user;
+    const {
+      email,
+      name,
+      password,
+    }: { email: string; name: string; password: string } = user;
 
-    const userGoogleLogin = await this.userRepositary.findUserByOnlyEmail(
+    const userGoogleLogin = await this.userRepository.findUserByOnlyEmail(
       email,
       name,
       password
@@ -24,4 +31,5 @@ export class GoogleLoginUser {
 
     return userGoogleLogin;
   }
-}
+};
+

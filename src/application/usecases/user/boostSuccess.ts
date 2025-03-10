@@ -1,5 +1,5 @@
 export interface UserRepositary {
-  boostSuccess(userId: string): Promise<any>;
+  boostSuccess(userId: string): void;
 }
 
 export class BoostSuccess {

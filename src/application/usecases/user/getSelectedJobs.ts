@@ -1,5 +1,5 @@
 export interface UserRepository {
-  getSelectedJobs(userId: string, jobsType: string, currentPage: number): Promise<any>;
+  getSelectedJobs(userId: string, jobsType: string, currentPage: number): void;
 }
 
 export class GetSelectedJobs {

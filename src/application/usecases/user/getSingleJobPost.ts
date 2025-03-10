@@ -1,11 +1,9 @@
-
-
-export interface userRepository{
-    getSingleJobPost(jobPostId: string): Promise<any>
+export interface userRepository {
+    getSingleJobPost(jobPostId: string): void;
 }
 
 export class GetSingleJobPost {
-    constructor(private userepository: userRepository) {} 
+    constructor(private userepository: userRepository) { }
 
     async execute(jobPostId: string) {
         const jobPost = await this.userepository.getSingleJobPost(jobPostId);

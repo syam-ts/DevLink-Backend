@@ -1,5 +1,11 @@
+import { ContractDocument } from "../../../domain/entities/Contract";
+
 export interface UserRepositary {
-  viewContracts(userId: string, contractViewType: string, currentPage: number): void;
+  viewContracts(
+    userId: string,
+    contractViewType: string,
+    currentPage: number
+  ): Promise<ContractDocument>;
 }
 
 export class ViewContracts {
