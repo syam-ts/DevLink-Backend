@@ -142,10 +142,8 @@ export const userController = {
         return;
       }
 
-      user.role = "user";
-      console.log('google return: ', user)
-      const { accessToken, refreshToken } = generateTokens(user);
-      console.log('Acc: ', accessToken, 'REFRSH: ', refreshToken)
+      user.role = "user"; 
+      const { accessToken, refreshToken } = generateTokens(user); 
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
@@ -377,8 +375,7 @@ export const userController = {
 
   bosstSuccess: async (req: Request, res: Response) => {
     try {
-      const { id: userId } = req.user;
-      console.log("bo", userId);
+      const { id: userId } = req.user; 
       const response = await allUserUseCases.boostSuccessUseCase.execute(
         userId
       );
