@@ -27,6 +27,7 @@ import { GetAllInvites } from "../../application/usecases/user/getAllInvites";
 import { RejectInvite } from "../../application/usecases/user/rejectInvite"; 
 import { ViewSingleContractUser } from "../../application/usecases/user/viewSingleContract"; 
 import { WithdrawMoneyByUser } from "../../application/usecases/user/withdrawMoneyByUser"; 
+import { SearchJobs } from "../../application/usecases/user/searchJobs"; 
 import { UserRepositoryMongoose } from "../../domain/interfaces/Repositaries/UserRepositoryMongoose ";
  
 // Client imports ----------------> 
@@ -123,6 +124,7 @@ const removeFromWishlistUseCase = new RemoveFromWishlist(wishlistRepository);
 const viewWalletUserUseCase = new ViewWalletUser(userRepository); 
 const getAllInvitesUseCase = new GetAllInvites(userRepository); 
 const rejectInviteUseCase = new RejectInvite(userRepository); 
+const searchJobsUseCase = new SearchJobs(userRepository); 
 const viewSingleContractUserUseCase = new ViewSingleContractUser(userRepository); 
 const withdrawMoneyByUserUseCase =  new WithdrawMoneyByUser(userRepository);
   
@@ -223,6 +225,7 @@ export const allUserUseCases = {
         viewWalletUserUseCase,
         getAllInvitesUseCase,
         rejectInviteUseCase,
+        searchJobsUseCase,
         viewSingleContractUserUseCase, 
         withdrawMoneyByUserUseCase,
 }; 

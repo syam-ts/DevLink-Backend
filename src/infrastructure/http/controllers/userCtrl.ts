@@ -134,7 +134,7 @@ export const userController = {
       const user: any = await allUserUseCases.GoogleLoginUserUseCase.execute(
         req.body
       );
-      
+
       if (!user) {
         res
           .status(401)
@@ -142,8 +142,8 @@ export const userController = {
         return;
       }
 
-      user.role = "user"; 
-      const { accessToken, refreshToken } = generateTokens(user); 
+      user.role = "user";
+      const { accessToken, refreshToken } = generateTokens(user);
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
@@ -182,7 +182,7 @@ export const userController = {
   },
 
   getProfile: async (req: Request, res: Response) => {
-    try { 
+    try {
       const { id: userId } = req.user;
       const user = await allUserUseCases.getProfileUseCase.execute(userId);
 
@@ -202,7 +202,7 @@ export const userController = {
     try {
       const { type } = req.params;
       const { id: userId } = req.user;
-      const profileData = req.body; 
+      const profileData = req.body;
 
       const response = await allUserUseCases.alterProfileUseCase.execute(
         userId,
@@ -261,7 +261,7 @@ export const userController = {
     try {
       const { jobsType } = req.params;
       const { id: userId } = req.user;
-      const currentPage : number = Number(req.query.currentPage) || 1; 
+      const currentPage: number = Number(req.query.currentPage) || 1;
 
       const response = await allUserUseCases.getSelectedJobsUseCase.execute(
         userId,
@@ -305,10 +305,10 @@ export const userController = {
   },
 
   viewProposals: async (req: Request, res: Response) => {
-    try { 
-      const {id: userId} = req.user;    
+    try {
+      const { id: userId } = req.user;
       const response = await allUserUseCases.viewProposalsUseCase.execute(
-        userId 
+        userId
       );
 
       res.status(HttpStatusCode.OK).json({
@@ -323,7 +323,6 @@ export const userController = {
     }
   },
 
- 
   allNotifications: async (req: Request, res: Response) => {
     try {
       const { userId } = req.params;
@@ -356,7 +355,7 @@ export const userController = {
 
   boostAccount: async (req: Request, res: Response) => {
     try {
-      const { id: userId } = req.user; 
+      const { id: userId } = req.user;
       const paymentUrl = await allUserUseCases.boostAccountUseCase.execute(
         userId
       );
@@ -375,7 +374,7 @@ export const userController = {
 
   bosstSuccess: async (req: Request, res: Response) => {
     try {
-      const { id: userId } = req.user; 
+      const { id: userId } = req.user;
       const response = await allUserUseCases.boostSuccessUseCase.execute(
         userId
       );
@@ -393,8 +392,7 @@ export const userController = {
   },
 
   getSingleJobPost: async (req: Request, res: Response) => {
-    try { 
-      
+    try {
       const { jobPostId } = req.params;
       const jobPost = await allUserUseCases.getSingleJobPostUseCase.execute(
         jobPostId
@@ -416,7 +414,7 @@ export const userController = {
     try {
       const { id: userId } = req.user;
       const { contractViewType } = req.params;
-      const currentPage : number = Number(req.query.currentPage) || 1; 
+      const currentPage: number = Number(req.query.currentPage) || 1;
       const contracts = await allUserUseCases.viewContractsUseCase.execute(
         userId,
         contractViewType,
@@ -433,7 +431,6 @@ export const userController = {
         .json({ message: err.message, success: false });
     }
   },
- 
 
   submitProject: async (req: Request, res: Response) => {
     try {
@@ -572,7 +569,7 @@ export const userController = {
 
   getAllInvites: async (req: Request, res: Response) => {
     try {
-      const { id: userId }: {id: string} = req.user;
+      const { id: userId }: { id: string } = req.user;
       const response = await allUserUseCases.getAllInvitesUseCase.execute(
         userId
       );
@@ -607,12 +604,32 @@ export const userController = {
         .json({ message: err.message, success: false });
     }
   },
+
+  searchJobs: async (req: Request, res: Response) => {
+    try {
+      const { input }: { input: string } = req.body;
+      const jobs = await allUserUseCases.searchJobsUseCase.execute(input);
+
+      res
+        .status(HttpStatusCode.OK)
+        .json({
+          message: StatusMessage[HttpStatusCode.OK],
+          jobs,
+          success: true,
+        });
+    } catch (err: any) {
+      res
+        .status(500)
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: err.message, success: false });
+    }
+  },
   withdrawMoneyByUser: async (req: Request, res: Response) => {
     try {
-      const { amount, accountNumber, balance, type } = req.body;  
-      const{ id: userId}: {id: string} = req.user;
+      const { amount, accountNumber, balance, type } = req.body;
+      const { id: userId }: { id: string } = req.user;
 
-      const response = await allUserUseCases.withdrawMoneyByUserUseCase.execute( 
+      const response = await allUserUseCases.withdrawMoneyByUserUseCase.execute(
         userId,
         amount,
         accountNumber,
@@ -620,9 +637,10 @@ export const userController = {
         type
       );
 
-      res
-        .status(HttpStatusCode.CREATED)
-        .json({ message: StatusMessage[HttpStatusCode.CREATED], success: true });
+      res.status(HttpStatusCode.CREATED).json({
+        message: StatusMessage[HttpStatusCode.CREATED],
+        success: true,
+      });
     } catch (err: any) {
       res
         .status(500)

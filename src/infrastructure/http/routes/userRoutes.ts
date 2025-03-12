@@ -34,7 +34,7 @@ const {
     viewSingleContract,  
     withdrawMoneyByUser,
     
-    
+    searchJobs,
     submitProject,
     getAllInvites,
     rejectInvite,
@@ -68,7 +68,7 @@ userRouter.get("/invites",verifyToken, requireRole(USER), getAllInvites);
 userRouter.post('/withdrawMoney',verifyToken, requireRole(USER), withdrawMoneyByUser);  
 
 
-
+userRouter.get('/searchJobs', searchJobs)
 
 userRouter.get("/contract/:contractId",verifyToken, requireRole(USER),viewSingleContract);
 userRouter.get('/notifications/:userId', verifyToken, requireRole(USER), allNotifications);
