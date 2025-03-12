@@ -1,20 +1,15 @@
-
-
+import { User } from "../../../domain/entities/User";
 
 export interface ClientRepository {
-    getallDevelopers(): Promise <any>
-    
-};
-
+    getallDevelopers(): Promise<User>;
+}
 
 export class GetallDevelopers {
-    constructor( private clientRepository: ClientRepository) {};
+    constructor(private clientRepository: ClientRepository) { }
 
-    async execute() { 
- 
+    async execute() {
+        const allDevelopers = await this.clientRepository.getallDevelopers();
 
-          const allDevelopers = await this.clientRepository.getallDevelopers();
-        
-          return allDevelopers;
+        return allDevelopers;
     }
 }

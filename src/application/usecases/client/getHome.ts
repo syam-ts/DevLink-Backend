@@ -1,15 +1,16 @@
 import { Client } from "../../../domain/entities/Client";
+import { JobPostDocument } from "../../../domain/entities/JobPost";
 
 export interface ClientRepository {
-  findAllUsers(): Promise<Client | null>;
-  trendingJobs(): Promise<null>;
+  findAllUsers(): Promise<Client>;
+  trendingJobs(): Promise<JobPostDocument>;
 }
 
 export class getHomeClient {
   constructor(private clientRepository: ClientRepository) {}
 
   async execute() {
-    const foundUsers: any = await this.clientRepository.findAllUsers(); 
+    const foundUsers = await this.clientRepository.findAllUsers();
     return foundUsers;
   }
 }
