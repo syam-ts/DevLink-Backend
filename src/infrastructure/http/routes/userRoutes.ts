@@ -47,7 +47,6 @@ const { USER }: {USER: string} = allRoles;
 userRouter.get('/getHome', getHomeUser);
 userRouter.get('/home/:type', listHomeJobs);
 userRouter.get('/jobs/:jobsType', verifyToken, requireRole(USER), getSelectedJobs);
-userRouter.get('/job/:jobPostId',verifyToken, requireRole(USER), getSingleJobPost);
 userRouter.get('/proposals/:proposalType',verifyToken, requireRole(USER), viewProposals);
 userRouter.get('/contracts/:contractViewType', verifyToken, requireRole(USER), viewContracts); 
 userRouter.get('/profile/:type',verifyToken, requireRole(USER), getProfile); 
@@ -57,19 +56,15 @@ userRouter.patch('/profileBoostSuccess', verifyToken, requireRole(USER), bosstSu
 userRouter.get('/wishlist', verifyToken, requireRole(USER), viewAllWishlist);
 userRouter.post('/addToWishlist', verifyToken, requireRole(USER), addToWishlist);
 
-
-
-userRouter.patch('/removeFromWishlist',verifyToken, requireRole(USER), removeFromWishlist);
+userRouter.patch('/removeFromWishlist/:wishlistId',verifyToken, requireRole(USER), removeFromWishlist); 
 
 
 userRouter.get("/wallet",verifyToken, requireRole(USER), viewWalletUser);
 userRouter.post('/createProposal', verifyToken, requireRole(USER), createProposal);
 userRouter.get("/invites",verifyToken, requireRole(USER), getAllInvites);  
 userRouter.post('/withdrawMoney',verifyToken, requireRole(USER), withdrawMoneyByUser);  
-
-
-userRouter.get('/searchJobs', searchJobs)
-
+userRouter.post('/searchJobs',verifyToken, requireRole(USER), searchJobs);
+userRouter.get('/job/:jobPostId',verifyToken, requireRole(USER), getSingleJobPost);
 userRouter.get("/contract/:contractId",verifyToken, requireRole(USER),viewSingleContract);
 userRouter.get('/notifications/:userId', verifyToken, requireRole(USER), allNotifications);
 userRouter.get('/allChat/view/:roleId', clientController.getAllChats);

@@ -12,7 +12,7 @@ export class SignupClient {
     async execute(client: Client | any) {   
         
 
-        const existingClient:any = await this.clientRepositary.signupClient(client)
+        const existingClient = await this.clientRepositary.signupClient(client)
 
         
         if(existingClient) {

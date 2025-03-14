@@ -1,6 +1,6 @@
 export interface ClientRepositary {
   viewWallet(clientId: string, currentPage: number | any): void;
-};
+}
 
 export class ViewWallet {
   constructor(private clientRepositary: ClientRepositary) {}

@@ -19,7 +19,7 @@ interface ClientData {
     location: string;
 }
 
-interface InviteDocument extends Document {
+export interface InviteDocument extends Document {
     userId?: mongoose.Types.ObjectId;
     clientId?: mongoose.Types.ObjectId;
     description: String;

@@ -1,5 +1,7 @@
+import { InviteDocument } from "../../../domain/entities/Invite";
+
 export interface ClientRepository {
-    ViewInviteClient(clientId: string): Promise<any>;
+    ViewInviteClient(clientId: string): Promise<InviteDocument>;
 }
 
 export class ViewInviteClient {

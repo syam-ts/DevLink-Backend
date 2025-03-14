@@ -9,7 +9,7 @@ export interface ClientRepositary {
 
 
 
-  const sendMail = async (toMail: string, clientId: any) => {
+  const sendMail = async (toMail: string, clientId: string | unknown) => {
     try {
   
       const transporter = nodemailer.createTransport({
