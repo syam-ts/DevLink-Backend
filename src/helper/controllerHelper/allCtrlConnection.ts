@@ -65,6 +65,7 @@ import { ViewChat } from '../../application/usecases/client/viewChat';
 import { ViewInviteClient } from '../../application/usecases/client/viewInvite';
 import { GetSingleJobPostClient } from '../../application/usecases/client/getSingleJobPost';
 import { InviteUser } from '../../application/usecases/client/inviteUser';
+import { SearchDeveloper } from '../../application/usecases/client/searchDeveloper';
 import { RejectContract } from '../../application/usecases/client/rejectContract';
 import { GetallDevelopers } from '../../application/usecases/client/getallDevelopers';
 import { ChatRepositoryMongoose } from "../../domain/interfaces/Repositaries/ChatRepository";
@@ -159,6 +160,7 @@ const viewSubmissionsUseCase = new ViewSubmissions(ClientRepository);
 const closeContractUseCase = new CloseContract(ClientRepository);
 const rateAndReviewUserUseCase = new RateAndReview(ClientRepository);
 const viewWalletUseCase = new ViewWallet(ClientRepository);
+const searchDeveloperUseCase = new SearchDeveloper(ClientRepository);
 const getallDevelopersUseCase = new GetallDevelopers(ClientRepository);
 const inviteUserUseCase = new InviteUser(ClientRepository);
 const rejectContractUseCase = new RejectContract(ClientRepository);
@@ -260,6 +262,7 @@ export const allClientUseCases = {
      getallDevelopersUseCase,
      getSingleJobPostClientUseCase,
      closeContractUseCase,
+     searchDeveloperUseCase,
      rateAndReviewUserUseCase, 
      inviteUserUseCase, 
      rejectContractUseCase, 

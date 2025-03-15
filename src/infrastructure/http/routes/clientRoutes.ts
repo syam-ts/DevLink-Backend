@@ -42,7 +42,8 @@ const {
   viewChat,
   rateAndReview,
   sendMessage,
-  viewInvite
+  viewInvite,
+  searchDevlopers
 } = clientController;
 const { 
   viewSingleContract
@@ -66,7 +67,14 @@ clientRouter.post("/paymentSuccess", verifyToken, requireRole(CLIENT),createJobP
 clientRouter.get("/profile", verifyToken, requireRole(CLIENT), getProfile);
 clientRouter.get("/userProfile/:userId", verifyToken, requireRole(CLIENT), getUserProfile);
 clientRouter.post("/profile/verify", verifyToken, requireRole(CLIENT), profileVerification);
-clientRouter.post("/profile/edit",verifyToken, requireRole(CLIENT), editProfile);   
+clientRouter.post("/profile/edit",verifyToken, requireRole(CLIENT), editProfile);
+
+
+clientRouter.post('/searchDevelopers', searchDevlopers);
+
+
+
+
 clientRouter.post("/signup", signupClient);
 clientRouter.post("/verify-otp", verifyOtp);
 clientRouter.post("/resend-otp", resendOtp);

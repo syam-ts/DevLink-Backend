@@ -187,53 +187,50 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     email: string,
     name: string,
     password: string
-  ): Promise<Client | null> { 
-    
+  ): Promise<Client | null> {
     const client: any = await ClientModel.findOne({ email }).exec();
 
-    name = client.companyName
-      
+    name = client.companyName;
+
     if (client) {
       return {
         _id: client._id,
         companyName: client.companyName,
         email: client.email,
         isBlocked: client.isBlocked,
-        isVerified: client.isVerified
+        isVerified: client.isVerified,
       } as Client;
-    } else { 
-
+    } else {
       const salt: number = 10;
-            const hashedPassword = await bcrypt.hash(password, salt);
-            const createdClient = new ClientModel({
-              companyName: name,
-              email: email,
-              password: hashedPassword,
-              description: "",
-              numberOfEmployees: "",
-              location: "",
-              domain: "",
-              since: "",
-              totalJobs: "",
-              isVerified: false,
-              isGoogle: false,
-              totalSpend: 0,
-              totalHours: 0,
-              wallet: { },
-              request: [],
-              isBlocked: false,
-              createdAt: new Date(),
-            });
-      
-            const savedClient = await createdClient.save();
-      
-            return {
-              _id: savedClient._id,
-              companyName: savedClient.companyName,
-              email: savedClient.email,
-              password: savedClient.password,
-            } as Client; 
- 
+      const hashedPassword = await bcrypt.hash(password, salt);
+      const createdClient = new ClientModel({
+        companyName: name,
+        email: email,
+        password: hashedPassword,
+        description: "",
+        numberOfEmployees: "",
+        location: "",
+        domain: "",
+        since: "",
+        totalJobs: "",
+        isVerified: false,
+        isGoogle: false,
+        totalSpend: 0,
+        totalHours: 0,
+        wallet: {},
+        request: [],
+        isBlocked: false,
+        createdAt: new Date(),
+      });
+
+      const savedClient = await createdClient.save();
+
+      return {
+        _id: savedClient._id,
+        companyName: savedClient.companyName,
+        email: savedClient.email,
+        password: savedClient.password,
+      } as Client;
     }
   }
 
@@ -337,7 +334,10 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return updatedAdmin;
   }
 
-  async createJobPost(clientId: Id, data: JobPostDocument | any): Promise<JobPostDocument> {
+  async createJobPost(
+    clientId: Id,
+    data: JobPostDocument | any
+  ): Promise<JobPostDocument> {
     const client: any = await ClientModel.findById(clientId);
     //update client jobpost count
     // const cilent = await ClientModel.findByIdAndUpdate(clientId, {
@@ -346,7 +346,6 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     //   new: true
     // });
     // console.log('THejb', client)
-    
 
     const parsedEstimatedTimeInHours = parseInt(data.estimateTime);
     const totalAmount = data.estimateTime * data.amount;
@@ -780,19 +779,22 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         },
       },
       {
-        $set: { "proposals.$.status": "rejected" },  
+        $set: { "proposals.$.status": "rejected" },
       },
       { new: true }
     );
 
     // -------------- decrementing proposalCount --------------
-    const updatetingCount = await JobPostModel.findByIdAndUpdate(jobPostId, {
-      $inc: {proposalCount: -1}
-    }, {
-      new: true
-    });
-   
-    
+    const updatetingCount = await JobPostModel.findByIdAndUpdate(
+      jobPostId,
+      {
+        $inc: { proposalCount: -1 },
+      },
+      {
+        new: true,
+      }
+    );
+
     return proposal;
   }
 
@@ -1054,12 +1056,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     jobPostId: Id,
     description: string
   ): Promise<any> {
-    
     const jobPostData: any = await JobPostModel.findById(jobPostId);
     const client: any = await ClientModel.findById(clientId);
 
     const existingInvite = await InviteModel.find({
-      $and: [{"jobPostData._id": jobPostId},{userId: userId}]
+      $and: [{ "jobPostData._id": jobPostId }, { userId: userId }],
     });
 
     if (existingInvite.length !== 0) throw new Error("Invite already send");
@@ -1103,10 +1104,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
   async ViewInviteClient(clientId: string): Promise<any> {
- 
-    const invite = await InviteModel.find({$and: [{clientId: clientId}, {status: 'pending'}]}).exec();
+    const invite = await InviteModel.find({
+      $and: [{ clientId: clientId }, { status: "pending" }],
+    }).exec();
 
-    if (!invite) throw new Error("No invites found"); 
+    if (!invite) throw new Error("No invites found");
     return invite;
   }
 
@@ -1156,5 +1158,13 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return contract;
   }
 
+  async searchDeveloper(input: string): Promise<any> {
+    const developers = await UserModel.find({
+      name: { $regex: input, $options: "i" },
+    });
 
+    if (!developers) throw new Error("No developer found");
+
+    return developers;
+  }
 }

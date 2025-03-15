@@ -784,4 +784,23 @@ export const clientController = {
         .json({ message: err.message, success: false });
     }
   },
+
+  searchDevlopers: async(req: Request, res: Response) => {
+    try {
+
+    const {input}: {input: string} = req.body;
+    const developers = await allClientUseCases.searchDeveloperUseCase.execute(input);
+
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        developers,
+        success: true,
+      });
+    } catch (error: unknown) {
+      const err = error as { message: string };
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: err.message, success: false });
+    }
+  }
 };
