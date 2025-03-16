@@ -4,10 +4,16 @@ export interface Notification extends mongoose.Document {
     type: string;
     message: string;
     sender_id: string;
-    reciever_id: string;
-    extra?: {
-        documentId: mongoose.Types.ObjectId;
-    };
+    reciever_id: string; 
+    newContract: {
+        contractId: string
+    }
+    closeContract: {
+        userId: string
+    }
+    inviteSuccess: {
+        inviteId: string
+    }
     withdrawData: {
         paymentScreenshot: string;
         amount: number;
@@ -21,9 +27,15 @@ const NotificationSchema: mongoose.Schema = new mongoose.Schema({
     type: { type: String, required: false },
     message: { type: String, required: false },
     sender_id: { type: String, required: false },
-    reciever_id: { type: String, required: false },
-    extra: {
-        documentId: { type: mongoose.Types.ObjectId, required: false },
+    reciever_id: { type: String, required: false }, 
+    newContract: {
+        contractId: {type: String, required: false}
+    },
+    closeContract: {
+        userId: {type: String, required: false}
+    },
+    inviteSuccess: {
+        inviteId: {type: String, required: false}
     },
     withdrawData: {
         paymentScreenshot: { type: String, required: false },
