@@ -519,7 +519,7 @@ export const clientController = {
   },
 
   closeContract: async (req: Request, res: Response) => {
-    try {
+    try { 
       const { contractId, progress } = req.body;
       const response = await allClientUseCases.closeContractUseCase.execute(
         contractId,

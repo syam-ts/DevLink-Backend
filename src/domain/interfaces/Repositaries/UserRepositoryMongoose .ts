@@ -737,7 +737,7 @@ export class UserRepositoryMongoose implements UserRepositary {
   async submitProject(
     contractId: string,
     body: { description: string; progress: number; attachedFile: string }
-  ): Promise<any> {
+  ): Promise<any> { 
     const contract: any = await ContractModel.findByIdAndUpdate(
       contractId,
       {
@@ -751,7 +751,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     const clientId = contract.clientId;
     const jobPostId = contract.jobPostId;
 
-    const jobPost: any = await JobPostModel.findById(jobPostId).exec();
+    const jobPost: any = await JobPostModel.findById(jobPostId).exec(); 
 
     const submissionBody = {
       contractId: contractId,

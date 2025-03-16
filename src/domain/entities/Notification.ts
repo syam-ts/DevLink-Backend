@@ -9,10 +9,11 @@ export interface Notification extends mongoose.Document {
         contractId: string
     }
     closeContract: {
+        contractId: string
         userId: string
     }
     inviteSuccess: {
-        inviteId: string
+        userId: string
     }
     withdrawData: {
         paymentScreenshot: string;
@@ -32,10 +33,11 @@ const NotificationSchema: mongoose.Schema = new mongoose.Schema({
         contractId: {type: String, required: false}
     },
     closeContract: {
+        contractId: {type: String, required: false},
         userId: {type: String, required: false}
     },
     inviteSuccess: {
-        inviteId: {type: String, required: false}
+        userId: {type: String, required: false}
     },
     withdrawData: {
         paymentScreenshot: { type: String, required: false },

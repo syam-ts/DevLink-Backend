@@ -698,13 +698,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       { new: true }
     );
 
-    // send notification to rejectd and accepted user
-    //  const notification = new NotificationModel({
-
-    //  })
-
-    // const deduction = currentJobPost.amount % 10;
-
+     
     const newContract = new ContractModel({
       clientId: clientId,
       userId: userId,
@@ -739,20 +733,25 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     const adminId = process.env.ADMIN_OBJECT_ID;
 
     const newNotificationUser = await NotificationModel.create<Notification>({
-      type: "Contract",
+      type: "new contract",
       message: "New Contract signed in",
       sender_id: adminId,
       reciever_id: userId,
-      "extra.documentId": contractId,
+      newContract: {
+        contractId: savedContract._id
+      },
       createdAt: new Date(),
     });
+ 
 
     const newNotificationClient = await NotificationModel.create<Notification>({
       type: "Contract",
       message: "New Contract signed in",
       sender_id: adminId,
       reciever_id: clientId,
-      "extra.documentId": contractId,
+      newContract: {
+        contractId: savedContract._id
+      },
       createdAt: new Date(),
     });
 
@@ -806,7 +805,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async closeContract(contractId: Id, progress: number): Promise<any> {
     //update contract status as closed ----------------
-    if (!progress) throw new Error("Progress data missing");
+    if (!progress) throw new Error("Progress data missing"); 
 
     const currentContract: any = await ContractModel.findByIdAndUpdate(
       contractId,
@@ -961,12 +960,12 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     );
 
     const newNotificationUser = await NotificationModel.create({
-      type: "contract close",
+      type: "contract closed",
       message: "You successfully completed a Job Contract",
       sender_id: process.env._ADMIN_OBJECT_ID,
       reciever_id: currentContract.userId,
-      extra: {
-        documentId: contractId,
+      closeContract: {
+        contractId: contractId
       },
       createdAt: new Date(),
     });
@@ -976,8 +975,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       message: "One Contract Successfully Closed",
       sender_id: process.env._ADMIN_OBJECT_ID,
       reciever_id: currentContract.clientId,
-      extra: {
-        documentId: currentContract.userId,
+      closeContract: {
+        contractId: contractId,
+        userId: currentContract.userId
       },
       createdAt: new Date(),
     });
@@ -1091,6 +1091,17 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     });
 
     const savedInvite = await inviteFn.save();
+
+    const newNotificationClient = await NotificationModel.create({
+      type: "invited user",
+      message: "Invite sended to the user",
+      sender_id: process.env._ADMIN_OBJECT_ID,
+      reciever_id: clientId,
+      inviteSuccess: {
+        userId: userId
+      },
+      createdAt: new Date(),
+    });
 
     return savedInvite;
   }
