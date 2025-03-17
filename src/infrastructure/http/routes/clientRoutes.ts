@@ -62,7 +62,7 @@ clientRouter.get('/job/:jobPostId',verifyToken, requireRole(CLIENT), getSingleJo
 clientRouter.get("/proposals/:proposalType", verifyToken, requireRole(CLIENT), getProposals);
 clientRouter.get('/contracts/:contractViewType', verifyToken, requireRole(CLIENT), viewContracts); 
 clientRouter.get("/contract/:contractId", verifyToken, requireRole(CLIENT), viewSingleContract);  
-clientRouter.get("/invites", verifyToken, requireRole(CLIENT), viewInvite);  
+clientRouter.get("/invites/:inviteType", verifyToken, requireRole(CLIENT), viewInvite);  
 clientRouter.get("/contractsSubmissions", verifyToken, requireRole(CLIENT), viewSubmissions);
 clientRouter.get("/wallet", verifyToken, requireRole(CLIENT), viewWallet);  
 clientRouter.get("/allChat/view/:roleId", verifyToken, requireRole(CLIENT), getAllChats);

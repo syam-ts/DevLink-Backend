@@ -1114,10 +1114,17 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return jobPost;
   }
 
-  async ViewInviteClient(clientId: string): Promise<any> {
-    const invite = await InviteModel.find({
-      $and: [{ clientId: clientId }, { status: "pending" }],
-    }).exec();
+  async ViewInviteClient(clientId: string,inviteType: string): Promise<any> {
+    let invite;
+    if(inviteType === 'pending') {
+       invite = await InviteModel.find({
+        $and: [{ clientId: clientId }, { status: "pending" }],
+      }).exec();
+    } else {
+      invite = await InviteModel.find({
+        $and: [{ clientId: clientId }, { status: "rejected" }],
+      }).exec();
+    } 
 
     if (!invite) throw new Error("No invites found");
     return invite;

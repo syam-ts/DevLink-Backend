@@ -749,8 +749,9 @@ export const clientController = {
   viewInvite: async (req: Request, res: Response) => {
     try {  
       const { id: clientId }: { id: string } = req.user;
+      const {inviteType}= req.params;
 
-      const invites = await allClientUseCases.viewInviteUseCase.execute(clientId);
+      const invites = await allClientUseCases.viewInviteUseCase.execute(clientId, inviteType);
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         invites,
