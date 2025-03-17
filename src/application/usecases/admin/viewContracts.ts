@@ -1,5 +1,7 @@
+import { ContractDocument } from "../../../domain/entities/Contract";
+
 export interface AdminRepositary {
-  viewContracts(): Promise<any>;
+  viewContracts(): ContractDocument;
 }
 
 export class ViewContractsAdmin {

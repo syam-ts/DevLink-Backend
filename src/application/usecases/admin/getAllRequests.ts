@@ -1,16 +1,12 @@
-import { Client } from '../../../domain/entities/Client';
-
 export interface AdminRepositary {
-    getAllRequests(): Promise< any >;
+    getAllRequests(): void;
 }
 
-
 export class GetAllRequests {
+    constructor(private adminRepositary: AdminRepositary) { }
 
-    constructor(private adminRepositary: AdminRepositary) {}
-
-   async execute () {
-        const requests = await this.adminRepositary.getAllRequests(); 
-        return requests
-   }
+    async execute() {
+        const requests = await this.adminRepositary.getAllRequests();
+        return requests;
+    }
 }

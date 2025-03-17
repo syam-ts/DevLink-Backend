@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export interface Admin extends mongoose.Document {
+export interface Admin extends mongoose.Document { 
     name: string;
     password?: string;
     request: [

@@ -1,13 +1,17 @@
-import jwt from "jsonwebtoken";
+ 
+interface Admin {
+ email: string
+ password: string
+};
 
 export interface AdminRepositary {
-  findAdmin(name: string, password: string): Promise<any>;
+  findAdmin(name: string, password: string): any;
 }
 
 export class LoginAdmin {
   constructor(private adminRepositary: AdminRepositary) {}
 
-  async execute(admin: any) {
+  async execute(admin: Admin) {
     const foundAdmin = await this.adminRepositary.findAdmin(
       admin.email,
       admin.password

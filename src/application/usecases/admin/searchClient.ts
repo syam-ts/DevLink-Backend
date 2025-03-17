@@ -1,6 +1,7 @@
+import { Client } from "../../../domain/entities/Client";
 
 export interface AdminRepositary {
-    searchClients(inputData: string): Promise< any >;
+    searchClients(inputData: string): Client;
 }
 
 export class SearchClient {

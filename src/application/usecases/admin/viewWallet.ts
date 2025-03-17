@@ -1,11 +1,11 @@
 export interface AdminRepository {
-  viewWallet( urrentPage: number | any): Promise<any>;
+  viewWallet( currentPage: number): void;
 }
 
 export class ViewWalletAdmin {
   constructor(private adminRepository: AdminRepository) {}
 
-  async execute( currentPage: number | any) {
+  async execute( currentPage: number) {
     const result = await this.adminRepository.viewWallet(currentPage);
 
     return result;

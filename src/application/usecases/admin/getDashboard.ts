@@ -1,25 +1,21 @@
- 
 export interface AdminRepositary {
-    findAdmin(name: string, password: string): Promise< any >;
-    findAllUsers(): Promise< any >;
-    findAllClients(): Promise< any >;
-    
+    findAdmin(name: string, password: string): void;
+    findAllUsers(): void;
+    findAllClients(): void;
 }
 
 export class GetDashboard {
-    constructor(private adminRepositary: AdminRepositary) {}
+    constructor(private adminRepositary: AdminRepositary) { }
 
-    async execute() {    
-   
+    async execute() {
         const [allUsers, allClients] = await Promise.all([
             this.adminRepositary.findAllUsers(),
-            this.adminRepositary.findAllClients()
-        ]); 
- 
+            this.adminRepositary.findAllClients(),
+        ]);
+
         return {
             allUsers: allUsers,
-            allClients: allClients
-        }
-        
+            allClients: allClients,
+        };
     }
 }

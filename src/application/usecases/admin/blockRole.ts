@@ -1,12 +1,19 @@
+interface User {
+  userId: string
+}
+interface Client {
+  clientId: string
+}
+
 export interface AdminRepositary {
-  blockUser(userId: string): Promise<any>;
-  blockClient(clientId: string): Promise<any>;
+  blockUser(userId: string): void;
+  blockClient(clientId: string): void;
 }
 
 export class BlockUser {
   constructor(private adminRepositary: AdminRepositary) {}
 
-  async execute(user: any) {
+  async execute(user: User) {
     const { userId } = user;
     const blockedUser = await this.adminRepositary.blockUser(userId);
 
@@ -17,9 +24,8 @@ export class BlockUser {
 export class BlockClient {
   constructor(private adminRepositary: AdminRepositary) {}
 
-  async execute(client: any) {
-    const { clientId } = client;
-    console.log('HTe cl', clientId)
+  async execute(client: Client) {
+    const { clientId } = client; 
     const blockedClient = await this.adminRepositary.blockClient(clientId);
 
     return blockedClient;

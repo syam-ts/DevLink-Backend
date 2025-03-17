@@ -1,5 +1,7 @@
+import { ContractDocument } from "../../../domain/entities/Contract";
+
 export interface AdminRepository {
-  viewSingleContract(contractId: string): void;
+  viewSingleContract(contractId: string): ContractDocument;
 }
 
 export class ViewSingleContractAdmin {

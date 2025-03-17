@@ -1,19 +1,14 @@
- 
-
 export interface AdminRepositary {
-    getWallet(adminId: any): Promise< any >;
+    getWallet(adminId: string): void;
 }
 
 export class GetWallet {
-    constructor(private adminRepositary: AdminRepositary) {}
+    constructor(private adminRepositary: AdminRepositary) { }
 
-    async execute() {    
-         
-        const adminId = process.env.ADMIN_OBJECT_ID;
+    async execute() {
+        const adminId: string = process.env.ADMIN_OBJECT_ID as string;
         const wallet = await this.adminRepositary.getWallet(adminId);
-  
-         
-        return { wallet}; 
-        
+
+        return { wallet };
     }
 }

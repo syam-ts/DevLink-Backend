@@ -1,21 +1,16 @@
- 
-
-import jwt from 'jsonwebtoken';
-
 export interface AdminRepositary {
-    viewRoleInfo(roleId: string, roleInfo: string): Promise< any >;
+    viewRoleInfo(roleId: string, roleInfo: string): void;
 }
 
 export class ViewRoleInfo {
-    constructor(private adminRepositary: AdminRepositary) {}
+    constructor(private adminRepositary: AdminRepositary) { }
 
-    async execute(roleId: string, roleInfo: string) {    
- 
-         
-        const roleInformation= await this.adminRepositary.viewRoleInfo(roleId, roleInfo);
-   
-         
-        return {roleInformation}; 
-        
+    async execute(roleId: string, roleInfo: string) {
+        const roleInformation = await this.adminRepositary.viewRoleInfo(
+            roleId,
+            roleInfo
+        );
+
+        return { roleInformation };
     }
 }

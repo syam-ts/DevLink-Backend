@@ -1,33 +1,34 @@
- 
-export interface AdminRepositary {
-    unBlockUser(userId: string): Promise< any >;
-    unBlockClient(clientId: string): Promise< any >;
+interface User {
+    userId: string;
 }
 
+interface Client {
+    clientId: string;
+}
+
+export interface AdminRepositary {
+    unBlockUser(userId: string): void;
+    unBlockClient(clientId: string): void;
+}
 
 export class UnBlockUser {
+    constructor(private adminRepositary: AdminRepositary) { }
 
-    constructor(private adminRepositary: AdminRepositary) {}
+    async execute(user: User) {
+        const { userId } = user;
+        const blockedUser = await this.adminRepositary.unBlockUser(userId);
 
-   async execute (user: any) {
-    const { userId } = user;
-        const blockedUser = await this.adminRepositary.unBlockUser(userId); 
- 
-        
-        return blockedUser
-   }
+        return blockedUser;
+    }
 }
 
-
 export class UnBlockClient {
+    constructor(private adminRepositary: AdminRepositary) { }
 
-    constructor(private adminRepositary: AdminRepositary) {}
+    async execute(client: Client) {
+        const { clientId } = client;
+        const blockedClient = await this.adminRepositary.unBlockClient(clientId);
 
-   async execute (client: any) {
-    const { clientId } = client;
-        const blockedClient = await this.adminRepositary.unBlockClient(clientId); 
- 
-        
-        return blockedClient
-   }
+        return blockedClient;
+    }
 }
