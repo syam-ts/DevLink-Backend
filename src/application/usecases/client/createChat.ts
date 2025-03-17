@@ -1,20 +1,17 @@
-
 interface Members {
-    members: string[]
-  }
-
+    members: string[];
+}
 
 export interface ClientRepository {
-    createChat(members: Members): Promise <any>
-};
-
+    createChat(members: Members): void;
+}
 
 export class CreateChat {
-    constructor( private clientRepository: ClientRepository) {};
+    constructor(private clientRepository: ClientRepository) { }
 
     async execute(members: Members) {
         const jobs = await this.clientRepository.createChat(members);
- 
+
         return jobs;
     }
 }

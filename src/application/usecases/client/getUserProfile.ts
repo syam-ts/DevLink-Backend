@@ -1,8 +1,9 @@
+import { User } from "../../../domain/entities/User";
 
 
 
 export interface ClientRepository {
-    getUserProfile(userId: string): Promise <any>
+    getUserProfile(userId: string): User
 };
 
 

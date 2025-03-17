@@ -63,6 +63,7 @@ interface Invite {
 }
 
 export class UserRepositoryMongoose implements UserRepositary {
+  
   async createUser(user: User): Promise<User> {
     const salt: number = parseInt(process.env.BCRYPT_SALT as string);
     const hashedPassword = await bcrypt.hash(user.password, salt);
@@ -76,7 +77,6 @@ export class UserRepositoryMongoose implements UserRepositary {
     });
 
     const savedUser = await createdUser.save();
-
     return {
       name: savedUser.name,
       email: savedUser.email,
@@ -93,7 +93,12 @@ export class UserRepositoryMongoose implements UserRepositary {
     return foundUser;
   }
 
-  async verifyOtp(user: any): Promise<User> {
+  async verifyOtp(user: {
+    mailOtp: any;
+    user: {
+      data: { name: string; email: string; password: string; mobile: number };
+    };
+  }): Promise<User> {
     const {
       name,
       email,
@@ -142,7 +147,6 @@ export class UserRepositoryMongoose implements UserRepositary {
       });
 
       const savedUser = await createdUser.save();
-
       return {
         name: savedUser.name,
         email: savedUser.email,
@@ -153,7 +157,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-  async findUserById(_id: string): Promise<any | null> {
+  async findUserById(_id: string): Promise<any | User> {
     const user = await UserModel.findById(_id);
     if (!user) throw new Error("User not found");
     return user;
@@ -275,7 +279,6 @@ export class UserRepositoryMongoose implements UserRepositary {
       });
 
       const savedUser = await createdUser.save();
-
       return {
         _id: savedUser._id,
         name: savedUser.name,
@@ -285,28 +288,26 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-  async findAllClients(): Promise<Client | any> {
+  async findAllClients(): Promise<any> {
     const clients: any = await ClientModel.find({ isVerified: true })
       .limit(3)
       .exec();
     if (clients) {
       return {
         ...clients,
-      } as Client;
+      };
     }
   }
 
-  async resetPassword(userId: string, password: string): Promise<User | any> {
+  async resetPassword(userId: string, password: string): Promise<string> {
     const updatedUser = await UserModel.findByIdAndUpdate(
       userId,
       { password: password },
       { new: true }
     ).exec();
 
-    if (!updatedUser) {
+    if (!updatedUser)
       throw new Error("User not found or password update failed.");
-    }
-
     return "Password reset successfully!";
   }
 
@@ -489,8 +490,8 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-  async allNotifications(userId: Id): Promise<any> {
-    const notifications: any = await NotificationModel.find({
+  async allNotifications(userId: Id): Promise<Notification[] | unknown> {
+    const notifications = await NotificationModel.find({
       reciever_id: userId,
     })
       .sort({ createdAt: -1 })
@@ -638,14 +639,11 @@ export class UserRepositoryMongoose implements UserRepositary {
     return { updateUserWallet, updateAdminWallet };
   }
 
-  async viewSingleContract(contractId: Id): Promise<any> {
-    const contract: any = await ContractModel.findById(contractId);
+  async viewSingleContract(contractId: Id): Promise<ContractDocument> {
+    const contract = await ContractModel.findById(contractId);
+    if (!contract) throw new Error("contract not found");
 
-    if (!contract) {
-      throw new Error("contract not found");
-    } else {
-      return contract;
-    }
+    return contract;
   }
 
   async viewContracts(
@@ -726,9 +724,8 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-  async getSingleJobPost(jobPostId: string): Promise<any> {
+  async getSingleJobPost(jobPostId: string): Promise<JobPostDocument> {
     const jobPost = await JobPostModel.findById(jobPostId).exec();
-
     if (!jobPost) throw new Error("Job Post didnt found");
 
     return jobPost;
@@ -737,7 +734,7 @@ export class UserRepositoryMongoose implements UserRepositary {
   async submitProject(
     contractId: string,
     body: { description: string; progress: number; attachedFile: string }
-  ): Promise<any> { 
+  ): Promise<any> {
     const contract: any = await ContractModel.findByIdAndUpdate(
       contractId,
       {
@@ -751,7 +748,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     const clientId = contract.clientId;
     const jobPostId = contract.jobPostId;
 
-    const jobPost: any = await JobPostModel.findById(jobPostId).exec(); 
+    const jobPost: any = await JobPostModel.findById(jobPostId).exec();
 
     const submissionBody = {
       contractId: contractId,
@@ -840,7 +837,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     const jobs = await JobPostModel.find({
       title: { $regex: input, $options: "i" },
     });
-    if(!jobs) throw new Error('No jobs found')
+    if (!jobs) throw new Error("No jobs found");
 
     return jobs;
   }

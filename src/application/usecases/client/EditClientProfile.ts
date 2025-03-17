@@ -1,7 +1,8 @@
+import { Client } from "../../../domain/entities/Client";
 
 
 export interface ClientRepository {
-    editClientProfile(clientId: string, clientData: any): Promise <any>
+    editClientProfile(clientId: string, clientData: Client): Client
 };
 
 

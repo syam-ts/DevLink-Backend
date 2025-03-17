@@ -1,10 +1,12 @@
+import { InviteDocument } from "../../../domain/entities/Invite";
+
 export interface ClientRepository {
   inviteUser(
     userId: string,
     clientId: string,
     jobPostId: string,
     description: string
-  ): Promise<any>;
+  ): InviteDocument;
 }
 
 export class InviteUser {

@@ -1,7 +1,7 @@
  
 
 export interface ChatRepository {
-    getAllChats(roleId: string): Promise <any>
+    getAllChats(roleId: string): void
 };
 
 

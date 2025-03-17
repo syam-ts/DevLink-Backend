@@ -1,7 +1,8 @@
+import { JobPostDocument } from "../../../domain/entities/JobPost";
 
 
 export interface userRepository{
-    getSingleJobPost(jobPostId: string): Promise<any>
+    getSingleJobPost(jobPostId: string): JobPostDocument
 }
 
 export class GetSingleJobPostClient {

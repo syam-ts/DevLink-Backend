@@ -1,7 +1,8 @@
+import { ContractDocument } from "../../../domain/entities/Contract";
 
 
 export interface ClientRepository {
-    rejectContract(contractId: string, clientId: string): Promise <any>
+    rejectContract(contractId: string, clientId: string): ContractDocument
 };
 
 

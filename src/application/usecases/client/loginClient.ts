@@ -1,21 +1,21 @@
-import { Client } from '../../../domain/entities/Client';
-import jwt from 'jsonwebtoken';
+import { Client } from "../../../domain/entities/Client";
 
 export interface ClientRepositary {
-    findClientByEmailAndPassword(email: string, password: string): Promise<Client | null>;
+    findClientByEmailAndPassword(
+        email: string,
+        password: string
+    ): Promise<Client | null>;
 }
 
 export class LoginClient {
-    constructor(private clientRepositary: ClientRepositary) {}
+    constructor(private clientRepositary: ClientRepositary) { }
 
-    async execute(clientData: any) {   
+    async execute(clientData: any) {
+        const client = await this.clientRepositary.findClientByEmailAndPassword(
+            clientData.email,
+            clientData.password
+        );
 
-        
-        const client: any = await this.clientRepositary.findClientByEmailAndPassword(clientData.email, clientData.password);
- 
-   
-        return client; 
-  
-        
+        return client;
     }
 }

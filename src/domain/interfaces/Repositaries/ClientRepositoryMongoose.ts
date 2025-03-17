@@ -51,8 +51,10 @@ interface Invite {
 }
 
 export class ClientRepositoryMongoose implements ClientRepositary {
-  async createClient(client: Client | any): Promise<Client | any> {
-    const salt: number = 10;
+async createClient(client: {name?: string, email?: string, password?: string }): Promise<any> {
+  if (!client.password) throw new Error("Password is required");
+    
+  const salt: number = 10;
     const hashedPassword = await bcrypt.hash(client.password, salt);
 
     const createdClient = new ClientModel({
@@ -67,17 +69,16 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       name: savedClient.name,
       email: savedClient.email,
       password: savedClient.password,
-    } as unknown as Client;
+    } ;
   }
 
-  async signupClient(client: Client | any): Promise<Client | any> {
-    const foundClient: any = this.findClientByEmail(client.email);
-    if (!foundClient) throw new Error("Client Not Found");
-
+  async signupClient(email: string ): Promise<Client > {
+    const foundClient = await this.findClientByEmail(email); 
+    if (!foundClient) throw new Error("Client Not Found"); 
     return foundClient;
   }
-
-  async verifyOtp(client: any): Promise<Client> {
+  
+  async verifyOtp(client: {mailOtp: number,user:{otp: string,data:{name: string, email: string, password: string}}}): Promise<Client> {
     const { name, email, password } = client.user.data;
 
     if (client.mailOtp === parseInt(client.user.otp)) {
@@ -148,7 +149,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   async findClientByEmailAndPassword(
     email: string,
     password: string
-  ): Promise<Client | any> {
+  ): Promise<Client | unknown> {
     if (!email || !password) {
       throw new Error("Email, and password are required");
     }
@@ -185,17 +186,15 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async findClientByOnlyEmail(
     email: string,
-    name: string,
+    companyName: string,
     password: string
   ): Promise<Client | null> {
-    const client: any = await ClientModel.findOne({ email }).exec();
-
-    name = client.companyName;
+    const client = await ClientModel.findOne({ email }).exec(); 
 
     if (client) {
       return {
         _id: client._id,
-        companyName: client.companyName,
+        companyName: companyName,
         email: client.email,
         isBlocked: client.isBlocked,
         isVerified: client.isVerified,
@@ -234,24 +233,25 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
   }
 
-  async findAllUsers(): Promise<any> {
+  async findAllUsers(): Promise<User[] | unknown> {
     const users = await UserModel.find({
       $and: [{ isProfileFilled: true }, { isBlocked: false }],
     })
       .limit(4)
+      .lean()
       .exec();
-    if (!users) throw new Error("Users not found");
+      if (!users || users.length === 0) throw new Error("Users not found");
 
     return users;
   }
 
-  async trendingJobs(): Promise<any> {
+  async trendingJobs(): Promise<JobPostDocument[]> {
     const jobs = await JobPostModel.find().limit(3).exec();
     if (!jobs) throw new Error("Jobs not found");
     return jobs;
   }
 
-  async resetPassword(clientId: Id, password: string): Promise<User | any> {
+  async resetPassword(clientId: Id, password: string): Promise<string > {
     const pass = { password: password };
 
     const updatedClient = await ClientModel.findByIdAndUpdate(clientId, pass, {
@@ -264,23 +264,18 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return "Password reset successfully!";
   }
 
-  async getClientProfile(clientId: Id): Promise<any> {
-    const client = await ClientModel.findById(clientId);
-
-    if (!client) {
-      throw new Error("Client not found");
-    }
+  async getClientProfile(clientId: Id): Promise<Client | unknown> {
+    const client = await ClientModel.findById(clientId); 
+    if (!client) throw new Error("Client not found"); 
 
     return client;
   }
 
-  async profileVerification(clientId: Id, data: any): Promise<any> {
+  async profileVerification(clientId: Id, data: {}): Promise<any> {
     const adminId = process.env.ADMIN_OBJECT_ID;
     const existingClient: any = await ClientModel.findById(clientId);
 
-    if (existingClient.isEditRequest) {
-      throw new Error("Request already sended");
-    }
+    if (existingClient.isEditRequest) throw new Error("Request already sended"); 
 
     const request = {
       type: "Profile Verification Request",
@@ -304,7 +299,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return updatedAdmin;
   }
 
-  async editClientProfile(clientId: Id, editData: any): Promise<any> {
+  async editClientProfile(clientId: Id, editData: {}): Promise<any> {
     const adminId = process.env.ADMIN_OBJECT_ID;
     const existingClient: any = await ClientModel.findById(clientId);
 
@@ -394,7 +389,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return savedJobPost;
   }
 
-  async getAllNotifications(clientId: Id): Promise<any> {
+  async getAllNotifications(clientId: Id): Promise<Notification[]> {
     const notifications = await NotificationModel.aggregate([
       {
         $match: { reciever_id: clientId },
@@ -411,21 +406,19 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
   }
 
-  async findAllJobs(): Promise<any> {
+  async findAllJobs(): Promise<JobPostDocument[]> {
     const allJobs = await JobPostModel.find().exec();
 
-    if (!allJobs) {
-      throw new Error("No job found");
-    } else {
-      return allJobs;
-    }
+    if (!allJobs || allJobs.length === 0) throw new Error("No job found");
+   
+      return allJobs; 
   }
 
   async getSelectedJobs(
     clientId: string,
     jobType: string,
     currentPage: number
-  ): Promise<JobPostDocument | any> {
+  ): Promise<{jobs:JobPostDocument[], totalPages: number }> {
     const page_size: number = 3;
     const skip: number = (currentPage - 1) * page_size;
 
@@ -482,12 +475,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
   }
 
-  async getProposals(clientId: Id): Promise<any> {
-    const client: any = await ClientModel.findById(clientId);
-    if (!client) {
-      throw new Error("Client not found");
-    }
-
+  async getProposals(clientId: Id): Promise<unknown> {
+    const client = await ClientModel.findById(clientId);
+    if (!client) throw new Error("Client not found"); 
     const proposals = client.proposals;
     return proposals;
   }
@@ -524,11 +514,10 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
   }
 
-  async getallDevelopers(): Promise<any> {
-    //  const developers = await UserModel.find({isProfileFilled: true}).exec();
+  async getallDevelopers(): Promise<User[] | unknown> {
     const developers = await UserModel.find({ isProfileFilled: true }).exec();
 
-    if (!developers) throw new Error("Developers not found");
+    if (!developers || developers.length === 0) throw new Error("Developers not found");
 
     return developers;
   }
@@ -797,9 +786,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return proposal;
   }
 
-  async listAllJobs(clientId: Id): Promise<any> {
+  async listAllJobs(clientId: Id): Promise<JobPostDocument[]> {
     const jobs = await JobPostModel.find({ clientId: clientId }).exec();
-    if (!jobs) throw new Error("No jobs found");
+    if (!jobs || jobs.length === 0) throw new Error("No jobs found");
     return jobs;
   }
 
@@ -816,9 +805,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       { update: true }
     );
 
-    if (!currentContract) {
-      throw new Error("Contract not found");
-    }
+    if (!currentContract) throw new Error("Contract not found");
+    
 
     //update jobpost status as closed ----------------
     const jobPostId: string = currentContract.jobPostId;
@@ -1106,9 +1094,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return savedInvite;
   }
 
-  async getSingleJobPost(jobPostId: string): Promise<any> {
-    const jobPost = await JobPostModel.findById(jobPostId).exec();
-
+  async getSingleJobPost(jobPostId: string): Promise<JobPostDocument> {
+    const jobPost = await JobPostModel.findById(jobPostId).exec(); 
     if (!jobPost) throw new Error("Job Post didnt found");
 
     return jobPost;
@@ -1130,7 +1117,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return invite;
   }
 
-  async rejectContract(contractId: Id, clientId: Id): Promise<any> {
+  async rejectContract(contractId: Id, clientId: Id): Promise<ContractDocument> {
     const adminId = process.env.ADMIN_OBJECT_ID;
 
     const contract: any = await ContractModel.findByIdAndUpdate(
@@ -1176,7 +1163,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return contract;
   }
 
-  async searchDeveloper(input: string): Promise<any> {
+  async searchDeveloper(input: string): Promise<User | unknown> {
     const developers = await UserModel.find({
       name: { $regex: input, $options: "i" },
     });
