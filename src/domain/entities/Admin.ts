@@ -4,6 +4,7 @@ export interface Admin extends mongoose.Document {
     name: string;
     password?: string;
     totalWithdrawals: number;
+    grossAmount: number;
     request: [
         {
             type: string;
@@ -44,6 +45,7 @@ export const AdminSchema: mongoose.Schema = new mongoose.Schema({
     name: { type: String, required: false },
     password: { type: String, required: false },
     totalWithdrawals: { type: Number, required: false },
+    grossAmount: { type: Number, required: false },
     request: [
         {
             type: { type: String, required: false },

@@ -822,6 +822,7 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     const finalAmount = Math.round(
       currentContract.amount - (currentContract.amount * 10) / 100
     );
+    const adminDeduction:number = Math.floor((currentContract.amount * 10) / 100)
     const adminId = process.env.ADMIN_OBJECT_ID;
     let updateUserWallet, updateAdminWallet, updateClientWallet;
 
@@ -837,8 +838,8 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     updateAdminWallet = await AdminModel.findByIdAndUpdate(
       adminId,
       {
-        $inc: { "wallet.balance": -finalAmount },
-        $push: { "wallet.transactions": walletEntryAdmin },
+        $inc: { "wallet.balance": -finalAmount, grossAmount: adminDeduction },
+        $push: { "wallet.transactions": walletEntryAdmin }, 
       },
       {
         new: true,

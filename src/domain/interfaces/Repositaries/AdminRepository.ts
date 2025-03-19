@@ -517,6 +517,7 @@ export class AdminRepository implements AdminRepositary {
     });
 
     newNotification.save();
+    const adminId = process.env.ADMIN_OBJECT_ID;
 
     // Delete withdrawrequest from admin
     const deleteWithdrawRequest = await AdminModel.findOneAndUpdate(
@@ -524,6 +525,12 @@ export class AdminRepository implements AdminRepositary {
       { $pull: { withdrawRequest: { _id: requestId } } },
       { new: true }
     );
+
+    // add withdrwa money to admin entity
+    const addWithdrawMoney = await AdminModel.findByIdAndUpdate( adminId,{
+          $Inc: {totalWithdrawals: amount}
+    });
+    
 
     return newNotification;
   }

@@ -411,7 +411,7 @@ export const userController = {
   },
 
   viewContracts: async (req: Request, res: Response) => {
-    try {
+    try { 
       const { id: userId } = req.user;
       const { contractViewType } = req.params;
       const currentPage: number = Number(req.query.currentPage) || 1;
