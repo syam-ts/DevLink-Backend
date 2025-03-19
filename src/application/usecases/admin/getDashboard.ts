@@ -1,21 +1,24 @@
-export interface AdminRepositary {
-    findAdmin(name: string, password: string): void;
-    findAllUsers(): void;
-    findAllClients(): void;
+export interface AdminRepository {
+     clientMetrics(): Promise<number>
+     userMetrics(): Promise<number>
 }
 
-export class GetDashboard {
-    constructor(private adminRepositary: AdminRepositary) { }
+export class ClientMetrics {
+    constructor(private adminRepository: AdminRepository) { }
 
     async execute() {
-        const [allUsers, allClients] = await Promise.all([
-            this.adminRepositary.findAllUsers(),
-            this.adminRepositary.findAllClients(),
-        ]);
+       const result = await this.adminRepository.clientMetrics();
+       
+       return result;
+    }
+}
 
-        return {
-            allUsers: allUsers,
-            allClients: allClients,
-        };
+export class UserMetrics {
+    constructor(private adminRepository: AdminRepository) { }
+
+    async execute() {
+       const result = await this.adminRepository.userMetrics();
+       
+       return result;
     }
 }

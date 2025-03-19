@@ -49,19 +49,15 @@ export const adminController = {
 
   getDashboard: async (req: any, res: any) => {
     try {
-      const clientsAndUsers =
-        await allAdminUseCases.getDashboardUseCase.execute();
-
-      //    res.cookie("jwt", req.admin.accessToken, {
-      //     httpOnly: true,
-      //     sameSite: "None",
-      //     secure: true,
-      //     maxAge: 24 * 60 * 60 * 1000
-      //   }
-      // );
+      const clientMetrics = await allAdminUseCases.clientMetricsUseCase.execute();
+      const userMetrics = await allAdminUseCases.userMetricsUseCase.execute();
+      const response = {
+        clientMetrics: clientMetrics,
+        userMetrics: userMetrics 
+      }
       return res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
-        data: clientsAndUsers,
+        response,
         success: true,
       });
     } catch (err: any) {
@@ -397,7 +393,7 @@ export const adminController = {
 
   getAllContracts: async (req: any, res: any) => {
     try {
-      const contracts = await allAdminUseCases.getAllContractsUseCase.execute();
+      const contracts = await allAdminUseCases.viewContractsAdminUseCase.execute();
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         contracts,
@@ -447,7 +443,7 @@ export const adminController = {
         upiId: number;
         requestId: string
         requestedAmount: number
-      } = req.body.body; 
+      } = req.body.body;
 
       const response =
         await allAdminUseCases.successMoneyTransferUseCase.execute(
@@ -464,7 +460,7 @@ export const adminController = {
         success: true,
       });
     } catch (error: unknown) {
-      const err = error as {message: string};
+      const err = error as { message: string };
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
         message: err.message,
         success: false,
@@ -502,5 +498,5 @@ export const adminController = {
         success: false,
       });
     }
-  } 
+  }
 };

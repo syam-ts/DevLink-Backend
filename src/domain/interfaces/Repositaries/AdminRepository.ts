@@ -554,33 +554,46 @@ export class AdminRepository implements AdminRepositary {
     return contract;
   }
 
-  async userMetrics(): Promise<{
-    users: { totalUsers: number; verifiedUsers: number; boostedUsers: number };
-  }> {
+  async userMetrics(): Promise<{totalUsers: number,verifiedUsers: number,
+    boostedUsers: number,
+    totalJobs: number }> {
     const totalUsers = await UserModel.countDocuments({});
-    const verifiedUsers = await UserModel.countDocuments({ isVerified: true });
+    const verifiedUsers = await UserModel.countDocuments({ isProfileFilled: true });
     const boostedUsers = await UserModel.countDocuments({ isBoosted: true });
-    return {
-      users: {
+    const totalJobsByUser = await UserModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: {$sum: "$totalJobs"}
+        }
+      }
+    ]);
+    const totalJobs: number = totalJobsByUser[0].total;
+    return { 
         totalUsers,
         verifiedUsers,
         boostedUsers,
-      },
+        totalJobs 
     };
   }
 
-  async clientMetrics(): Promise<{
-    clients: { totalClients: number; verifiedClients: number; totalJobs: number };
-  }> {
+  async clientMetrics(): Promise<{  totalClients: number; verifiedClients: number; totalJobs: number }> {
     const totalClients = await ClientModel.countDocuments({});
     const verifiedClients = await ClientModel.countDocuments({ isVerified: true });
-    const totalJobs = await ClientModel.countDocuments({totalJobs: 0});
-    return {
-      clients: {
+    const totalJobsByClient = await ClientModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: {$sum: "$totalJobs"}
+        }
+      }
+    ]);
+
+    const totalJobs: number = totalJobsByClient[0].total
+    return { 
         totalClients,
         verifiedClients,
-        totalJobs,
-      },
+        totalJobs, 
     };
   }
 

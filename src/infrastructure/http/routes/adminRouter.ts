@@ -35,7 +35,8 @@ const {ADMIN}: {ADMIN: string} = allRoles;
 
 // adminRouter.post('/signup', adminController.signUpAdmin);
 
-adminRouter.get('/dashboard',verifyToken,requireRole(ADMIN), getDashboard);
+adminRouter.get('/getDashboard',verifyToken,requireRole(ADMIN), getDashboard);
+// adminRouter.get('/dashboard', getDashboard);
 adminRouter.get('/getAllUsers', verifyToken,requireRole(ADMIN), getAllUsers);
 adminRouter.get('/getAllClients', verifyToken,requireRole(ADMIN), getAllClients);   
 adminRouter.get('/wallet', verifyToken,requireRole(ADMIN), viewWallet);    
