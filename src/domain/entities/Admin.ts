@@ -3,8 +3,14 @@ import mongoose from "mongoose";
 export interface Admin extends mongoose.Document { 
     name: string;
     password?: string;
-    totalWithdrawals: number;
-    grossAmount: number;
+   totalWithdrawals: [{
+    amount: number
+    createdAt: Date
+   }], 
+    grossAmount: [{
+        amount: number
+        createdAt: Date
+    }],
     request: [
         {
             type: string;
@@ -37,15 +43,22 @@ const WithdrawRequestSchema = new mongoose.Schema({
     userName: {type: String, required: true},
     amount: { type: Number, required: true },
     accountNumber: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now },
+    createdAt: { type: Date },
 });
+
+
+const RevenueSchema = new mongoose.Schema({
+    amount: { type: Number, required: true },
+    createdAt: { type: Date },
+});
+
 
 //Admin Schema
 export const AdminSchema: mongoose.Schema = new mongoose.Schema({
     name: { type: String, required: false },
     password: { type: String, required: false },
-    totalWithdrawals: { type: Number, required: false },
-    grossAmount: { type: Number, required: false },
+    totalWithdrawals: [RevenueSchema],  
+    grossAmount: [RevenueSchema],
     request: [
         {
             type: { type: String, required: false },

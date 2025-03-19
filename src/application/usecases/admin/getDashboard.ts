@@ -1,6 +1,7 @@
 export interface AdminRepository {
      clientMetrics(): Promise<number>
      userMetrics(): Promise<number>
+     getRevenue(sortType: string): void
 }
 
 export class ClientMetrics {
@@ -18,6 +19,16 @@ export class UserMetrics {
 
     async execute() {
        const result = await this.adminRepository.userMetrics();
+       
+       return result;
+    }
+}
+
+export class GetRevenue {
+    constructor(private adminRepository: AdminRepository) { }
+
+    async execute(sortType: string) {
+       const result = await this.adminRepository.getRevenue(sortType);
        
        return result;
     }

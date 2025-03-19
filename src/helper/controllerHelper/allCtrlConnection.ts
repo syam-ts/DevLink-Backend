@@ -73,7 +73,7 @@ import { WishlistRepositoryMongoose } from "../../domain/interfaces/Repositaries
 // admin imports -----> 
 import { LoginAdmin } from '../../application/usecases/admin/loginAdmin';
 import { AdminRepository } from '../../domain/interfaces/Repositaries/AdminRepository'; 
-import { ClientMetrics, UserMetrics } from '../../application/usecases/admin/getDashboard';
+import { ClientMetrics, UserMetrics, GetRevenue } from '../../application/usecases/admin/getDashboard';
 import { GetAllUsers } from '../../application/usecases/admin/getAllUsers';
 import { GetAllClients } from '../../application/usecases/admin/getAllClients';
 import { BlockUser, BlockClient } from '../../application/usecases/admin/blockRole';
@@ -170,6 +170,7 @@ const adminRepository = new AdminRepository();
 const loginAdminUseCase = new LoginAdmin(adminRepository);
 const clientMetricsUseCase = new ClientMetrics(adminRepository);
 const userMetricsUseCase = new UserMetrics(adminRepository);
+const getRevenueUseCase = new GetRevenue(adminRepository);
 const getAllUsersUseCase = new GetAllUsers(adminRepository);
 const getAllClientsUseCase = new GetAllClients(adminRepository);
 const blockUserUseCase = new BlockUser(adminRepository);
@@ -179,11 +180,7 @@ const viewWalletAdminUseCase = new ViewWalletAdmin(adminRepository);
 const successMoneyTransferUseCase = new SuccessMoneyTransfer(adminRepository); 
 const getWithdrawRequestsUseCase = new GetWithdrawRequests(adminRepository); 
 const viewContractsAdminUseCase = new ViewContractsAdmin(adminRepository); 
-const viewSingleContractAdminUseCase = new ViewSingleContractAdmin(adminRepository); 
-
-
-
-
+const viewSingleContractAdminUseCase = new ViewSingleContractAdmin(adminRepository);  
 const unBlockClientUseCase = new UnBlockClient(adminRepository);
 const viewRoleInfoUseCase = new ViewRoleInfo(adminRepository);
 const getWalletUseCase = new GetWallet(adminRepository);
@@ -272,6 +269,7 @@ export const allAdminUseCases = {
         adminRepository , 
         clientMetricsUseCase,
         userMetricsUseCase,
+        getRevenueUseCase,
         loginAdminUseCase,
         getAllUsersUseCase,
         getAllClientsUseCase,

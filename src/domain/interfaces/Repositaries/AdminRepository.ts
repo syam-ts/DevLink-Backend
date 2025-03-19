@@ -528,7 +528,9 @@ export class AdminRepository implements AdminRepositary {
 
     // add withdrwa money to admin entity
     const addWithdrawMoney = await AdminModel.findByIdAndUpdate( adminId,{
-          $Inc: {totalWithdrawals: amount}
+      $push: {  
+        "totalWithdrawals": { amount: amount, createdAt: Date.now() } 
+      }, 
     });
     
 
@@ -604,8 +606,52 @@ export class AdminRepository implements AdminRepositary {
     };
   }
 
-async revenue() {
-  
+async getRevenue(sortType: string) {
+  const now = new Date();
+
+    let startDate;
+    if (sortType === "weekly") {
+        startDate = new Date(now);
+        startDate.setDate(now.getDate() - now.getDay());  
+    } else if (sortType === "monthly") {
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);  
+    } else if (sortType === "yearly") {
+        startDate = new Date(now.getFullYear(), 0, 1);  
+    } else {
+        throw new Error("Invalid type. Choose 'weekly', 'monthly', or 'yearly'.");
+    }
+ 
+    const totalRevenue = await AdminModel.aggregate([
+        {
+            $project: {
+                totalWithdrawals: {
+                    $filter: {
+                        input: "$totalWithdrawals",
+                        as: "withdrawal",
+                        cond: { $gte: ["$$withdrawal.createdAt", startDate] },
+                    },
+                },
+                grossAmount: {
+                    $filter: {
+                        input: "$grossAmount",
+                        as: "gross",
+                        cond: { $gte: ["$$gross.createdAt", startDate] },
+                    },
+                },
+            },
+        },
+        {
+            $unwind: "$totalWithdrawals",  
+        },
+        {
+            $group: {
+                _id: null,
+                totalWithdrawals: { $sum: "$totalWithdrawals.amount" },  
+                grossAmount: { $sum: "$grossAmount.amount" },  
+            },
+        },
+    ]);
+    console.log("The result: ",totalRevenue)
 }
 
 };

@@ -835,17 +835,22 @@ async createClient(client: {name?: string, email?: string, password?: string }):
       date: new Date(),
     };
 
-    updateAdminWallet = await AdminModel.findByIdAndUpdate(
+ 
+   updateAdminWallet = await AdminModel.findByIdAndUpdate(
       adminId,
       {
-        $inc: { "wallet.balance": -finalAmount, grossAmount: adminDeduction },
-        $push: { "wallet.transactions": walletEntryAdmin }, 
+        $inc: { 
+          "wallet.balance": -finalAmount
+        },  
+        $push: { 
+          "wallet.transactions": walletEntryAdmin, 
+          "grossAmount": { amount: adminDeduction, createdAt: Date.now() } 
+        }, 
       },
-      {
-        new: true,
-        upsert: false,
-      }
+      { new: true }
     ).exec();
+    
+    
 
     if (progress === 100) {
       const walletEntryUser = {
