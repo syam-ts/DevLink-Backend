@@ -34,8 +34,7 @@ import { UserRepositoryMongoose } from "../../domain/interfaces/Repositaries/Use
 import { SignupClient } from '../../application/usecases/client/signupClient';
 import { LoginClient } from '../../application/usecases/client/loginClient';
 import { GoogleLoginClient } from '../../application/usecases/client/GoogleLoginClient';
-import { ClientRepositoryMongoose } from '../../domain/interfaces/Repositaries/ClientRepositoryMongoose';  
-import { LogoutClient } from '../../application/usecases/client/logoutClient';
+import { ClientRepositoryMongoose } from '../../domain/interfaces/Repositaries/ClientRepositoryMongoose';   
 import { VerifyEmailClient } from '../../application/usecases/client/verifyEmail';
 import { ResetPasswordClient } from '../../application/usecases/client/resetPassword';
 import { verifyOtpClient } from '../../application/usecases/client/verifyOtpClient';
@@ -69,7 +68,7 @@ import { SearchDeveloper } from '../../application/usecases/client/searchDevelop
 import { RejectContract } from '../../application/usecases/client/rejectContract';
 import { GetallDevelopers } from '../../application/usecases/client/getallDevelopers';
 import { ChatRepositoryMongoose } from "../../domain/interfaces/Repositaries/ChatRepository";
-import { WishlistRepositoryMongoose } from "../../domain/interfaces/WishlistRepository";
+import { WishlistRepositoryMongoose } from "../../domain/interfaces/Repositaries/WishlistRepository";
   
 // admin imports -----> 
 import { LoginAdmin } from '../../application/usecases/admin/loginAdmin';
@@ -133,8 +132,7 @@ const withdrawMoneyByUserUseCase =  new WithdrawMoneyByUser(userRepository);
 const ClientRepository = new ClientRepositoryMongoose();
 const ChatRepository = new ChatRepositoryMongoose();
 const signupClientUseCase = new SignupClient(ClientRepository); 
-const loginClientUseCase = new LoginClient(ClientRepository);
-const logoutClientUseCase = new LogoutClient(ClientRepository);
+const loginClientUseCase = new LoginClient(ClientRepository); 
 const verifyClientUseCase = new verifyOtpClient(ClientRepository);
 const verifyEmailClientUseCase = new VerifyEmailClient(ClientRepository);
 const resetPasswordClientUseCase = new ResetPassword(ClientRepository);
@@ -235,8 +233,7 @@ export const allUserUseCases = {
 // exports all Client Usecases ------->
 export const allClientUseCases = {
      signupClientUseCase, 
-     loginClientUseCase,
-     logoutClientUseCase,
+     loginClientUseCase, 
      verifyClientUseCase,
      verifyEmailClientUseCase,
      resetPasswordClientUseCase,
@@ -286,8 +283,7 @@ export const allAdminUseCases = {
         successMoneyTransferUseCase, 
         getWithdrawRequestsUseCase, 
         viewContractsAdminUseCase,   
-        viewSingleContractAdminUseCase,    
-
+        viewSingleContractAdminUseCase,   
         viewRoleInfoUseCase ,
         getWalletUseCase ,
         searchUserUseCase ,

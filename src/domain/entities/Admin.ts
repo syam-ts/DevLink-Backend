@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 export interface Admin extends mongoose.Document { 
     name: string;
     password?: string;
+    totalWithdrawals: number;
     request: [
         {
             type: string;
@@ -42,6 +43,7 @@ const WithdrawRequestSchema = new mongoose.Schema({
 export const AdminSchema: mongoose.Schema = new mongoose.Schema({
     name: { type: String, required: false },
     password: { type: String, required: false },
+    totalWithdrawals: { type: Number, required: false },
     request: [
         {
             type: { type: String, required: false },

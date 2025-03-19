@@ -50,6 +50,9 @@ adminRouter.get('/viewContracts', verifyToken,requireRole(ADMIN), viewContracts)
 
 
 adminRouter.get('/contract/:contractId', verifyToken,requireRole(ADMIN), viewContracts);
+adminRouter.get('/revenue', viewContracts);
+adminRouter.get('/userMetrics', viewContracts);
+adminRouter.get('/clientMetrics', viewContracts);
 
 
 

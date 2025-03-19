@@ -495,7 +495,6 @@ export class AdminRepository implements AdminRepositary {
     }
     return contracts;
   }
- 
 
   async successMoneyTransfer(
     userId: string,
@@ -549,9 +548,44 @@ export class AdminRepository implements AdminRepositary {
   }
 
   async viewSingleContract(contractId: string) {
-     const contract = await ContractModel.findById(contractId).exec();
-     if(!contract) throw new Error('Contract not found');
+    const contract = await ContractModel.findById(contractId).exec();
+    if (!contract) throw new Error("Contract not found");
 
-     return contract;
+    return contract;
   }
+
+  async userMetrics(): Promise<{
+    users: { totalUsers: number; verifiedUsers: number; boostedUsers: number };
+  }> {
+    const totalUsers = await UserModel.countDocuments({});
+    const verifiedUsers = await UserModel.countDocuments({ isVerified: true });
+    const boostedUsers = await UserModel.countDocuments({ isBoosted: true });
+    return {
+      users: {
+        totalUsers,
+        verifiedUsers,
+        boostedUsers,
+      },
+    };
+  }
+
+  async clientMetrics(): Promise<{
+    clients: { totalClients: number; verifiedClients: number; totalJobs: number };
+  }> {
+    const totalClients = await ClientModel.countDocuments({});
+    const verifiedClients = await ClientModel.countDocuments({ isVerified: true });
+    const totalJobs = await ClientModel.countDocuments({totalJobs: 0});
+    return {
+      clients: {
+        totalClients,
+        verifiedClients,
+        totalJobs,
+      },
+    };
+  }
+
+async revenue() {
+  
 }
+
+};

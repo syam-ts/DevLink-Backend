@@ -1,6 +1,6 @@
-import { Wishlist, WishlistModel } from "../entities/WIshlist";
-import { Jobs } from "../entities/User";
-import { JobPostModel } from "../entities/JobPost";
+import { Wishlist, WishlistModel } from "../../entities/WIshlist";
+import { Jobs } from "../../entities/User";
+import { JobPostModel } from "../../entities/JobPost";
 
 export class WishlistRepositoryMongoose {
   async addToWishlist(userId: string, jobPostId: string): Promise<Wishlist> {
