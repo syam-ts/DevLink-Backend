@@ -844,7 +844,7 @@ async createClient(client: {name?: string, email?: string, password?: string }):
         },  
         $push: { 
           "wallet.transactions": walletEntryAdmin, 
-          "grossAmount": { amount: adminDeduction, createdAt: Date.now() } 
+          "revenue.grossAmount": { amount: adminDeduction, createdAt: Date.now() } 
         }, 
       },
       { new: true }

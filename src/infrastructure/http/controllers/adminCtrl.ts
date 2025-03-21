@@ -48,12 +48,13 @@ export const adminController = {
   },
 
   getDashboard: async (req: any, res: any) => {
-    try {
-      const {sortType}: {sortType: string} = req.params;
+    try { 
       const clientMetrics = await allAdminUseCases.clientMetricsUseCase.execute();
       const userMetrics = await allAdminUseCases.userMetricsUseCase.execute();
-      const getRevenue = await allAdminUseCases.getRevenueUseCase.execute(sortType);
-      console.log('res: ', getRevenue)
+
+      const { range } = req.params; 
+      const getRevenue = await allAdminUseCases.getRevenueUseCase.execute(range);
+   
       const response = {
         clientMetrics: clientMetrics,
         userMetrics: userMetrics ,

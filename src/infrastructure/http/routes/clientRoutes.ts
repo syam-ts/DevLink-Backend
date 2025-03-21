@@ -69,7 +69,7 @@ clientRouter.get("/allChat/view/:roleId", verifyToken, requireRole(CLIENT), getA
 clientRouter.get("/chat/view/:roleType/:roleId/:targetId", verifyToken, requireRole(CLIENT), clientController.viewChat);
 clientRouter.get("/notifications/:clientId", verifyToken, requireRole(CLIENT), getAllNotifications);
 
-clientRouter.post("/projectApprove", verifyToken, requireRole(CLIENT),closeContract);
+clientRouter.post("/projectApprove",  closeContract);
 clientRouter.post("/jobPaymentStripe",verifyToken, requireRole(CLIENT), makePayment );
 clientRouter.post("/paymentSuccess", verifyToken, requireRole(CLIENT),createJobPost);
 clientRouter.post("/profile/verify", verifyToken, requireRole(CLIENT), profileVerification);

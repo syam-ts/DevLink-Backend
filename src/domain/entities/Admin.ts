@@ -1,82 +1,51 @@
 import mongoose from "mongoose";
 
-export interface Admin extends mongoose.Document { 
-    name: string;
-    password?: string;
-   totalWithdrawals: [{
-    amount: number
-    createdAt: Date
-   }], 
-    grossAmount: [{
-        amount: number
-        createdAt: Date
-    }],
-    request: [
-        {
-            type: string;
-            clientId: mongoose.Types.ObjectId;
-            status: "pending" | "approved" | "rejected";
-            data?: [];
-        }
-    ];
-    withdrawRequest: [
-        {
-            roleId: mongoose.Types.ObjectId;
-            userName: string;
-            amount: number;
-            accountNumber: string;
-            createdAt: Date;
-        }
-    ];
-    wallet: {
-        balance: { type: Number; required: false };
-        transactions: [
-            {
-                type: [];
-            }
-        ];
-    };
-}
+const RevenueSchema = new mongoose.Schema({
+    amount: { type: Number, required: true },
+    createdAt: { type: Date, required: true, default: Date.now, index: true },
+});
 
 const WithdrawRequestSchema = new mongoose.Schema({
     roleId: { type: mongoose.Schema.Types.ObjectId, required: true },
-    userName: {type: String, required: true},
+    userName: { type: String, required: true },
     amount: { type: Number, required: true },
     accountNumber: { type: String, required: true },
-    createdAt: { type: Date },
+    createdAt: { type: Date, required: true, default: Date.now },
 });
 
-
-const RevenueSchema = new mongoose.Schema({
+const TransactionSchema = new mongoose.Schema({
+    type: { type: String, enum: ["credit", "debit"], required: true },
     amount: { type: Number, required: true },
-    createdAt: { type: Date },
+    from: { type: String, required: true },
+    fromId: { type: mongoose.Types.ObjectId, required: true },
+    createdAt: { type: Date, required: true, default: Date.now, index: true },
 });
 
-
-//Admin Schema
-export const AdminSchema: mongoose.Schema = new mongoose.Schema({
+export const AdminSchema = new mongoose.Schema({
     name: { type: String, required: false },
     password: { type: String, required: false },
-    totalWithdrawals: [RevenueSchema],  
-    grossAmount: [RevenueSchema],
+    revenue: {
+        totalWithdrawals: [RevenueSchema],
+        grossAmount: [RevenueSchema],
+    },
+    withdrawRequest: [WithdrawRequestSchema],
+    wallet: {
+        balance: { type: Number, required: false, default: 0 },
+        transactions: [TransactionSchema],
+    },
+
     request: [
         {
             type: { type: String, required: false },
             clientId: { type: mongoose.Types.ObjectId, required: false },
-            status: { type: String, required: false },
+            status: {
+                type: String,
+                enum: ["pending", "approved", "rejected"],
+                required: false,
+            },
             data: { type: mongoose.Schema.Types.Mixed, required: false },
         },
     ],
-    withdrawRequest: [WithdrawRequestSchema],
-    wallet: {
-        balance: { type: Number, required: false },
-        transactions: [
-            {
-                type: Array,
-            },
-        ],
-    },
 });
 
-//Admin model
 export const AdminModel = mongoose.model("Admin", AdminSchema);

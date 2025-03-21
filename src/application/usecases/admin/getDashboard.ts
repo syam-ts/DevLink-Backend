@@ -1,7 +1,7 @@
 export interface AdminRepository {
      clientMetrics(): Promise<number>
      userMetrics(): Promise<number>
-     getRevenue(sortType: string): void
+     getRevenue(range: string): void
 }
 
 export class ClientMetrics {
@@ -27,9 +27,8 @@ export class UserMetrics {
 export class GetRevenue {
     constructor(private adminRepository: AdminRepository) { }
 
-    async execute(sortType: string) {
-       const result = await this.adminRepository.getRevenue(sortType);
-       
+    async execute(range: string) {
+       const result = await this.adminRepository.getRevenue(range); 
        return result;
     }
 }

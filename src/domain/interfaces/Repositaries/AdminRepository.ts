@@ -529,7 +529,7 @@ export class AdminRepository implements AdminRepositary {
     // add withdrwa money to admin entity
     const addWithdrawMoney = await AdminModel.findByIdAndUpdate( adminId,{
       $push: {  
-        "totalWithdrawals": { amount: amount, createdAt: Date.now() } 
+        "revenue.totalWithdrawals": { amount: amount, createdAt: Date.now() } 
       }, 
     });
     
@@ -606,52 +606,80 @@ export class AdminRepository implements AdminRepositary {
     };
   }
 
-async getRevenue(sortType: string) {
-  const now = new Date();
+  async getRevenue(range: "weekly" | "monthly" | "yearly"): Promise<any> {
+    let startDate: Date;
+    let groupFormat: string; 
 
-    let startDate;
-    if (sortType === "weekly") {
-        startDate = new Date(now);
-        startDate.setDate(now.getDate() - now.getDay());  
-    } else if (sortType === "monthly") {
-        startDate = new Date(now.getFullYear(), now.getMonth(), 1);  
-    } else if (sortType === "yearly") {
-        startDate = new Date(now.getFullYear(), 0, 1);  
+    // Set the date range and grouping format based on the selected range
+    if (range === "weekly") {
+        startDate = new Date();
+        startDate.setDate(startDate.getDate() - 6); // Last 7 days (including today)
+        groupFormat = "%Y-%m-%d"; // Group by day
+    } else if (range === "monthly") {
+        startDate = new Date();
+        startDate.setDate(startDate.getDate() - 29); // Last 30 days
+        groupFormat = "%Y-%m-%d"; // Group by day
     } else {
-        throw new Error("Invalid type. Choose 'weekly', 'monthly', or 'yearly'.");
+        startDate = new Date();
+        startDate.setFullYear(startDate.getFullYear() - 1); // Last 12 months
+        groupFormat = "%Y-%m"; // Group by month
     }
- 
-    const totalRevenue = await AdminModel.aggregate([
+
+    // Aggregation Pipeline
+    const revenueDataGrossAmount = await AdminModel.aggregate([
         {
-            $project: {
-                totalWithdrawals: {
-                    $filter: {
-                        input: "$totalWithdrawals",
-                        as: "withdrawal",
-                        cond: { $gte: ["$$withdrawal.createdAt", startDate] },
-                    },
-                },
-                grossAmount: {
-                    $filter: {
-                        input: "$grossAmount",
-                        as: "gross",
-                        cond: { $gte: ["$$gross.createdAt", startDate] },
-                    },
-                },
-            },
+            $unwind: `$revenue.grossAmount` // Flatten the array field (grossAmount or totalWithdrawals)
         },
         {
-            $unwind: "$totalWithdrawals",  
+            $match: {
+                [`revenue.grossAmount.createdAt`]: { $gte: startDate } // Filter by date range
+            }
         },
         {
             $group: {
-                _id: null,
-                totalWithdrawals: { $sum: "$totalWithdrawals.amount" },  
-                grossAmount: { $sum: "$grossAmount.amount" },  
-            },
+                _id: { $dateToString: { format: groupFormat, date: `$revenue.grossAmount.createdAt` } }, // Group by day or month
+                total: { $sum: `$revenue.grossAmount.amount` } // Sum amounts for each period
+            }
         },
+        {
+            $sort: { "_id": 1 } // Sort by date (ascending)
+        }
     ]);
-    console.log("The result: ",totalRevenue)
-}
+
+    const revenueDataTotalWithdrawals = await AdminModel.aggregate([
+        {
+            $unwind: `$revenue.totalWithdrawals`
+        },
+        {
+            $match: {
+                [`revenue.totalWithdrawals.createdAt`]: { $gte: startDate } 
+            }
+        },
+        {
+            $group: {
+                _id: { $dateToString: { format: groupFormat, date: `$revenue.totalWithdrawals.createdAt` } }, 
+                total: { $sum: `$revenue.totalWithdrawals.amount` } 
+            }
+        },
+        {
+            $sort: { "_id": 1 } 
+        }
+    ]);
+
+  
+    return {grossAmount: revenueDataGrossAmount.map(entry => ({
+        date: entry._id, 
+        amount: entry.total
+    })), 
+    totalWithdrawals: revenueDataTotalWithdrawals.map(entry => ({
+      date: entry._id, 
+      amount: entry.total
+  }))
+    };
+};
+  
+  
+  
+  
 
 };
