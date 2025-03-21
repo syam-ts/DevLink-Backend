@@ -213,7 +213,12 @@ export const adminController = {
 
   logoutAdmin: async (req: any, res: any) => {
     try {
-      res.clearCookie("jwtA", { path: "/" });
+      res.clearCookie("refreshToken", {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: process.env.NODE_ENV === "production",
+        path: "/",
+      });
 
       res
         .status(HttpStatusCode.OK)
