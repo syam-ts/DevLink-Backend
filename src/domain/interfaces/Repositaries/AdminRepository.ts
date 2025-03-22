@@ -527,12 +527,11 @@ export class AdminRepository implements AdminRepositary {
     );
 
     // add withdrwa money to admin entity
-    const addWithdrawMoney = await AdminModel.findByIdAndUpdate( adminId,{
-      $push: {  
-        "revenue.totalWithdrawals": { amount: amount, createdAt: Date.now() } 
-      }, 
+    const addWithdrawMoney = await AdminModel.findByIdAndUpdate(adminId, {
+      $push: {
+        "revenue.totalWithdrawals": { amount: amount, createdAt: Date.now() },
+      },
     });
-    
 
     return newNotification;
   }
@@ -563,123 +562,137 @@ export class AdminRepository implements AdminRepositary {
     return contract;
   }
 
-  async userMetrics(): Promise<{totalUsers: number,verifiedUsers: number,
-    boostedUsers: number,
-    totalJobs: number }> {
+  async userMetrics(): Promise<{
+    totalUsers: number;
+    verifiedUsers: number;
+    boostedUsers: number;
+    totalJobs: number;
+  }> {
     const totalUsers = await UserModel.countDocuments({});
-    const verifiedUsers = await UserModel.countDocuments({ isProfileFilled: true });
+    const verifiedUsers = await UserModel.countDocuments({
+      isProfileFilled: true,
+    });
     const boostedUsers = await UserModel.countDocuments({ isBoosted: true });
     const totalJobsByUser = await UserModel.aggregate([
       {
         $group: {
           _id: null,
-          total: {$sum: "$totalJobs"}
-        }
-      }
+          total: { $sum: "$totalJobs" },
+        },
+      },
     ]);
     const totalJobs: number = totalJobsByUser[0].total;
-    return { 
-        totalUsers,
-        verifiedUsers,
-        boostedUsers,
-        totalJobs 
+    return {
+      totalUsers,
+      verifiedUsers,
+      boostedUsers,
+      totalJobs,
     };
   }
 
-  async clientMetrics(): Promise<{  totalClients: number; verifiedClients: number; totalJobs: number }> {
+  async clientMetrics(): Promise<{
+    totalClients: number;
+    verifiedClients: number;
+    totalJobs: number;
+  }> {
     const totalClients = await ClientModel.countDocuments({});
-    const verifiedClients = await ClientModel.countDocuments({ isVerified: true });
+    const verifiedClients = await ClientModel.countDocuments({
+      isVerified: true,
+    });
     const totalJobsByClient = await ClientModel.aggregate([
       {
         $group: {
           _id: null,
-          total: {$sum: "$totalJobs"}
-        }
-      }
+          total: { $sum: "$totalJobs" },
+        },
+      },
     ]);
 
-    const totalJobs: number = totalJobsByClient[0].total
-    return { 
-        totalClients,
-        verifiedClients,
-        totalJobs, 
+    const totalJobs: number = totalJobsByClient[0].total;
+    return {
+      totalClients,
+      verifiedClients,
+      totalJobs,
     };
   }
 
   async getRevenue(range: "weekly" | "monthly" | "yearly"): Promise<any> {
     let startDate: Date;
-    let groupFormat: string; 
+    let groupFormat: string;
 
-    // Set the date range and grouping format based on the selected range
     if (range === "weekly") {
-        startDate = new Date();
-        startDate.setDate(startDate.getDate() - 6); // Last 7 days (including today)
-        groupFormat = "%Y-%m-%d"; // Group by day
+      startDate = new Date();
+      startDate.setDate(startDate.getDate() - 6);
+      groupFormat = "%Y-%m-%d";
     } else if (range === "monthly") {
-        startDate = new Date();
-        startDate.setDate(startDate.getDate() - 29); // Last 30 days
-        groupFormat = "%Y-%m-%d"; // Group by day
+      startDate = new Date();
+      startDate.setDate(startDate.getDate() - 29);
+      groupFormat = "%Y-%m-%d";
     } else {
-        startDate = new Date();
-        startDate.setFullYear(startDate.getFullYear() - 1); // Last 12 months
-        groupFormat = "%Y-%m"; // Group by month
+      startDate = new Date();
+      startDate.setFullYear(startDate.getFullYear() - 1);
+      groupFormat = "%Y-%m";
     }
 
-    // Aggregation Pipeline
     const revenueDataGrossAmount = await AdminModel.aggregate([
-        {
-            $unwind: `$revenue.grossAmount` // Flatten the array field (grossAmount or totalWithdrawals)
+      {
+        $unwind: `$revenue.grossAmount`,
+      },
+      {
+        $match: {
+          [`revenue.grossAmount.createdAt`]: { $gte: startDate },
         },
-        {
-            $match: {
-                [`revenue.grossAmount.createdAt`]: { $gte: startDate } // Filter by date range
-            }
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: groupFormat,
+              date: `$revenue.grossAmount.createdAt`,
+            },
+          },
+          total: { $sum: `$revenue.grossAmount.amount` },
         },
-        {
-            $group: {
-                _id: { $dateToString: { format: groupFormat, date: `$revenue.grossAmount.createdAt` } }, // Group by day or month
-                total: { $sum: `$revenue.grossAmount.amount` } // Sum amounts for each period
-            }
-        },
-        {
-            $sort: { "_id": 1 } // Sort by date (ascending)
-        }
+      },
+      {
+        $sort: { _id: 1 },
+      },
     ]);
 
     const revenueDataTotalWithdrawals = await AdminModel.aggregate([
-        {
-            $unwind: `$revenue.totalWithdrawals`
+      {
+        $unwind: `$revenue.totalWithdrawals`,
+      },
+      {
+        $match: {
+          [`revenue.totalWithdrawals.createdAt`]: { $gte: startDate },
         },
-        {
-            $match: {
-                [`revenue.totalWithdrawals.createdAt`]: { $gte: startDate } 
-            }
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: groupFormat,
+              date: `$revenue.totalWithdrawals.createdAt`,
+            },
+          },
+          total: { $sum: `$revenue.totalWithdrawals.amount` },
         },
-        {
-            $group: {
-                _id: { $dateToString: { format: groupFormat, date: `$revenue.totalWithdrawals.createdAt` } }, 
-                total: { $sum: `$revenue.totalWithdrawals.amount` } 
-            }
-        },
-        {
-            $sort: { "_id": 1 } 
-        }
+      },
+      {
+        $sort: { _id: 1 },
+      },
     ]);
 
-  
-    return {grossAmount: revenueDataGrossAmount.map(entry => ({
-        date: entry._id, 
-        amount: entry.total
-    })), 
-    totalWithdrawals: revenueDataTotalWithdrawals.map(entry => ({
-      date: entry._id, 
-      amount: entry.total
-  }))
+    return {
+      grossAmount: revenueDataGrossAmount.map((entry) => ({
+        date: entry._id,
+        amount: entry.total,
+      })),
+      totalWithdrawals: revenueDataTotalWithdrawals.map((entry) => ({
+        date: entry._id,
+        amount: entry.total,
+      })),
     };
-};
-  
-  
-  
-  
-
-};
+  }
+}
