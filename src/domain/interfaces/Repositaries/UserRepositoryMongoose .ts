@@ -63,7 +63,7 @@ interface Invite {
 }
 
 export class UserRepositoryMongoose implements UserRepositary {
-  
+
   async createUser(user: User): Promise<User> {
     const salt: number = parseInt(process.env.BCRYPT_SALT as string);
     const hashedPassword = await bcrypt.hash(user.password, salt);
@@ -503,24 +503,96 @@ export class UserRepositoryMongoose implements UserRepositary {
   async getSelectedJobs(
     userId: string,
     jobType: string,
+    query: {
+      amount: number
+      projectType: 'houly' | 'fixed'
+      expertLevel: 'beginner' | 'intermediate' | 'advanced'
+    },
     currentPage: number
   ): Promise<JobPostDocument | any> {
     const page_size: number = 4;
     const skip: number = (currentPage - 1) * page_size;
 
     const user: any = await UserModel.findById(userId).exec();
-    let totalPages: number;
+
 
     if (!user || !user.skills || user.skills.length === 0)
       throw new Error("User has no skills or does not exist.");
 
     if (jobType === "listAllJobs") {
-      const totalJobs = await JobPostModel.countDocuments();
+      let totalJobs, jobs, totalPages;
 
-      totalPages = Math.ceil(totalJobs / page_size);
-      const jobs = await JobPostModel.find({ status: "pending" })
-        .skip(skip)
-        .limit(page_size);
+      if (query.amount) {
+        if (query.amount === 500) {
+          totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 500 }, { $gt: 100 }] } }] });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 500 }, { $gt: 100 }] } }] })
+            .skip(skip)
+            .limit(page_size);
+        } else if (query.amount === 2000) {
+          totalJobs = await JobPostModel.countDocuments({
+            $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 2000 }, { $gt: 500 }] } }]
+          });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 2000 }, { $gt: 500 }] } }] })
+            .skip(skip)
+            .limit(page_size);
+        } else if (Number(query.amount) === 10000) {
+          totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending", }, { $and: [{ amount: { $lt: 10000 } }, { amount: { $gt: 2000 } }] }] });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { $and: [{ amount: { $lt: 10000 } }, { amount: { $gt: 2000 } }] }] })
+            .skip(skip)
+            .limit(page_size);
+        } else if (query.amount === 50000) {
+          totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 50000 }, { $gt: 10000 }] } }] });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 50000 }, { $gt: 10000 }] } }] })
+            .skip(skip)
+            .limit(page_size);
+        } else if (query.amount === 70000) {
+          totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 70000 }, { $gt: 50000 }] } }] });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 70000 }, { $gt: 50000 }] } }] })
+            .skip(skip)
+            .limit(page_size);
+        }
+      } else if (query.expertLevel) {
+        if (query.expertLevel === 'beginner') {
+          totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { expertLevel: 'beginner' }] });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { expertLevel: 'beginner' }] })
+            .skip(skip)
+            .limit(page_size);
+          console.log("The jobs: ", jobs)
+        } else if (query.expertLevel === 'intermediate') {
+
+          totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { expertLevel: 'intermediate' }] });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { expertLevel: 'intermediate' }] })
+            .skip(skip)
+            .limit(page_size);
+        } else if (query.expertLevel === 'advanced') {
+          totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { expertLevel: 'advanced' }] });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { expertLevel: 'advanced' }] })
+            .skip(skip)
+            .limit(page_size);
+        }
+      } else if (query.projectType) {
+        if (query.projectType === 'houly') {
+          totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { projectType: 'houly' }] });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { projectType: 'houly' }] })
+            .skip(skip)
+            .limit(page_size);
+        } else if (query.projectType === 'fixed') {
+          totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { projectType: 'fixed' }] });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { projectType: 'fixed' }] })
+            .skip(skip)
+            .limit(page_size);
+        }
+      }
 
       if (!jobs) throw new Error("No jobs found");
 
@@ -529,31 +601,139 @@ export class UserRepositoryMongoose implements UserRepositary {
         totalPages,
       };
     } else if (jobType === "trendingJobs") {
-      const totalJobs = await JobPostModel.countDocuments();
+      let totalJobs, jobs, totalPages;
+      totalJobs = await JobPostModel.countDocuments();
       totalPages = Math.ceil(totalJobs / page_size);
-      const jobs = await JobPostModel.find({ status: "pending" })
+      jobs = await JobPostModel.find({ status: "pending" })
         .sort({
           proposalCount: -1,
         })
         .skip(skip)
         .limit(page_size);
-      if (!jobs) throw new Error("No jobs found");
 
-      return {
-        jobs,
-        totalPages,
-      };
+        
+        if (query.amount) {
+          if (query.amount === 500) {
+            totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 500 }, { $gt: 100 }] } }] });
+            totalPages = Math.ceil(totalJobs / page_size);
+            jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 500 }, { $gt: 100 }] } }] })
+            .sort({
+              proposalCount: -1,
+            }) 
+            .skip(skip)
+              .limit(page_size);
+          } else if (query.amount === 2000) {
+            totalJobs = await JobPostModel.countDocuments({
+              $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 2000 }, { $gt: 500 }] } }]
+            });
+            totalPages = Math.ceil(totalJobs / page_size);
+            jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 2000 }, { $gt: 500 }] } }] })
+            .sort({
+              proposalCount: -1,
+            })  
+            .skip(skip)
+              .limit(page_size);
+          } else if (Number(query.amount) === 10000) {
+            totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending", }, { $and: [{ amount: { $lt: 10000 } }, { amount: { $gt: 2000 } }] }] });
+            totalPages = Math.ceil(totalJobs / page_size);
+            jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { $and: [{ amount: { $lt: 10000 } }, { amount: { $gt: 2000 } }] }] })
+            .sort({
+              proposalCount: -1,
+            })  
+            .skip(skip)
+              .limit(page_size);
+          } else if (query.amount === 50000) {
+            totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 50000 }, { $gt: 10000 }] } }] });
+            totalPages = Math.ceil(totalJobs / page_size);
+            jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 50000 }, { $gt: 10000 }] } }] })
+            .sort({
+              proposalCount: -1,
+            }) 
+            .skip(skip)
+              .limit(page_size);
+          } else if (query.amount === 70000) {
+            totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 70000 }, { $gt: 50000 }] } }] });
+            totalPages = Math.ceil(totalJobs / page_size);
+            jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 70000 }, { $gt: 50000 }] } }] })
+            .sort({
+              proposalCount: -1,
+            }) 
+            .skip(skip)
+              .limit(page_size);
+          }
+        } else if (query.expertLevel) {
+          if (query.expertLevel === 'beginner') {
+            totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { expertLevel: 'beginner' }] });
+            totalPages = Math.ceil(totalJobs / page_size);
+            jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { expertLevel: 'beginner' }] })
+            .sort({
+              proposalCount: -1,
+            }) 
+            .skip(skip)
+              .limit(page_size);
+            console.log("The jobs: ", jobs)
+          } else if (query.expertLevel === 'intermediate') {
+  
+            totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { expertLevel: 'intermediate' }] });
+            totalPages = Math.ceil(totalJobs / page_size);
+            jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { expertLevel: 'intermediate' }] })
+            .sort({
+              proposalCount: -1,
+            })  
+            .skip(skip)
+              .limit(page_size);
+          } else if (query.expertLevel === 'advanced') {
+            totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { expertLevel: 'advanced' }] });
+            totalPages = Math.ceil(totalJobs / page_size);
+            jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { expertLevel: 'advanced' }] })
+            .sort({
+              proposalCount: -1,
+            }) 
+            .skip(skip)
+              .limit(page_size);
+          }
+        } else if (query.projectType) {
+          if (query.projectType === 'houly') {
+            totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { projectType: 'houly' }] });
+            totalPages = Math.ceil(totalJobs / page_size);
+            jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { projectType: 'houly' }] })
+            .sort({
+              proposalCount: -1,
+            }) 
+            .skip(skip)
+              .limit(page_size);
+          } else if (query.projectType === 'fixed') {
+            totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { projectType: 'fixed' }] });
+            totalPages = Math.ceil(totalJobs / page_size);
+            jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { projectType: 'fixed' }] })
+            .sort({
+              proposalCount: -1,
+            })  
+            .skip(skip)
+              .limit(page_size);
+          }
+        }
+  
+        if (!jobs) throw new Error("No jobs found");
+  
+        return {
+          jobs,
+          totalPages,
+        };
+
+
     } else if (jobType === "bestMatches") {
+      let totalJobs, jobs, totalPages;
       const userSkills = user.skills;
 
-      const totalJobs = await JobPostModel.countDocuments({
+      totalJobs = await JobPostModel.countDocuments({
         $and: [
           { status: "pending" },
           { requiredSkills: { $elemMatch: { $in: userSkills } } },
         ],
       });
       totalPages = Math.ceil(totalJobs / page_size);
-      const jobs = await JobPostModel.find({
+      jobs = await JobPostModel.find({
         $and: [
           { status: "pending" },
           { requiredSkills: { $elemMatch: { $in: userSkills } } },

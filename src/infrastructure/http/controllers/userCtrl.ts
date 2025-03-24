@@ -259,13 +259,15 @@ export const userController = {
 
   getSelectedJobs: async (req: Request, res: Response) => {
     try {
-      const { jobsType } = req.params;
-      const { id: userId } = req.user;
+      const { jobsType } = req.params; 
+      // const { id: userId } = req.user;
+      const userId = '67b77a87ef9e80dc0e1c16d7'
       const currentPage: number = Number(req.query.currentPage) || 1;
 
       const response = await allUserUseCases.getSelectedJobsUseCase.execute(
         userId,
         jobsType,
+        req.query,
         currentPage
       );
       res.status(HttpStatusCode.OK).json({
