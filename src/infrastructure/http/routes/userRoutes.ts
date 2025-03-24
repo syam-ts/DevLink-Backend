@@ -45,7 +45,7 @@ const { USER }: { USER: string } = allRoles;
 
 userRouter.get('/getHome', getHomeUser);
 userRouter.get('/home/:type', listHomeJobs);
-userRouter.get('/jobs/:jobsType', getSelectedJobs);
+userRouter.get('/jobs/:jobsType', verifyToken, requireRole(USER), getSelectedJobs);
 userRouter.get('/proposals/:proposalType', verifyToken, requireRole(USER), viewProposals);
 userRouter.get('/contracts/:contractViewType', verifyToken, requireRole(USER), viewContracts);
 userRouter.get('/profile/:type', verifyToken, requireRole(USER), getProfile);

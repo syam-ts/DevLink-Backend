@@ -11,7 +11,7 @@ interface Query {
 export class GetSelectedJobs {
   constructor(private userRepository: UserRepository) {}
 
-  async execute(userId: string, jobsType: string,query: Query, currentPage: number ) {
+  async execute(userId: string, jobsType: string,query: Query, currentPage: number ) { 
     const response = await this.userRepository.getSelectedJobs(
       userId,
       jobsType,
