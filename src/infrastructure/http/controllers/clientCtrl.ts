@@ -279,7 +279,7 @@ export const clientController = {
 
   editProfile: async (req: any, res: Response) => {
     try {
-      const { id: clientId }: { id: string } = req.user;
+      const { id: clientId }: { id: string } = req.user; 
       const response = await allClientUseCases.editClientProfileUseCase.execute(
         clientId,
         req.body

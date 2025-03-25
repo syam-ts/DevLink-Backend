@@ -44,6 +44,7 @@ export const AdminSchema = new mongoose.Schema({
                 required: false,
             },
             data: { type: mongoose.Schema.Types.Mixed, required: false },
+            unChangedData: { type: mongoose.Schema.Types.Mixed, required: false },
         },
     ],
 });

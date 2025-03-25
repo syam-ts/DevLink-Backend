@@ -377,6 +377,7 @@ export class AdminRepository implements AdminRepositary {
   //verify client profile
   async verifyAccept(data: any): Promise<any> {
     const { clientId, editData } = data;
+    console.log('The final data from Admin: ',data)
 
     const adminId = process.env.ADMIN_OBJECT_ID;
 

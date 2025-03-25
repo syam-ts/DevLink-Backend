@@ -276,6 +276,7 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     const existingClient: any = await ClientModel.findById(clientId);
 
     if (existingClient.isEditRequest) throw new Error("Request already sended"); 
+    console.log('THe data: ',data)
 
     const request = {
       type: "Profile Verification Request",
@@ -299,9 +300,9 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     return updatedAdmin;
   }
 
-  async editClientProfile(clientId: Id, editData: {}): Promise<any> {
+  async editClientProfile(clientId: Id, editData: {}, unChangedData: {}): Promise<any> {
     const adminId = process.env.ADMIN_OBJECT_ID;
-    const existingClient: any = await ClientModel.findById(clientId);
+    const existingClient: any = await ClientModel.findById(clientId); 
 
     if (existingClient.isEditRequest) {
       throw new Error("Request already sended");
@@ -312,6 +313,7 @@ async createClient(client: {name?: string, email?: string, password?: string }):
       clientId: clientId,
       status: "pending",
       data: editData,
+      unChangedData: unChangedData
     };
 
     const updatedAdmin = await AdminModel.findByIdAndUpdate(

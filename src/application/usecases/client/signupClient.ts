@@ -10,8 +10,7 @@ export class SignupClient {
     constructor(private clientRepositary: ClientRepositary) { }
 
     async execute(client: Client | any) {
-        const existingClient = await this.clientRepositary.signupClient(client.email);
-        console.log('THe result: ',existingClient)
+        const existingClient = await this.clientRepositary.signupClient(client.email); 
 
         if (existingClient) {
             throw new Error("Client already exists");
