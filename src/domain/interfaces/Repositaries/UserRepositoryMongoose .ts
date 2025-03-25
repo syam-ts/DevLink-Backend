@@ -431,7 +431,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         { $push: { proposals: newProposal } },
         { new: true }
       );
-      console.log("The final: ", jobpost.clientId);
+       
 
       const newNotificationUser = await NotificationModel.create({
         type: "New Job Proposal",
@@ -601,7 +601,7 @@ export class UserRepositoryMongoose implements UserRepositary {
           jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { expertLevel: 'beginner' }] })
             .skip(skip)
             .limit(page_size);
-          console.log("The jobs: ", jobs)
+     
         } else if (query.expertLevel === 'intermediate') {
 
           totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { expertLevel: 'intermediate' }] });
@@ -617,7 +617,7 @@ export class UserRepositoryMongoose implements UserRepositary {
             .limit(page_size);
         }
       } else if (query.paymentType) {
-        if (query.paymentType === 'hourly') {
+        if (query.paymentType ===   'hourly') {
           totalJobs = await JobPostModel.countDocuments({ status: "pending" ,paymentType: 'hourly' });
           totalPages = Math.ceil(totalJobs / page_size);
           jobs = await JobPostModel.find({ $and: [{status: "pending"}, {paymentType: 'hourly'}] })
@@ -631,7 +631,7 @@ export class UserRepositoryMongoose implements UserRepositary {
             .limit(page_size);
         }
       } 
-      console.log('THe jonb: ', jobs)
+      
       if (!jobs) throw new Error("No jobs found");
 
       return {

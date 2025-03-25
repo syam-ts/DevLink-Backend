@@ -66,7 +66,7 @@ clientRouter.get("/invites/:inviteType", verifyToken, requireRole(CLIENT), viewI
 clientRouter.get("/contractsSubmissions", verifyToken, requireRole(CLIENT), viewSubmissions);
 clientRouter.get("/wallet", verifyToken, requireRole(CLIENT), viewWallet);
 clientRouter.get("/allChat/view/:roleId", verifyToken, requireRole(CLIENT), getAllChats);
-clientRouter.get("/chat/view/:roleType/:roleId/:targetId", verifyToken, requireRole(CLIENT), clientController.viewChat);
+clientRouter.get("/chat/view/:roleType/:roleId/:targetId", verifyToken, requireRole(CLIENT), viewChat);
 clientRouter.get("/notifications/:clientId", verifyToken, requireRole(CLIENT), getAllNotifications);
 
 clientRouter.post("/projectApprove", closeContract);

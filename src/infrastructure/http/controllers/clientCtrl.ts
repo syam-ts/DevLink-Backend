@@ -20,8 +20,9 @@ interface RequestRole {
 
 export const clientController = {
   signupClient: async (req: Request, res: Response) => {
-    try {
+    try { 
       const otp = await allClientUseCases.signupClientUseCase.execute(req.body);
+      console.log('The return otp: ',otp)
       if (otp) {
         res.status(HttpStatusCode.CREATED).json({
           message: StatusMessage[HttpStatusCode.CREATED],
@@ -32,7 +33,6 @@ export const clientController = {
       }
     } catch (err: any) {
       res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
         .json({ message: err.message, sucess: false });
     }
@@ -589,7 +589,7 @@ export const clientController = {
   },
 
   getAllChats: async (req: Request, res: Response) => {
-    try {
+    try { 
       const { roleId } = req.params;
       const response = await allClientUseCases.getAllChatsUseCase.execute(
         roleId
@@ -609,7 +609,8 @@ export const clientController = {
   },
 
   viewChat: async (req: Request, res: Response) => {
-    try {
+    try { 
+      console.log('log')
       const { roleType, roleId, targetId, roleName } = req.params;
 
       const response = await allClientUseCases.viewChatUseCase.execute(

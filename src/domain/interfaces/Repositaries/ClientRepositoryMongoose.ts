@@ -52,7 +52,7 @@ interface Invite {
 
 export class ClientRepositoryMongoose implements ClientRepositary {
 async createClient(client: {name?: string, email?: string, password?: string }): Promise<any> {
-  if (!client.password) throw new Error("Password is required");
+  if (!client.password) throw new Error("Password is required"); 
     
   const salt: number = 10;
     const hashedPassword = await bcrypt.hash(client.password, salt);
@@ -72,8 +72,8 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     } ;
   }
 
-  async signupClient(email: string ): Promise<Client > {
-    const foundClient = await this.findClientByEmail(email); 
+  async signupClient(email: string ): Promise<Client | null> { 
+    const foundClient =  this.findClientByEmail(email); 
     if (!foundClient) throw new Error("Client Not Found"); 
     return foundClient;
   }
