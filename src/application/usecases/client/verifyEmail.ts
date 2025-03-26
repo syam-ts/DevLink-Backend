@@ -27,7 +27,7 @@ export interface ClientRepositary {
           from: 'syamnandhu3@gmail.com',
           to: toMail,
           subject: 'Verified Email for password changing',
-          text: `http://localhost:5173/client/resetPassword/${clientId}`,
+          text: `http://localhost:5173/resetPassword/${clientId}?role=client`,
       });
    
        

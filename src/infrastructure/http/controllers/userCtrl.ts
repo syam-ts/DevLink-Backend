@@ -61,7 +61,7 @@ export const userController = {
   },
 
   verifyEmail: async (req: Request, res: Response) => {
-    try {
+    try { 
       const response = await allUserUseCases.verifyEmailUseCase.execute(
         req.body.email
       );
@@ -79,7 +79,7 @@ export const userController = {
   },
 
   resetPassword: async (req: Request, res: Response) => {
-    try {
+    try { 
       let { userId } = req.params,
         { password } = req.body;
       const response = await allUserUseCases.resetPasswordUseCase.execute(
