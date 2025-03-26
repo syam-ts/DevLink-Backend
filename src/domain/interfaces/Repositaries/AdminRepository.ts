@@ -377,7 +377,7 @@ export class AdminRepository implements AdminRepositary {
   //verify client profile
   async verifyAccept(data: any): Promise<any> {
     const { clientId, editData } = data;
-    console.log('The final data from Admin: ',data)
+    console.log("The final data from Admin: ", data);
 
     const adminId = process.env.ADMIN_OBJECT_ID;
 
@@ -547,13 +547,17 @@ export class AdminRepository implements AdminRepositary {
     return adminData.withdrawRequest;
   }
 
-  async viewContracts(): Promise<any> {
-    //limit to 4
-    const contracts = await ContractModel.find().limit(5).exec();
+  async viewContracts(currentPage: number): Promise<any> {
+    const page_size: number = 4;
+    const skip: number = (currentPage - 1) * page_size;
+
+    const totalContracts = await ContractModel.countDocuments(); 
+    const contracts = await ContractModel.find().skip(skip).limit(page_size);
+    const totalPages: number = Math.ceil(totalContracts / page_size);
 
     if (!contracts) throw new Error("Contracts not found");
 
-    return contracts;
+    return { contracts, totalPages };
   }
 
   async viewSingleContract(contractId: string) {

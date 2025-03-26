@@ -994,7 +994,7 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
   async viewWallet(userId: string, currentPage: number): Promise<any> {
-    const page_size: number = 4;
+    const page_size: number = 6;
     const skip: number = (currentPage - 1) * page_size;
 
     const wallet = await UserModel.aggregate([

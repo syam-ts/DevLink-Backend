@@ -496,10 +496,11 @@ export const adminController = {
 
   viewContracts: async (req: Request, res: any) => {
     try {
-      const contracts = await allAdminUseCases.viewContractsAdminUseCase.execute();
+      const { currentPage } = req.query;
+      const response = await allAdminUseCases.viewContractsAdminUseCase.execute(currentPage);
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
-        contracts,
+        response,
         success: true,
       });
     } catch (err: any) {

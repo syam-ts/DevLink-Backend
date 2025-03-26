@@ -585,7 +585,7 @@ async createClient(client: {name?: string, email?: string, password?: string }):
   }
 
   async viewWallet(clientId: Id, page: number): Promise<any> {
-    const PAGE_SIZE: number = 4;
+    const PAGE_SIZE: number = 6;
     const skip: number = (page - 1) * PAGE_SIZE;
 
     const wallet = await ClientModel.aggregate([
