@@ -1,5 +1,6 @@
 interface User {
   name: string
+  email: string
   budget: number
   location: string
   mobile: number
@@ -16,6 +17,8 @@ interface User {
   isBoosted: boolean
   isProfileFilled: boolean
   workHistory: string[]
+  totalJobs: number
+  totalHours: number
 };
 
 export interface UserRepositary {
@@ -26,10 +29,11 @@ export class GetUserProfile {
   constructor(private userRepositary: UserRepositary) {}
 
   async execute(userId: string) {
-    const user = await this.userRepositary.findUserById(userId);
+    const user = await this.userRepositary.findUserById(userId); 
 
     return {
       name: user.name,
+      email: user.email,
       budget: user.budget,
       location: user.location,
       mobile: user.mobile,
@@ -46,6 +50,8 @@ export class GetUserProfile {
       isBoosted: user.isBoosted,
       isProfileFilled: user.isProfileFilled,
       workHistory: user.workHistory,
+      totalJobs: user.totalJobs,
+      totalHours: user.totalHours,
     };
   }
 }
