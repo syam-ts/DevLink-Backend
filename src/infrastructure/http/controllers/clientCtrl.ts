@@ -22,7 +22,7 @@ export const clientController = {
   signupClient: async (req: Request, res: Response) => {
     try { 
       const otp = await allClientUseCases.signupClientUseCase.execute(req.body);
-      console.log('The return otp: ',otp)
+     
       if (otp) {
         res.status(HttpStatusCode.CREATED).json({
           message: StatusMessage[HttpStatusCode.CREATED],
@@ -219,7 +219,10 @@ export const clientController = {
   getSelectedJobs: async (req: Request, res: Response) => {
     try {
       const { jobsType } = req.params;
-      const { id: clientId } = req.user;
+       if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: clientId} = req.user;
       const currentPage: number = Number(req.query.currentPage) || 1;
 
       const response =
@@ -242,7 +245,10 @@ export const clientController = {
 
   getProfile: async (req: Request, res: Response) => {
     try {
-      const { id: clientId }: { id: string } = req.user;
+      if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: clientId} = req.user;
       const client = await allClientUseCases.getClientProfileUseCase.execute(
         clientId
       );
@@ -259,7 +265,10 @@ export const clientController = {
 
   profileVerification: async (req: any, res: Response) => {
     try {
-      const { id: clientId }: { id: string } = req.user;
+      if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: clientId} = req.user;
 
       const response =
         await allClientUseCases.profileVerificationUseCase.execute(
@@ -279,7 +288,10 @@ export const clientController = {
 
   editProfile: async (req: any, res: Response) => {
     try {
-      const { id: clientId }: { id: string } = req.user; 
+      if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: clientId} = req.user; 
       const response = await allClientUseCases.editClientProfileUseCase.execute(
         clientId,
         req.body
@@ -334,7 +346,10 @@ export const clientController = {
 
   makePayment: async (req: Request, res: Response) => {
     try {
-      const { id: clientId } = req.user;
+       if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: clientId} = req.user;
       const response = await allClientUseCases.makePaymentUseCase.execute(
         clientId,
         req.body
@@ -354,7 +369,10 @@ export const clientController = {
 
   createJobPost: async (req: Request, res: Response) => {
     try {
-      const { id: clientId }: { id: string } = req.user;
+      if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: clientId} = req.user;
       const { data } = req.body;
 
       const jobPost = await allClientUseCases.createJobPostUseCase.execute(
@@ -395,7 +413,10 @@ export const clientController = {
 
   getProposals: async (req: Request, res: Response) => {
     try {
-      const { id: clientId } = req.user;
+       if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: clientId} = req.user;
       const response = await allClientUseCases.getProposalsUseCase.execute(
         clientId
       );
@@ -448,7 +469,10 @@ export const clientController = {
     try {
       const { userId, jobPostId }: { userId: string; jobPostId: string } =
         req.body;
-      const { id: clientId } = req.user;
+        if (!req.user || !req.user.id) {
+          return res.status(401).json({ message: "Unauthorized", success: false });
+        }
+        const { id: clientId} = req.user;
 
       if (!userId && !clientId && !jobPostId) {
         return res
@@ -477,7 +501,10 @@ export const clientController = {
 
   viewContracts: async (req: Request, res: Response) => {
     try {
-      const { id: clientId } = req.user;
+       if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: clientId} = req.user;
       const { contractViewType } = req.params;
       const currentPage: number = Number(req.query.currentPage) || 1;
       const contracts =
@@ -500,7 +527,10 @@ export const clientController = {
 
   viewSubmissions: async (req: Request, res: Response) => {
     try {
-      const { id: clientId } = req.user;
+       if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: clientId} = req.user;
       const response = await allClientUseCases.viewSubmissionsUseCase.execute(
         clientId
       );
@@ -635,7 +665,10 @@ export const clientController = {
 
   viewWallet: async (req: Request, res: Response) => {
     try {
-      const { id: clientId }: { id: string } = req.user;
+      if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: clientId} = req.user;
       const { currentPage } = req.query;
       const response = await allClientUseCases.viewWalletUseCase.execute(
         clientId,
@@ -697,7 +730,10 @@ export const clientController = {
 
   listAllJobs: async (req: any, res: Response) => {
     try {
-      const { id: clientId }: { id: string } = req.user;
+      if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: clientId} = req.user;
       const response = await allClientUseCases.listAllJobsClientUseCase.execute(
         clientId
       );
@@ -726,7 +762,10 @@ export const clientController = {
         selectJobId: string;
         description: string;
       } = req.body;
-      const { id: clientId }: { id: string } = req.user;
+      if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: clientId} = req.user;
 
       const response = await allClientUseCases.inviteUserUseCase.execute(
         userId,
@@ -749,7 +788,10 @@ export const clientController = {
 
   viewInvite: async (req: Request, res: Response) => {
     try {  
-      const { id: clientId }: { id: string } = req.user;
+      if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: clientId} = req.user;
       const {inviteType}= req.params;
 
       const invites = await allClientUseCases.viewInviteUseCase.execute(clientId, inviteType);

@@ -183,7 +183,10 @@ export const userController = {
 
   getProfile: async (req: Request, res: Response) => {
     try {
-      const { id: userId } = req.user;
+       if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: userId} = req.user;
       const user = await allUserUseCases.getProfileUseCase.execute(userId);
 
       res.status(HttpStatusCode.OK).json({
@@ -201,7 +204,10 @@ export const userController = {
   alterProfile: async (req: Request, res: Response) => {
     try {
       const { type } = req.params;
-      const { id: userId } = req.user;
+       if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: userId} = req.user;
       const profileData = req.body;
 
       const response = await allUserUseCases.alterProfileUseCase.execute(
@@ -260,7 +266,10 @@ export const userController = {
   getSelectedJobs: async (req: Request, res: Response) => {
     try {
       const { jobsType } = req.params; 
-    const { id: userId } = req.user; 
+     if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: userId} = req.user; 
       const currentPage: number = Number(req.query.currentPage) || 1;
 
       const response = await allUserUseCases.getSelectedJobsUseCase.execute(
@@ -307,7 +316,10 @@ export const userController = {
 
   viewProposals: async (req: Request, res: Response) => {
     try {
-      const { id: userId } = req.user;
+       if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: userId} = req.user;
       const response = await allUserUseCases.viewProposalsUseCase.execute(
         userId
       );
@@ -356,10 +368,11 @@ export const userController = {
 
   boostAccount: async (req: Request, res: Response) => {
     try {
-      const { id: userId } = req.user;
-      const paymentUrl = await allUserUseCases.boostAccountUseCase.execute(
-        userId
-      );
+       if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: userId} = req.user;
+      const paymentUrl = await allUserUseCases.boostAccountUseCase.execute();
 
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
@@ -375,7 +388,10 @@ export const userController = {
 
   bosstSuccess: async (req: Request, res: Response) => {
     try {
-      const { id: userId } = req.user;
+       if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: userId} = req.user;
       const response = await allUserUseCases.boostSuccessUseCase.execute(
         userId
       );
@@ -413,7 +429,10 @@ export const userController = {
 
   viewContracts: async (req: Request, res: Response) => {
     try { 
-      const { id: userId } = req.user;
+       if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: userId} = req.user;
       const { contractViewType } = req.params;
       const currentPage: number = Number(req.query.currentPage) || 1;
       const contracts = await allUserUseCases.viewContractsUseCase.execute(
@@ -475,7 +494,10 @@ export const userController = {
   addToWishlist: async (req: Request, res: any) => {
     try {
       const { jobPostId } = req.body;
-      const userId = req.user.id;
+      if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: userId} = req.user;
       const response = await allUserUseCases.addToWishlistUseCase.execute(
         userId,
         jobPostId
@@ -494,7 +516,10 @@ export const userController = {
 
   viewAllWishlist: async (req: Request, res: any) => {
     try {
-      const userId = req.user.id;
+      if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: userId} = req.user;
       const wishlist = await allUserUseCases.viewAllWishlistUseCase.execute(
         userId
       );
@@ -532,7 +557,10 @@ export const userController = {
 
   viewWalletUser: async (req: Request, res: Response) => {
     try {
-      const { id: userId } = req.user;
+      if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: userId} = req.user;
       const { currentPage } = req.query;
       const response = await allUserUseCases.viewWalletUserUseCase.execute(
         userId,
@@ -573,7 +601,10 @@ export const userController = {
 
   getAllInvites: async (req: Request, res: Response) => {
     try {
-      const { id: userId }: { id: string } = req.user;
+      if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: userId} = req.user;
       const response = await allUserUseCases.getAllInvitesUseCase.execute(
         userId
       );
@@ -631,7 +662,10 @@ export const userController = {
   withdrawMoneyByUser: async (req: Request, res: Response) => {
     try {
       const { amount, accountNumber, balance, type } = req.body;
-      const { id: userId }: { id: string } = req.user;
+      if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const { id: userId} = req.user;
 
       const response = await allUserUseCases.withdrawMoneyByUserUseCase.execute(
         userId,
