@@ -513,10 +513,11 @@ export const userController = {
 
   removeFromWishlist: async (req: Request, res: any) => {
     try {
-      const {wishlistId} = req.params;
-      console.log('The wihsilstid: ', wishlistId);
+      const { wishlistId } = req.params; 
+      const { jobPostId } = req.body; 
       const wishlist = await allUserUseCases.removeFromWishlistUseCase.execute(
-        req.body
+        wishlistId,
+        jobPostId
       );
 
       res

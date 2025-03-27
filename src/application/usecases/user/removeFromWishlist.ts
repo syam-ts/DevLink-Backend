@@ -1,18 +1,12 @@
 export interface WishlistRepository {
   removeFromWishlist(wishlistId: string, jobPostId: string): void;
 }
-
-interface WishlistData {
-  wishlistId: string
-  jobPostId: string
-};
+ 
 
 export class RemoveFromWishlist {
   constructor(private wishlistRepository: WishlistRepository) {}
 
-  async execute(wishlistData: WishlistData) {
-    const { wishlistId, jobPostId }: { wishlistId: string; jobPostId: string } =
-      wishlistData;
+  async execute(wishlistId: string, jobPostId: string) {  
     const result = await this.wishlistRepository.removeFromWishlist(
       wishlistId,
       jobPostId

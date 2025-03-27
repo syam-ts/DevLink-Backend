@@ -63,7 +63,7 @@ export class WishlistRepositoryMongoose {
       { _id: wishlistId },
       { $pull: { jobPostData: { _id: jobPostId } } },
       { new: true }
-    );
+    ); 
 
     if (!deleteWishlist) throw Error("Wishlist not found");
     return deleteWishlist;
