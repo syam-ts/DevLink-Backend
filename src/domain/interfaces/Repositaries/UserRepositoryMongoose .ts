@@ -361,10 +361,17 @@ export class UserRepositoryMongoose implements UserRepositary {
           proposals: { $elemMatch: { userId } },
         },
       ],
-    }).exec();
+    }).exec(); 
 
-    if (!findProposals) throw new Error("No proposal found");
-    return findProposals[0].proposals;
+
+    if (findProposals.length === 0) throw new Error("No proposal found");
+    let proposals = []; 
+
+    for(let i=0; i< findProposals.length; i++) {
+        proposals.push(findProposals[i].proposals)
+  }
+  const finalProposals = proposals.flat(1);
+    return finalProposals
   }
 
   async createProposal(
