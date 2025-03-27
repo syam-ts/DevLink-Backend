@@ -369,6 +369,7 @@ export const clientController = {
 
   createJobPost: async (req: Request, res: Response) => {
     try {
+      console.log('the use: ',req.user)
       if (!req.user || !req.user.id) {
         return res.status(401).json({ message: "Unauthorized", success: false });
       }

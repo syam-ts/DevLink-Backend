@@ -275,8 +275,7 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     const adminId = process.env.ADMIN_OBJECT_ID;
     const existingClient: any = await ClientModel.findById(clientId);
 
-    if (existingClient.isEditRequest) throw new Error("Request already sended"); 
-    console.log('THe data: ',data)
+    if (existingClient.isEditRequest) throw new Error("Request already sended");  
 
     const request = {
       type: "Profile Verification Request",
@@ -337,11 +336,11 @@ async createClient(client: {name?: string, email?: string, password?: string }):
   ): Promise<JobPostDocument> {
     const client: any = await ClientModel.findById(clientId);
     //update client jobpost count
-    // const cilent = await ClientModel.findByIdAndUpdate(clientId, {
-    //   $inc: {totalJobs: 1}
-    // }, {
-    //   new: true
-    // });
+    const cilent = await ClientModel.findByIdAndUpdate(clientId, {
+      $inc: {totalJobs: 1}
+    }, {
+      new: true
+    });
     // console.log('THejb', client)
 
     const parsedEstimatedTimeInHours = parseInt(data.estimateTime);

@@ -9,19 +9,19 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 export class MakePayment {
   constructor(private clientRepository: ClientRepository) {}
 
-  async execute(clientId: string, data: any) {
+  async execute(clientId: string, data: any) { 
     const { 
-      payment,
+      amount,
       paymentType, 
     } = data.formData;
 
     if (paymentType === "hourly") {
-      if (payment < 100 || payment > 2000) {
+      if (amount < 100 || amount > 2000) {
         throw new Error("Pay per Hour should 100₹ to 2000₹ ");
       }
 
-      const totalAmount: number = parseInt(data.formData.estimateTime) * data.formData.payment;
-      data.formData.payment = totalAmount;
+      const totalAmount: number = parseInt(data.formData.estimateTime) * data.formData.amount;
+      data.formData.amount = totalAmount;
 
       const product = await stripe.products.create({
         name: "Job-Post",
@@ -55,11 +55,12 @@ export class MakePayment {
         }
       }
     } else {
-      if (payment < 10000 || payment > 200000) {
+      if (amount < 10000 || amount > 200000) {
         throw new Error("Pay per Hour should 10000₹ to 200000₹ ");
       }
 
-      const totalAmount = payment;
+      const totalAmount = amount;
+      console.log('Total: ',totalAmount)
 
       const product = await stripe.products.create({
         name: "Job-Post",
@@ -73,6 +74,7 @@ export class MakePayment {
         });
 
         if (price.id) {
+
           var session = await stripe.checkout.sessions.create({
             line_items: [
               {
@@ -81,14 +83,14 @@ export class MakePayment {
               },
             ],
             mode: "payment",
-            success_url: `http://localhost:5173/client/draftJobPost/payment-success/${encodeURIComponent(
+            success_url: `${process.env.FRONTEND_ORIGIN}/client/paymentSuccess/${encodeURIComponent(
               clientId
             )}/${encodeURIComponent(JSON.stringify(data.formData))}`,
             cancel_url:
-              "http://localhost:5173/client/draftJobPost/payment-failed",
-            customer_email: "samplemail@gmai.com",
+              `${process.env.FRONTEND_ORIGIN}/client/paymentFailed`,
+            customer_email: process.env.STRIPE_CUSTOMER_EMAIL,
           });
-
+ 
           return session;
         }
       }
