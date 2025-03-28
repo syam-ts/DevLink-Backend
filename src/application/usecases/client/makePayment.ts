@@ -14,14 +14,12 @@ export class MakePayment {
       amount,
       paymentType, 
     } = data.formData;
+    
 
     if (paymentType === "hourly") {
-      if (amount < 100 || amount > 2000) {
-        throw new Error("Pay per Hour should 100₹ to 2000₹ ");
-      }
 
-      const totalAmount: number = parseInt(data.formData.estimateTime) * data.formData.amount;
-      data.formData.amount = totalAmount;
+      const totalAmount: number = parseInt(data.formData.estimateTime) * data.formData.amount; 
+      console.log('The total: ', totalAmount)
 
       const product = await stripe.products.create({
         name: "Job-Post",
@@ -33,7 +31,7 @@ export class MakePayment {
           unit_amount: totalAmount * 100,
           currency: "inr",
         });
-
+console.log("Final Data: ",data.formData)
         if (price.id) {
           var session = await stripe.checkout.sessions.create({
             line_items: [
@@ -54,14 +52,8 @@ export class MakePayment {
           return session;
         }
       }
-    } else {
-      if (amount < 10000 || amount > 200000) {
-        throw new Error("Pay per Hour should 10000₹ to 200000₹ ");
-      }
-
-      const totalAmount = amount;
-      console.log('Total: ',totalAmount)
-
+    } else { 
+      const totalAmount: number = amount;  
       const product = await stripe.products.create({
         name: "Job-Post",
       });
@@ -74,7 +66,6 @@ export class MakePayment {
         });
 
         if (price.id) {
-
           var session = await stripe.checkout.sessions.create({
             line_items: [
               {

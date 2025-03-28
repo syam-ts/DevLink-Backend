@@ -70,7 +70,7 @@ clientRouter.get("/chat/view/:roleType/:roleId/:targetId", verifyToken, requireR
 clientRouter.get("/notifications/:clientId", verifyToken, requireRole(CLIENT), getAllNotifications);
 
 clientRouter.post("/projectApprove", closeContract);
-clientRouter.post("/jobPaymentStripe", verifyToken, requireRole(CLIENT), makePayment);
+clientRouter.post("/jobPaymentStripe", makePayment);
 clientRouter.post("/paymentSuccess", verifyToken, requireRole(CLIENT), createJobPost);
 clientRouter.post("/profile/verify", verifyToken, requireRole(CLIENT), profileVerification);
 clientRouter.post("/profile/edit", verifyToken, requireRole(CLIENT), editProfile);

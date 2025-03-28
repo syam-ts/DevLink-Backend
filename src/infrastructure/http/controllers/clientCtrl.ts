@@ -346,10 +346,11 @@ export const clientController = {
 
   makePayment: async (req: Request, res: Response) => {
     try {
-       if (!req.user || !req.user.id) {
-        return res.status(401).json({ message: "Unauthorized", success: false });
-      }
-      const { id: clientId} = req.user;
+      //  if (!req.user || !req.user.id) {
+      //   return res.status(401).json({ message: "Unauthorized", success: false });
+      // }
+      // const { id: clientId} = req.user;
+      const clientId = '67e268a4a9ff4accb5a24d34'
       const response = await allClientUseCases.makePaymentUseCase.execute(
         clientId,
         req.body

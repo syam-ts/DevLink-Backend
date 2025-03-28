@@ -341,11 +341,13 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     }, {
       new: true
     });
-    // console.log('THejb', client)
-
-    const parsedEstimatedTimeInHours = parseInt(data.estimateTime);
-    const totalAmount = data.estimateTime * data.amount;
-    data.amount = totalAmount; //updatig the total amount
+    let parsedEstimatedTimeInHours = parseInt(data.estimateTime);
+     if(data.payementType === 'hourly') {
+      parsedEstimatedTimeInHours = parseInt(data.estimateTime);
+      const totalAmount = data.estimateTime * data.amount;
+      data.amount = totalAmount; //updatig the total amount
+     }
+ 
 
     const createdJobPost = new JobPostModel({
       title: data.title,
