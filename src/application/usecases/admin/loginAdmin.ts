@@ -5,7 +5,7 @@ interface Admin {
 };
 
 export interface AdminRepositary {
-  findAdmin(name: string, password: string): any;
+  findAdmin(name: string, password: string): unknown;
 }
 
 export class LoginAdmin {

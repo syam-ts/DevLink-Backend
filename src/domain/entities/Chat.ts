@@ -1,17 +1,12 @@
 import mongoose, { Document, Schema, model } from 'mongoose';
-import { MessageSchema } from './Message';
-
-
+import { MessageSchema } from './Message'; 
 
 export interface Chat extends Document {
     members:[];
     membersData:[];
-    messages?: []
-         
-      
+    messages?: [] 
 };
-
-
+ 
 
 const ChatSchema: Schema = new Schema({
   

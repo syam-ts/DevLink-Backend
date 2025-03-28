@@ -6,7 +6,7 @@ export interface JobPostDocument extends Document {
     description: string;
     keyResponsiblities: [string],
     requiredSkills: [string],
-    estimateTime: Date;
+    estimateTime: string;
     estimateTimeinHours: number;
     paymentType: 'hourly' | 'fixed',
     amount: number,
@@ -36,7 +36,7 @@ export interface JobPostDocument extends Document {
     description: { type: String, required: true },
     keyResponsiblities: { type: [String], required: true },
     requiredSkills: { type: [String], required: true },
-    estimateTime: { type: Date, required: false },
+    estimateTime: { type: String, required: false },
     estimateTimeinHours: { type: Number, required: false },
     paymentType: { type: String, required: false },
     amount: { type: Number, required: false },

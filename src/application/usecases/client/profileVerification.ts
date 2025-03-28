@@ -1,14 +1,20 @@
+import { Client } from "../../../domain/entities/Client";
 
+
+interface ClientData {
+    editData: Client
+    
+}
 
 export interface ClientRepository {
-    profileVerification(clientId: string, editData: any): Promise <any>
+    profileVerification(clientId: string, editData: Client): Promise <Client>
 };
 
 
 export class ProfileVerification {
     constructor( private clientRepository: ClientRepository) {};
 
-    async execute(clientId: string, clientData: any) { 
+    async execute(clientId: string, clientData: ClientData) { 
 
       
         const { companyName, location, description,domain,  numberOfEmployees, since } = clientData.editData;
@@ -41,7 +47,7 @@ export class ProfileVerification {
             throw new Error("Date need to be valid", )
         } 
 
-        const verify = await this.clientRepository.profileVerification(clientId, clientData);
+        const verify = await this.clientRepository.profileVerification(clientId, clientData as unknown as Client);
 
         return verify;
     }

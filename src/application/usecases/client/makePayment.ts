@@ -1,7 +1,12 @@
 import Stripe from "stripe";
+import { JobPostDocument } from "../../../domain/entities/JobPost";
+
+interface DataInterface {
+  formData: JobPostDocument
+}
 
 export interface ClientRepository {
-  createJobPost(clientId: string, postData: any): void;
+  createJobPost(clientId: string, postData: JobPostDocument): void;
 }
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
@@ -9,7 +14,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 export class MakePayment {
   constructor(private clientRepository: ClientRepository) {}
 
-  async execute(clientId: string, data: any) { 
+  async execute(clientId: string, data: DataInterface) { 
     const { 
       amount,
       paymentType, 

@@ -13,7 +13,7 @@ const WithdrawRequestSchema = new mongoose.Schema({
     createdAt: { type: Date, required: true, default: Date.now },
 });
 
-const TransactionSchema = new mongoose.Schema({
+ const TransactionSchema = new mongoose.Schema({
     type: { type: String, enum: ["credit", "debit"], required: true },
     amount: { type: Number, required: true },
     from: { type: String, required: true },

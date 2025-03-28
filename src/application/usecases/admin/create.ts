@@ -1,5 +1,5 @@
 export interface AdminRepositary {
-    create(adminId: string): Promise<any>;
+    create(adminId: string): void;
 }
 
 export class Create {

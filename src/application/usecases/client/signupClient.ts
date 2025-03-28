@@ -9,7 +9,7 @@ export interface ClientRepositary {
 export class SignupClient {
     constructor(private clientRepositary: ClientRepositary) { }
 
-    async execute(client: Client | any) {
+    async execute(client: Client) {
         const existingClient = await this.clientRepositary.signupClient(client.email); 
 
         if (existingClient) {
