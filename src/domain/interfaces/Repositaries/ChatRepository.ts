@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import { ChatModel } from "../../../domain/entities/Chat";
+import { Chat, ChatModel } from "../../../domain/entities/Chat";
 import { MessageModel } from "../../entities/Message";
 import { UserModel } from "../../entities/User";
-import { ClientModel } from "../../entities/Client";
+import { Client, ClientModel } from "../../entities/Client";
 // import { io } from '../../../infrastructure/socket/socket';
 
 interface Members {
@@ -46,33 +46,28 @@ export class ChatRepositoryMongoose {
 
 
 
-  async getAllChats(roleId: string): Promise<any> {
+  async getAllChats(roleId: string): Promise<Chat> {
 
-    const allChats = await ChatModel.find({ members: roleId });
+    const allChats = await ChatModel.find({ members: roleId }).lean<Chat>().exec(); 
 
-
-    if (!allChats) throw new Error("No chats found");
-
+    if (!allChats) throw new Error("No chats found"); 
     return allChats;
   }
 
 
 
 
-  async viewChat(roleType: string, roleId: string, targetId: string): Promise<any> {
-
-    
+  async viewChat(roleType: string, roleId: string, targetId: string): Promise<unknown> { 
 
     let chat = await ChatModel.findOne({
       members: { $all: [roleId, targetId] }
-    });
- 
+    }); 
 
-    if (!chat) {
-      
-        const client: any = await ClientModel.findOne({ $or: [{ _id: roleId }, { _id: targetId }] })
-        const user: any = await UserModel.findOne({ $or: [{ _id: roleId }, { _id: targetId }] })
-        console.log( 'client', client.companyName)
+    if (!chat) { 
+        const client = await ClientModel.findOne({ $or: [{ _id: roleId }, { _id: targetId }] });
+        const user = await UserModel.findOne({ $or: [{ _id: roleId }, { _id: targetId }] })
+         if(!client) throw new Error('')
+         if(!user) throw new Error('')
         chat = new ChatModel({
           members: [roleId, targetId],
           userData:  
@@ -86,13 +81,10 @@ export class ChatRepositoryMongoose {
             profilePicture: ""
           } ,
           messages: []
-        })
-    
+        }) 
     }
 
-    await chat.save();
-
-
+    await chat.save(); 
     return chat;
 
   }
@@ -100,19 +92,15 @@ export class ChatRepositoryMongoose {
 
 
 
-  async sendMessage(body: Message): Promise<any> {
-    const { chatId, sender, text, roleType }: Message = body;
- 
-
+  async sendMessage(body: Message): Promise<Chat> {
+    const { chatId, sender, text, roleType }: Message = body; 
     const newMessage = new MessageModel({
       chatId: chatId,
       sender: sender,
       text: text,
     });
 
-    const savedMessage = await newMessage.save();
-
-
+    const savedMessage = await newMessage.save(); 
 
     // insert message inot chat
     if (roleType === 'client') {
@@ -131,7 +119,7 @@ export class ChatRepositoryMongoose {
           new: true,
           upsert: true,
         }
-      ).sort({ "chatHistory.clientChat.createdAt": 1 });
+      ).sort({ "chatHistory.clientChat.createdAt": 1 }).lean<Chat>();
 
 
       return updateChat;
@@ -151,13 +139,10 @@ export class ChatRepositoryMongoose {
           new: true,
           upsert: true,
         }
-      ).sort({ "chatHistory.useChat.createdAt": 1 });
+      ).sort({ "chatHistory.useChat.createdAt": 1 }).lean<Chat>();
       return updateChat;
     }
+ 
 
-
-
-
-  }
-
+  } 
 }

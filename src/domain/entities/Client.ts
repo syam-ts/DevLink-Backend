@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { User } from './User'
 
 export interface Client extends mongoose.Document {
+    length?: number;
     companyName?: string;
     password?: string;
     email: string;
