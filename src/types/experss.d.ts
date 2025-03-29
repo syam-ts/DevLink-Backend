@@ -5,6 +5,7 @@ declare module 'express-serve-static-core' {
         user?: { id: string, role: 'user' | 'client' | 'admin'}
         client?: { id: string} 
         cookies?: {refreshToken: string}
+        query: {page: number}
     }
     // interface Response {
     //     status?: { id: string} 

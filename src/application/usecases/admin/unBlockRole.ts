@@ -1,11 +1,4 @@
-interface User {
-    userId: string;
-}
-
-interface Client {
-    clientId: string;
-}
-
+ 
 export interface AdminRepositary {
     unBlockUser(userId: string): void;
     unBlockClient(clientId: string): void;
@@ -14,8 +7,7 @@ export interface AdminRepositary {
 export class UnBlockUser {
     constructor(private adminRepositary: AdminRepositary) { }
 
-    async execute(user: User) {
-        const { userId } = user;
+    async execute(userId: string) { 
         const blockedUser = await this.adminRepositary.unBlockUser(userId);
 
         return blockedUser;
@@ -25,8 +17,7 @@ export class UnBlockUser {
 export class UnBlockClient {
     constructor(private adminRepositary: AdminRepositary) { }
 
-    async execute(client: Client) {
-        const { clientId } = client;
+    async execute(clientId: string) { 
         const blockedClient = await this.adminRepositary.unBlockClient(clientId);
 
         return blockedClient;

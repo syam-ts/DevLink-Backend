@@ -1,6 +1,8 @@
  
 interface Admin {
- email: string
+  _id: string
+  role: string
+  email: string
  password: string
 };
 

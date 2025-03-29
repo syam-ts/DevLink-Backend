@@ -670,8 +670,8 @@ export const clientController = {
       if (!req.user || !req.user.id) {
         return res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const { id: clientId} = req.user;
-      const { currentPage } = req.query;
+      const { id: clientId} = req.user
+      const currentPage = Number(req.query.currentPage)
       const response = await allClientUseCases.viewWalletUseCase.execute(
         clientId,
         currentPage
