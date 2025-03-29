@@ -26,7 +26,7 @@ const server = http.createServer(app);
 
 initializeSocket(server);
 
-const PORT: number = (process.env.PORT as any) || 3000;
+const PORT = (process.env.PORT as string) || 3000;
 
 (async () => {
   await connectDB();

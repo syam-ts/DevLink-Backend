@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { Response, NextFunction } from "express";
+import { Response, NextFunction, Request } from "express";
 import { HttpStatusCode } from "../../../../helper/constants/enums";
 import { StatusMessage } from "../../../../helper/constants/stausMessages";
 
@@ -10,7 +10,7 @@ interface DecodedUser {
   exp: number;
 }
 
-const verifyToken = (req: any, res: Response, next: NextFunction): any => {
+const verifyToken = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(" ")[1];  
 
   if (!token) {

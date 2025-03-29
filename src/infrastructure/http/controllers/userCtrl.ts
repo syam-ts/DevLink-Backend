@@ -6,6 +6,7 @@ import {
 import { HttpStatusCode } from "../../../helper/constants/enums";
 import { StatusMessage } from "../../../helper/constants/stausMessages";
 import generateTokens from "../../../utils/generateTokens";
+import { Error } from "mongoose";
 
 export const userController = {
   signupUser: async (req: Request, res: Response) => {

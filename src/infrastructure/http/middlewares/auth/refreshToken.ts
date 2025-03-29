@@ -1,7 +1,13 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import generateTokens from "../../../../utils/generateTokens";
+import { Request, Response } from "express";
 
-const refreshToken = (req: any, res: any) => {
+interface User {
+    _id: string
+    role: string
+  };
+
+const refreshToken = (req: Request, res: Response) => {
     const refreshToken = req.cookies.refreshToken; 
 
     if (!refreshToken)
@@ -10,13 +16,13 @@ const refreshToken = (req: any, res: any) => {
     jwt.verify(
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET as string,
-        (err: any, decoded: any) => {
+        (err: jwt.VerifyErrors | null, decoded: string | JwtPayload | undefined) => {
             if (err)
                 return res
                     .status(403)
                     .json({ message: "Invalid or expired refresh token" });
 
-            const { accessToken } = generateTokens(decoded);
+            const { accessToken } = generateTokens(decoded as User);
             res.json({ accessToken });
         }
     );

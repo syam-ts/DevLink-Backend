@@ -1,3 +1,4 @@
+import { Socket } from "socket.io";
 import { ChatModel } from "../../domain/entities/Chat";
 
 const socket = require("socket.io");
@@ -15,7 +16,7 @@ interface Chat {
 }
 
 
-const initializeSocket = (server: any) => {
+const initializeSocket = (server: Socket) => {
   const io = socket(server, {
     cors: {
       origin: process.env.FRONTEND_ORIGIN || "http://localhost:5173",
@@ -24,17 +25,23 @@ const initializeSocket = (server: any) => {
     },
   });
 
-  io.on("connection", (socket: any) => {
+  io.on("connection", (socket: Socket) => {
 
     console.log(`New client connected: ${socket.id}`);
 
-    socket.on("joinChat", ({ name, roleId, targetId }: any) => {
+    socket.on("joinChat", ({ name, roleId, targetId }: {name: string, roleId: string, targetId: string}) => {
       const roomId = [roleId, targetId].sort().join("_");
       console.log(`User ${name} with ID ${roleId} joined chat with ${targetId}`);
       socket.join(roomId);
     });
 
-    socket.on("sendMessage", async ({ name, roleType, roleId, targetId, text }: any) => {
+    socket.on("sendMessage", async ({ name, roleType, roleId, targetId, text }: {
+      name: string,
+      roleType: string,
+      roleId: string,
+      targetId: string,
+      text: string,
+    }) => {
       try {
       const roomId = [roleId, targetId].sort().join("_");
      
@@ -74,7 +81,7 @@ const initializeSocket = (server: any) => {
         await chat.save();
 
         io.to(roomId).emit("messageReceived", { name, text, roleType });
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.log(err)
       }
 

@@ -1,17 +1,19 @@
 import cron from 'node-cron';
-import { ContractModel } from '../../domain/entities/Contract';
+import { ContractDocument, ContractModel } from '../../domain/entities/Contract';
 import { UserModel } from '../../domain/entities/User';
 import { JobPostModel } from '../../domain/entities/JobPost';
 
 type Id = string;
 
 const sendingContractFinishRequest = async (jobPostId: Id, userId: Id, contractId: Id) => {
-     const currentContract: any = await ContractModel.findById(contractId).exec();
-     const updateJobPost: any = await JobPostModel.findByIdAndUpdate(jobPostId, {
+     const currentContract = await ContractModel.findById(contractId).lean<ContractDocument>().exec();
+     const updateJobPost = await JobPostModel.findByIdAndUpdate(jobPostId, {
       status: 'finished'
      }, {
       update: true
      });
+     if(!currentContract) throw new Error('Contract not exists');
+     console.log('updateJobPost: ',updateJobPost);
      
 
      if(currentContract.status === 'closed') {
@@ -34,7 +36,7 @@ const sendingContractFinishRequest = async (jobPostId: Id, userId: Id, contractI
 } 
 
 
-export const startContractHelperFn = async (timer: any, jobPostId: Id, userId: Id, contractId: Id) => {
+export const startContractHelperFn = async (timer: string, jobPostId: Id, userId: Id, contractId: Id) => {
   console.log('TIMER : ', timer)
 
    const schedule: string = `*/${timer} * * * * *`;  // This will run every second
