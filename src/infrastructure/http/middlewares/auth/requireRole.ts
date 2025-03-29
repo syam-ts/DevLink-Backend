@@ -3,14 +3,17 @@ import { HttpStatusCode } from "../../../../helper/constants/enums";
 import { StatusMessage } from "../../../../helper/constants/stausMessages";
 
 const requireRole = (role: string) => {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, res: Response, next: NextFunction): void => {
     if (!req.user || req.user.role !== role) {
-      return res
-        .status(HttpStatusCode.FORBIDDEN)
-        .json({ message: StatusMessage[HttpStatusCode.FORBIDDEN] });
+      res.status(HttpStatusCode.FORBIDDEN).json({
+        message: StatusMessage[HttpStatusCode.FORBIDDEN],
+      });
+      return;  
     }
-    next();
+    
+    next(); 
   };
 };
+
 
 export { requireRole };

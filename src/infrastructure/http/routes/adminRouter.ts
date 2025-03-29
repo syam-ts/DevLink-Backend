@@ -19,8 +19,6 @@ const {
     viewRoleInfo,
     getWallet,
     logoutAdmin,
-    searchUser,
-    searchClient,
     sortClient,
     verifyAccept,
     blockUser,
@@ -54,8 +52,6 @@ adminRouter.get('/viewSingleContract/:contractId', verifyToken, requireRole(ADMI
 adminRouter.post('/login', loginAdmin);
 adminRouter.post('/logout', logoutAdmin);
 adminRouter.post('/refresh-token', refreshToken);
-adminRouter.post('/getAllUsers/search?', verifyToken, requireRole(ADMIN), searchUser);
-adminRouter.post('/getAllClients/search?', verifyToken, requireRole(ADMIN), searchClient);
 adminRouter.post('/getAllClients/sort?', verifyToken, requireRole(ADMIN), sortClient);
 
 adminRouter.put('/verifyClient/accept', verifyToken, requireRole(ADMIN), verifyAccept);

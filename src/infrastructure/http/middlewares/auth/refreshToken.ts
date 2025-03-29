@@ -7,11 +7,11 @@ interface User {
     role: string
   };
 
-const refreshToken = (req: Request, res: Response) => {
+const refreshToken = (req: Request, res: Response): void => {
     const refreshToken = req.cookies.refreshToken; 
 
     if (!refreshToken)
-        return res.status(401).json({ message: "No refresh token" });
+          res.status(401).json({ message: "No refresh token" });
 
     jwt.verify(
         refreshToken,
@@ -26,6 +26,7 @@ const refreshToken = (req: Request, res: Response) => {
             res.json({ accessToken });
         }
     );
+    return;
 };
 
 export default refreshToken;

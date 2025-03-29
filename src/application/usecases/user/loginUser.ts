@@ -1,4 +1,4 @@
-export interface UserRepositary {
+export interface UserRepository {
     findUserByEmailAndPassword(
         email: string,
         password: string
@@ -15,10 +15,10 @@ interface User {
 }
 
 export class LoginUser {
-    constructor(private userRepositary: UserRepositary) { }
+    constructor(private userRepository: UserRepository) { }
 
     async execute(theUser: User) {
-        const user = await this.userRepositary.findUserByEmailAndPassword(
+        const user = await this.userRepository.findUserByEmailAndPassword(
             theUser.email,
             theUser.password
         );

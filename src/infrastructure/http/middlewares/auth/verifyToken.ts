@@ -10,13 +10,13 @@ interface DecodedUser {
   exp: number;
 }
 
-const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers.authorization?.split(" ")[1];  
+const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
+  const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
-    res
-      .status(HttpStatusCode.UNAUTHORIZED)
-      .json({ message: StatusMessage[HttpStatusCode.UNAUTHORIZED] });
+    res.status(HttpStatusCode.UNAUTHORIZED).json({
+      message: StatusMessage[HttpStatusCode.UNAUTHORIZED],
+    });
     return;
   }
 
@@ -25,13 +25,17 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
       token,
       process.env.ACCESS_TOKEN_SECRET as string
     ) as DecodedUser;
+    
     req.user = { id: decoded._id, role: decoded.role };
-    next();
+    
+    return next();  
   } catch (error) {
-    return res.status(HttpStatusCode.UNAUTHORIZED).json({
+    res.status(HttpStatusCode.UNAUTHORIZED).json({
       message: error,
     });
+    return; 
   }
 };
+
 
 export { verifyToken };

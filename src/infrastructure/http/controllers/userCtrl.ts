@@ -9,7 +9,7 @@ import generateTokens from "../../../utils/generateTokens";
 import { Error } from "mongoose";
 
 export const userController = {
-  signupUser: async (req: Request, res: Response) => {
+  signupUser: async (req: Request, res: Response): Promise<void> => {
     try {
       const otp = await allUserUseCases.signupUseCase.execute(req.body);
 
@@ -21,30 +21,36 @@ export const userController = {
           success: true,
         });
       }
-    } catch (err: any) {
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-        message: err.message,
-        success: false,
-      });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  verifyOtp: async (req: Request, res: Response) => {
+  verifyOtp: async (req: Request, res: Response): Promise<void> => {
     try {
       const user = await allUserUseCases.verifyUserUseCase.execute(req.body);
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         success: true,
       });
-    } catch (err: any) {
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-        message: err.message,
-        success: false,
-      });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  resendOtp: async (req: Request, res: Response) => {
+  resendOtp: async (req: Request, res: Response): Promise<void> => {
     try {
       const user = await allUserUseCases.signupUseCase.execute(req.body);
 
@@ -53,15 +59,18 @@ export const userController = {
         newOtp: user,
         success: true,
       });
-    } catch (err: any) {
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-        message: err.message,
-        success: false,
-      });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  verifyEmail: async (req: Request, res: Response) => {
+  verifyEmail: async (req: Request, res: Response): Promise<void> => {
     try { 
       const response = await allUserUseCases.verifyEmailUseCase.execute(
         req.body.email
@@ -72,14 +81,18 @@ export const userController = {
         data: response,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, sucess: false });
+    } catch (err) {
+      if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  resetPassword: async (req: Request, res: Response) => {
+  resetPassword: async (req: Request, res: Response): Promise<void> => {
     try { 
       let { userId } = req.params,
         { password } = req.body;
@@ -91,10 +104,14 @@ export const userController = {
       res
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, sucess: false });
+    } catch (err) {
+      if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
@@ -123,10 +140,14 @@ export const userController = {
         refreshToken,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
@@ -159,10 +180,14 @@ export const userController = {
         refreshToken,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
@@ -175,19 +200,23 @@ export const userController = {
         data: clients,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, sucess: false });
+    } catch (err) {
+      if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  getProfile: async (req: Request, res: Response) => {
+  getProfile: async (req: Request, res: Response): Promise<void> => {
     try {
        if (!req.user || !req.user.id) {
-        return res.status(401).json({ message: "Unauthorized", success: false });
+         res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const { id: userId} = req.user;
+      const userId = String(req.user?.id);
       const user = await allUserUseCases.getProfileUseCase.execute(userId);
 
       res.status(HttpStatusCode.OK).json({
@@ -195,20 +224,24 @@ export const userController = {
         data: user,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, sucess: false });
+    } catch (err) {
+      if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  alterProfile: async (req: Request, res: Response) => {
+  alterProfile: async (req: Request, res: Response): Promise<void> => {
     try {
       const { type } = req.params;
        if (!req.user || !req.user.id) {
-        return res.status(401).json({ message: "Unauthorized", success: false });
+         res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const { id: userId} = req.user;
+      const userId = String(req.user?.id);
       const profileData = req.body;
 
       const response = await allUserUseCases.alterProfileUseCase.execute(
@@ -222,14 +255,18 @@ export const userController = {
         data: response,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, sucess: false });
+    } catch (err) {
+      if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  logoutUser: async (req: Request, res: Response) => {
+  logoutUser: async (req: Request, res: Response): Promise<void> => {
     try {
       res.clearCookie("refreshToken", {
         httpOnly: true,
@@ -240,14 +277,18 @@ export const userController = {
       res
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, sucess: false });
+    } catch (err) {
+      if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  listHomeJobs: async (req: Request, res: Response) => {
+  listHomeJobs: async (req: Request, res: Response): Promise<void> => {
     try {
       const { type } = req.params;
       const response = await allUserUseCases.listHomeJobsUseCase.execute(type);
@@ -257,20 +298,24 @@ export const userController = {
         data: response,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  getSelectedJobs: async (req: Request, res: Response) => {
+  getSelectedJobs: async (req: Request, res: Response): Promise<void> => {
     try {
       const { jobsType } = req.params; 
      if (!req.user || !req.user.id) {
-        return res.status(401).json({ message: "Unauthorized", success: false });
+         res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const { id: userId} = req.user; 
+      const userId = String(req.user?.id);
       const currentPage: number = Number(req.query.currentPage) || 1;
 
       const response = await allUserUseCases.getSelectedJobsUseCase.execute(
@@ -284,14 +329,18 @@ export const userController = {
         data: response,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  createProposal: async (req: Request, res: Response) => {
+  createProposal: async (req: Request, res: Response): Promise<void> => {
     try {
       const { userId, jobPostId, description, bidAmount, bidDeadline } =
         req.body.body;
@@ -308,19 +357,23 @@ export const userController = {
         data: response,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  viewProposals: async (req: Request, res: Response) => {
+  viewProposals: async (req: Request, res: Response): Promise<void> => {
     try {
        if (!req.user || !req.user.id) {
-        return res.status(401).json({ message: "Unauthorized", success: false });
+         res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const { id: userId} = req.user;
+      const userId = String(req.user?.id);
       const response = await allUserUseCases.viewProposalsUseCase.execute(
         userId
       );
@@ -330,14 +383,18 @@ export const userController = {
         proposals: response,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  allNotifications: async (req: Request, res: Response) => {
+  allNotifications: async (req: Request, res: Response): Promise<void> => {
     try {
       const { userId } = req.params;
       const allNotifications =
@@ -348,31 +405,35 @@ export const userController = {
         notifications: allNotifications,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  // closingContract: async (req: Request, res: Response) => {
+  // closingContract: async (req: Request, res: Response): Promise<void> => {
   //     try{
   //           const { contractId, description, progress } = req.body;
 
   //         const closedContract = await allUserUseCases.closeContractUseCase.execute(contractId, description, progress);
 
   //         res.status(HttpStatusCode.OK).json({message: 'Contract closed successfully', success: true});
-  //     }catch(err: any) {
+  //     }catch(err) {
   //         res.status(500).json({message: err.message, success: false});
   //     }
   // },
 
-  boostAccount: async (req: Request, res: Response) => {
+  boostAccount: async (req: Request, res: Response): Promise<void> => {
     try {
        if (!req.user || !req.user.id) {
-        return res.status(401).json({ message: "Unauthorized", success: false });
+         res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const { id: userId} = req.user;
+      const userId = String(req.user?.id);
       const paymentUrl = await allUserUseCases.boostAccountUseCase.execute();
 
       res.status(HttpStatusCode.OK).json({
@@ -380,19 +441,23 @@ export const userController = {
         url: paymentUrl,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  bosstSuccess: async (req: Request, res: Response) => {
+  bosstSuccess: async (req: Request, res: Response): Promise<void> => {
     try {
        if (!req.user || !req.user.id) {
-        return res.status(401).json({ message: "Unauthorized", success: false });
+         res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const { id: userId} = req.user;
+      const userId = String(req.user?.id);
       const response = await allUserUseCases.boostSuccessUseCase.execute(
         userId
       );
@@ -402,14 +467,18 @@ export const userController = {
         response: response,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  getSingleJobPost: async (req: Request, res: Response) => {
+  getSingleJobPost: async (req: Request, res: Response): Promise<void> => {
     try {
       const { jobPostId } = req.params;
       const jobPost = await allUserUseCases.getSingleJobPostUseCase.execute(
@@ -421,19 +490,23 @@ export const userController = {
         jobPost,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  viewContracts: async (req: Request, res: Response) => {
+  viewContracts: async (req: Request, res: Response): Promise<void> => {
     try { 
        if (!req.user || !req.user.id) {
-        return res.status(401).json({ message: "Unauthorized", success: false });
+          res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const { id: userId} = req.user;
+      const userId = String(req.user?.id);
       const { contractViewType } = req.params;
       const currentPage: number = Number(req.query.currentPage) || 1;
       const contracts = await allUserUseCases.viewContractsUseCase.execute(
@@ -446,14 +519,18 @@ export const userController = {
         data: contracts,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  submitProject: async (req: Request, res: Response) => {
+  submitProject: async (req: Request, res: Response): Promise<void> => {
     try {
       const { contractId } = req.params;
       const body = req.body.formData;
@@ -467,10 +544,14 @@ export const userController = {
         data: response,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
@@ -485,10 +566,14 @@ export const userController = {
         queryResult: response,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
@@ -496,9 +581,9 @@ export const userController = {
     try {
       const { jobPostId } = req.body;
       if (!req.user || !req.user.id) {
-        return res.status(401).json({ message: "Unauthorized", success: false });
+         res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const { id: userId} = req.user;
+      const userId = String(req.user?.id);
       const response = await allUserUseCases.addToWishlistUseCase.execute(
         userId,
         jobPostId
@@ -508,19 +593,23 @@ export const userController = {
         message: StatusMessage[HttpStatusCode.CREATED],
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
   viewAllWishlist: async (req: Request, res: any) => {
     try {
       if (!req.user || !req.user.id) {
-        return res.status(401).json({ message: "Unauthorized", success: false });
+         res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const { id: userId} = req.user;
+      const userId = String(req.user?.id);
       const wishlist = await allUserUseCases.viewAllWishlistUseCase.execute(
         userId
       );
@@ -530,10 +619,14 @@ export const userController = {
         wishlist,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
@@ -549,20 +642,24 @@ export const userController = {
       res
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-    } catch (err: any) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  viewWalletUser: async (req: Request, res: Response) => {
+  viewWalletUser: async (req: Request, res: Response): Promise<void> => {
     try {
       if (!req.user || !req.user.id) {
-        return res.status(401).json({ message: "Unauthorized", success: false });
+          res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const { id: userId} = req.user;
-      const { currentPage } = req.query;
+      const userId = String(req.user?.id);
+      const currentPage = Number(req.query.currentPage);
       const response = await allUserUseCases.viewWalletUserUseCase.execute(
         userId,
         currentPage
@@ -573,15 +670,18 @@ export const userController = {
         wallet: response,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(500)
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  viewSingleContract: async (req: Request, res: Response) => {
+  viewSingleContract: async (req: Request, res: Response): Promise<void> => {
     try {
       const { contractId } = req.params;
       const contract =
@@ -592,20 +692,23 @@ export const userController = {
         contract,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(500)
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  getAllInvites: async (req: Request, res: Response) => {
+  getAllInvites: async (req: Request, res: Response): Promise<void> => {
     try {
       if (!req.user || !req.user.id) {
-        return res.status(401).json({ message: "Unauthorized", success: false });
+         res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const { id: userId} = req.user;
+      const userId = String(req.user?.id);
       const response = await allUserUseCases.getAllInvitesUseCase.execute(
         userId
       );
@@ -615,15 +718,18 @@ export const userController = {
         invites: response,
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(500)
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  rejectInvite: async (req: Request, res: Response) => {
+  rejectInvite: async (req: Request, res: Response): Promise<void> => {
     try {
       const { inviteId } = req.params;
       const response = await allUserUseCases.rejectInviteUseCase.execute(
@@ -633,15 +739,18 @@ export const userController = {
       res
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-    } catch (err: any) {
-      res
-        .status(500)
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 
-  searchJobs: async (req: Request, res: Response) => {
+  searchJobs: async (req: Request, res: Response): Promise<void> => {
     try {
       const { input }: { input: string } = req.body;
       const jobs = await allUserUseCases.searchJobsUseCase.execute(input);
@@ -653,20 +762,23 @@ export const userController = {
           jobs,
           success: true,
         });
-    } catch (err: any) {
-      res
-        .status(500)
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
-  withdrawMoneyByUser: async (req: Request, res: Response) => {
+  withdrawMoneyByUser: async (req: Request, res: Response): Promise<void> => {
     try {
       const { amount, accountNumber, balance, type } = req.body;
       if (!req.user || !req.user.id) {
-        return res.status(401).json({ message: "Unauthorized", success: false });
+         res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const { id: userId} = req.user;
+      const userId = String(req.user?.id);
 
       const response = await allUserUseCases.withdrawMoneyByUserUseCase.execute(
         userId,
@@ -680,11 +792,14 @@ export const userController = {
         message: StatusMessage[HttpStatusCode.CREATED],
         success: true,
       });
-    } catch (err: any) {
-      res
-        .status(500)
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: err.message, success: false });
+    } catch (err) {
+       if (err instanceof Error) { 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      }
+      return;
     }
   },
 };
