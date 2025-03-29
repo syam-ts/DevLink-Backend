@@ -1,9 +1,12 @@
 import { User } from "../../../domain/entities/User";
 import { JobPostDocument } from "../../../domain/entities/JobPost";
+import { Client } from "../../../domain/entities/Client";
 
 export interface UserRepository {
-  findAllClients(): Promise<User>;
-  listHomeJobs(type: string): Promise<JobPostDocument>;
+  findAllClients(): Promise<Client[]>;
+  listHomeJobs(type: string): Promise<{latestJobs?: JobPostDocument[],
+      allJobs?: JobPostDocument[], totalJobs?: number,
+       totalHours?: unknown, verifiedAccounts?: number}>;
 }
 
 export class getHomeUser {

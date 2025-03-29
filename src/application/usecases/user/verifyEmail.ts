@@ -1,6 +1,14 @@
-import { User } from "../../../domain/entities/User";
+// import { User } from "../../../domain/entities/User";
 import nodemailer from "nodemailer";
 import generateOtp from "../../../utils/otp-gen";
+
+interface User {
+    _id: string,
+    name: string,
+    email: string,
+    password: string,
+    mobile: number,
+}
 
 export interface UserRepository {
     findUserByEmail(email: string): Promise<User>;

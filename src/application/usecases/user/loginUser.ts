@@ -1,18 +1,20 @@
+interface User { 
+    _id: string
+    name: string
+    email: string
+    password: string
+    profilePicture: string
+    isBlocked: boolean
+    isProfileFilled: boolean 
+    role?: string;
+}
 export interface UserRepository {
     findUserByEmailAndPassword(
         email: string,
         password: string
-    ): Promise<User | null>;
+    ): Promise<User>;
 }
 
-interface User {
-    user: User;
-    _id: string;
-    name: string;
-    email: string;
-    password: string;
-    role: string;
-}
 
 export class LoginUser {
     constructor(private userRepository: UserRepository) { }

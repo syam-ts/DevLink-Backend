@@ -1,23 +1,8 @@
-interface Invite {
-  clientId?: String
-  userId?: String
-  jobPostData?: {
-    title: string
-    description: string
-    expertLevel: string
-    location: string
-    requiredSkills: string[]
-    amount: number
-    paymentType: String
-    estimateTimeinHours: Number
-    projectType: String
-  }
-  status: String
-  createdAt: Date
-};
+import { InviteDocument } from "../../../domain/entities/Invite";
+  
 
 export interface UserRepositary {
-  rejectInvite(inviteId: string): Promise<Invite>;
+  rejectInvite(inviteId: string): Promise<InviteDocument>;
 }
 
 export class RejectInvite {

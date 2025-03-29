@@ -5,7 +5,7 @@ export interface UserRepositary {
     userId: string,
     contractViewType: string,
     currentPage: number
-  ): Promise<ContractDocument>;
+  ): Promise<{contract: ContractDocument[], totalPages: number}>;
 }
 
 export class ViewContracts {

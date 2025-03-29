@@ -1,6 +1,6 @@
-import { User } from "../../../domain/entities/User";
+  import { User } from "../../../domain/entities/User";
 
-export interface UserRepositary {
+export interface UserRepository {
   alterUserProfile(
     userId: string,
     editData: ProfileData,
@@ -9,11 +9,11 @@ export interface UserRepositary {
 };
 
 interface ProfileData {
-  editData: EditData
-  unchangedData: EditData
+  editData: UserData
+  unchangedData: UserData
 };
 
-interface EditData {
+interface UserData {
   [key: string]: string | number | string[]
   name: string
   budget: number
@@ -31,11 +31,11 @@ interface EditData {
 }
 
 export class AlterUserProfile {
-  constructor(private userRepositary: UserRepositary) {}
+  constructor(private userRepository: UserRepository) {}
 
   async execute(userId: string, profileData: ProfileData, type: string) {
     if (type === "verify") {
-      const updatedUser = await this.userRepositary.alterUserProfile(
+      const updatedUser = await this.userRepository.alterUserProfile(
         userId,
         profileData,
         type
@@ -54,7 +54,7 @@ export class AlterUserProfile {
         }
       }
       const type: string = "edit"; 
-      const updatedUser = await this.userRepositary.alterUserProfile(
+      const updatedUser = await this.userRepository.alterUserProfile(
         userId,
         profileData,
         type

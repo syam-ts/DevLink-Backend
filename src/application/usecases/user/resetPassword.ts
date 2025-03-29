@@ -2,7 +2,7 @@ import { User } from "../../../domain/entities/User";
 import bcrypt from "bcrypt";
 
 export interface UserRepositary {
-    resetPassword(email: string, password: string): Promise<User>;
+    resetPassword(email: string, password: string): Promise<string>;
 }
 
 export class ResetPassword {

@@ -1,35 +1,50 @@
-interface User {
-  name: string
-  email: string
-  budget: number
-  location: string
-  mobile: number
-  skills: string[]
-  profilePicture: string
-  domain: string
-  rating: number
-  review: string[]
-  githubLink: string
-  description: string
-  whyHireMe: string
-  experience: string
-  education: string[]
-  isBoosted: boolean
-  isProfileFilled: boolean
-  workHistory: string[]
-  totalJobs: number
-  totalHours: number
-};
-
-export interface UserRepositary {
+interface User {  
+  _id: string;
+  name: string;
+  email: string;
+  password: string;
+  mobile: number;
+  skills: string[];
+  profilePicture: string;
+  location: string;
+  description: string;
+  experience: string;
+  education: string;
+  budget: number;
+  rating: number;
+  domain: string; 
+  githubLink: string;
+  totalJobs: number;
+  totalHours: number;
+  whyHireMe: string;
+  completedJobs: string;
+  inProgress: string;
+  review?: [
+    {
+      theReview: string;
+      rating: number;
+      companyName: string;
+    }
+  ];
+  workHistory: string[];
+  isEditRequest: boolean;
+  isProfileFilled: boolean;
+  request: string[];
+  wallet: string[];
+  isBlocked: boolean;
+  isBoosted: boolean;
+  createdAt: string;
+  
+}
+export interface UserRepository {
   findUserById(userId: string): Promise<User>;
 }
 
 export class GetUserProfile {
-  constructor(private userRepositary: UserRepositary) {}
+  constructor(private userRepository: UserRepository) {}
 
   async execute(userId: string) {
-    const user = await this.userRepositary.findUserById(userId); 
+    const user = await this.userRepository.findUserById(userId); 
 
     return {
       name: user.name,
@@ -54,4 +69,4 @@ export class GetUserProfile {
       totalHours: user.totalHours,
     };
   }
-}
+};

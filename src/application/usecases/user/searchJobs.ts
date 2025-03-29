@@ -1,7 +1,7 @@
 import { JobPostDocument } from "../../../domain/entities/JobPost";
 
 export interface UserRepository {
-    searchJobsByTitle(input: string): Promise<JobPostDocument>;
+    searchJobsByTitle(input: string): Promise<JobPostDocument[]>;
 }
 
 export class SearchJobs {

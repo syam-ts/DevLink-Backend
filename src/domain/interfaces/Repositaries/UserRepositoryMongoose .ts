@@ -8,12 +8,13 @@ import { ContractDocument, ContractModel } from "../../entities/Contract";
 import { AdminModel } from "../../entities/Admin";
 import { Notification, NotificationModel } from "../../entities/Notification";
 import mongoose, { isObjectIdOrHexString } from "mongoose";
-import { InviteModel } from "../../entities/Invite";
+import { InviteDocument, InviteModel } from "../../entities/Invite";
 import { WishlistModel } from "../../entities/WIshlist";
 
 type Id = string;
 
-interface User {
+interface User { 
+  role?: string;
   _id: string;
   name: string;
   email: string;
@@ -27,13 +28,20 @@ interface User {
   education: string;
   budget: number;
   rating: number;
-  domain: string;
+  domain: string; 
   githubLink: string;
   totalJobs: number;
   totalHours: number;
   whyHireMe: string;
   completedJobs: string;
   inProgress: string;
+  review?: [
+    {
+      theReview: string;
+      rating: number;
+      companyName: string;
+    }
+  ];
   workHistory: string[];
   isEditRequest: boolean;
   isProfileFilled: boolean;
@@ -42,6 +50,7 @@ interface User {
   isBlocked: boolean;
   isBoosted: boolean;
   createdAt: string;
+  
 }
 
 interface Invite {
@@ -89,26 +98,74 @@ interface Wallet {
 export class UserRepositoryMongoose implements UserRepositary {
 
   async createUser(user: User): Promise<User> {
-    const salt: number = parseInt(process.env.BCRYPT_SALT as string);
+    const salt: number = parseInt(process.env.BCRYPT_SALT as string, 10);
     const hashedPassword = await bcrypt.hash(user.password, salt);
 
     const createdUser = new UserModel({
-      name: user.name,
-      email: user.email,
-      password: hashedPassword,
-      mobile: user.mobile,
-      isBlocked: false,
+        name: user.name,
+        email: user.email,
+        password: hashedPassword,
+        mobile: user.mobile,
+        role: user.role ?? "user",
+        skills: user.skills ?? [],
+        profilePicture: user.profilePicture ?? "",
+        location: user.location ?? "",
+        description: user.description ?? "",
+        experience: user.experience ?? "",
+        education: user.education ?? "",
+        budget: user.budget ?? 0,
+        rating: user.rating ?? 0,
+        domain: user.domain ?? "",
+        githubLink: user.githubLink ?? "",
+        totalJobs: user.totalJobs ?? 0,
+        totalHours: user.totalHours ?? 0,
+        whyHireMe: user.whyHireMe ?? "",
+        completedJobs: user.completedJobs ?? "",
+        inProgress: user.inProgress ?? "",
+        workHistory: user.workHistory ?? [],
+        isEditRequest: false,
+        isProfileFilled: false,
+        request: [],
+        wallet: [],
+        isBlocked: false,
+        isBoosted: false,
+        createdAt: new Date(),
     });
 
     const savedUser = await createdUser.save();
-    return {
-      name: savedUser.name,
-      email: savedUser.email,
-      password: savedUser.password,
-      mobile: savedUser.mobile,
-      isBlocked: false,
+
+    return { 
+        name: savedUser.name,
+        email: savedUser.email,
+        password: savedUser.password,
+        mobile: savedUser.mobile,
+        role: savedUser.role,
+        skills: savedUser.skills,
+        profilePicture: savedUser.profilePicture,
+        location: savedUser.location,
+        description: savedUser.description,
+        experience: savedUser.experience,
+        education: savedUser.education,
+        budget: savedUser.budget,
+        rating: savedUser.rating,
+        domain: savedUser.domain,
+        githubLink: savedUser.githubLink,
+        totalJobs: savedUser.totalJobs,
+        totalHours: savedUser.totalHours,
+        whyHireMe: savedUser.whyHireMe,
+        completedJobs: savedUser.completedJobs,
+        inProgress: savedUser.inProgress,
+        workHistory: savedUser.workHistory,
+        isEditRequest: savedUser.isEditRequest,
+        isProfileFilled: savedUser.isProfileFilled,
+        request: savedUser.request,
+        wallet: savedUser.wallet,
+        isBlocked: savedUser.isBlocked,
+        isBoosted: savedUser.isBoosted,
+        createdAt: savedUser.createdAt,
     } as User;
-  }
+}
+
 
   async signupUser(email: string): Promise<User | null> {
     const foundUser = this.findUserByEmail(email);
@@ -128,7 +185,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       email,
       password,
       mobile,
-    }: { name: string; email: string; password: string; mobile: number } =
+    } =
       user.user.data;
 
     if (Number(user.mailOtp) == Number(user.mailOtp)) {
@@ -181,31 +238,29 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-  async findUserById(_id: string): Promise< User> {
-    const user = await UserModel.findById(_id).lean<User>().exec();
+  async findUserById(userId: string): Promise<User> {
+    const user = await UserModel.findById(userId).lean<User>().exec();
     if (!user) throw new Error("User not found");
-    return user;
+    return user as User;
   }
 
-  async findUserByEmail(email: string): Promise<User | null> {
-    const user = await UserModel.findOne({ email }).exec();
-    if (!user) {
-      return null;
-    } else {
+  async findUserByEmail(email: string): Promise<User> {
+    const user = await UserModel.findOne({ email }).lean<User>().exec();
+    if (!user) throw new Error('user not found');
+ 
       return {
         _id: user._id,
         name: user.name,
         email: user.email,
         password: user.password,
         mobile: user.mobile,
-      } as User;
-    }
+      } as User; 
   }
 
   async findUserByEmailAndPassword(
     email: string,
     passwordUser: string
-  ): Promise<{user: User}> { 
+  ): Promise<User> { 
 
     const user = await UserModel.findOne({ email }).lean<User>().exec();
 
@@ -220,16 +275,14 @@ export class UserRepositoryMongoose implements UserRepositary {
       throw new Error("wrong password");
     }
 
-    return {
-      user: {
+    return { 
         _id: user._id,
         name: user.name,
         email: user.email,
         profilePicture: user.profilePicture,
         isBlocked: user.isBlocked,
-        isProfileFilled: user.isProfileFilled,
-      } as User,
-    };
+        isProfileFilled: user.isProfileFilled, 
+    } as User;
   }
 
   async findUserByOnlyEmail(
@@ -297,10 +350,10 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-  async findAllClients(): Promise<Client> {
+  async findAllClients(): Promise<Client[]> {
     const clients = await ClientModel.find({ isVerified: true })
       .limit(3)
-      .lean<Client>()
+      .lean<Client[]>()
       .exec();
       if(!clients) throw new Error('Clients not found');
 
@@ -321,7 +374,7 @@ export class UserRepositoryMongoose implements UserRepositary {
 
   async alterUserProfile(
     userId: string,
-    userData: {editData: User},
+    userData: {editData: User, unchangedData: User},
     type: string
   ): Promise<{user: User}> {
     const { editData } = userData;
@@ -1099,7 +1152,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     return foundedInvites;
   }
 
-  async rejectInvite(inviteId: string): Promise<Invite> {
+  async rejectInvite(inviteId: string): Promise<InviteDocument> {
     const updateInvite = await InviteModel.updateOne(
       { _id: inviteId },
       {
@@ -1108,11 +1161,10 @@ export class UserRepositoryMongoose implements UserRepositary {
       {
         new: true,
       }
-    ).lean<Invite>();
+    ).lean<InviteDocument>();
 
-    if (!updateInvite) throw new Error("Invite not Found");
-
-    return updateInvite;
+    if (!updateInvite) throw new Error("Invite not Found");  
+    return updateInvite as InviteDocument;
   }
 
   async searchJobsByTitle(input: string): Promise<JobPostDocument[]> {

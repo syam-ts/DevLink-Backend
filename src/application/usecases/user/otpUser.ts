@@ -1,15 +1,64 @@
-import { User } from "../../../domain/entities/User";
-
-export interface UserRepositary {
-    createUser(user: User): Promise<User>;
-    verifyOtp(user: User): Promise<User>;
+interface UserDoc {
+    name: string;
+    email: string;
+    mobile: number;
 }
 
-export class verifyOtp {
-    constructor(private userRepositary: UserRepositary) { }
+interface User {
+    role?: string;
+    _id: string;
+    name: string;
+    email: string;
+    password: string;
+    mobile: number;
+    skills: string[];
+    profilePicture: string;
+    location: string;
+    description: string;
+    experience: string;
+    education: string;
+    budget: number;
+    rating: number;
+    domain: string;
+    githubLink: string;
+    totalJobs: number;
+    totalHours: number;
+    whyHireMe: string;
+    completedJobs: string;
+    inProgress: string;
+    review?: [
+        {
+            theReview: string;
+            rating: number;
+            companyName: string;
+        }
+    ];
+    workHistory: string[];
+    isEditRequest: boolean;
+    isProfileFilled: boolean;
+    request: string[];
+    wallet: string[];
+    isBlocked: boolean;
+    isBoosted: boolean;
+    createdAt: string;
+}
 
-    async execute(user: User) {
-        const verifiedOtp = await this.userRepositary.verifyOtp(user);
+export interface UserRepository {
+    createUser(user: User): Promise<User>;
+    verifyOtp(user: {
+        mailOtp: string;
+        user: { name: string; email: string; password: string; mobile: number };
+    }): Promise<UserDoc>;
+}
+
+export class VerifyOtp {
+    constructor(private userRepository: UserRepository) { }
+
+    async execute(user: {
+        mailOtp: string;
+        user: { name: string; email: string; password: string; mobile: number };
+    }) {
+        const verifiedOtp = await this.userRepository.verifyOtp(user);
         return verifiedOtp;
     }
 }
