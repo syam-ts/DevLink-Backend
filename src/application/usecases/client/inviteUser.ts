@@ -6,7 +6,7 @@ export interface ClientRepository {
     clientId: string,
     jobPostId: string,
     description: string
-  ): InviteDocument;
+  ): Promise<InviteDocument>;
 }
 
 export class InviteUser {

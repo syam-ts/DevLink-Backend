@@ -7,7 +7,7 @@ interface ClientData {
 
 
 export interface ClientRepository {
-  editClientProfile(clientId: string, clientData: Client, unChangedData: Client): Client;
+  editClientProfile(clientId: string, clientData: Client, unChangedData: Client): Promise<Client>;
 }
 
 export class EditClientProfile {
@@ -17,7 +17,7 @@ export class EditClientProfile {
     const unChangedData = JSON.parse(JSON.stringify(clientData.editData));
     for (const key of Object.keys(clientData.editData) as Array<keyof Client>) {
       if (clientData.editData[key] === "") {
-        clientData.editData[key] = clientData.unhangedData[key]; // Ensure valid key access
+        clientData.editData[key] = clientData.unhangedData[key];  
       }
     }
     const client = await this.clientRepository.editClientProfile(

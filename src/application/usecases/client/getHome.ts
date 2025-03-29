@@ -1,9 +1,10 @@
 import { Client } from "../../../domain/entities/Client";
 import { JobPostDocument } from "../../../domain/entities/JobPost";
+import { User } from "../../../domain/entities/User";
 
 export interface ClientRepository {
-  findAllUsers(): Promise<Client>;
-  trendingJobs(): Promise<JobPostDocument>;
+  findAllUsers(): Promise<User[]>;
+  trendingJobs(): Promise<JobPostDocument[]>;
 }
 
 export class getHomeClient {

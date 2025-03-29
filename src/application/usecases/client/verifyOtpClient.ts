@@ -2,7 +2,8 @@ import { Client } from '../../../domain/entities/Client';
 
 export interface ClientRepositary {
    
-    verifyOtp(client: Client): Promise<Client>; 
+    verifyOtp(client: {mailOtp: number,user:{otp: string,data:{name: string, email: string, password: string}}}): 
+    Promise<Client | null>; 
 }
 
 export class verifyOtpClient {

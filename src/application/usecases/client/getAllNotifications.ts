@@ -1,7 +1,7 @@
 import { Notification } from "../../../domain/entities/Notification";
 
 export interface ClientRepository {
-    getAllNotifications(clientId: string): Promise<Notification>;
+    getAllNotifications(clientId: string): Promise<Notification[]>;
 }
 
 export class GetAllNotifications {

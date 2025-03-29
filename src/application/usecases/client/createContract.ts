@@ -1,4 +1,5 @@
-import { ContractDocument } from "../../../domain/entities/Contract";
+ 
+import { Notification } from "../../../domain/entities/Notification";
 
 export interface ClientRepository {
   createContract(
@@ -7,7 +8,8 @@ export interface ClientRepository {
     jobPostId: string,
     bidAmount: number,
     bidDeadline: string
-  ): ContractDocument;
+  ): Promise<{ newNotificationUser: Notification,
+      newNotificationClient: Notification}>;
 }
 
 export class CreateContract {

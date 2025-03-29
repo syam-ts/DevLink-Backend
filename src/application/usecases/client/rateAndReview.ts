@@ -1,3 +1,4 @@
+import { Notification } from "../../../domain/entities/Notification";
 import { User } from "../../../domain/entities/User";
 
 type Id = string;
@@ -9,7 +10,7 @@ export interface ClientRepository {
         notificationId: Id,
         rating: number,
         review: string
-    ): User;
+    ): Promise<{updateUser: User, removeExtra: Notification}>;
 }
 
 export class RateAndReview {

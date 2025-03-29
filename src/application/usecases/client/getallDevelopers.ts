@@ -1,7 +1,7 @@
 import { User } from "../../../domain/entities/User";
 
 export interface ClientRepository {
-    getallDevelopers(): Promise<User>;
+    getallDevelopers(): Promise<User[] | unknown>;
 }
 
 export class GetallDevelopers {

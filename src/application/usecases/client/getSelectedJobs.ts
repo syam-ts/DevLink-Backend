@@ -5,7 +5,7 @@ export interface UserRepository {
     userId: string,
     jobsType: string,
     currentPage: number
-  ): Promise<JobPostDocument>;
+  ): Promise<{jobs:JobPostDocument[], totalPages: number }>;
 }
 
 export class GetSelectedJobsClient {

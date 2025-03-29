@@ -10,7 +10,7 @@ import bcrypt from "bcrypt";
 import validator from "validator";
 import allCronJobs from "../../../helper/cron-jobs/index";
 import mongoose from "mongoose";
-import { InviteModel } from "../../entities/Invite";
+import { InviteDocument, InviteModel } from "../../entities/Invite";
 
 type Id = string;
 // export interface Notification {
@@ -193,7 +193,7 @@ async createClient(client: Client): Promise<Client> {
   async findClientByEmailAndPassword(
     email: string,
     password: string
-  ): Promise<Client | unknown> {
+  ): Promise<Client | null> {
     if (!email || !password) {
       throw new Error("Email, and password are required");
     }
@@ -202,7 +202,7 @@ async createClient(client: Client): Promise<Client> {
       throw new Error("Invalid email format");
     }
 
-    const client = await ClientModel.findOne({ email }).exec();
+    const client = await ClientModel.findOne({ email }).lean<Client>().exec();
 
     if (!client) {
       throw new Error("client not Found");
@@ -277,12 +277,12 @@ async createClient(client: Client): Promise<Client> {
     }
   }
 
-  async findAllUsers(): Promise<User[] | unknown> {
+  async findAllUsers(): Promise<User[]> {
     const users = await UserModel.find({
       $and: [{ isProfileFilled: true }, { isBlocked: false }],
     })
       .limit(4)
-      .lean()
+      .lean<User[]>()
       .exec();
       if (!users || users.length === 0) throw new Error("Users not found");
 
@@ -308,8 +308,8 @@ async createClient(client: Client): Promise<Client> {
     return "Password reset successfully!";
   }
 
-  async getClientProfile(clientId: Id): Promise<Client | unknown> {
-    const client = await ClientModel.findById(clientId); 
+  async getClientProfile(clientId: Id): Promise<Client> {
+    const client = await ClientModel.findById(clientId).lean<Client>().exec(); 
     if (!client) throw new Error("Client not found"); 
 
     return client;
@@ -344,7 +344,8 @@ async createClient(client: Client): Promise<Client> {
     return updatedAdmin;
   }
 
-  async editClientProfile(clientId: Id, editData: {}, unChangedData: {}): Promise<unknown> {
+  async editClientProfile(clientId: Id, editData: { editData: Partial<Client>, 
+    unhangedData: Client}, unChangedData: Client): Promise<Client> {
     const adminId = process.env.ADMIN_OBJECT_ID;
     const existingClient = await ClientModel.findById(clientId).lean<Client>(); 
     if(!existingClient) throw new Error('Client not exists');
@@ -1112,7 +1113,7 @@ async createClient(client: Client): Promise<Client> {
     clientId: Id,
     jobPostId: Id,
     description: string
-  ): Promise<Invite> {
+  ): Promise<InviteDocument> {
     const jobPostData = await JobPostModel.findById(jobPostId);
     if(!jobPostData) throw new Error('jobpost not found');
 
@@ -1164,7 +1165,7 @@ async createClient(client: Client): Promise<Client> {
     });
     console.log(newNotificationClient);
 
-    return savedInvite as Invite;
+    return savedInvite as InviteDocument;
   }
 
   async getSingleJobPost(jobPostId: string): Promise<JobPostDocument> {
@@ -1174,16 +1175,16 @@ async createClient(client: Client): Promise<Client> {
     return jobPost;
   }
 
-  async ViewInviteClient(clientId: string,inviteType: string): Promise<Invite> {
+  async ViewInviteClient(clientId: string,inviteType: string): Promise<InviteDocument> {
     let invite;
     if(inviteType === 'pending') {
        invite = await InviteModel.find({
         $and: [{ clientId: clientId }, { status: "pending" }],
-      }).lean<Invite>().exec();
+      }).lean<InviteDocument>().exec();
     } else {
       invite = await InviteModel.find({
         $and: [{ clientId: clientId }, { status: "rejected" }],
-      }).lean<Invite>().exec();    } 
+      }).lean<InviteDocument>().exec();    } 
 
     if (!invite) throw new Error("No invites found");
     return invite;
@@ -1237,10 +1238,10 @@ async createClient(client: Client): Promise<Client> {
     return contract;
   }
 
-  async searchDeveloper(input: string): Promise<User | unknown> {
+  async searchDeveloper(input: string): Promise<User> {
     const developers = await UserModel.find({
       name: { $regex: input, $options: "i" },
-    });
+    }).lean<User>().exec();
 
     if (!developers) throw new Error("No developer found");
 
