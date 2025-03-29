@@ -2,7 +2,7 @@ import { Client, ClientModel } from "../../entities/Client";
 import { User } from "../../entities/User";
 import { ClientRepositary } from "../../../application/usecases/client/signupClient";
 import { UserModel } from "../../entities/User";
-import { NotificationModel } from "../../entities/Notification";
+import { NotificationModel, Notification } from "../../entities/Notification";
 import { JobPostDocument, JobPostModel } from "../../entities/JobPost";
 import { AdminModel } from "../../entities/Admin";
 import { ContractDocument, ContractModel } from "../../entities/Contract";
@@ -13,14 +13,14 @@ import mongoose from "mongoose";
 import { InviteModel } from "../../entities/Invite";
 
 type Id = string;
-export interface Notification {
-  type: string;
-  message: string;
-  sender_id: Id;
-  reciever_id: Id;
-  extra: Extra;
-  createdAt: string;
-}
+// export interface Notification {
+//   type: string;
+//   message: string;
+//   sender_id: Id;
+//   reciever_id: Id;
+//   extra: Extra;
+//   createdAt: string;
+// }
 
 export interface Extra {
   userId: Id;
@@ -41,6 +41,7 @@ interface Invite {
     estimateTimeinHours: Number;
     projectType: String;
   };
+
   clientData: {
     companyName: string;
     email: string;
@@ -48,17 +49,60 @@ interface Invite {
   };
   status: String;
   createdAt: Date;
+};
+
+interface Wallet {
+  balance: number,
+  transactions: {
+    type: string
+       amount: number
+       from: string
+       fromId: string
+       createdAt: Date
+  }
+};
+
+interface ProjectSubmission {
+  contractId: string;
+  description: string;
+  progress: number;
+  attachedFile: string;
+  jobPostData: {
+    jobPostId: string;
+    title: string;
+    amount: number;
+  };
+  createdAt: Date;
+};
+
+  interface Proposal {
+        type: string,
+        UserId: mongoose.Types.ObjectId,
+        jobPostId: mongoose.Types.ObjectId,
+        jobPostInfo: string,
+        userData: User,
+        description?: string,
+        status?: string,
+        bidamount: number,
+        bidDeadline: number,
+        createdAt: Date
+    };
+
+interface CreateClient {
+  name: string
+  email: string
+  password: string
 }
 
 export class ClientRepositoryMongoose implements ClientRepositary {
-async createClient(client: {name?: string, email?: string, password?: string }): Promise<any> {
+async createClient(client: Client): Promise<Client> {
   if (!client.password) throw new Error("Password is required"); 
     
   const salt: number = 10;
     const hashedPassword = await bcrypt.hash(client.password, salt);
 
     const createdClient = new ClientModel({
-      name: client.name,
+      companyName: client.companyName,
       email: client.email,
       password: hashedPassword,
     });
@@ -66,10 +110,10 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     const savedClient = await createdClient.save();
 
     return {
-      name: savedClient.name,
-      email: savedClient.email,
-      password: savedClient.password,
-    } ;
+      companyName: savedClient.companyName as string,
+      email: savedClient.email as string,
+      password: savedClient.password as string,
+    } as Client;
   }
 
   async signupClient(email: string ): Promise<Client | null> { 
@@ -271,9 +315,10 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     return client;
   }
 
-  async profileVerification(clientId: Id, data: {}): Promise<any> {
+  async profileVerification(clientId: Id, data: {}): Promise<unknown> {
     const adminId = process.env.ADMIN_OBJECT_ID;
-    const existingClient: any = await ClientModel.findById(clientId);
+    const existingClient = await ClientModel.findById(clientId);
+    if(!existingClient) throw new Error('Client not Exists');
 
     if (existingClient.isEditRequest) throw new Error("Request already sended");  
 
@@ -299,9 +344,10 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     return updatedAdmin;
   }
 
-  async editClientProfile(clientId: Id, editData: {}, unChangedData: {}): Promise<any> {
+  async editClientProfile(clientId: Id, editData: {}, unChangedData: {}): Promise<unknown> {
     const adminId = process.env.ADMIN_OBJECT_ID;
-    const existingClient: any = await ClientModel.findById(clientId); 
+    const existingClient = await ClientModel.findById(clientId).lean<Client>(); 
+    if(!existingClient) throw new Error('Client not exists');
 
     if (existingClient.isEditRequest) {
       throw new Error("Request already sended");
@@ -332,19 +378,21 @@ async createClient(client: {name?: string, email?: string, password?: string }):
 
   async createJobPost(
     clientId: Id,
-    data: JobPostDocument | any
+    data: JobPostDocument 
   ): Promise<JobPostDocument> {
-    const client: any = await ClientModel.findById(clientId);
+    const client = await ClientModel.findById(clientId).lean<Client>();
+    if(!client) throw new Error('Client not found');
+
     //update client jobpost count
     const cilent = await ClientModel.findByIdAndUpdate(clientId, {
       $inc: {totalJobs: 1}
     }, {
       new: true
     });
-    let parsedEstimatedTimeInHours = parseInt(data.estimateTime);
-     if(data.payementType === 'hourly') {
-      parsedEstimatedTimeInHours = parseInt(data.estimateTime);
-      const totalAmount = data.estimateTime * data.amount;
+    let parsedEstimatedTimeInHours = Number(data.estimateTime);
+     if(data.paymentType === 'hourly') {
+      parsedEstimatedTimeInHours = Number(data.estimateTime);
+      const totalAmount = Math.floor(data.estimateTime * data.amount);
       data.amount = totalAmount; //updatig the total amount
      }
  
@@ -485,8 +533,8 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     return proposals;
   }
 
-  async getUserProfile(userId: Id): Promise<any> {
-    const user = await UserModel.findById(userId).exec();
+  async getUserProfile(userId: Id): Promise<User> {
+    const user = await UserModel.findById(userId).lean<User>().exec();
 
     if (!user) {
       throw new Error("User not found");
@@ -505,7 +553,7 @@ async createClient(client: {name?: string, email?: string, password?: string }):
         totalJobs: user.totalJobs,
         totalHours: user.totalHours,
         domain: user.domain,
-        githubLink: user.githubLinke,
+        githubLink: user.githubLink,
         whyHireMe: user.whyHireMe,
         education: user.education,
         completedJobs: user.completedJobs,
@@ -513,7 +561,7 @@ async createClient(client: {name?: string, email?: string, password?: string }):
         workHistory: user.workHistory,
       };
 
-      return userProfile;
+      return userProfile as User;
     }
   }
 
@@ -529,7 +577,7 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     clientId: Id,
     contractViewType: string,
     currentPage: number
-  ): Promise<ContractDocument | any> {
+  ): Promise<{contract: ContractDocument[], totalPages: number}> {
     const page_size: number = 3;
     const skip: number = (currentPage - 1) * page_size;
 
@@ -585,7 +633,9 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     }
   }
 
-  async viewWallet(clientId: Id, page: number): Promise<any> {
+  async viewWallet(clientId: Id, page: number): Promise<{
+    clientWallet: unknown, totalPages: number
+  }> {
     const PAGE_SIZE: number = 6;
     const skip: number = (page - 1) * PAGE_SIZE;
 
@@ -612,7 +662,7 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     ]);
 
     return {
-      ...clientWallet,
+      clientWallet,
       totalPages,
     };
   }
@@ -621,9 +671,9 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     role: string,
     roleId: Id,
     amount: number
-  ): Promise<any> {
+  ): Promise<string> {
     const adminId = process.env.ADMIN_OBJECT_ID;
-    const admin: any = await AdminModel.findById(adminId);
+    const admin = await AdminModel.findById(adminId);
 
     if (!admin) throw new Error("Unknown Error Occured");
     const walletEntry = {
@@ -653,9 +703,8 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     return "success";
   }
 
-  async viewSubmissions(clientId: Id): Promise<any> {
-    const client: any = await ClientModel.findById(clientId).exec();
-
+  async viewSubmissions(clientId: Id): Promise<unknown> {
+    const client = await ClientModel.findById(clientId).lean<Client>().exec(); 
     if (!client) throw new Error("Client not found");
 
     return client.projectSubmissions;
@@ -667,9 +716,10 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     jobPostId: Id,
     bidAmount: number,
     bidDeadline: string
-  ): Promise<any> {
+  ): Promise<{ newNotificationUser: Notification,
+    newNotificationClient: Notification}> {
     // updating job post status
-    const currentJobPost: any = await JobPostModel.findByIdAndUpdate(
+    const currentJobPost = await JobPostModel.findByIdAndUpdate(
       jobPostId,
       {
         status: "on progress",
@@ -679,10 +729,13 @@ async createClient(client: {name?: string, email?: string, password?: string }):
       }
     ).exec();
 
-    const currentClient: any = await ClientModel.findById(clientId).exec();
+    if(!currentJobPost) throw new Error('Jobpost not exists');
 
-    const currentUser: any = await UserModel.findById(userId).exec();
+    const currentClient = await ClientModel.findById(clientId).exec();
+    if(!currentClient) throw new Error('client not exists');
 
+    const currentUser = await UserModel.findById(userId).exec();
+    if(!currentUser) throw new Error('user not exists');
     // reomove all the proposals for this jobpost
     const client = await ClientModel.findByIdAndUpdate(
       clientId,
@@ -720,11 +773,11 @@ async createClient(client: {name?: string, email?: string, password?: string }):
 
     const savedContract = await newContract.save();
 
-    const timer = currentJobPost.estimateTimeinHours;
-    const contractId: any = savedContract._id;
+    // const timer = currentJobPost.estimateTimeinHours;
+    // const contractId = savedContract._id;
     const adminId = process.env.ADMIN_OBJECT_ID;
 
-    const newNotificationUser = await NotificationModel.create<Notification>({
+    const newNotificationUser = await NotificationModel.create({ 
       type: "new contract",
       message: "New Contract signed in",
       sender_id: adminId,
@@ -733,7 +786,7 @@ async createClient(client: {name?: string, email?: string, password?: string }):
         contractId: savedContract._id
       },
       createdAt: new Date(),
-    });
+    }) as unknown as Notification;
  
 
     const newNotificationClient = await NotificationModel.create<Notification>({
@@ -745,7 +798,7 @@ async createClient(client: {name?: string, email?: string, password?: string }):
         contractId: savedContract._id
       },
       createdAt: new Date(),
-    });
+    }) as unknown as Notification;
 
     newNotificationUser.save();
     newNotificationClient.save();
@@ -755,10 +808,10 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     return {
       newNotificationUser,
       newNotificationClient,
-    };
+    }
   }
 
-  async rejectProposal(clientId: Id, userId: Id, jobPostId: Id): Promise<any> {
+  async rejectProposal(clientId: Id, userId: Id, jobPostId: Id): Promise<Client> {
     const proposal = await ClientModel.findOneAndUpdate(
       {
         _id: new mongoose.Types.ObjectId(clientId),
@@ -773,7 +826,8 @@ async createClient(client: {name?: string, email?: string, password?: string }):
         $set: { "proposals.$.status": "rejected" },
       },
       { new: true }
-    );
+    ).lean<Client>().exec();
+    if(!proposal) throw new Error('Client not exists');
 
     // -------------- decrementing proposalCount --------------
     const updatetingCount = await JobPostModel.findByIdAndUpdate(
@@ -785,6 +839,7 @@ async createClient(client: {name?: string, email?: string, password?: string }):
         new: true,
       }
     );
+    console.log(updatetingCount)
 
     return proposal;
   }
@@ -795,11 +850,11 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     return jobs;
   }
 
-  async closeContract(contractId: Id, progress: number): Promise<any> {
+  async closeContract(contractId: Id, progress: number): Promise<unknown> {
     //update contract status as closed ----------------
     if (!progress) throw new Error("Progress data missing"); 
 
-    const currentContract: any = await ContractModel.findByIdAndUpdate(
+    const currentContract = await ContractModel.findByIdAndUpdate(
       contractId,
       {
         active: false,
@@ -812,15 +867,16 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     
 
     //update jobpost status as closed ----------------
-    const jobPostId: string = currentContract.jobPostId;
+    const jobPostId = currentContract.jobPostId;
 
-    const currentJobPost: any = await JobPostModel.findByIdAndUpdate(
+    const currentJobPost = await JobPostModel.findByIdAndUpdate(
       jobPostId,
       {
         status: "closed",
       },
       { new: true }
     );
+    if(!currentJobPost) throw new Error('Jobpost not exists');
 
     const finalAmount = Math.round(
       currentContract.amount - (currentContract.amount * 10) / 100
@@ -945,7 +1001,7 @@ async createClient(client: {name?: string, email?: string, password?: string }):
             location: currentJobPost.location,
             amount: currentJobPost.amount,
             paymentType: currentJobPost.paymentType,
-            estimateTimeinHours: currentJobPost.estimatetimeinHours,
+            estimateTimeinHours: currentJobPost.estimateTimeinHours,
             projectType: currentJobPost.projectType,
             requiredSkills: currentJobPost.requiredSkills,
           },
@@ -997,7 +1053,7 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     notificationId: Id,
     rating: number,
     review: string
-  ): Promise<any> {
+  ): Promise<{updateUser: User, removeExtra: Notification}> {
     interface Rating {
       rating: {
         ratingSum: number;
@@ -1020,7 +1076,8 @@ async createClient(client: {name?: string, email?: string, password?: string }):
       rating: rating,
     };
 
-    const client: any = await ClientModel.findById(clientId);
+    const client = await ClientModel.findById(clientId).lean<Client>();
+    if(!client) throw new Error('Client not found');
 
     const updateUser = await UserModel.findByIdAndUpdate(
       userId,
@@ -1036,13 +1093,16 @@ async createClient(client: {name?: string, email?: string, password?: string }):
         },
       },
       { new: true }
-    );
+    ).lean<User>().exec();
+    if(!updateUser) throw new Error('user not exists');
 
     const removeExtra = await NotificationModel.findByIdAndUpdate(
       notificationId,
       { extra: {} },
       { update: true }
-    );
+    ).lean<Notification>().exec();
+    if(!removeExtra) throw new Error('notification not exists');
+
 
     return { updateUser, removeExtra };
   }
@@ -1052,9 +1112,12 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     clientId: Id,
     jobPostId: Id,
     description: string
-  ): Promise<any> {
-    const jobPostData: any = await JobPostModel.findById(jobPostId);
-    const client: any = await ClientModel.findById(clientId);
+  ): Promise<Invite> {
+    const jobPostData = await JobPostModel.findById(jobPostId);
+    if(!jobPostData) throw new Error('jobpost not found');
+
+    const client = await ClientModel.findById(clientId);
+    if(!client) throw new Error('client not found');
 
     const existingInvite = await InviteModel.find({
       $and: [{ "jobPostData._id": jobPostId }, { userId: userId }],
@@ -1099,8 +1162,9 @@ async createClient(client: {name?: string, email?: string, password?: string }):
       },
       createdAt: new Date(),
     });
+    console.log(newNotificationClient);
 
-    return savedInvite;
+    return savedInvite as Invite;
   }
 
   async getSingleJobPost(jobPostId: string): Promise<JobPostDocument> {
@@ -1110,17 +1174,16 @@ async createClient(client: {name?: string, email?: string, password?: string }):
     return jobPost;
   }
 
-  async ViewInviteClient(clientId: string,inviteType: string): Promise<any> {
+  async ViewInviteClient(clientId: string,inviteType: string): Promise<Invite> {
     let invite;
     if(inviteType === 'pending') {
        invite = await InviteModel.find({
         $and: [{ clientId: clientId }, { status: "pending" }],
-      }).exec();
+      }).lean<Invite>().exec();
     } else {
       invite = await InviteModel.find({
         $and: [{ clientId: clientId }, { status: "rejected" }],
-      }).exec();
-    } 
+      }).lean<Invite>().exec();    } 
 
     if (!invite) throw new Error("No invites found");
     return invite;
@@ -1129,7 +1192,7 @@ async createClient(client: {name?: string, email?: string, password?: string }):
   async rejectContract(contractId: Id, clientId: Id): Promise<ContractDocument> {
     const adminId = process.env.ADMIN_OBJECT_ID;
 
-    const contract: any = await ContractModel.findByIdAndUpdate(
+    const contract = await ContractModel.findByIdAndUpdate(
       contractId,
       {
         status: "rejected",
@@ -1138,6 +1201,8 @@ async createClient(client: {name?: string, email?: string, password?: string }):
         new: true,
       }
     );
+
+    if(!contract) throw new Error('Contract not found');
 
     // deleting the entire submission doc from client
     const updatedClient = await ClientModel.findOneAndUpdate(

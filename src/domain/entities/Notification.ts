@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 export interface Notification extends mongoose.Document {
+    _id: string
     type: string;
     message: string;
     sender_id: string;
@@ -21,6 +22,7 @@ export interface Notification extends mongoose.Document {
         upiId: number;
     };
     createdAt?: Date;
+    __v: string
 }
 
 //Notification Schema
