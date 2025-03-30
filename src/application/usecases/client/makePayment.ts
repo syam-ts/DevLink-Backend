@@ -23,7 +23,7 @@ export class MakePayment {
 
     if (paymentType === "hourly") {
 
-      const totalAmount: number = parseInt(data.formData.estimateTime) * data.formData.amount; 
+      const totalAmount: number = data.formData.estimateTime * data.formData.amount; 
       console.log('The total: ', totalAmount)
 
       const product = await stripe.products.create({

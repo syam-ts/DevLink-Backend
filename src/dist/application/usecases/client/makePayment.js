@@ -23,7 +23,7 @@ class MakePayment {
         return __awaiter(this, void 0, void 0, function* () {
             const { amount, paymentType, } = data.formData;
             if (paymentType === "hourly") {
-                const totalAmount = parseInt(data.formData.estimateTime) * data.formData.amount;
+                const totalAmount = data.formData.estimateTime * data.formData.amount;
                 console.log('The total: ', totalAmount);
                 const product = yield stripe.products.create({
                     name: "Job-Post",

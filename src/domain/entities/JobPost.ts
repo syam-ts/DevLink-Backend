@@ -6,7 +6,7 @@ export interface JobPostDocument extends Document {
     description: string;
     keyResponsiblities: [string],
     requiredSkills: [string],
-    estimateTime: number;
+    estimateTime: number ;
     estimateTimeinHours: number;
     paymentType: 'hourly' | 'fixed',
     amount: number,
