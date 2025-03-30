@@ -2,7 +2,7 @@
 import { SignupUser } from "../../application/usecases/user/signupUser";
 import { LoginUser } from "../../application/usecases/user/loginUser";
 import { GoogleLoginUser } from "../../application/usecases/user/GoogleLoginUser";
-import { verifyOtp } from "../../application/usecases/user/otpUser";
+import { VerifyOtp } from "../../application/usecases/user/otpUser";
 import { VerifyEmail } from "../../application/usecases/user/verifyEmail";
 import { ResetPassword } from "../../application/usecases/user/resetPassword";
 import { getHomeUser } from "../../application/usecases/user/getHome";
@@ -88,10 +88,8 @@ import { VerifyAccept } from '../../application/usecases/admin/verifyAccept';
 import { GetAllRequests } from '../../application/usecases/admin/getAllRequests';
 import { GetRequestedClient } from '../../application/usecases/admin/getRequestedClient';
 import { ViewRoleInfo } from '../../application/usecases/admin/viewRoleInfo';
-import { GetWallet } from '../../application/usecases/admin/getWallet';
-import { SearchUser } from '../../application/usecases/admin/searchUser';
-import { SortUser } from '../../application/usecases/admin/sortUser';
-import { SearchClient } from '../../application/usecases/admin/searchClient';
+import { GetWallet } from '../../application/usecases/admin/getWallet'; 
+import { SortUser } from '../../application/usecases/admin/sortUser'; 
 import { SortClient } from '../../application/usecases/admin/sortClient'; 
  
 // User Respo instance  ---------->
@@ -102,7 +100,7 @@ const loginUseCase = new LoginUser(userRepository);
 const getHomeUseCase = new getHomeUser(userRepository);
 const verifyEmailUseCase = new VerifyEmail(userRepository);
 const resetPasswordUseCase = new ResetPassword(userRepository);
-const verifyUserUseCase = new verifyOtp(userRepository);
+const verifyUserUseCase = new VerifyOtp(userRepository);
 const GoogleLoginUserUseCase = new GoogleLoginUser(userRepository);
 const alterProfileUseCase = new AlterUserProfile(userRepository);
 const getProfileUseCase = new GetUserProfile(userRepository);
@@ -183,10 +181,8 @@ const viewContractsAdminUseCase = new ViewContractsAdmin(adminRepository);
 const viewSingleContractAdminUseCase = new ViewSingleContractAdmin(adminRepository);  
 const unBlockClientUseCase = new UnBlockClient(adminRepository);
 const viewRoleInfoUseCase = new ViewRoleInfo(adminRepository);
-const getWalletUseCase = new GetWallet(adminRepository);
-const searchUserUseCase = new SearchUser(adminRepository);
-const sortUserUseCase = new SortUser(adminRepository);
-const searchClientUseCase = new SearchClient(adminRepository);
+const getWalletUseCase = new GetWallet(adminRepository); 
+const sortUserUseCase = new SortUser(adminRepository); 
 const sortClientUseCase = new SortClient(adminRepository);
 const verifyAcceptUseCase = new VerifyAccept(adminRepository);
 const getAllRequestsUseCase = new GetAllRequests(adminRepository);
@@ -282,13 +278,11 @@ export const allAdminUseCases = {
         getWithdrawRequestsUseCase, 
         viewContractsAdminUseCase,   
         viewSingleContractAdminUseCase,   
-        viewRoleInfoUseCase ,
-        getWalletUseCase ,
-        searchUserUseCase ,
-        sortUserUseCase ,
-        searchClientUseCase ,
-        sortClientUseCase ,
-        verifyAcceptUseCase ,
-        getAllRequestsUseCase ,
+        viewRoleInfoUseCase,
+        getWalletUseCase, 
+        sortUserUseCase, 
+        sortClientUseCase,
+        verifyAcceptUseCase,
+        getAllRequestsUseCase,
         getRequestedClientUseCase,  
 };

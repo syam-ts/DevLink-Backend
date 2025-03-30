@@ -1,4 +1,51 @@
-import mongoose from "mongoose";
+ 
+import mongoose, { Types } from "mongoose";
+
+interface Revenue {
+  amount: number;
+  createdAt: Date;
+}
+
+interface WithdrawRequest {
+  roleId: Types.ObjectId;
+  userName: string;
+  amount: number;
+  accountNumber: string;
+  createdAt: Date;
+}
+
+interface Transaction {
+  type: "credit" | "debit";
+  amount: number;
+  from: string;
+  fromId: Types.ObjectId;
+  createdAt: Date;
+}
+
+interface Request {
+  type?: string;
+  clientId?: Types.ObjectId;
+  status?: "pending" | "approved" | "rejected";
+  data?: any;
+  unChangedData?: any;
+}
+
+export interface Admin {
+  _id?: Types.ObjectId;
+  name?: string;
+  password?: string;
+  revenue: {
+    totalWithdrawals: Revenue[];
+    grossAmount: Revenue[];
+  };
+  withdrawRequest: WithdrawRequest[];
+  wallet: {
+    balance: number;
+    transactions: Transaction[];
+  };
+  request: Request[];
+}
+
 
 const RevenueSchema = new mongoose.Schema({
     amount: { type: Number, required: true },

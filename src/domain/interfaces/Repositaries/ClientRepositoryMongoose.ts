@@ -4,23 +4,16 @@ import { ClientRepositary } from "../../../application/usecases/client/signupCli
 import { UserModel } from "../../entities/User";
 import { NotificationModel, Notification } from "../../entities/Notification";
 import { JobPostDocument, JobPostModel } from "../../entities/JobPost";
-import { AdminModel } from "../../entities/Admin";
+import { Admin, AdminModel } from "../../entities/Admin";
 import { ContractDocument, ContractModel } from "../../entities/Contract";
 import bcrypt from "bcrypt";
 import validator from "validator";
 import allCronJobs from "../../../helper/cron-jobs/index";
-import mongoose from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 import { InviteDocument, InviteModel } from "../../entities/Invite";
+import { ProjectSubmissions } from "../../../application/usecases/client/viewSubmissions";
 
 type Id = string;
-// export interface Notification {
-//   type: string;
-//   message: string;
-//   sender_id: Id;
-//   reciever_id: Id;
-//   extra: Extra;
-//   createdAt: string;
-// }
 
 export interface Extra {
   userId: Id;
@@ -49,56 +42,43 @@ interface Invite {
   };
   status: String;
   createdAt: Date;
-};
+}
 
 interface Wallet {
-  balance: number,
+  balance: number;
   transactions: {
-    type: string
-       amount: number
-       from: string
-       fromId: string
-       createdAt: Date
-  }
-};
-
-interface ProjectSubmission {
-  contractId: string;
-  description: string;
-  progress: number;
-  attachedFile: string;
-  jobPostData: {
-    jobPostId: string;
-    title: string;
+    type: string;
     amount: number;
+    from: string;
+    fromId: string;
+    createdAt: Date;
   };
-  createdAt: Date;
-};
+}
 
-  interface Proposal {
-        type: string,
-        UserId: mongoose.Types.ObjectId,
-        jobPostId: mongoose.Types.ObjectId,
-        jobPostInfo: string,
-        userData: User,
-        description?: string,
-        status?: string,
-        bidamount: number,
-        bidDeadline: number,
-        createdAt: Date
-    };
+interface Proposal {
+  type: string;
+  UserId: ObjectId;
+  jobPostId: ObjectId;
+  jobPostInfo: string;
+  userData: User;
+  description?: string | undefined;
+  status?: string | undefined;
+  bidamount: number;
+  bidDeadline: number;
+  createdAt: Date;
+}
 
 interface CreateClient {
-  name: string
-  email: string
-  password: string
+  name: string;
+  email: string;
+  password: string;
 }
 
 export class ClientRepositoryMongoose implements ClientRepositary {
-async createClient(client: Client): Promise<Client> {
-  if (!client.password) throw new Error("Password is required"); 
-    
-  const salt: number = 10;
+  async createClient(client: Client): Promise<Client> {
+    if (!client.password) throw new Error("Password is required");
+
+    const salt: number = 10;
     const hashedPassword = await bcrypt.hash(client.password, salt);
 
     const createdClient = new ClientModel({
@@ -116,13 +96,19 @@ async createClient(client: Client): Promise<Client> {
     } as Client;
   }
 
-  async signupClient(email: string ): Promise<Client | null> { 
-    const foundClient =  this.findClientByEmail(email); 
-    if (!foundClient) throw new Error("Client Not Found"); 
+  async signupClient(email: string): Promise<Client | null> {
+    const foundClient = this.findClientByEmail(email);
+    if (!foundClient) throw new Error("Client Not Found");
     return foundClient;
   }
-  
-  async verifyOtp(client: {mailOtp: number,user:{otp: string,data:{name: string, email: string, password: string}}}): Promise<Client> {
+
+  async verifyOtp(client: {
+    mailOtp: number;
+    user: {
+      otp: string;
+      data: { name: string; email: string; password: string };
+    };
+  }): Promise<Client> {
     const { name, email, password } = client.user.data;
 
     if (client.mailOtp === parseInt(client.user.otp)) {
@@ -230,10 +216,10 @@ async createClient(client: Client): Promise<Client> {
 
   async findClientByOnlyEmail(
     email: string,
-    companyName: string,
+    companyName: string | undefined,
     password: string
-  ): Promise<Client | null> {
-    const client = await ClientModel.findOne({ email }).exec(); 
+  ): Promise<Client> {
+    const client = await ClientModel.findOne({ email }).exec();
 
     if (client) {
       return {
@@ -284,7 +270,7 @@ async createClient(client: Client): Promise<Client> {
       .limit(4)
       .lean<User[]>()
       .exec();
-      if (!users || users.length === 0) throw new Error("Users not found");
+    if (!users || users.length === 0) throw new Error("Users not found");
 
     return users;
   }
@@ -295,7 +281,7 @@ async createClient(client: Client): Promise<Client> {
     return jobs;
   }
 
-  async resetPassword(clientId: Id, password: string): Promise<string > {
+  async resetPassword(clientId: Id, password: string): Promise<string> {
     const pass = { password: password };
 
     const updatedClient = await ClientModel.findByIdAndUpdate(clientId, pass, {
@@ -309,18 +295,21 @@ async createClient(client: Client): Promise<Client> {
   }
 
   async getClientProfile(clientId: Id): Promise<Client> {
-    const client = await ClientModel.findById(clientId).lean<Client>().exec(); 
-    if (!client) throw new Error("Client not found"); 
+    const client = await ClientModel.findById(clientId).lean<Client>().exec();
+    if (!client) throw new Error("Client not found");
 
     return client;
   }
 
-  async profileVerification(clientId: Id, data: {}): Promise<unknown> {
+  async profileVerification(
+    clientId: Id,
+    data: { editData: Client }
+  ): Promise<Admin> {
     const adminId = process.env.ADMIN_OBJECT_ID;
     const existingClient = await ClientModel.findById(clientId);
-    if(!existingClient) throw new Error('Client not Exists');
+    if (!existingClient) throw new Error("Client not Exists");
 
-    if (existingClient.isEditRequest) throw new Error("Request already sended");  
+    if (existingClient.isEditRequest) throw new Error("Request already sended");
 
     const request = {
       type: "Profile Verification Request",
@@ -333,7 +322,11 @@ async createClient(client: Client): Promise<Client> {
       adminId,
       { $push: { request: request } },
       { new: true }
-    );
+    )
+      .lean<Admin>()
+      .exec();
+
+    if (!updatedAdmin) throw new Error("Admin not found");
 
     const editclientRequest = await ClientModel.findByIdAndUpdate(
       clientId,
@@ -344,11 +337,14 @@ async createClient(client: Client): Promise<Client> {
     return updatedAdmin;
   }
 
-  async editClientProfile(clientId: Id, editData: { editData: Partial<Client>, 
-    unhangedData: Client}, unChangedData: Client): Promise<Client> {
+  async editClientProfile(
+    clientId: Id,
+    editData: { editData: Partial<Client>; unhangedData: Client },
+    unChangedData: Client
+  ): Promise<Admin> {
     const adminId = process.env.ADMIN_OBJECT_ID;
-    const existingClient = await ClientModel.findById(clientId).lean<Client>(); 
-    if(!existingClient) throw new Error('Client not exists');
+    const existingClient = await ClientModel.findById(clientId).lean<Client>();
+    if (!existingClient) throw new Error("Client not exists");
 
     if (existingClient.isEditRequest) {
       throw new Error("Request already sended");
@@ -359,14 +355,18 @@ async createClient(client: Client): Promise<Client> {
       clientId: clientId,
       status: "pending",
       data: editData,
-      unChangedData: unChangedData
+      unChangedData: unChangedData,
     };
 
     const updatedAdmin = await AdminModel.findByIdAndUpdate(
       adminId,
       { $push: { request: request } },
       { new: true }
-    );
+    )
+      .lean<Admin>()
+      .exec();
+
+    if (!updatedAdmin) throw new Error("Admin not found");
 
     const editclientRequest = await ClientModel.findByIdAndUpdate(
       clientId,
@@ -379,24 +379,27 @@ async createClient(client: Client): Promise<Client> {
 
   async createJobPost(
     clientId: Id,
-    data: JobPostDocument 
+    data: JobPostDocument
   ): Promise<JobPostDocument> {
     const client = await ClientModel.findById(clientId).lean<Client>();
-    if(!client) throw new Error('Client not found');
+    if (!client) throw new Error("Client not found");
 
     //update client jobpost count
-    const cilent = await ClientModel.findByIdAndUpdate(clientId, {
-      $inc: {totalJobs: 1}
-    }, {
-      new: true
-    });
+    const cilent = await ClientModel.findByIdAndUpdate(
+      clientId,
+      {
+        $inc: { totalJobs: 1 },
+      },
+      {
+        new: true,
+      }
+    );
     let parsedEstimatedTimeInHours = Number(data.estimateTime);
-     if(data.paymentType === 'hourly') {
+    if (data.paymentType === "hourly") {
       parsedEstimatedTimeInHours = Number(data.estimateTime);
       const totalAmount = Math.floor(data.estimateTime * data.amount);
       data.amount = totalAmount; //updatig the total amount
-     }
- 
+    }
 
     const createdJobPost = new JobPostModel({
       title: data.title,
@@ -462,15 +465,15 @@ async createClient(client: Client): Promise<Client> {
     const allJobs = await JobPostModel.find().exec();
 
     if (!allJobs || allJobs.length === 0) throw new Error("No job found");
-   
-      return allJobs; 
+
+    return allJobs;
   }
 
   async getSelectedJobs(
     clientId: string,
     jobType: string,
     currentPage: number
-  ): Promise<{jobs:JobPostDocument[], totalPages: number }> {
+  ): Promise<{ jobs: JobPostDocument[]; totalPages: number }> {
     const page_size: number = 3;
     const skip: number = (currentPage - 1) * page_size;
 
@@ -527,11 +530,12 @@ async createClient(client: Client): Promise<Client> {
     }
   }
 
-  async getProposals(clientId: Id): Promise<unknown> {
-    const client = await ClientModel.findById(clientId);
-    if (!client) throw new Error("Client not found"); 
+  async getProposals(clientId: Id): Promise<Proposal[]> {
+    const client = await ClientModel.findById(clientId).lean<Client>().exec();
+    if (!client) throw new Error("Client not found");
     const proposals = client.proposals;
-    return proposals;
+
+    return proposals as unknown as Proposal[];
   }
 
   async getUserProfile(userId: Id): Promise<User> {
@@ -569,7 +573,8 @@ async createClient(client: Client): Promise<Client> {
   async getallDevelopers(): Promise<User[] | unknown> {
     const developers = await UserModel.find({ isProfileFilled: true }).exec();
 
-    if (!developers || developers.length === 0) throw new Error("Developers not found");
+    if (!developers || developers.length === 0)
+      throw new Error("Developers not found");
 
     return developers;
   }
@@ -578,7 +583,7 @@ async createClient(client: Client): Promise<Client> {
     clientId: Id,
     contractViewType: string,
     currentPage: number
-  ): Promise<{contract: ContractDocument[], totalPages: number}> {
+  ): Promise<{ contract: ContractDocument[]; totalPages: number }> {
     const page_size: number = 3;
     const skip: number = (currentPage - 1) * page_size;
 
@@ -634,8 +639,12 @@ async createClient(client: Client): Promise<Client> {
     }
   }
 
-  async viewWallet(clientId: Id, page: number): Promise<{
-    clientWallet: unknown, totalPages: number
+  async viewWallet(
+    clientId: Id,
+    page: number
+  ): Promise<{
+    clientWallet: unknown;
+    totalPages: number;
   }> {
     const PAGE_SIZE: number = 6;
     const skip: number = (page - 1) * PAGE_SIZE;
@@ -704,11 +713,11 @@ async createClient(client: Client): Promise<Client> {
     return "success";
   }
 
-  async viewSubmissions(clientId: Id): Promise<unknown> {
-    const client = await ClientModel.findById(clientId).lean<Client>().exec(); 
+  async viewSubmissions(clientId: Id): Promise<ProjectSubmissions> {
+    const client = await ClientModel.findById(clientId).lean<Client>().exec();
     if (!client) throw new Error("Client not found");
 
-    return client.projectSubmissions;
+    return client.projectSubmissions as unknown as ProjectSubmissions;
   }
 
   async createContract(
@@ -717,8 +726,10 @@ async createClient(client: Client): Promise<Client> {
     jobPostId: Id,
     bidAmount: number,
     bidDeadline: string
-  ): Promise<{ newNotificationUser: Notification,
-    newNotificationClient: Notification}> {
+  ): Promise<{
+    newNotificationUser: Notification;
+    newNotificationClient: Notification;
+  }> {
     // updating job post status
     const currentJobPost = await JobPostModel.findByIdAndUpdate(
       jobPostId,
@@ -730,13 +741,13 @@ async createClient(client: Client): Promise<Client> {
       }
     ).exec();
 
-    if(!currentJobPost) throw new Error('Jobpost not exists');
+    if (!currentJobPost) throw new Error("Jobpost not exists");
 
     const currentClient = await ClientModel.findById(clientId).exec();
-    if(!currentClient) throw new Error('client not exists');
+    if (!currentClient) throw new Error("client not exists");
 
     const currentUser = await UserModel.findById(userId).exec();
-    if(!currentUser) throw new Error('user not exists');
+    if (!currentUser) throw new Error("user not exists");
     // reomove all the proposals for this jobpost
     const client = await ClientModel.findByIdAndUpdate(
       clientId,
@@ -744,7 +755,6 @@ async createClient(client: Client): Promise<Client> {
       { new: true }
     );
 
-     
     const newContract = new ContractModel({
       clientId: clientId,
       userId: userId,
@@ -778,28 +788,29 @@ async createClient(client: Client): Promise<Client> {
     // const contractId = savedContract._id;
     const adminId = process.env.ADMIN_OBJECT_ID;
 
-    const newNotificationUser = await NotificationModel.create({ 
+    const newNotificationUser = (await NotificationModel.create({
       type: "new contract",
       message: "New Contract signed in",
       sender_id: adminId,
       reciever_id: userId,
       newContract: {
-        contractId: savedContract._id
+        contractId: savedContract._id,
       },
       createdAt: new Date(),
-    }) as unknown as Notification;
- 
+    })) as unknown as Notification;
 
-    const newNotificationClient = await NotificationModel.create<Notification>({
-      type: "Contract",
-      message: "New Contract signed in",
-      sender_id: adminId,
-      reciever_id: clientId,
-      newContract: {
-        contractId: savedContract._id
-      },
-      createdAt: new Date(),
-    }) as unknown as Notification;
+    const newNotificationClient = (await NotificationModel.create<Notification>(
+      {
+        type: "Contract",
+        message: "New Contract signed in",
+        sender_id: adminId,
+        reciever_id: clientId,
+        newContract: {
+          contractId: savedContract._id,
+        },
+        createdAt: new Date(),
+      }
+    )) as unknown as Notification;
 
     newNotificationUser.save();
     newNotificationClient.save();
@@ -809,10 +820,14 @@ async createClient(client: Client): Promise<Client> {
     return {
       newNotificationUser,
       newNotificationClient,
-    }
+    };
   }
 
-  async rejectProposal(clientId: Id, userId: Id, jobPostId: Id): Promise<Client> {
+  async rejectProposal(
+    clientId: Id,
+    userId: Id,
+    jobPostId: Id
+  ): Promise<Client> {
     const proposal = await ClientModel.findOneAndUpdate(
       {
         _id: new mongoose.Types.ObjectId(clientId),
@@ -827,8 +842,10 @@ async createClient(client: Client): Promise<Client> {
         $set: { "proposals.$.status": "rejected" },
       },
       { new: true }
-    ).lean<Client>().exec();
-    if(!proposal) throw new Error('Client not exists');
+    )
+      .lean<Client>()
+      .exec();
+    if (!proposal) throw new Error("Client not exists");
 
     // -------------- decrementing proposalCount --------------
     const updatetingCount = await JobPostModel.findByIdAndUpdate(
@@ -840,7 +857,7 @@ async createClient(client: Client): Promise<Client> {
         new: true,
       }
     );
-    console.log(updatetingCount)
+    console.log(updatetingCount);
 
     return proposal;
   }
@@ -853,7 +870,7 @@ async createClient(client: Client): Promise<Client> {
 
   async closeContract(contractId: Id, progress: number): Promise<unknown> {
     //update contract status as closed ----------------
-    if (!progress) throw new Error("Progress data missing"); 
+    if (!progress) throw new Error("Progress data missing");
 
     const currentContract = await ContractModel.findByIdAndUpdate(
       contractId,
@@ -865,7 +882,6 @@ async createClient(client: Client): Promise<Client> {
     );
 
     if (!currentContract) throw new Error("Contract not found");
-    
 
     //update jobpost status as closed ----------------
     const jobPostId = currentContract.jobPostId;
@@ -877,12 +893,14 @@ async createClient(client: Client): Promise<Client> {
       },
       { new: true }
     );
-    if(!currentJobPost) throw new Error('Jobpost not exists');
+    if (!currentJobPost) throw new Error("Jobpost not exists");
 
     const finalAmount = Math.round(
       currentContract.amount - (currentContract.amount * 10) / 100
     );
-    const adminDeduction:number = Math.floor((currentContract.amount * 10) / 100)
+    const adminDeduction: number = Math.floor(
+      (currentContract.amount * 10) / 100
+    );
     const adminId = process.env.ADMIN_OBJECT_ID;
     let updateUserWallet, updateAdminWallet, updateClientWallet;
 
@@ -895,22 +913,22 @@ async createClient(client: Client): Promise<Client> {
       date: new Date(),
     };
 
- 
-   updateAdminWallet = await AdminModel.findByIdAndUpdate(
+    updateAdminWallet = await AdminModel.findByIdAndUpdate(
       adminId,
       {
-        $inc: { 
-          "wallet.balance": -finalAmount
-        },  
-        $push: { 
-          "wallet.transactions": walletEntryAdmin, 
-          "revenue.grossAmount": { amount: adminDeduction, createdAt: Date.now() } 
-        }, 
+        $inc: {
+          "wallet.balance": -finalAmount,
+        },
+        $push: {
+          "wallet.transactions": walletEntryAdmin,
+          "revenue.grossAmount": {
+            amount: adminDeduction,
+            createdAt: Date.now(),
+          },
+        },
       },
       { new: true }
     ).exec();
-    
-    
 
     if (progress === 100) {
       const walletEntryUser = {
@@ -1019,7 +1037,7 @@ async createClient(client: Client): Promise<Client> {
       sender_id: process.env._ADMIN_OBJECT_ID,
       reciever_id: currentContract.userId,
       closeContract: {
-        contractId: contractId
+        contractId: contractId,
       },
       createdAt: new Date(),
     });
@@ -1031,7 +1049,7 @@ async createClient(client: Client): Promise<Client> {
       reciever_id: currentContract.clientId,
       closeContract: {
         contractId: contractId,
-        userId: currentContract.userId
+        userId: currentContract.userId,
       },
       createdAt: new Date(),
     });
@@ -1054,7 +1072,7 @@ async createClient(client: Client): Promise<Client> {
     notificationId: Id,
     rating: number,
     review: string
-  ): Promise<{updateUser: User, removeExtra: Notification}> {
+  ): Promise<{ updateUser: User; removeExtra: Notification }> {
     interface Rating {
       rating: {
         ratingSum: number;
@@ -1078,7 +1096,7 @@ async createClient(client: Client): Promise<Client> {
     };
 
     const client = await ClientModel.findById(clientId).lean<Client>();
-    if(!client) throw new Error('Client not found');
+    if (!client) throw new Error("Client not found");
 
     const updateUser = await UserModel.findByIdAndUpdate(
       userId,
@@ -1094,16 +1112,19 @@ async createClient(client: Client): Promise<Client> {
         },
       },
       { new: true }
-    ).lean<User>().exec();
-    if(!updateUser) throw new Error('user not exists');
+    )
+      .lean<User>()
+      .exec();
+    if (!updateUser) throw new Error("user not exists");
 
     const removeExtra = await NotificationModel.findByIdAndUpdate(
       notificationId,
       { extra: {} },
       { update: true }
-    ).lean<Notification>().exec();
-    if(!removeExtra) throw new Error('notification not exists');
-
+    )
+      .lean<Notification>()
+      .exec();
+    if (!removeExtra) throw new Error("notification not exists");
 
     return { updateUser, removeExtra };
   }
@@ -1115,10 +1136,10 @@ async createClient(client: Client): Promise<Client> {
     description: string
   ): Promise<InviteDocument> {
     const jobPostData = await JobPostModel.findById(jobPostId);
-    if(!jobPostData) throw new Error('jobpost not found');
+    if (!jobPostData) throw new Error("jobpost not found");
 
     const client = await ClientModel.findById(clientId);
-    if(!client) throw new Error('client not found');
+    if (!client) throw new Error("client not found");
 
     const existingInvite = await InviteModel.find({
       $and: [{ "jobPostData._id": jobPostId }, { userId: userId }],
@@ -1159,7 +1180,7 @@ async createClient(client: Client): Promise<Client> {
       sender_id: process.env._ADMIN_OBJECT_ID,
       reciever_id: clientId,
       inviteSuccess: {
-        userId: userId
+        userId: userId,
       },
       createdAt: new Date(),
     });
@@ -1169,28 +1190,39 @@ async createClient(client: Client): Promise<Client> {
   }
 
   async getSingleJobPost(jobPostId: string): Promise<JobPostDocument> {
-    const jobPost = await JobPostModel.findById(jobPostId).exec(); 
+    const jobPost = await JobPostModel.findById(jobPostId).exec();
     if (!jobPost) throw new Error("Job Post didnt found");
 
     return jobPost;
   }
 
-  async ViewInviteClient(clientId: string,inviteType: string): Promise<InviteDocument> {
+  async ViewInviteClient(
+    clientId: string,
+    inviteType: string
+  ): Promise<InviteDocument> {
     let invite;
-    if(inviteType === 'pending') {
-       invite = await InviteModel.find({
+    if (inviteType === "pending") {
+      invite = await InviteModel.find({
         $and: [{ clientId: clientId }, { status: "pending" }],
-      }).lean<InviteDocument>().exec();
+      })
+        .lean<InviteDocument>()
+        .exec();
     } else {
       invite = await InviteModel.find({
         $and: [{ clientId: clientId }, { status: "rejected" }],
-      }).lean<InviteDocument>().exec();    } 
+      })
+        .lean<InviteDocument>()
+        .exec();
+    }
 
     if (!invite) throw new Error("No invites found");
     return invite;
   }
 
-  async rejectContract(contractId: Id, clientId: Id): Promise<ContractDocument> {
+  async rejectContract(
+    contractId: Id,
+    clientId: Id
+  ): Promise<ContractDocument> {
     const adminId = process.env.ADMIN_OBJECT_ID;
 
     const contract = await ContractModel.findByIdAndUpdate(
@@ -1203,7 +1235,7 @@ async createClient(client: Client): Promise<Client> {
       }
     );
 
-    if(!contract) throw new Error('Contract not found');
+    if (!contract) throw new Error("Contract not found");
 
     // deleting the entire submission doc from client
     const updatedClient = await ClientModel.findOneAndUpdate(
@@ -1241,7 +1273,9 @@ async createClient(client: Client): Promise<Client> {
   async searchDeveloper(input: string): Promise<User> {
     const developers = await UserModel.find({
       name: { $regex: input, $options: "i" },
-    }).lean<User>().exec();
+    })
+      .lean<User>()
+      .exec();
 
     if (!developers) throw new Error("No developer found");
 

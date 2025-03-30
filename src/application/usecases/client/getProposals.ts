@@ -1,9 +1,11 @@
+import { User } from "../../../domain/entities/User";
+
 interface Proposal {
   type: string;
   UserId: string;
   jobPostId: string;
   jobPostInfo: string;
-  userData: {};
+  userData: User;
   description?: string;
   status?: string;
   bidamount: number;
@@ -12,7 +14,7 @@ interface Proposal {
 }
 
 export interface ClientRepository {
-  getProposals(clientId: string): Promise<Proposal>;
+  getProposals(clientId: string): Promise<any>;
 }
 
 export class GetProposals {

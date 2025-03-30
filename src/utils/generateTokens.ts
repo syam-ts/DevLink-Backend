@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 interface User {
   _id: string
-  role: string
+  role?: string
 };
 
 const generateTokens = (user: User) => {

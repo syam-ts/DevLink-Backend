@@ -1,34 +1,55 @@
-  import { User } from "../../../domain/entities/User";
+ 
+    interface UserData {
+      _id: string;
+      name: string;
+      email: string;
+      password: string;
+      mobile: number;
+      skills: string[];
+      profilePicture: string;
+      location: string;
+      description: string;
+      experience: string;
+      education: string;
+      budget: number;
+      rating: number;
+      domain: string;
+      githubLink: string;
+      totalJobs: number;
+      totalHours: number;
+      whyHireMe: string;
+      completedJobs: string;
+      inProgress: string;
+      review?: [{
+        theReview: string;
+        rating: number;
+        companyName: string;
+      }];
+      workHistory: string[];
+      isEditRequest: boolean;
+      isProfileFilled: boolean;
+      request: string[];
+      wallet: string[];
+      isBlocked: boolean;
+      isBoosted: boolean;
+      createdAt: string;
+      [key: string]: string[] | number | string | boolean | Object | undefined
+    }
+     
+  interface ProfileData {
+    editData: UserData
+    unchangedData: UserData
+  };
 
 export interface UserRepository {
   alterUserProfile(
     userId: string,
-    editData: ProfileData,
+    userData: ProfileData,
     type: string
-  ): Promise<User>
+  ): Promise<{user: UserData}>
 };
 
-interface ProfileData {
-  editData: UserData
-  unchangedData: UserData
-};
 
-interface UserData {
-  [key: string]: string | number | string[]
-  name: string
-  budget: number
-  age: number
-  location: string
-  mobile: number
-  skills: string
-  profilePicture: string
-  domain: string
-  githubLink: string
-  description: string
-  whyHireMe: string
-  experience: string
-  education: string
-}
 
 export class AlterUserProfile {
   constructor(private userRepository: UserRepository) {}

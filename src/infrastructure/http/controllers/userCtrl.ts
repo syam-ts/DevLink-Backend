@@ -115,15 +115,16 @@ export const userController = {
     }
   },
 
-  loginUser: async (req: Request, res: any) => {
+  loginUser: async (req: Request, res: Response) => {
     try {
-      const { user } = await allUserUseCases.loginUseCase.execute(req.body);
+      const user = await allUserUseCases.loginUseCase.execute(req.body);
       if (!user) {
         res
           .status(401)
           .json({ message: "Invalid credentials", success: false });
         return;
       }
+      if(!user.role) throw new Error('not eixist')
       user.role = "user";
       const { accessToken, refreshToken } = generateTokens(user);
 
@@ -151,9 +152,9 @@ export const userController = {
     }
   },
 
-  googleLogin: async (req: Request, res: any) => {
+  googleLogin: async (req: Request, res: Response) => {
     try {
-      const user: any = await allUserUseCases.GoogleLoginUserUseCase.execute(
+      const user = await allUserUseCases.GoogleLoginUserUseCase.execute(
         req.body
       );
 
@@ -191,7 +192,7 @@ export const userController = {
     }
   },
 
-  getHomeUser: async (req: Request, res: any) => {
+  getHomeUser: async (req: Request, res: Response) => {
     try {
       const clients = await allUserUseCases.getHomeUseCase.execute();
 
@@ -317,11 +318,16 @@ export const userController = {
       }
       const userId = String(req.user?.id);
       const currentPage: number = Number(req.query.currentPage) || 1;
+      const query = {
+        amount: Number(req.query.amount) || 0,
+        paymentType: req.query.paymentType as "hourly" | "fixed",
+        expertLevel: req.query.expertLevel as "beginner" | "intermediate" | "advanced",
+      };
 
       const response = await allUserUseCases.getSelectedJobsUseCase.execute(
         userId,
         jobsType,
-        req.query,
+        query,
         currentPage
       );
       res.status(HttpStatusCode.OK).json({
@@ -555,7 +561,7 @@ export const userController = {
     }
   },
 
-  chatbot: async (req: Request, res: any) => {
+  chatbot: async (req: Request, res: Response) => {
     try {
       const { userInput } = req.body;
 
@@ -577,7 +583,7 @@ export const userController = {
     }
   },
 
-  addToWishlist: async (req: Request, res: any) => {
+  addToWishlist: async (req: Request, res: Response) => {
     try {
       const { jobPostId } = req.body;
       if (!req.user || !req.user.id) {
@@ -604,7 +610,7 @@ export const userController = {
     }
   },
 
-  viewAllWishlist: async (req: Request, res: any) => {
+  viewAllWishlist: async (req: Request, res: Response) => {
     try {
       if (!req.user || !req.user.id) {
          res.status(401).json({ message: "Unauthorized", success: false });
@@ -630,7 +636,7 @@ export const userController = {
     }
   },
 
-  removeFromWishlist: async (req: Request, res: any) => {
+  removeFromWishlist: async (req: Request, res: Response) => {
     try {
       const { wishlistId } = req.params; 
       const { jobPostId } = req.body; 

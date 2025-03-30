@@ -1,3 +1,4 @@
+import { Admin } from "../../../domain/entities/Admin";
 import { Client } from "../../../domain/entities/Client";
 
 interface ClientData {
@@ -7,7 +8,7 @@ interface ClientData {
 
 
 export interface ClientRepository {
-  editClientProfile(clientId: string, clientData: Client, unChangedData: Client): Promise<Client>;
+  editClientProfile(clientId: string, clientData: ClientData, unChangedData: Client): Promise<Admin>;
 }
 
 export class EditClientProfile {
@@ -22,7 +23,7 @@ export class EditClientProfile {
     }
     const client = await this.clientRepository.editClientProfile(
       clientId,
-      clientData.editData as Client,
+      clientData.editData as ClientData,
       unChangedData as Client
     );
   }

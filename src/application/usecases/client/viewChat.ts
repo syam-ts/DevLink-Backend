@@ -1,9 +1,7 @@
-import { Chat } from "../../../domain/entities/Chat";
-
  
 
 export interface ChatRepositary { 
-    viewChat(roleType: string, roleId: string, targetId: string, roleName: string): Promise< Chat>;
+    viewChat(roleType: string, roleId: string, targetId: string, roleName: string): Promise< unknown>;
 }
 
 export class ViewChat {

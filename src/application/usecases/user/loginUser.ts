@@ -11,7 +11,7 @@ interface User {
 export interface UserRepository {
     findUserByEmailAndPassword(
         email: string,
-        password: string
+        password: string,
     ): Promise<User>;
 }
 
@@ -22,7 +22,7 @@ export class LoginUser {
     async execute(theUser: User) {
         const user = await this.userRepository.findUserByEmailAndPassword(
             theUser.email,
-            theUser.password
+            theUser.password 
         );
 
         if (!user) {

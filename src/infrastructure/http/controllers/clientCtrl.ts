@@ -212,7 +212,7 @@ export const clientController = {
     }
   },
 
-  getHomeClient: async (req: any, res: any) => {
+  getHomeClient: async (req: Request, res: any) => {
     try {
       const users = await allClientUseCases.getHomeClientUseCase.execute();
 
@@ -232,7 +232,7 @@ export const clientController = {
     }
   },
 
-  trendingJobs: async (req: any, res: any) => {
+  trendingJobs: async (req: Request, res: any) => {
     try {
       const jobs = await allClientUseCases.trendingJobsUseCase.execute();
 
@@ -309,7 +309,7 @@ export const clientController = {
     }
   },
 
-  profileVerification: async (req: any, res: Response): Promise<void> => {
+  profileVerification: async (req: Request, res: Response): Promise<void> => {
     try {
       if (!req.user || !req.user.id) {
          res.status(401).json({ message: "Unauthorized", success: false });
@@ -336,7 +336,7 @@ export const clientController = {
     }
   },
 
-  editProfile: async (req: any, res: Response): Promise<void> => {
+  editProfile: async (req: Request, res: Response): Promise<void> => {
     try {
       if (!req.user || !req.user.id) {
          res.status(401).json({ message: "Unauthorized", success: false });
@@ -664,9 +664,12 @@ export const clientController = {
     }
   },
 
-  rateAndReview: async (req: any, res: Response): Promise<void> => {
+  rateAndReview: async (req: Request, res: Response): Promise<void> => {
     try {
-      const clientId: Id = req.user.id;
+      if (!req.user || !req.user.id) {
+        res.status(401).json({ message: "Unauthorized", success: false });
+     }
+     const clientId = String(req.user?.id);
       const { notificationId } = req.params;
       const {
         userId,
@@ -821,10 +824,13 @@ export const clientController = {
     }
   },
 
-  rejectContract: async (req: any, res: Response): Promise<void> => {
+  rejectContract: async (req: Request, res: Response): Promise<void> => {
     try {
+      if (!req.user || !req.user.id) {
+        res.status(401).json({ message: "Unauthorized", success: false });
+      }
       const { contractId } = req.params;
-      const clientId = req.user.id;
+     const clientId = String(req.user?.id);
       const response = await allClientUseCases.rejectContractUseCase.execute(
         contractId,
         clientId
@@ -846,7 +852,7 @@ export const clientController = {
     }
   },
 
-  listAllJobs: async (req: any, res: Response): Promise<void> => {
+  listAllJobs: async (req: Request, res: Response): Promise<void> => {
     try {
       if (!req.user || !req.user.id) {
          res.status(401).json({ message: "Unauthorized", success: false });

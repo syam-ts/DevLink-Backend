@@ -13,7 +13,8 @@ import { WishlistModel } from "../../entities/WIshlist";
 
 type Id = string;
 
-interface User { 
+interface User {
+  
   role?: string;
   _id: string;
   name: string;
@@ -28,7 +29,7 @@ interface User {
   education: string;
   budget: number;
   rating: number;
-  domain: string; 
+  domain: string;
   githubLink: string;
   totalJobs: number;
   totalHours: number;
@@ -50,7 +51,7 @@ interface User {
   isBlocked: boolean;
   isBoosted: boolean;
   createdAt: string;
-  
+  [key: string]: string[] | number | string | boolean | Object | undefined
 }
 
 interface Invite {
@@ -75,25 +76,25 @@ interface Wallet {
   balance: number,
   transactions: {
     type: string
-       amount: number
-       from: string
-       fromId: string
-       createdAt: Date
+    amount: number
+    from: string
+    fromId: string
+    createdAt: Date
   }
 };
 
-  interface Proposal {
-        type: string,
-        UserId: mongoose.Types.ObjectId,
-        jobPostId: mongoose.Types.ObjectId,
-        jobPostInfo: string,
-        userData: User,
-        description?: string,
-        status?: string,
-        bidamount: number,
-        bidDeadline: number,
-        createdAt: Date
-    };
+interface Proposal {
+  type: string,
+  UserId: mongoose.Types.ObjectId,
+  jobPostId: mongoose.Types.ObjectId,
+  jobPostInfo: string,
+  userData: User,
+  description?: string,
+  status?: string,
+  bidamount: number,
+  bidDeadline: number,
+  createdAt: Date
+};
 
 export class UserRepositoryMongoose implements UserRepositary {
 
@@ -102,69 +103,69 @@ export class UserRepositoryMongoose implements UserRepositary {
     const hashedPassword = await bcrypt.hash(user.password, salt);
 
     const createdUser = new UserModel({
-        name: user.name,
-        email: user.email,
-        password: hashedPassword,
-        mobile: user.mobile,
-        role: user.role ?? "user",
-        skills: user.skills ?? [],
-        profilePicture: user.profilePicture ?? "",
-        location: user.location ?? "",
-        description: user.description ?? "",
-        experience: user.experience ?? "",
-        education: user.education ?? "",
-        budget: user.budget ?? 0,
-        rating: user.rating ?? 0,
-        domain: user.domain ?? "",
-        githubLink: user.githubLink ?? "",
-        totalJobs: user.totalJobs ?? 0,
-        totalHours: user.totalHours ?? 0,
-        whyHireMe: user.whyHireMe ?? "",
-        completedJobs: user.completedJobs ?? "",
-        inProgress: user.inProgress ?? "",
-        workHistory: user.workHistory ?? [],
-        isEditRequest: false,
-        isProfileFilled: false,
-        request: [],
-        wallet: [],
-        isBlocked: false,
-        isBoosted: false,
-        createdAt: new Date(),
+      name: user.name,
+      email: user.email,
+      password: hashedPassword,
+      mobile: user.mobile,
+      role: user.role ?? "user",
+      skills: user.skills ?? [],
+      profilePicture: user.profilePicture ?? "",
+      location: user.location ?? "",
+      description: user.description ?? "",
+      experience: user.experience ?? "",
+      education: user.education ?? "",
+      budget: user.budget ?? 0,
+      rating: user.rating ?? 0,
+      domain: user.domain ?? "",
+      githubLink: user.githubLink ?? "",
+      totalJobs: user.totalJobs ?? 0,
+      totalHours: user.totalHours ?? 0,
+      whyHireMe: user.whyHireMe ?? "",
+      completedJobs: user.completedJobs ?? "",
+      inProgress: user.inProgress ?? "",
+      workHistory: user.workHistory ?? [],
+      isEditRequest: false,
+      isProfileFilled: false,
+      request: [],
+      wallet: [],
+      isBlocked: false,
+      isBoosted: false,
+      createdAt: new Date(),
     });
 
     const savedUser = await createdUser.save();
 
-    return { 
-        name: savedUser.name,
-        email: savedUser.email,
-        password: savedUser.password,
-        mobile: savedUser.mobile,
-        role: savedUser.role,
-        skills: savedUser.skills,
-        profilePicture: savedUser.profilePicture,
-        location: savedUser.location,
-        description: savedUser.description,
-        experience: savedUser.experience,
-        education: savedUser.education,
-        budget: savedUser.budget,
-        rating: savedUser.rating,
-        domain: savedUser.domain,
-        githubLink: savedUser.githubLink,
-        totalJobs: savedUser.totalJobs,
-        totalHours: savedUser.totalHours,
-        whyHireMe: savedUser.whyHireMe,
-        completedJobs: savedUser.completedJobs,
-        inProgress: savedUser.inProgress,
-        workHistory: savedUser.workHistory,
-        isEditRequest: savedUser.isEditRequest,
-        isProfileFilled: savedUser.isProfileFilled,
-        request: savedUser.request,
-        wallet: savedUser.wallet,
-        isBlocked: savedUser.isBlocked,
-        isBoosted: savedUser.isBoosted,
-        createdAt: savedUser.createdAt,
+    return {
+      name: savedUser.name,
+      email: savedUser.email,
+      password: savedUser.password,
+      mobile: savedUser.mobile,
+      role: savedUser.role,
+      skills: savedUser.skills,
+      profilePicture: savedUser.profilePicture,
+      location: savedUser.location,
+      description: savedUser.description,
+      experience: savedUser.experience,
+      education: savedUser.education,
+      budget: savedUser.budget,
+      rating: savedUser.rating,
+      domain: savedUser.domain,
+      githubLink: savedUser.githubLink,
+      totalJobs: savedUser.totalJobs,
+      totalHours: savedUser.totalHours,
+      whyHireMe: savedUser.whyHireMe,
+      completedJobs: savedUser.completedJobs,
+      inProgress: savedUser.inProgress,
+      workHistory: savedUser.workHistory,
+      isEditRequest: savedUser.isEditRequest,
+      isProfileFilled: savedUser.isProfileFilled,
+      request: savedUser.request,
+      wallet: savedUser.wallet,
+      isBlocked: savedUser.isBlocked,
+      isBoosted: savedUser.isBoosted,
+      createdAt: savedUser.createdAt,
     } as User;
-}
+  }
 
 
   async signupUser(email: string): Promise<User | null> {
@@ -177,7 +178,12 @@ export class UserRepositoryMongoose implements UserRepositary {
   async verifyOtp(user: {
     mailOtp: string;
     user: {
-      data: { name: string; email: string; password: string; mobile: number };
+      data: {
+        name: string;
+        email: string;
+        password: string;
+        mobile: number
+      };
     };
   }): Promise<User> {
     const {
@@ -247,41 +253,41 @@ export class UserRepositoryMongoose implements UserRepositary {
   async findUserByEmail(email: string): Promise<User> {
     const user = await UserModel.findOne({ email }).lean<User>().exec();
     if (!user) throw new Error('user not found');
- 
-      return {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        password: user.password,
-        mobile: user.mobile,
-      } as User; 
+
+    return {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      mobile: user.mobile,
+    } as User;
   }
 
   async findUserByEmailAndPassword(
     email: string,
     passwordUser: string
-  ): Promise<User> { 
+  ): Promise<User> {
 
     const user = await UserModel.findOne({ email }).lean<User>().exec();
 
-    if (!user) throw new Error("User not Found"); 
-    if (user.isBlocked) throw new Error("User not Authenticated"); 
-    if (!user.password) throw new Error("Password is wrong"); 
+    if (!user) throw new Error("User not Found");
+    if (user.isBlocked) throw new Error("User not Authenticated");
+    if (!user.password) throw new Error("Password is wrong");
 
-    const { password } = user as {password: string};
+    const { password } = user as { password: string };
     const isValidPassword = await bcrypt.compare(passwordUser, password);
 
     if (!isValidPassword) {
       throw new Error("wrong password");
     }
 
-    return { 
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        profilePicture: user.profilePicture,
-        isBlocked: user.isBlocked,
-        isProfileFilled: user.isProfileFilled, 
+    return {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      profilePicture: user.profilePicture,
+      isBlocked: user.isBlocked,
+      isProfileFilled: user.isProfileFilled,
     } as User;
   }
 
@@ -355,9 +361,9 @@ export class UserRepositoryMongoose implements UserRepositary {
       .limit(3)
       .lean<Client[]>()
       .exec();
-      if(!clients) throw new Error('Clients not found');
+    if (!clients) throw new Error('Clients not found');
 
-      return clients;
+    return clients;
   }
 
   async resetPassword(userId: string, password: string): Promise<string> {
@@ -374,9 +380,9 @@ export class UserRepositoryMongoose implements UserRepositary {
 
   async alterUserProfile(
     userId: string,
-    userData: {editData: User, unchangedData: User},
+    userData: { editData: User, unchangedData: User },
     type: string
-  ): Promise<{user: User}> {
+  ): Promise<{ user: User }> {
     const { editData } = userData;
     editData.isProfileFilled = true;
     if (type === "verify") {
@@ -415,7 +421,7 @@ export class UserRepositoryMongoose implements UserRepositary {
           wallet: user.wallet,
           isBoosted: user.isBoosted,
           createdAt: user.createdAt
-        },
+        } as User,
       };
     } else {
       const user = await UserModel.findByIdAndUpdate(userId, editData, {
@@ -425,36 +431,36 @@ export class UserRepositoryMongoose implements UserRepositary {
       if (!user) throw new Error("User not found");
 
       return {
-       user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        profilePicture: user.profilePicture,
-        isBlocked: user.isBlocked,
-        isProfileFilled: user.isProfileFilled,
-        password: user.password,
-        mobile: user.mobile,
-        skills: user.skills,
-        location: user.location,
-        description: user.description,
-        experience: user.experience,
-        education: user.education,
-        budget: user.budget,
-        rating: user.rating,
-        domain: user.domain,
-        githubLink: user.githubLink,
-        totalJobs: user.totalJobs,
-        totalHours: user.totalHours,
-        whyHireMe: user.whyHireMe,
-        completedJobs: user.completedJobs,
-        inProgress: user.inProgress,
-        workHistory: user.workHistory,
-        isEditRequest: user.isEditRequest,
-        request: user.request,
-        wallet: user.wallet,
-        isBoosted: user.isBoosted,
-        createdAt: user.createdAt
-       }
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          profilePicture: user.profilePicture,
+          isBlocked: user.isBlocked,
+          isProfileFilled: user.isProfileFilled,
+          password: user.password,
+          mobile: user.mobile,
+          skills: user.skills,
+          location: user.location,
+          description: user.description,
+          experience: user.experience,
+          education: user.education,
+          budget: user.budget,
+          rating: user.rating,
+          domain: user.domain,
+          githubLink: user.githubLink,
+          totalJobs: user.totalJobs,
+          totalHours: user.totalHours,
+          whyHireMe: user.whyHireMe,
+          completedJobs: user.completedJobs,
+          inProgress: user.inProgress,
+          workHistory: user.workHistory,
+          isEditRequest: user.isEditRequest,
+          request: user.request,
+          wallet: user.wallet,
+          isBoosted: user.isBoosted,
+          createdAt: user.createdAt
+        } as User
       };
     }
   }
@@ -462,20 +468,20 @@ export class UserRepositoryMongoose implements UserRepositary {
   async viewProposals(userId: string): Promise<Proposal[]> {
     let findProposals = await ClientModel.find({
       proposals: { $elemMatch: { userId } },
-    }).exec();  
-  
+    }).exec();
+
     if (!findProposals.length) throw new Error("No proposal found");
-  
+
     let proposals: Proposal[] = [];
-  
+
     for (let i = 0; i < findProposals.length; i++) {
       proposals.push(...(findProposals[i].proposals as Proposal[]));
     }
-  
+
     const finalProposals = proposals.flat(1);
     return finalProposals
   }
-  
+
 
   async createProposal(
     userId: Id,
@@ -483,10 +489,10 @@ export class UserRepositoryMongoose implements UserRepositary {
     description: Id,
     bidAmount: number,
     bidDeadline: number
-  ): Promise<{proposal: Client, notification: unknown}> {
+  ): Promise<{ proposal: Client, notification: unknown }> {
     //CHECK IF MAX PROP REACHED
     const proposals = await JobPostModel.findById(jobPostId).lean<JobPostDocument>().exec();
-    if(!proposals) throw new Error('Jobpost not found');
+    if (!proposals) throw new Error('Jobpost not found');
     const { proposalCount, maxProposals } = proposals;
     if (proposalCount === maxProposals)
       throw new Error("Maximum proposals reched");
@@ -494,7 +500,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     const user = await UserModel.findById(userId);
 
     if (!user) throw new Error("User not found");
-    
+
 
     //REMOVE INVITE DOC IF EXISTS 
     const existingProposal = await ClientModel.find({
@@ -516,7 +522,7 @@ export class UserRepositoryMongoose implements UserRepositary {
           new: true,
         }
       );
-      if(!jobpost) throw new Error('Jobpost not found');
+      if (!jobpost) throw new Error('Jobpost not found');
 
       // deletes invite doc if exists
       const clearInvite = await InviteModel.deleteOne({ jobPostId: jobPostId });
@@ -542,8 +548,8 @@ export class UserRepositoryMongoose implements UserRepositary {
         { new: true }
       ).lean<Client>();
 
-      if(!proposal) throw new Error('Proposals not found')
-       
+      if (!proposal) throw new Error('Proposals not found')
+
 
       const newNotificationUser = await NotificationModel.create({
         type: "New Job Proposal",
@@ -572,7 +578,8 @@ export class UserRepositoryMongoose implements UserRepositary {
   async listHomeJobs(type: string): Promise<{
     latestJobs?: JobPostDocument[],
     allJobs?: JobPostDocument[], totalJobs?: number,
-     totalHours?: unknown, verifiedAccounts?: number} > {
+    totalHours?: unknown, verifiedAccounts?: number
+  }> {
     if (type === "listAllJobs") {
       const totalJobs = await JobPostModel.countDocuments();
 
@@ -599,7 +606,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         .limit(3)
         .exec();
 
-      return {latestJobs};
+      return { latestJobs };
     } else {
       throw new Error("Jobs not founded");
     }
@@ -624,88 +631,90 @@ export class UserRepositoryMongoose implements UserRepositary {
       expertLevel: 'beginner' | 'intermediate' | 'advanced'
     },
     currentPage: number
-  ): Promise<{jobs: JobPostDocument[],
-    totalPages: number | undefined} > {
+  ): Promise<{
+    jobs: JobPostDocument[],
+    totalPages: number | undefined
+  }> {
     const page_size: number = 4;
     const skip: number = (currentPage - 1) * page_size;
 
     const user = await UserModel.findById(userId).exec();
- 
+
     if (!user || !user.skills)
       throw new Error("User has no skills or does not exist.");
 
     if (jobType === "listAllJobs") {
-      let totalJobs, jobs, totalPages; 
+      let totalJobs, jobs, totalPages;
 
       if (query.amount) {
-        if (Number(query.amount) === 500) {  
-          totalJobs = await JobPostModel.countDocuments({ 
-            status: "pending", 
-            amount: { $gt: 100, $lt: 500 } 
+        if (Number(query.amount) === 500) {
+          totalJobs = await JobPostModel.countDocuments({
+            status: "pending",
+            amount: { $gt: 100, $lt: 500 }
           });
-          
+
           totalPages = Math.ceil(totalJobs / page_size);
-          
-          jobs = await JobPostModel.find({ 
-            status: "pending", 
-            amount: { $gt: 100, $lt: 500 } 
+
+          jobs = await JobPostModel.find({
+            status: "pending",
+            amount: { $gt: 100, $lt: 500 }
           })
             .skip(skip)
             .limit(page_size);
-          
+
         } else if (Number(query.amount) === 2000) {
-          totalJobs = await JobPostModel.countDocuments({ 
-            status: "pending", 
-            amount: { $gt: 500, $lt: 2000 } 
+          totalJobs = await JobPostModel.countDocuments({
+            status: "pending",
+            amount: { $gt: 500, $lt: 2000 }
           });
-          
+
           totalPages = Math.ceil(totalJobs / page_size);
-          
-          jobs = await JobPostModel.find({ 
-            status: "pending", 
-            amount: { $gt: 500, $lt: 2000 } 
+
+          jobs = await JobPostModel.find({
+            status: "pending",
+            amount: { $gt: 500, $lt: 2000 }
           })
             .skip(skip)
             .limit(page_size);
         } else if (Number(query.amount) === 10000) {
-          totalJobs = await JobPostModel.countDocuments({ 
-            status: "pending", 
-            amount: { $gt: 2000, $lt: 200000 } 
+          totalJobs = await JobPostModel.countDocuments({
+            status: "pending",
+            amount: { $gt: 2000, $lt: 200000 }
           });
-          
+
           totalPages = Math.ceil(totalJobs / page_size);
-          
-          jobs = await JobPostModel.find({ 
-            status: "pending", 
-            amount: { $gt: 2000, $lt: 10000 } 
+
+          jobs = await JobPostModel.find({
+            status: "pending",
+            amount: { $gt: 2000, $lt: 10000 }
           })
             .skip(skip)
             .limit(page_size);
         } else if (Number(query.amount) === 50000) {
-          totalJobs = await JobPostModel.countDocuments({ 
-            status: "pending", 
-            amount: { $gt: 10000, $lt: 50000 } 
+          totalJobs = await JobPostModel.countDocuments({
+            status: "pending",
+            amount: { $gt: 10000, $lt: 50000 }
           });
-          
+
           totalPages = Math.ceil(totalJobs / page_size);
-          
-          jobs = await JobPostModel.find({ 
-            status: "pending", 
-            amount: { $gt: 10000, $lt: 50000 } 
+
+          jobs = await JobPostModel.find({
+            status: "pending",
+            amount: { $gt: 10000, $lt: 50000 }
           })
             .skip(skip)
             .limit(page_size);
         } else if (Number(query.amount) === 70000) {
-          totalJobs = await JobPostModel.countDocuments({ 
-            status: "pending", 
-            amount: { $gt: 50000, $lt: 70000 } 
+          totalJobs = await JobPostModel.countDocuments({
+            status: "pending",
+            amount: { $gt: 50000, $lt: 70000 }
           });
-          
+
           totalPages = Math.ceil(totalJobs / page_size);
-          
-          jobs = await JobPostModel.find({ 
-            status: "pending", 
-            amount: { $gt: 50000, $lt: 70000 } 
+
+          jobs = await JobPostModel.find({
+            status: "pending",
+            amount: { $gt: 50000, $lt: 70000 }
           })
             .skip(skip)
             .limit(page_size);
@@ -717,7 +726,7 @@ export class UserRepositoryMongoose implements UserRepositary {
           jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { expertLevel: 'beginner' }] })
             .skip(skip)
             .limit(page_size);
-     
+
         } else if (query.expertLevel === 'intermediate') {
 
           totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { expertLevel: 'intermediate' }] });
@@ -733,10 +742,10 @@ export class UserRepositoryMongoose implements UserRepositary {
             .limit(page_size);
         }
       } else if (query.paymentType) {
-        if (query.paymentType ===   'hourly') {
-          totalJobs = await JobPostModel.countDocuments({ status: "pending" ,paymentType: 'hourly' });
+        if (query.paymentType === 'hourly') {
+          totalJobs = await JobPostModel.countDocuments({ status: "pending", paymentType: 'hourly' });
           totalPages = Math.ceil(totalJobs / page_size);
-          jobs = await JobPostModel.find({ $and: [{status: "pending"}, {paymentType: 'hourly'}] })
+          jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { paymentType: 'hourly' }] })
             .skip(skip)
             .limit(page_size);
         } else if (query.paymentType === 'fixed') {
@@ -746,8 +755,8 @@ export class UserRepositoryMongoose implements UserRepositary {
             .skip(skip)
             .limit(page_size);
         }
-      } 
-      
+      }
+
       if (!jobs) throw new Error("No jobs found");
 
       return {
@@ -765,114 +774,114 @@ export class UserRepositoryMongoose implements UserRepositary {
         .skip(skip)
         .limit(page_size);
 
-        
-        if (query.amount) {
-          if (query.amount === 500) {
-            totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 500 }, { $gt: 100 }] } }] });
-            totalPages = Math.ceil(totalJobs / page_size);
-            jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 500 }, { $gt: 100 }] } }] })
+
+      if (query.amount) {
+        if (query.amount === 500) {
+          totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 500 }, { $gt: 100 }] } }] });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 500 }, { $gt: 100 }] } }] })
             .sort({
               proposalCount: -1,
-            }) 
+            })
             .skip(skip)
-              .limit(page_size);
-          } else if (query.amount === 2000) {
-            totalJobs = await JobPostModel.countDocuments({
-              $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 2000 }, { $gt: 500 }] } }]
-            });
-            totalPages = Math.ceil(totalJobs / page_size);
-            jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 2000 }, { $gt: 500 }] } }] })
+            .limit(page_size);
+        } else if (query.amount === 2000) {
+          totalJobs = await JobPostModel.countDocuments({
+            $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 2000 }, { $gt: 500 }] } }]
+          });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 2000 }, { $gt: 500 }] } }] })
             .sort({
               proposalCount: -1,
-            })  
+            })
             .skip(skip)
-              .limit(page_size);
-          } else if (Number(query.amount) === 10000) {
-            totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending", }, { $and: [{ amount: { $lt: 10000 } }, { amount: { $gt: 2000 } }] }] });
-            totalPages = Math.ceil(totalJobs / page_size);
-            jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { $and: [{ amount: { $lt: 10000 } }, { amount: { $gt: 2000 } }] }] })
+            .limit(page_size);
+        } else if (Number(query.amount) === 10000) {
+          totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending", }, { $and: [{ amount: { $lt: 10000 } }, { amount: { $gt: 2000 } }] }] });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { $and: [{ amount: { $lt: 10000 } }, { amount: { $gt: 2000 } }] }] })
             .sort({
               proposalCount: -1,
-            })  
+            })
             .skip(skip)
-              .limit(page_size);
-          } else if (query.amount === 50000) {
-            totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 50000 }, { $gt: 10000 }] } }] });
-            totalPages = Math.ceil(totalJobs / page_size);
-            jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 50000 }, { $gt: 10000 }] } }] })
+            .limit(page_size);
+        } else if (query.amount === 50000) {
+          totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 50000 }, { $gt: 10000 }] } }] });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 50000 }, { $gt: 10000 }] } }] })
             .sort({
               proposalCount: -1,
-            }) 
+            })
             .skip(skip)
-              .limit(page_size);
-          } else if (query.amount === 70000) {
-            totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 70000 }, { $gt: 50000 }] } }] });
-            totalPages = Math.ceil(totalJobs / page_size);
-            jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 70000 }, { $gt: 50000 }] } }] })
+            .limit(page_size);
+        } else if (query.amount === 70000) {
+          totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 70000 }, { $gt: 50000 }] } }] });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending", }, { amount: { $and: [{ $lt: 70000 }, { $gt: 50000 }] } }] })
             .sort({
               proposalCount: -1,
-            }) 
+            })
             .skip(skip)
-              .limit(page_size);
-          }
-        } else if (query.expertLevel) {
-          if (query.expertLevel === 'beginner') {
-            totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { expertLevel: 'beginner' }] });
-            totalPages = Math.ceil(totalJobs / page_size);
-            jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { expertLevel: 'beginner' }] })
-            .sort({
-              proposalCount: -1,
-            }) 
-            .skip(skip)
-              .limit(page_size); 
-          } else if (query.expertLevel === 'intermediate') {
-  
-            totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { expertLevel: 'intermediate' }] });
-            totalPages = Math.ceil(totalJobs / page_size);
-            jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { expertLevel: 'intermediate' }] })
-            .sort({
-              proposalCount: -1,
-            })  
-            .skip(skip)
-              .limit(page_size);
-          } else if (query.expertLevel === 'advanced') {
-            totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { expertLevel: 'advanced' }] });
-            totalPages = Math.ceil(totalJobs / page_size);
-            jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { expertLevel: 'advanced' }] })
-            .sort({
-              proposalCount: -1,
-            }) 
-            .skip(skip)
-              .limit(page_size);
-          }
-        } else if (query.paymentType) {
-          if (query.paymentType === 'hourly') {
-            totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { paymentType: 'houly' }] });
-            totalPages = Math.ceil(totalJobs / page_size);
-            jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { paymentType: 'houly' }] })
-            .sort({
-              proposalCount: -1,
-            }) 
-            .skip(skip)
-              .limit(page_size);
-          } else if (query.paymentType === 'fixed') {
-            totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { paymentType: 'fixed' }] });
-            totalPages = Math.ceil(totalJobs / page_size);
-            jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { paymentType: 'fixed' }] })
-            .sort({
-              proposalCount: -1,
-            })  
-            .skip(skip)
-              .limit(page_size);
-          }
+            .limit(page_size);
         }
-  
-        if (!jobs) throw new Error("No jobs found");
-  
-        return {
-          jobs,
-          totalPages,
-        };
+      } else if (query.expertLevel) {
+        if (query.expertLevel === 'beginner') {
+          totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { expertLevel: 'beginner' }] });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { expertLevel: 'beginner' }] })
+            .sort({
+              proposalCount: -1,
+            })
+            .skip(skip)
+            .limit(page_size);
+        } else if (query.expertLevel === 'intermediate') {
+
+          totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { expertLevel: 'intermediate' }] });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { expertLevel: 'intermediate' }] })
+            .sort({
+              proposalCount: -1,
+            })
+            .skip(skip)
+            .limit(page_size);
+        } else if (query.expertLevel === 'advanced') {
+          totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { expertLevel: 'advanced' }] });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { expertLevel: 'advanced' }] })
+            .sort({
+              proposalCount: -1,
+            })
+            .skip(skip)
+            .limit(page_size);
+        }
+      } else if (query.paymentType) {
+        if (query.paymentType === 'hourly') {
+          totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { paymentType: 'houly' }] });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { paymentType: 'houly' }] })
+            .sort({
+              proposalCount: -1,
+            })
+            .skip(skip)
+            .limit(page_size);
+        } else if (query.paymentType === 'fixed') {
+          totalJobs = await JobPostModel.countDocuments({ $and: [{ status: "pending" }, { paymentType: 'fixed' }] });
+          totalPages = Math.ceil(totalJobs / page_size);
+          jobs = await JobPostModel.find({ $and: [{ status: "pending" }, { paymentType: 'fixed' }] })
+            .sort({
+              proposalCount: -1,
+            })
+            .skip(skip)
+            .limit(page_size);
+        }
+      }
+
+      if (!jobs) throw new Error("No jobs found");
+
+      return {
+        jobs,
+        totalPages,
+      };
 
 
     } else if (jobType === "bestMatches") {
@@ -910,7 +919,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     contractId: string,
     description: string,
     progress: number
-  ): Promise<{updateUserWallet: User, updateAdminWallet: unknown}> {
+  ): Promise<{ updateUserWallet: User, updateAdminWallet: unknown }> {
     const currentContract = await ContractModel.findByIdAndUpdate(
       contractId,
       {
@@ -948,7 +957,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         upsert: false,
       }
     ).lean<User>().exec();
-    if(!updateUserWallet) throw new Error('Wallet is not available')
+    if (!updateUserWallet) throw new Error('Wallet is not available')
 
     const walletEntryAdmin = {
       type: "debit",
@@ -969,7 +978,7 @@ export class UserRepositoryMongoose implements UserRepositary {
         upsert: false,
       }
     ).exec();
-    if(!updateAdminWallet) throw new Error('Wallet is not available')
+    if (!updateAdminWallet) throw new Error('Wallet is not available')
 
 
     return { updateUserWallet, updateAdminWallet };
@@ -986,7 +995,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     userId: Id,
     contractViewType: string,
     currentPage: number
-  ): Promise<{contract: ContractDocument[], totalPages: number}> {
+  ): Promise<{ contract: ContractDocument[], totalPages: number }> {
     const page_size: number = 3;
     const skip: number = (currentPage - 1) * page_size;
 
@@ -1053,8 +1062,8 @@ export class UserRepositoryMongoose implements UserRepositary {
       }
     );
 
-    if (!user) throw new Error("User not found"); 
-      return user?.request; 
+    if (!user) throw new Error("User not found");
+    return user?.request;
   }
 
   async getSingleJobPost(jobPostId: string): Promise<JobPostDocument> {
@@ -1077,13 +1086,13 @@ export class UserRepositoryMongoose implements UserRepositary {
         update: true,
       }
     ).lean<ContractDocument>();
-    if(!contract) throw new Error('Contract not exists');
+    if (!contract) throw new Error('Contract not exists');
 
     const clientId = contract.clientId;
     const jobPostId = contract.jobPostId;
 
     const jobPost = await JobPostModel.findById(jobPostId).lean<JobPostDocument>().exec();
-    if(!jobPost) throw new Error('Jobpost doesnt exists');
+    if (!jobPost) throw new Error('Jobpost doesnt exists');
 
     const submissionBody = {
       contractId: contractId,
@@ -1111,7 +1120,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     return addRequestToClient;
   }
 
-  async viewWallet(userId: string, currentPage: number): Promise<{userWallet: Wallet[], totalPages: number}> {
+  async viewWallet(userId: string, currentPage: number): Promise<{ userWallet: Wallet[], totalPages: number }> {
     const page_size: number = 6;
     const skip: number = (currentPage - 1) * page_size;
 
@@ -1163,7 +1172,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       }
     ).lean<InviteDocument>();
 
-    if (!updateInvite) throw new Error("Invite not Found");  
+    if (!updateInvite) throw new Error("Invite not Found");
     return updateInvite as InviteDocument;
   }
 
@@ -1185,11 +1194,11 @@ export class UserRepositoryMongoose implements UserRepositary {
     let userName;
     if (type === "user") {
       const user = await UserModel.findById(userId).lean<User>().exec();
-      if(!user) throw new Error('user not exists');
+      if (!user) throw new Error('user not exists');
       userName = user.name;
     } else {
       const client = await ClientModel.findById(userId).lean<Client>().exec();
-      if(!client) throw new Error('client not exists'); 
+      if (!client) throw new Error('client not exists');
       userName = client.companyName;
     }
 

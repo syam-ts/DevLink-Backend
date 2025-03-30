@@ -4,7 +4,7 @@ export interface ClientRepository {
     closeContract(
         contractId: string,
         progress: number
-    ): Promise<ContractDocument>;
+    ): Promise<unknown>;
 }
 
 export class CloseContract {
