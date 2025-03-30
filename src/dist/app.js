@@ -21,6 +21,7 @@ const morgan_1 = __importDefault(require("morgan"));
 const routes_1 = __importDefault(require("./infrastructure/http/routes"));
 const db_1 = require("./infrastructure/database/db");
 const socket_1 = __importDefault(require("./infrastructure/socket/socket"));
+console.log('all dotenv: ',process.env)
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
