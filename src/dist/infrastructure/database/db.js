@@ -18,7 +18,11 @@ require('dotenv').config();
 const MONGO_URI = 'mongodb+srv://syamnandhu3:AUZcKAsIJHM5phLC@cluster0.ukj87.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose_1.default.connect(MONGO_URI);
+        yield mongoose_1.default.connect(MONGO_URI, {
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 45000,
+            tlsAllowInvalidCertificates: true
+        });
         console.log('Database Connection established');
     }
     catch (err) {
