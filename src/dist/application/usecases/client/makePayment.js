@@ -14,10 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MakePayment = void 0;
 const stripe_1 = __importDefault(require("stripe"));
-
- 
+console.log("The port: ", process.env.PORT);
 console.log("The stripe key: ", process.env.STRIPE_SECRET_KEY);
-const stripe = new stripe_1.default(process.env.STRIPE_SECRET_KEY);
+const stripe = new stripe_1.default('sk_test_51QbMd0IRhIB5V98AeCCvXn0kLeqwJ8HDxvSA92ucQQqItioMMPIEFwQk4kY9boTeeh1JRvF91jDnnAvOgJIO2F2k00J7W4XS9H');
 class MakePayment {
     constructor(clientRepository) {
         this.clientRepository = clientRepository;

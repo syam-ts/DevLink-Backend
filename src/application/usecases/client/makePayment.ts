@@ -11,7 +11,7 @@ export interface ClientRepository {
 
 console.log("The port: ", process.env.PORT)
 console.log("The stripe key: ", process.env.STRIPE_SECRET_KEY)
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+const stripe = new Stripe('sk_test_51QbMd0IRhIB5V98AeCCvXn0kLeqwJ8HDxvSA92ucQQqItioMMPIEFwQk4kY9boTeeh1JRvF91jDnnAvOgJIO2F2k00J7W4XS9H');
 
 export class MakePayment {
   constructor(private clientRepository: ClientRepository) {}
