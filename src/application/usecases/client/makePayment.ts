@@ -9,6 +9,8 @@ export interface ClientRepository {
   createJobPost(clientId: string, postData: JobPostDocument): void;
 }
 
+console.log("The port: ", process.env.PORT)
+console.log("The stripe key: ", process.env.STRIPE_SECRET_KEY)
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 export class MakePayment {
