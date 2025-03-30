@@ -1,7 +1,7 @@
 import { User } from "../../../domain/entities/User";
 
 export interface AdminRepositary {
-  getAllUsers(page: number, sortType: string): Promise<User>;
+  getAllUsers(page: number, sortType: string): Promise<{ users: User[], totalPages: number}>;
 }
 
 export class GetAllUsers {

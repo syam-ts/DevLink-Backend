@@ -1,7 +1,7 @@
 import { ContractDocument } from "../../../domain/entities/Contract";
 
 export interface AdminRepository {
-  viewSingleContract(contractId: string): ContractDocument;
+  viewSingleContract(contractId: string): Promise<ContractDocument>;
 }
 
 export class ViewSingleContractAdmin {

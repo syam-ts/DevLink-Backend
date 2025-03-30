@@ -1,7 +1,7 @@
 import { ContractDocument } from "../../../domain/entities/Contract";
 
 export interface AdminRepositary {
-  viewContracts(currentPage: number): ContractDocument;
+  viewContracts(currentPage: number): Promise<{contracts: ContractDocument[], totalPages: number}>;
 }
 
 export class ViewContractsAdmin {

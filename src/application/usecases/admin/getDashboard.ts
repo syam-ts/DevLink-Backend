@@ -1,7 +1,15 @@
 export interface AdminRepository {
-     clientMetrics(): Promise<number>
-     userMetrics(): Promise<number>
-     getRevenue(range: string): void
+     clientMetrics(): Promise<{ 
+        totalClients: number;
+        verifiedClients: number;
+        totalJobs: number;}>
+     userMetrics(): Promise<{
+        totalUsers: number;
+        verifiedUsers: number;
+        boostedUsers: number;
+        totalJobs: number;
+     }>
+     getRevenue(range: string): Promise<unknown>
 }
 
 export class ClientMetrics {

@@ -518,7 +518,7 @@ export class AdminRepository implements AdminRepositary {
     return { contracts, totalPages };
   }
 
-  async viewSingleContract(contractId: string) {
+  async viewSingleContract(contractId: string): Promise<ContractDocument> {
     const contract = await ContractModel.findById(contractId).exec();
     if (!contract) throw new Error("Contract not found");
 
