@@ -116,7 +116,7 @@ export const userController = {
   },
 
   loginUser: async (req: Request, res: Response) => {
-    try {
+    try { 
       const user = await allUserUseCases.loginUseCase.execute(req.body);
       if (!user) {
         res
@@ -124,17 +124,18 @@ export const userController = {
           .json({ message: "Invalid credentials", success: false });
         return;
       }
-      if(!user.role) throw new Error('not eixist')
       user.role = "user";
-      const { accessToken, refreshToken } = generateTokens(user);
+      if(!user.role) throw new Error('not eixist')
+        const { accessToken, refreshToken } = generateTokens(user);
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
       });
+      console.log('THe user: ', user)
 
-      res.status(HttpStatusCode.OK).json({
+        res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         user,
         accessToken,
@@ -142,7 +143,8 @@ export const userController = {
         success: true,
       });
     } catch (err) {
-       if (err instanceof Error) { 
+      console.log('the err: ',err)
+      if (err instanceof Error) { 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
@@ -192,11 +194,11 @@ export const userController = {
     }
   },
 
-  getHomeUser: async (req: Request, res: Response) => {
+  getHomeUser: async (req: Request, res: Response): Promise<void> => {
     try {
       const clients = await allUserUseCases.getHomeUseCase.execute();
 
-      return res.status(HttpStatusCode.OK).json({
+        res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         data: clients,
         success: true,
@@ -561,13 +563,13 @@ export const userController = {
     }
   },
 
-  chatbot: async (req: Request, res: Response) => {
+  chatbot: async (req: Request, res: Response): Promise<void> => {
     try {
       const { userInput } = req.body;
 
       const response = await allUserUseCases.chatBotUseCase.execute(userInput);
 
-      return res.status(HttpStatusCode.OK).json({
+        res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         queryResult: response,
         success: true,

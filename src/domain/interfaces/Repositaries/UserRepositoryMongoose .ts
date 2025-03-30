@@ -267,7 +267,6 @@ export class UserRepositoryMongoose implements UserRepositary {
     email: string,
     passwordUser: string
   ): Promise<User> {
-
     const user = await UserModel.findOne({ email }).lean<User>().exec();
 
     if (!user) throw new Error("User not Found");
@@ -279,7 +278,7 @@ export class UserRepositoryMongoose implements UserRepositary {
 
     if (!isValidPassword) {
       throw new Error("wrong password");
-    }
+    } 
 
     return {
       _id: user._id,
