@@ -14,6 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BoostPayment = void 0;
 const stripe_1 = __importDefault(require("stripe"));
+console.log('THE FIRST ONE');
+console.log('The port: ',process.env.PORT)
+console.log('The env: ',process.env.STRIPE_SECRET_KEY)
 const stripe = new stripe_1.default(process.env.STRIPE_SECRET_KEY);
 class BoostPayment {
     constructor(userRepositary) {
