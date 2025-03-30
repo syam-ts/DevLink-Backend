@@ -1,6 +1,6 @@
 import { Socket } from "socket.io";
 import { ChatModel } from "../../domain/entities/Chat";
-
+import { Server as HttpServer } from "http";
 const socket = require("socket.io");
 
 
@@ -16,7 +16,7 @@ interface Chat {
 }
 
 
-const initializeSocket = (server: Socket) => {
+const initializeSocket = (server: HttpServer ) => {
   const io = socket(server, {
     cors: {
       origin: process.env.FRONTEND_ORIGIN || "http://localhost:5173",

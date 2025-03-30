@@ -6,7 +6,7 @@
   "author": "<syamnandhu3@gmail.com>",
   "scripts": {
     "dev": "npx nodemon --exec ts-node --transpile-only src/app.ts",
-    "start": "nodemon src/app.ts"
+    "start": "nodemon src/dist/app.js"
   },
   "license": "MIT",
   "dependencies": {
