@@ -15,8 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MakePayment = void 0;
 const stripe_1 = __importDefault(require("stripe"));
 
-
-console.log("The port: ", process.env.PORT);
+ 
 console.log("The stripe key: ", process.env.STRIPE_SECRET_KEY);
 const stripe = new stripe_1.default(process.env.STRIPE_SECRET_KEY);
 class MakePayment {
