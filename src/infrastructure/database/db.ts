@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 require('dotenv').config();
 
  
-const MONGO_URI: string  = process.env.MONGO_URI as string;
+const MONGO_URI: string  = 'mongodb+srv://syamnandhu3:AUZcKAsIJHM5phLC@cluster0.ukj87.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
 export const connectDB = async () => {
     try {
