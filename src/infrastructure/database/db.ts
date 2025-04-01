@@ -11,7 +11,7 @@ export const connectDB = async () => {
         serverSelectionTimeoutMS: 5000, 
         socketTimeoutMS: 45000,
         tlsAllowInvalidCertificates: true
-    });  
+    });   
         console.log('Database Connection established');
     } catch (err: any) {
         console.error('Failed to Connect Database', err);

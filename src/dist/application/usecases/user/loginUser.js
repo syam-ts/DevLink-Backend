@@ -17,6 +17,7 @@ class LoginUser {
     execute(theUser) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield this.userRepository.findUserByEmailAndPassword(theUser.email, theUser.password);
+            console.log('The user from usecase :', user);
             if (!user) {
                 throw new Error("User not Found");
             }

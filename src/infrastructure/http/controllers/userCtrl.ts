@@ -7,6 +7,7 @@ import { HttpStatusCode } from "../../../helper/constants/enums";
 import { StatusMessage } from "../../../helper/constants/stausMessages";
 import generateTokens from "../../../utils/generateTokens";
 import { Error } from "mongoose";
+import logger from '../../../logger/logger'
 
 export const userController = {
   signupUser: async (req: Request, res: Response): Promise<void> => {
@@ -21,13 +22,13 @@ export const userController = {
           success: true,
         });
       }
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -39,13 +40,13 @@ export const userController = {
         message: StatusMessage[HttpStatusCode.OK],
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -59,13 +60,13 @@ export const userController = {
         newOtp: user,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -81,13 +82,13 @@ export const userController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-      if (err instanceof Error) { 
+    } catch (error: unknown) {
+      const err = error as {message: string};
+      logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -104,20 +105,21 @@ export const userController = {
       res
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-    } catch (err) {
-      if (err instanceof Error) { 
+    } catch (error: unknown) {
+      const err = error as {message: string};
+      logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
 
   loginUser: async (req: Request, res: Response) => {
-    try { 
+    try {  
       const user = await allUserUseCases.loginUseCase.execute(req.body);
+      console.log('rint:',user)
       if (!user) {
         res
           .status(401)
@@ -132,8 +134,7 @@ export const userController = {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-      });
-      console.log('THe user: ', user)
+      }); 
 
         res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
@@ -142,14 +143,13 @@ export const userController = {
         refreshToken,
         success: true,
       });
-    } catch (err) {
-      console.log('the err: ',err)
-      if (err instanceof Error) { 
+    } catch (error: unknown ) { 
+      const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -183,13 +183,13 @@ export const userController = {
         refreshToken,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -203,13 +203,13 @@ export const userController = {
         data: clients,
         success: true,
       });
-    } catch (err) {
-      if (err instanceof Error) { 
+    } catch (error: unknown) {
+      const err = error as {message: string};
+      logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -227,13 +227,13 @@ export const userController = {
         data: user,
         success: true,
       });
-    } catch (err) {
-      if (err instanceof Error) { 
+    } catch (error: unknown) {
+      const err = error as {message: string};
+      logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -258,13 +258,13 @@ export const userController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-      if (err instanceof Error) { 
+    } catch (error: unknown) {
+      const err = error as {message: string};
+      logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -280,13 +280,13 @@ export const userController = {
       res
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-    } catch (err) {
-      if (err instanceof Error) { 
+    } catch (error: unknown) {
+      const err = error as {message: string};
+      logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -301,13 +301,13 @@ export const userController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -337,13 +337,13 @@ export const userController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -365,13 +365,13 @@ export const userController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -391,13 +391,13 @@ export const userController = {
         proposals: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -413,13 +413,13 @@ export const userController = {
         notifications: allNotifications,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -449,13 +449,13 @@ export const userController = {
         url: paymentUrl,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -475,13 +475,13 @@ export const userController = {
         response: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -498,13 +498,13 @@ export const userController = {
         jobPost,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -527,13 +527,13 @@ export const userController = {
         data: contracts,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -552,13 +552,13 @@ export const userController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -574,13 +574,13 @@ export const userController = {
         queryResult: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -601,13 +601,13 @@ export const userController = {
         message: StatusMessage[HttpStatusCode.CREATED],
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -627,13 +627,13 @@ export const userController = {
         wishlist,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -650,13 +650,13 @@ export const userController = {
       res
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -678,13 +678,13 @@ export const userController = {
         wallet: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -700,13 +700,13 @@ export const userController = {
         contract,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -726,13 +726,13 @@ export const userController = {
         invites: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -747,13 +747,13 @@ export const userController = {
       res
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -770,13 +770,13 @@ export const userController = {
           jobs,
           success: true,
         });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },
@@ -800,13 +800,13 @@ export const userController = {
         message: StatusMessage[HttpStatusCode.CREATED],
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
         });
-      }
       return;
     }
   },

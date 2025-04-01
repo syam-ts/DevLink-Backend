@@ -18,6 +18,7 @@ const enums_1 = require("../../../helper/constants/enums");
 const stausMessages_1 = require("../../../helper/constants/stausMessages");
 const generateTokens_1 = __importDefault(require("../../../utils/generateTokens"));
 const mongoose_1 = require("mongoose");
+const logger_1 = __importDefault(require("../../../logger/logger"));
 exports.userController = {
     signupUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
@@ -31,13 +32,13 @@ exports.userController = {
                 });
             }
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -49,13 +50,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -68,13 +69,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -87,13 +88,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -105,19 +106,20 @@ exports.userController = {
                 .status(enums_1.HttpStatusCode.OK)
                 .json({ message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK], success: true });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
     loginUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const user = yield allCtrlConnection_1.allUserUseCases.loginUseCase.execute(req.body);
+            console.log('rint:', user);
             if (!user) {
                 res
                     .status(401)
@@ -133,7 +135,6 @@ exports.userController = {
                 secure: process.env.NODE_ENV === "production",
                 sameSite: "strict",
             });
-            console.log('THe user: ', user);
             res.status(enums_1.HttpStatusCode.OK).json({
                 message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK],
                 user,
@@ -142,14 +143,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            console.log('the err: ', err);
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -177,13 +177,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -196,13 +196,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -220,13 +220,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -246,13 +246,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -268,13 +268,13 @@ exports.userController = {
                 .status(enums_1.HttpStatusCode.OK)
                 .json({ message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK], success: true });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -288,13 +288,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -319,13 +319,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -339,13 +339,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -363,13 +363,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -383,13 +383,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -416,13 +416,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -440,13 +440,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -460,13 +460,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -486,13 +486,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -507,13 +507,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -527,13 +527,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -551,13 +551,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -575,13 +575,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -594,13 +594,13 @@ exports.userController = {
                 .status(enums_1.HttpStatusCode.OK)
                 .json({ message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK], success: true });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -619,13 +619,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -639,13 +639,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -663,13 +663,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -681,13 +681,13 @@ exports.userController = {
                 .status(enums_1.HttpStatusCode.OK)
                 .json({ message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK], success: true });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -703,13 +703,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -727,13 +727,13 @@ exports.userController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof mongoose_1.Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),

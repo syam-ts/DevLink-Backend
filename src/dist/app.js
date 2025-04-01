@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 require("dotenv").config();
+const logger_1 = __importDefault(require("./logger/logger"));
 const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const node_http_1 = __importDefault(require("node:http"));
@@ -25,7 +26,7 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
-    origin: process.env.FRONTEND_ORIGIN || 'http://localhost:5173',
+    origin: process.env.FRONTEND_ORIGIN,
     credentials: true,
 }));
 app.use((0, morgan_1.default)("dev"));
@@ -35,5 +36,8 @@ const server = node_http_1.default.createServer(app);
 const PORT = process.env.PORT || 3000;
 (() => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, db_1.connectDB)();
-    server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    server.listen(PORT, () => {
+        logger_1.default.info(`Server running on port ${PORT}`);
+        console.log(`Server running on port ${PORT}`);
+    });
 }))();

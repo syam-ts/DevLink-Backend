@@ -1,5 +1,6 @@
 import express from "express";
 require("dotenv").config();
+import logger from './logger/logger'
 import cors from "cors";
 import cookieparser from "cookie-parser";
 import http from "node:http";
@@ -13,7 +14,7 @@ app.use(express.json());
 app.use(cookieparser());
 app.use(
   cors({
-    origin: process.env.FRONTEND_ORIGIN || 'http://localhost:5173',
+    origin: process.env.FRONTEND_ORIGIN,
     credentials: true,
   })
 );
@@ -30,5 +31,8 @@ const PORT = (process.env.PORT as string) || 3000;
 
 (async () => {
   await connectDB();
-  server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  server.listen(PORT, () => {
+    logger.info(`Server running on port ${PORT}`)
+    console.log(`Server running on port ${PORT}`)
+  });
 })();

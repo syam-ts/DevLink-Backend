@@ -1,9 +1,9 @@
 import { allAdminUseCases } from "../../../helper/controllerHelper/allCtrlConnection";
-
 import { HttpStatusCode } from "../../../helper/constants/enums";
 import { StatusMessage } from "../../../helper/constants/stausMessages";
 import generateTokens from "../../../utils/generateTokens";
 import { ErrorRequestHandler, Request, Response } from "express";
+import logger from '../../../logger/logger';
 
 export const adminController = {
   // signUpAdmin: async(req: Request, res: Response): Promise<void> => {
@@ -41,13 +41,13 @@ export const adminController = {
         refreshToken,
         success: true,
       });
-    } catch (err) {
-      if (err instanceof Error) { 
+    } catch (error: unknown) {
+         const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -70,13 +70,13 @@ export const adminController = {
         response,
         success: true,
       });
-    } catch (err) {
-      if (err instanceof Error) { 
+    } catch (error: unknown) {
+         const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -96,13 +96,13 @@ export const adminController = {
         data: users,
         success: true,
       });
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -121,13 +121,13 @@ export const adminController = {
         data: clients,
         success: true,
       });
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -141,13 +141,13 @@ export const adminController = {
           .status(HttpStatusCode.OK)
           .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
    
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -164,13 +164,13 @@ export const adminController = {
           .status(HttpStatusCode.OK)
           .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
        
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -186,13 +186,13 @@ export const adminController = {
           .status(HttpStatusCode.OK)
           .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
     
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -209,13 +209,13 @@ export const adminController = {
           .status(HttpStatusCode.OK)
           .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
     
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -234,13 +234,13 @@ export const adminController = {
             success: true,
           });
    
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -257,13 +257,13 @@ export const adminController = {
       res
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -277,13 +277,13 @@ export const adminController = {
       res
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -297,13 +297,13 @@ export const adminController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -320,13 +320,13 @@ export const adminController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -344,13 +344,13 @@ export const adminController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -364,13 +364,13 @@ export const adminController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -389,13 +389,13 @@ export const adminController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -412,13 +412,13 @@ export const adminController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -432,13 +432,13 @@ export const adminController = {
         contracts,
         success: true,
       });
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -455,13 +455,13 @@ export const adminController = {
         contract,
         success: true,
       });
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -515,13 +515,13 @@ export const adminController = {
         requests,
         success: true,
       });
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -535,13 +535,13 @@ export const adminController = {
         response,
         success: true,
       });
-    } catch (err) {
-         if (err instanceof Error) { 
+    } catch (error: unknown) {
+            const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   }

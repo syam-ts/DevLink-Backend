@@ -17,6 +17,7 @@ const allCtrlConnection_1 = require("../../../helper/controllerHelper/allCtrlCon
 const enums_1 = require("../../../helper/constants/enums");
 const stausMessages_1 = require("../../../helper/constants/stausMessages");
 const generateTokens_1 = __importDefault(require("../../../utils/generateTokens"));
+const logger_1 = __importDefault(require("../../../logger/logger"));
 exports.adminController = {
     // signUpAdmin: async(req: Request, res: Response): Promise<void> => {
     //     try{
@@ -47,13 +48,13 @@ exports.adminController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -74,13 +75,13 @@ exports.adminController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -95,13 +96,13 @@ exports.adminController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -116,13 +117,13 @@ exports.adminController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -135,13 +136,13 @@ exports.adminController = {
                 .status(enums_1.HttpStatusCode.OK)
                 .json({ message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK], success: true });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -154,13 +155,13 @@ exports.adminController = {
                 .status(enums_1.HttpStatusCode.OK)
                 .json({ message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK], success: true });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -173,13 +174,13 @@ exports.adminController = {
                 .status(enums_1.HttpStatusCode.OK)
                 .json({ message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK], success: true });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -192,13 +193,13 @@ exports.adminController = {
                 .status(enums_1.HttpStatusCode.OK)
                 .json({ message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK], success: true });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -214,13 +215,13 @@ exports.adminController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -236,13 +237,13 @@ exports.adminController = {
                 .status(enums_1.HttpStatusCode.OK)
                 .json({ message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK], success: true });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -253,13 +254,13 @@ exports.adminController = {
                 .status(enums_1.HttpStatusCode.OK)
                 .json({ message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK], success: true });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -272,13 +273,13 @@ exports.adminController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -292,13 +293,13 @@ exports.adminController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -312,13 +313,13 @@ exports.adminController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -331,13 +332,13 @@ exports.adminController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -351,13 +352,13 @@ exports.adminController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -371,13 +372,13 @@ exports.adminController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -391,13 +392,13 @@ exports.adminController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -411,13 +412,13 @@ exports.adminController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -448,13 +449,13 @@ exports.adminController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     }),
@@ -468,13 +469,13 @@ exports.adminController = {
                 success: true,
             });
         }
-        catch (err) {
-            if (err instanceof Error) {
-                res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-                    message: err.message,
-                    success: false,
-                });
-            }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
             return;
         }
     })

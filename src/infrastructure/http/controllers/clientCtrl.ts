@@ -4,6 +4,7 @@ import { HttpStatusCode } from "../../../helper/constants/enums";
 import { StatusMessage } from "../../../helper/constants/stausMessages";
 import generateTokens from "../../../utils/generateTokens";
 import { GetSingleJobPost } from "../../../application/usecases/user/getSingleJobPost";
+import logger from '../../../logger/logger';
 
 type Id = string;
 
@@ -31,13 +32,13 @@ export const clientController = {
           success: true,
         });
       }
-    } catch (err) {
-    if (err instanceof Error) { 
+    } catch (error: unknown) {
+  const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -50,13 +51,13 @@ export const clientController = {
       res
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-    } catch (err) {
-    if (err instanceof Error) { 
+    } catch (error: unknown) {
+  const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -74,13 +75,13 @@ export const clientController = {
         newOtp: client,
         success: true,
       });
-    } catch (err) {
-    if (err instanceof Error) { 
+    } catch (error: unknown) {
+  const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -96,13 +97,13 @@ export const clientController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-    if (err instanceof Error) { 
+    } catch (error: unknown) {
+  const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -120,13 +121,13 @@ export const clientController = {
       res
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-    } catch (err) {
-    if (err instanceof Error) { 
+    } catch (error: unknown) {
+  const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -160,13 +161,13 @@ export const clientController = {
           success: true,
         });
       }
-    } catch (err) {
-    if (err instanceof Error) { 
+    } catch (error: unknown) {
+  const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -201,13 +202,13 @@ export const clientController = {
           accessToken,
           refreshToken, success: true
         });
-    } catch (err) {
-    if (err instanceof Error) { 
+    } catch (error: unknown) {
+  const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -221,13 +222,13 @@ export const clientController = {
         data: users,
         success: true,
       });
-    } catch (err) {
-    if (err instanceof Error) { 
+    } catch (error: unknown) {
+  const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -241,13 +242,13 @@ export const clientController = {
         data: jobs,
         success: true,
       });
-    } catch (err) {
-    if (err instanceof Error) { 
+    } catch (error: unknown) {
+  const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -272,13 +273,13 @@ export const clientController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-      if (err instanceof Error) { 
+    } catch (error: unknown) {
+    const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -298,13 +299,13 @@ export const clientController = {
         data: client,
         success: true,
       });
-    } catch (err) {
-      if (err instanceof Error) { 
-        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-         message: err.message,
-         success: false,
-       });
-     }
+    } catch (error: unknown) {
+      const err = error as {message: string};
+      logger.error(err.message);
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        }); 
      return;
     }
   },
@@ -325,13 +326,13 @@ export const clientController = {
       res
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-    } catch (err) {
-      if (err instanceof Error) { 
+    } catch (error: unknown) {
+    const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -351,13 +352,13 @@ export const clientController = {
         message: StatusMessage[HttpStatusCode.CREATED],
         success: true,
       });
-    } catch (err) {
-      if (err instanceof Error) { 
+    } catch (error: unknown) {
+    const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -373,13 +374,13 @@ export const clientController = {
       res
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-    } catch (err) {
-    if (err instanceof Error) { 
+    } catch (error: unknown) {
+  const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -395,13 +396,13 @@ export const clientController = {
         notifications: response,
         success: true,
       });
-    } catch (err) {
-    if (err instanceof Error) { 
+    } catch (error: unknown) {
+  const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -423,13 +424,13 @@ export const clientController = {
         response,
         success: true,
       });
-    } catch (err) {
-      if (err instanceof Error) { 
-        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-         message: err.message,
-         success: false,
-       });
-     }
+    } catch (error: unknown) {
+      const err = error as {message: string};
+      logger.error(err.message);
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        }); 
      return;
     }
   },
@@ -453,13 +454,13 @@ export const clientController = {
         data: jobPost,
         success: true,
       });
-    } catch (err) {
-    if (err instanceof Error) { 
+    } catch (error: unknown) {
+  const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -476,13 +477,13 @@ export const clientController = {
         response,
         success: true,
       });
-    } catch (err) {
-      if (err instanceof Error) { 
+    } catch (error: unknown) {
+    const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -502,13 +503,13 @@ export const clientController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+     const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -536,13 +537,13 @@ export const clientController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+     const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -573,13 +574,13 @@ export const clientController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+     const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -603,13 +604,13 @@ export const clientController = {
         data: contracts,
         success: true,
       });
-    } catch (err) {
-      if (err instanceof Error) { 
+    } catch (error: unknown) {
+    const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -629,13 +630,13 @@ export const clientController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+     const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -653,13 +654,13 @@ export const clientController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+     const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -689,13 +690,13 @@ export const clientController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+     const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -711,13 +712,13 @@ export const clientController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+     const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -734,13 +735,13 @@ export const clientController = {
         data: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+     const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -762,13 +763,13 @@ export const clientController = {
         messages: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+     const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -790,16 +791,14 @@ export const clientController = {
         wallet: response,
         success: true,
       });
-    } catch (err) {
-      if (err instanceof Error) { 
-        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-         message: err.message,
-         success: false,
-       });
-     }
-     return;
-
-     
+    } catch (error: unknown) {
+      const err = error as {message: string};
+      logger.error(err.message);
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });  
+     return; 
     }
   },
 
@@ -813,13 +812,13 @@ export const clientController = {
         developers: response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+     const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -841,13 +840,13 @@ export const clientController = {
         response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+     const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -867,13 +866,13 @@ export const clientController = {
         response,
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+     const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -905,13 +904,13 @@ export const clientController = {
         message: StatusMessage[HttpStatusCode.CREATED],
         success: true,
       });
-    } catch (err) {
-       if (err instanceof Error) { 
+    } catch (error: unknown) {
+     const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -931,13 +930,12 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-      const err = error as { message: string };
-      if (err instanceof Error) { 
+      const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -956,13 +954,12 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-      const err = error as { message: string };
-      if (err instanceof Error) { 
+      const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        }); 
       return;
     }
   },
@@ -979,13 +976,12 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-      const err = error as { message: string };
-      if (err instanceof Error) { 
+      const err = error as {message: string};
+      logger.error(err.message);
          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
           message: err.message,
           success: false,
-        });
-      }
+        });  
       return;
     }
   }
