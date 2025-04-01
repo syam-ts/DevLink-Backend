@@ -23,6 +23,11 @@ const routes_1 = __importDefault(require("./infrastructure/http/routes"));
 const db_1 = require("./infrastructure/database/db");
 const socket_1 = __importDefault(require("./infrastructure/socket/socket"));
 const app = (0, express_1.default)();
+//pushing all logs to info
+app.use((req, res, next) => {
+    logger_1.default.info(`route: ${req.url}`);
+    next();
+});
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({

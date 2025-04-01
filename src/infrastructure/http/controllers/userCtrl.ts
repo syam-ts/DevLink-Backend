@@ -215,7 +215,7 @@ export const userController = {
   },
 
   getProfile: async (req: Request, res: Response): Promise<void> => {
-    try {
+    try { 
        if (!req.user || !req.user.id) {
          res.status(401).json({ message: "Unauthorized", success: false });
       }

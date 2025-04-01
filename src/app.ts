@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 require("dotenv").config();
 import logger from './logger/logger'
 import cors from "cors";
@@ -10,6 +10,12 @@ import { connectDB } from "./infrastructure/database/db";
 import initializeSocket from "./infrastructure/socket/socket";
 
 const app = express();
+//pushing all logs to info
+app.use((req: Request, res: Response, next: NextFunction) => {  
+    logger.info(`route: ${req.url}`); 
+  next();
+}); 
+
 app.use(express.json());
 app.use(cookieparser());
 app.use(
