@@ -41,8 +41,5 @@ const server = node_http_1.default.createServer(app);
 const PORT = process.env.PORT || 3000;
 (() => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, db_1.connectDB)();
-    server.listen(PORT, () => {
-        logger_1.default.info(`Server running on port ${PORT}`);
-        console.log(`Server running on port ${PORT}`);
-    });
+    server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 }))();

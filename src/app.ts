@@ -25,20 +25,15 @@ app.use(
   })
 );
 
-app.use(morgan("dev"));
-
+app.use(morgan("dev")); 
 app.use("/", routes);
 
-const server = http.createServer(app);
-
+const server = http.createServer(app); 
 initializeSocket(server);
 
 const PORT = (process.env.PORT as string) || 3000;
 
 (async () => {
   await connectDB();
-  server.listen(PORT, () => {
-    logger.info(`Server running on port ${PORT}`)
-    console.log(`Server running on port ${PORT}`)
-  });
+  server.listen(PORT, () =>  console.log(`Server running on port ${PORT}`))
 })();
