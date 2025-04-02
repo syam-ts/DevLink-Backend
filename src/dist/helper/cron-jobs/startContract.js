@@ -28,7 +28,6 @@ const sendingContractFinishRequest = (jobPostId, userId, contractId) => __awaite
         throw new Error('Contract not exists');
     console.log('updateJobPost: ', updateJobPost);
     if (currentContract.status === 'closed') {
-        console.log('Contract alredy finished!');
     }
     else {
         const request = {
@@ -41,7 +40,6 @@ const sendingContractFinishRequest = (jobPostId, userId, contractId) => __awaite
     }
 });
 const startContractHelperFn = (timer, jobPostId, userId, contractId) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('TIMER : ', timer);
     const schedule = `*/${timer} * * * * *`; // This will run every second
     // const schedule: string = `0 */${timer} * * *`; // hour timer
     node_cron_1.default.schedule(schedule, () => {

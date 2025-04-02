@@ -16,7 +16,6 @@ class CreateJobPost {
     }
     execute(clientId, postData) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("THe postdta: ", postData);
             const jobPost = yield this.clientRepository.createJobPost(clientId, postData);
             return jobPost;
         });

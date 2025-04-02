@@ -184,13 +184,10 @@ class UserRepositoryMongoose {
             if (user.isBlocked)
                 throw new Error("User not Authenticated");
             const { password } = user;
-            console.log('The password: ', password, passwordUser);
             const isValidPassword = yield bcrypt_1.default.compare(passwordUser, password);
-            console.log('is valid: ', isValidPassword);
             if (!isValidPassword) {
                 throw new Error("wrong password");
             }
-            console.log('The final user: ', user);
             return {
                 _id: user._id,
                 name: user.name,

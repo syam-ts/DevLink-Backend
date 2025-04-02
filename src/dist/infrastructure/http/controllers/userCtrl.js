@@ -119,7 +119,6 @@ exports.userController = {
     loginUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const user = yield allCtrlConnection_1.allUserUseCases.loginUseCase.execute(req.body);
-            console.log('rint:', user);
             if (!user) {
                 res
                     .status(401)

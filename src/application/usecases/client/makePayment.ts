@@ -8,9 +8,7 @@ interface DataInterface {
 export interface ClientRepository {
   createJobPost(clientId: string, postData: JobPostDocument): void;
 }
-
-console.log("The port: ", process.env.PORT)
-console.log("The stripe key: ", process.env.STRIPE_SECRET_KEY)
+ 
 const stripe = new Stripe('sk_test_51QbMd0IRhIB5V98AeCCvXn0kLeqwJ8HDxvSA92ucQQqItioMMPIEFwQk4kY9boTeeh1JRvF91jDnnAvOgJIO2F2k00J7W4XS9H');
 
 export class MakePayment {
@@ -25,8 +23,7 @@ export class MakePayment {
 
     if (paymentType === "hourly") {
 
-      const totalAmount: number = data.formData.estimateTime * data.formData.amount; 
-      console.log('The total: ', totalAmount)
+      const totalAmount: number = data.formData.estimateTime * data.formData.amount;  
 
       const product = await stripe.products.create({
         name: "Job-Post",
@@ -37,8 +34,7 @@ export class MakePayment {
           product: `${product.id}`,
           unit_amount: totalAmount * 100,
           currency: "inr",
-        });
-console.log("Final Data: ",data.formData)
+        }); 
         if (price.id) {
           var session = await stripe.checkout.sessions.create({
             line_items: [

@@ -135,8 +135,7 @@ export const adminController = {
   blockUser: async (req: Request, res: Response): Promise<void> => {
     try {
       const {userId } = req.params;
-      const user = await allAdminUseCases.blockUserUseCase.execute(userId); 
-    console.log('user: ', user);
+      const user = await allAdminUseCases.blockUserUseCase.execute(userId);  
         res
           .status(HttpStatusCode.OK)
           .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
@@ -157,9 +156,7 @@ export const adminController = {
       const {userId } = req.params;
       const user = await allAdminUseCases.unBlockUserUseCase.execute(
         userId
-      );
-      console.log('user: ', user); 
-
+      ); 
         res
           .status(HttpStatusCode.OK)
           .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
@@ -180,8 +177,7 @@ export const adminController = {
       const {clientId } = req.params;
       const client = await allAdminUseCases.blockClientUseCase.execute(
         clientId
-      ); 
-      console.log('client: ',client);
+      );  
         res
           .status(HttpStatusCode.OK)
           .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
@@ -202,8 +198,7 @@ export const adminController = {
       const {clientId} = req.params;
       const client = await allAdminUseCases.unBlockClientUseCase.execute(
         clientId
-      );
-      console.log('client: ',client); 
+      );  
       
         res
           .status(HttpStatusCode.OK)

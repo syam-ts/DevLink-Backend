@@ -148,7 +148,7 @@ class ClientRepositoryMongoose {
             if (client) {
                 return {
                     _id: client._id,
-                    companyName: companyName,
+                    companyName: client.companyName,
                     email: client.email,
                     isBlocked: client.isBlocked,
                     isVerified: client.isVerified,
@@ -158,7 +158,7 @@ class ClientRepositoryMongoose {
                 const salt = 10;
                 const hashedPassword = yield bcrypt_1.default.hash(password, salt);
                 const createdClient = new Client_1.ClientModel({
-                    companyName: name,
+                    companyName: companyName,
                     email: email,
                     password: hashedPassword,
                     description: "",

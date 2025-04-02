@@ -131,7 +131,6 @@ exports.adminController = {
         try {
             const { userId } = req.params;
             const user = yield allCtrlConnection_1.allAdminUseCases.blockUserUseCase.execute(userId);
-            console.log('user: ', user);
             res
                 .status(enums_1.HttpStatusCode.OK)
                 .json({ message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK], success: true });
@@ -150,7 +149,6 @@ exports.adminController = {
         try {
             const { userId } = req.params;
             const user = yield allCtrlConnection_1.allAdminUseCases.unBlockUserUseCase.execute(userId);
-            console.log('user: ', user);
             res
                 .status(enums_1.HttpStatusCode.OK)
                 .json({ message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK], success: true });
@@ -169,7 +167,6 @@ exports.adminController = {
         try {
             const { clientId } = req.params;
             const client = yield allCtrlConnection_1.allAdminUseCases.blockClientUseCase.execute(clientId);
-            console.log('client: ', client);
             res
                 .status(enums_1.HttpStatusCode.OK)
                 .json({ message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK], success: true });
@@ -188,7 +185,6 @@ exports.adminController = {
         try {
             const { clientId } = req.params;
             const client = yield allCtrlConnection_1.allAdminUseCases.unBlockClientUseCase.execute(clientId);
-            console.log('client: ', client);
             res
                 .status(enums_1.HttpStatusCode.OK)
                 .json({ message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK], success: true });

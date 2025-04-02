@@ -16,8 +16,7 @@ const sendingContractFinishRequest = async (jobPostId: Id, userId: Id, contractI
      console.log('updateJobPost: ',updateJobPost);
      
 
-     if(currentContract.status === 'closed') {
-        console.log('Contract alredy finished!');
+     if(currentContract.status === 'closed') { 
      } else {
          const request = {
             type: 'What about the job progress ?',
@@ -37,11 +36,9 @@ const sendingContractFinishRequest = async (jobPostId: Id, userId: Id, contractI
 
 
 export const startContractHelperFn = async (timer: string, jobPostId: Id, userId: Id, contractId: Id) => {
-  console.log('TIMER : ', timer)
-
+  
    const schedule: string = `*/${timer} * * * * *`;  // This will run every second
-
-      // const schedule: string = `0 */${timer} * * *`; // hour timer
+ // const schedule: string = `0 */${timer} * * *`; // hour timer
 
      cron.schedule(schedule, () => { 
         sendingContractFinishRequest(jobPostId, userId, contractId);

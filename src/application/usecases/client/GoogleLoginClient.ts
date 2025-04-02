@@ -17,11 +17,9 @@ export interface ClientRepository {
 export class GoogleLoginClient {
     constructor(private clientRepository: ClientRepository) { }
 
-    async execute(client: ClientData) {
-        console.log('THe c: ',client)
+    async execute(client: ClientData) { 
         const { email, password } = client; 
-        const companyName = client.name;
-        console.log('THe name: ',companyName)
+        const companyName = client.name; 
 
         const clientGoogleLogin = await this.clientRepository.findClientByOnlyEmail(
             email,

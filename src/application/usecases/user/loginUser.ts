@@ -23,8 +23,7 @@ export class LoginUser {
         const user = await this.userRepository.findUserByEmailAndPassword(
             theUser.email,
             theUser.password 
-        ); 
-        console.log('The user from usecase :',user)
+        );  
 
         if (!user) {
             throw new Error("User not Found");

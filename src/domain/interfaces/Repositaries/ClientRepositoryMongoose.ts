@@ -228,8 +228,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         isBlocked: client.isBlocked,
         isVerified: client.isVerified,
       } as Client;
-    } else {
-      console.log('c',companyName)
+    } else { 
       const salt: number = 10;
       const hashedPassword = await bcrypt.hash(password, salt);
       const createdClient = new ClientModel({

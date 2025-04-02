@@ -14,8 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MakePayment = void 0;
 const stripe_1 = __importDefault(require("stripe"));
-console.log("The port: ", process.env.PORT);
-console.log("The stripe key: ", process.env.STRIPE_SECRET_KEY);
 const stripe = new stripe_1.default('sk_test_51QbMd0IRhIB5V98AeCCvXn0kLeqwJ8HDxvSA92ucQQqItioMMPIEFwQk4kY9boTeeh1JRvF91jDnnAvOgJIO2F2k00J7W4XS9H');
 class MakePayment {
     constructor(clientRepository) {
@@ -26,7 +24,6 @@ class MakePayment {
             const { amount, paymentType, } = data.formData;
             if (paymentType === "hourly") {
                 const totalAmount = data.formData.estimateTime * data.formData.amount;
-                console.log('The total: ', totalAmount);
                 const product = yield stripe.products.create({
                     name: "Job-Post",
                 });
@@ -36,7 +33,6 @@ class MakePayment {
                         unit_amount: totalAmount * 100,
                         currency: "inr",
                     });
-                    console.log("Final Data: ", data.formData);
                     if (price.id) {
                         var session = yield stripe.checkout.sessions.create({
                             line_items: [

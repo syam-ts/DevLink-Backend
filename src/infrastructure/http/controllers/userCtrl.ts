@@ -118,8 +118,7 @@ export const userController = {
 
   loginUser: async (req: Request, res: Response) => {
     try {  
-      const user = await allUserUseCases.loginUseCase.execute(req.body);
-      console.log('rint:',user)
+      const user = await allUserUseCases.loginUseCase.execute(req.body); 
       if (!user) {
         res
           .status(401)

@@ -392,7 +392,6 @@ exports.clientController = {
     createJobPost: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         var _a;
         try {
-            console.log('the use: ', req.user);
             if (!req.user || !req.user.id) {
                 res.status(401).json({ message: "Unauthorized", success: false });
             }
@@ -656,7 +655,6 @@ exports.clientController = {
     }),
     viewChat: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            console.log('log');
             const { roleType, roleId, targetId, roleName } = req.params;
             const response = yield allCtrlConnection_1.allClientUseCases.viewChatUseCase.execute(roleType, roleId, targetId, roleName);
             res.status(enums_1.HttpStatusCode.OK).json({

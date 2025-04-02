@@ -436,8 +436,7 @@ export const clientController = {
   },
 
   createJobPost: async (req: Request, res: Response): Promise<void> => {
-    try {
-      console.log('the use: ',req.user)
+    try { 
       if (!req.user || !req.user.id) {
          res.status(401).json({ message: "Unauthorized", success: false });
       }
@@ -747,8 +746,7 @@ export const clientController = {
   },
 
   viewChat: async (req: Request, res: Response): Promise<void> => {
-    try { 
-      console.log('log')
+    try {  
       const { roleType, roleId, targetId, roleName } = req.params;
 
       const response = await allClientUseCases.viewChatUseCase.execute(

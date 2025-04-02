@@ -271,15 +271,12 @@ export class UserRepositoryMongoose implements UserRepositary {
     if (!user) throw new Error("User not Found");
     if (user.isBlocked) throw new Error("User not Authenticated"); 
 
-    const { password } = user;
-    console.log('The password: ', password, passwordUser);
+    const { password } = user; 
     const isValidPassword = await bcrypt.compare(passwordUser, password);
-
-    console.log('is valid: ',isValidPassword)
+ 
     if (!isValidPassword) {
       throw new Error("wrong password");
-    } 
-    console.log('The final user: ',user)
+    }  
 
     return {
       _id: user._id,

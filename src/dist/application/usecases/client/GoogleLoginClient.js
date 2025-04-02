@@ -16,7 +16,8 @@ class GoogleLoginClient {
     }
     execute(client) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { email, companyName, password } = client;
+            const { email, password } = client;
+            const companyName = client.name;
             const clientGoogleLogin = yield this.clientRepository.findClientByOnlyEmail(email, companyName, password);
             return clientGoogleLogin;
         });
