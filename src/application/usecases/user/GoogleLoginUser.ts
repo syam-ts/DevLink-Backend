@@ -6,8 +6,7 @@ interface User {
   role?: string
 }
 
-export interface UserRepository {
-  createUser(user: User): Promise<User>;
+export interface UserRepository { 
   findUserByOnlyEmail(
     email: string,
     name: string,

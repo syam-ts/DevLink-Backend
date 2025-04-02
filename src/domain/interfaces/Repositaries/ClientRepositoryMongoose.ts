@@ -215,25 +215,25 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
   async findClientByOnlyEmail(
-    email: string,
-    companyName: string | undefined,
+    email: string, 
+    companyName: string, 
     password: string
-  ): Promise<Client> {
-    const client = await ClientModel.findOne({ email }).exec();
-
+  ): Promise<Client> { 
+    const client = await ClientModel.findOne({ email }).exec(); 
     if (client) {
       return {
         _id: client._id,
-        companyName: companyName,
+        companyName: client.companyName,
         email: client.email,
         isBlocked: client.isBlocked,
         isVerified: client.isVerified,
       } as Client;
     } else {
+      console.log('c',companyName)
       const salt: number = 10;
       const hashedPassword = await bcrypt.hash(password, salt);
       const createdClient = new ClientModel({
-        companyName: name,
+        companyName: companyName,
         email: email,
         password: hashedPassword,
         description: "",
