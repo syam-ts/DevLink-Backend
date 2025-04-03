@@ -485,8 +485,7 @@ export const adminController = {
           paymentScreenshot,
           amount,
           upiId,
-          requestId,
-          requestedAmount
+          requestId
         );
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
