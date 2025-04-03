@@ -215,11 +215,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
   async findClientByOnlyEmail(
-    email: string, 
-    companyName: string, 
+    email: string,
+    companyName: string,
     password: string
-  ): Promise<Client> { 
-    const client = await ClientModel.findOne({ email }).exec(); 
+  ): Promise<Client> {
+    const client = await ClientModel.findOne({ email }).exec();
     if (client) {
       return {
         _id: client._id,
@@ -228,7 +228,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         isBlocked: client.isBlocked,
         isVerified: client.isVerified,
       } as Client;
-    } else { 
+    } else {
       const salt: number = 10;
       const hashedPassword = await bcrypt.hash(password, salt);
       const createdClient = new ClientModel({
@@ -642,22 +642,22 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     clientId: Id,
     page: number
   ): Promise<{
-    clientWallet: unknown;
+    wallet: unknown;
     totalPages: number;
   }> {
     const PAGE_SIZE: number = 6;
     const skip: number = (page - 1) * PAGE_SIZE;
 
-    const wallet = await ClientModel.aggregate([
+    const theWallet = await ClientModel.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(clientId) } },
       { $project: { totalTransactions: { $size: "$wallet.transactions" } } },
     ]);
 
     const totalTransactions =
-      wallet.length > 0 ? wallet[0].totalTransactions : 0;
+      theWallet.length > 0 ? theWallet[0].totalTransactions : 0;
     const totalPages: number = totalTransactions / PAGE_SIZE;
 
-    const clientWallet = await ClientModel.aggregate([
+    const wallet = await ClientModel.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(clientId) } },
       {
         $project: {
@@ -671,7 +671,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     ]);
 
     return {
-      clientWallet,
+      wallet,
       totalPages,
     };
   }
@@ -1279,5 +1279,36 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     if (!developers) throw new Error("No developer found");
 
     return developers;
+  }
+
+  async withdrawMoney(
+    clientId: Id,
+    amount: number,
+    accountNumber: number
+  ): Promise<void> {
+    let userName;
+
+    const client = await ClientModel.findById(clientId).lean<Client>().exec();
+    if (!client) throw new Error('client not exists');
+    userName = client.companyName; 
+
+    const adminId: string = process.env.ADMIN_OBJECT_ID as string;
+    if (!mongoose.Types.ObjectId.isValid(clientId)) {
+      throw new Error("Invalid clientId: Must be a 24-character hex string.");
+    }
+    const withdrawRequestObject = {
+      roleId: new mongoose.Types.ObjectId(clientId),
+      userName: userName,
+      amount: amount,
+      accountNumber: accountNumber.toString(),
+      createdAt: new Date(),
+    };
+    const withdrawRequest = await AdminModel.findByIdAndUpdate(
+      adminId,
+      { $push: { withdrawRequest: withdrawRequestObject } },
+      { new: true }
+    );
+
+    return;
   }
 }

@@ -43,7 +43,8 @@ const {
   rateAndReview,
   sendMessage,
   viewInvite,
-  searchDevlopers
+  searchDevlopers,
+  withdrawMoneyByClient
 } = clientController;
 const {
   viewSingleContract
@@ -81,6 +82,7 @@ clientRouter.post("/contractSubmitReject/:contractId", verifyToken, requireRole(
 clientRouter.post('/inviteUser', verifyToken, requireRole(CLIENT), inviteUser)
 clientRouter.post("/rate-user/:notificationId", verifyToken, requireRole(CLIENT), rateAndReview);
 clientRouter.put('/proposalReject', verifyToken, requireRole(CLIENT), rejectProposal);
+clientRouter.post('/withdrawMoney', verifyToken, requireRole(CLIENT), withdrawMoneyByClient ); 
 clientRouter.post("/signup", signupClient);
 clientRouter.post("/verify-otp", verifyOtp);
 clientRouter.post("/resend-otp", resendOtp);

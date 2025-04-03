@@ -2,8 +2,7 @@ export interface UserRepository {
   withdrawMoney(
     userId: string,
     amount: number,
-    accountNumber: number,
-    type: string
+    accountNumber: number
   ): void;
 }
 
@@ -13,26 +12,13 @@ export class WithdrawMoneyByUser {
   async execute(
     userId: string,
     amount: number,
-    accountNumber: number,
-    balance: number,
-    type: string
-  ) {
-    if (!amount || !accountNumber) throw new Error("Please fill all fields");
-
-    if (amount > balance || amount <= 0)
-      throw new Error("Amount need to valid");
-
-    if (
-      accountNumber.toString().length > 14 ||
-      accountNumber.toString().length < 14
-    )
-      throw new Error("Account number should be minimum 14 numbers");
+    accountNumber: number
+  ) { 
 
     const result = await this.userRepository.withdrawMoney(
       userId,
       amount,
-      accountNumber,
-      type
+      accountNumber
     );
 
     return result;

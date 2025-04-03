@@ -790,9 +790,7 @@ export const userController = {
       const response = await allUserUseCases.withdrawMoneyByUserUseCase.execute(
         userId,
         amount,
-        accountNumber,
-        balance,
-        type
+        accountNumber 
       );
 
       res.status(HttpStatusCode.CREATED).json({

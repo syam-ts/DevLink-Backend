@@ -1117,20 +1117,20 @@ export class UserRepositoryMongoose implements UserRepositary {
     return addRequestToClient;
   }
 
-  async viewWallet(userId: string, currentPage: number): Promise<{ userWallet: Wallet[], totalPages: number }> {
+  async viewWallet(userId: string, currentPage: number): Promise<{ wallet: Wallet[], totalPages: number }> {
     const page_size: number = 6;
     const skip: number = (currentPage - 1) * page_size;
 
-    const wallet = await UserModel.aggregate([
+    const theWallet = await UserModel.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(userId) } },
       { $project: { totalTransactions: { $size: "$wallet.transactions" } } },
     ]);
 
     const totalTransactions =
-      wallet.length > 0 ? wallet[0].totalTransactions : 0;
+      theWallet.length > 0 ? theWallet[0].totalTransactions : 0;
     const totalPages: number = Math.ceil(totalTransactions / page_size);
 
-    const userWallet = await UserModel.aggregate([
+     const wallet = await UserModel.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(userId) } },
       {
         $project: {
@@ -1144,7 +1144,7 @@ export class UserRepositoryMongoose implements UserRepositary {
     ]);
 
     return {
-      userWallet,
+      wallet,
       totalPages,
     };
   }
@@ -1188,16 +1188,11 @@ export class UserRepositoryMongoose implements UserRepositary {
     accountNumber: number,
     type: string
   ): Promise<void> {
-    let userName;
-    if (type === "user") {
+    let userName; 
       const user = await UserModel.findById(userId).lean<User>().exec();
       if (!user) throw new Error('user not exists');
       userName = user.name;
-    } else {
-      const client = await ClientModel.findById(userId).lean<Client>().exec();
-      if (!client) throw new Error('client not exists');
-      userName = client.companyName;
-    }
+     
 
     const adminId: string = process.env.ADMIN_OBJECT_ID as string;
     if (!mongoose.Types.ObjectId.isValid(userId)) {

@@ -982,5 +982,33 @@ export const clientController = {
         });  
       return;
     }
-  }
+  },
+  withdrawMoneyByClient: async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { amount, accountNumber, balance, type } = req.body;
+      if (!req.user || !req.user.id) {
+         res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const clientId = String(req.user?.id);
+
+      const response = await allClientUseCases.withdrawMoneyByClientUseCase.execute(
+        clientId,
+        amount,
+        accountNumber
+      );
+
+      res.status(HttpStatusCode.CREATED).json({
+        message: StatusMessage[HttpStatusCode.CREATED],
+        success: true,
+      });
+    } catch (error: unknown) {
+       const err = error as {message: string};
+       logger.error(err.message); 
+         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+          message: err.message,
+          success: false,
+        });
+      return;
+    }
+  },
 };
