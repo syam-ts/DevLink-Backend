@@ -78,7 +78,7 @@ clientRouter.post("/profile/edit", verifyToken, requireRole(CLIENT), editProfile
 clientRouter.post('/searchDevelopers', verifyToken, requireRole(CLIENT), searchDevlopers);
 clientRouter.post('/createContract', verifyToken, requireRole(CLIENT), createContract);
 clientRouter.post("/chat/sendMessage", verifyToken, requireRole(CLIENT), sendMessage);
-clientRouter.post("/contractSubmitReject/:contractId", verifyToken, requireRole(CLIENT), rejectContract);
+clientRouter.post("/contractSubmitReject", verifyToken, requireRole(CLIENT), rejectContract);
 clientRouter.post('/inviteUser', verifyToken, requireRole(CLIENT), inviteUser)
 clientRouter.post("/rate-user/:notificationId", verifyToken, requireRole(CLIENT), rateAndReview);
 clientRouter.put('/proposalReject', verifyToken, requireRole(CLIENT), rejectProposal);

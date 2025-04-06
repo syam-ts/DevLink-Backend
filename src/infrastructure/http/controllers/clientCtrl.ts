@@ -826,7 +826,7 @@ export const clientController = {
       if (!req.user || !req.user.id) {
         res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const { contractId } = req.params;
+      const { contractId }: {contractId: string} = req.body;
      const clientId = String(req.user?.id);
       const response = await allClientUseCases.rejectContractUseCase.execute(
         contractId,

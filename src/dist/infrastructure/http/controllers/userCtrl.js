@@ -720,7 +720,7 @@ exports.userController = {
                 res.status(401).json({ message: "Unauthorized", success: false });
             }
             const userId = String((_a = req.user) === null || _a === void 0 ? void 0 : _a.id);
-            const response = yield allCtrlConnection_1.allUserUseCases.withdrawMoneyByUserUseCase.execute(userId, amount, accountNumber, balance, type);
+            const response = yield allCtrlConnection_1.allUserUseCases.withdrawMoneyByUserUseCase.execute(userId, amount, accountNumber);
             res.status(enums_1.HttpStatusCode.CREATED).json({
                 message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.CREATED],
                 success: true,

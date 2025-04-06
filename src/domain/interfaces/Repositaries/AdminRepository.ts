@@ -473,6 +473,7 @@ export class AdminRepository implements AdminRepositary {
       },
       createdAt: new Date(),
     });
+    console.log('The notitfication: ',newNotification);
 
     newNotification.save();
     const adminId = process.env.ADMIN_OBJECT_ID;

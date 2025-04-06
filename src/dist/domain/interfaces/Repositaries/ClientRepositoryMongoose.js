@@ -20,7 +20,6 @@ const JobPost_1 = require("../../entities/JobPost");
 const Admin_1 = require("../../entities/Admin");
 const Contract_1 = require("../../entities/Contract");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const validator_1 = __importDefault(require("validator"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const Invite_1 = require("../../entities/Invite");
 class ClientRepositoryMongoose {
@@ -118,12 +117,7 @@ class ClientRepositoryMongoose {
     }
     findClientByEmailAndPassword(email, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!email || !password) {
-                throw new Error("Email, and password are required");
-            }
-            if (!validator_1.default.isEmail(email)) {
-                throw new Error("Invalid email format");
-            }
+            console.log("The data: ", email, password);
             const client = yield Client_1.ClientModel.findOne({ email }).lean().exec();
             if (!client) {
                 throw new Error("client not Found");
@@ -138,7 +132,6 @@ class ClientRepositoryMongoose {
             if (!isValidPassword) {
                 throw new Error("wrong password");
             }
-            yield client.save();
             return client;
         });
     }
@@ -526,13 +519,13 @@ class ClientRepositoryMongoose {
         return __awaiter(this, void 0, void 0, function* () {
             const PAGE_SIZE = 6;
             const skip = (page - 1) * PAGE_SIZE;
-            const wallet = yield Client_1.ClientModel.aggregate([
+            const theWallet = yield Client_1.ClientModel.aggregate([
                 { $match: { _id: new mongoose_1.default.Types.ObjectId(clientId) } },
                 { $project: { totalTransactions: { $size: "$wallet.transactions" } } },
             ]);
-            const totalTransactions = wallet.length > 0 ? wallet[0].totalTransactions : 0;
+            const totalTransactions = theWallet.length > 0 ? theWallet[0].totalTransactions : 0;
             const totalPages = totalTransactions / PAGE_SIZE;
-            const clientWallet = yield Client_1.ClientModel.aggregate([
+            const wallet = yield Client_1.ClientModel.aggregate([
                 { $match: { _id: new mongoose_1.default.Types.ObjectId(clientId) } },
                 {
                     $project: {
@@ -545,7 +538,7 @@ class ClientRepositoryMongoose {
                 },
             ]);
             return {
-                clientWallet,
+                wallet,
                 totalPages,
             };
         });
@@ -969,7 +962,69 @@ class ClientRepositoryMongoose {
     }
     rejectContract(contractId, clientId) {
         return __awaiter(this, void 0, void 0, function* () {
+            // * Status as rejected in contract and jobpost
+            // * payment shared to three roles
+            // * admin get 10% and user also get 10% and client get rest of the money
+            console.log("The contrctId; ", contractId, clientId);
+            const currentContract = yield Contract_1.ContractModel.findById(contractId)
+                .lean()
+                .exec();
+            if (!currentContract)
+                throw new Error("Contract not exists");
+            //admin share would be 10%
             const adminId = process.env.ADMIN_OBJECT_ID;
+            const userId = currentContract.userId;
+            const adminWalletDeduction = Math.floor((currentContract.amount * 10) / 100);
+            const finalAmountToAdminWallet = Math.floor(currentContract.amount - adminWalletDeduction);
+            const walletEntryAdmin = {
+                type: "debit",
+                amount: finalAmountToAdminWallet,
+                from: "admin",
+                fromId: adminId,
+                date: new Date(),
+            };
+            const adminWallet = yield Admin_1.AdminModel.findByIdAndUpdate(adminId, {
+                $inc: { "wallet.balance": -finalAmountToAdminWallet },
+                $push: { "wallet.transactions": walletEntryAdmin },
+            }, {
+                new: true,
+            });
+            //usershare would be 10%
+            const userShare = Math.floor((finalAmountToAdminWallet * 10) / 100);
+            const walletEntryUser = {
+                type: "credit",
+                amount: userShare,
+                from: "admin",
+                fromId: adminId,
+                date: new Date(),
+            };
+            const userWallet = yield User_1.UserModel.findByIdAndUpdate(userId, {
+                $inc: { "wallet.balance": userShare },
+                $push: { "wallet.transactions": walletEntryUser },
+            }, {
+                new: true,
+            });
+            //rest of the amount go to client wallet
+            const finalAmountToClientWallet = Math.floor(finalAmountToAdminWallet - userShare);
+            const walletEntryClient = {
+                type: "credit",
+                amount: finalAmountToClientWallet,
+                from: "admin",
+                fromId: adminId,
+                date: new Date(),
+            };
+            // final amount go to client wallet and status changed to rejected
+            const updateClientWallet = yield Client_1.ClientModel.findByIdAndUpdate(clientId, {
+                status: "rejected",
+                $inc: {
+                    "wallet.balance": finalAmountToClientWallet,
+                },
+                $push: {
+                    "wallet.transactions": walletEntryClient,
+                },
+            }, {
+                new: true,
+            });
             const contract = yield Contract_1.ContractModel.findByIdAndUpdate(contractId, {
                 status: "rejected",
             }, {
@@ -979,19 +1034,6 @@ class ClientRepositoryMongoose {
                 throw new Error("Contract not found");
             // deleting the entire submission doc from client
             const updatedClient = yield Client_1.ClientModel.findOneAndUpdate({ "projectSubmissions.contractId": contractId }, { $pull: { projectSubmissions: { contractId } } }, { new: true });
-            const finalAmount = Math.floor(contract.amount % 10) * 100;
-            // 10% cut for admin
-            const adminWallet = yield Admin_1.AdminModel.findByIdAndUpdate(adminId, {
-                $inc: { "wallet.balance": finalAmount },
-            }, {
-                new: true,
-            });
-            // final amount go to client wallet
-            const updateClientWallet = yield Client_1.ClientModel.findByIdAndUpdate(clientId, {
-                $inc: { "wallet.balance": finalAmount },
-            }, {
-                new: true,
-            });
             return contract;
         });
     }
@@ -1005,6 +1047,28 @@ class ClientRepositoryMongoose {
             if (!developers)
                 throw new Error("No developer found");
             return developers;
+        });
+    }
+    withdrawMoney(clientId, amount, accountNumber) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let userName;
+            const client = yield Client_1.ClientModel.findById(clientId).lean().exec();
+            if (!client)
+                throw new Error("client not exists");
+            userName = client.companyName;
+            const adminId = process.env.ADMIN_OBJECT_ID;
+            if (!mongoose_1.default.Types.ObjectId.isValid(clientId)) {
+                throw new Error("Invalid clientId: Must be a 24-character hex string.");
+            }
+            const withdrawRequestObject = {
+                roleId: new mongoose_1.default.Types.ObjectId(clientId),
+                userName: userName,
+                amount: amount,
+                accountNumber: accountNumber.toString(),
+                createdAt: new Date(),
+            };
+            const withdrawRequest = yield Admin_1.AdminModel.findByIdAndUpdate(adminId, { $push: { withdrawRequest: withdrawRequestObject } }, { new: true });
+            return;
         });
     }
 }

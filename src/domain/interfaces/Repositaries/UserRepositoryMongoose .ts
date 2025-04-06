@@ -1185,8 +1185,7 @@ export class UserRepositoryMongoose implements UserRepositary {
   async withdrawMoney(
     userId: Id,
     amount: number,
-    accountNumber: number,
-    type: string
+    accountNumber: number
   ): Promise<void> {
     let userName; 
       const user = await UserModel.findById(userId).lean<User>().exec();

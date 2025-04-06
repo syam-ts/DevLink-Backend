@@ -9,16 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WithdrawMoneyByUser = void 0;
-class WithdrawMoneyByUser {
-    constructor(userRepository) {
-        this.userRepository = userRepository;
+exports.WithdrawMoneyByClient = void 0;
+class WithdrawMoneyByClient {
+    constructor(clientRepository) {
+        this.clientRepository = clientRepository;
     }
-    execute(userId, amount, accountNumber) {
+    execute(clientId, amount, accountNumber) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.userRepository.withdrawMoney(userId, amount, accountNumber);
+            const result = yield this.clientRepository.withdrawMoney(clientId, amount, accountNumber);
             return result;
         });
     }
 }
-exports.WithdrawMoneyByUser = WithdrawMoneyByUser;
+exports.WithdrawMoneyByClient = WithdrawMoneyByClient;

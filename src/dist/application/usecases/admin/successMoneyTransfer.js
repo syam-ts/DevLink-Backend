@@ -14,14 +14,8 @@ class SuccessMoneyTransfer {
     constructor(adminRepository) {
         this.adminRepository = adminRepository;
     }
-    execute(userId, paymentScreenshot, amount, upiId, requestId, requestedAmount) {
+    execute(userId, paymentScreenshot, amount, upiId, requestId) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!paymentScreenshot || !amount || !upiId)
-                throw new Error("All field need to filled");
-            if (amount > requestedAmount || amount <= 0)
-                throw new Error("Invaild amount");
-            if (upiId <= 0 || upiId.toString().length < 10)
-                throw new Error("Upi Id should 10 numbers");
             const result = yield this.adminRepository.successMoneyTransfer(userId, paymentScreenshot, amount, upiId, requestId);
             return result;
         });

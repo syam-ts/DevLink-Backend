@@ -180,14 +180,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     email: string,
     password: string
   ): Promise<Client | null> {
-    if (!email || !password) {
-      throw new Error("Email, and password are required");
-    }
-
-    if (!validator.isEmail(email)) {
-      throw new Error("Invalid email format");
-    }
-
+    console.log("The data: ", email, password);
     const client = await ClientModel.findOne({ email }).lean<Client>().exec();
 
     if (!client) {
@@ -210,7 +203,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     if (!isValidPassword) {
       throw new Error("wrong password");
     }
-    await client.save();
+
     return client;
   }
 
@@ -1222,7 +1215,98 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     contractId: Id,
     clientId: Id
   ): Promise<ContractDocument> {
+    // * Status as rejected in contract and jobpost
+    // * payment shared to three roles
+    // * admin get 10% and user also get 10% and client get rest of the money
+
+    console.log("The contrctId; ", contractId, clientId);
+    const currentContract = await ContractModel.findById(contractId)
+      .lean<ContractDocument>()
+      .exec();
+
+    if (!currentContract) throw new Error("Contract not exists");
+
+    //admin share would be 10%
     const adminId = process.env.ADMIN_OBJECT_ID;
+    const userId = currentContract.userId;
+
+    const adminWalletDeduction = Math.floor(
+      (currentContract.amount * 10) / 100
+    );
+    const finalAmountToAdminWallet = Math.floor(
+      currentContract.amount - adminWalletDeduction
+    );
+
+    const walletEntryAdmin = {
+      type: "debit",
+      amount: finalAmountToAdminWallet,
+      from: "admin",
+      fromId: adminId,
+      date: new Date(),
+    };
+
+    const adminWallet = await AdminModel.findByIdAndUpdate(
+      adminId,
+      {
+        $inc: { "wallet.balance": -finalAmountToAdminWallet },
+        $push: { "wallet.transactions": walletEntryAdmin },
+      },
+      {
+        new: true,
+      }
+    );
+
+    //usershare would be 10%
+    const userShare = Math.floor((finalAmountToAdminWallet * 10) / 100);
+
+    const walletEntryUser = {
+      type: "credit",
+      amount: userShare,
+      from: "admin",
+      fromId: adminId,
+      date: new Date(),
+    };
+
+    const userWallet = await UserModel.findByIdAndUpdate(
+      userId,
+      {
+        $inc: { "wallet.balance": userShare },
+        $push: { "wallet.transactions": walletEntryUser },
+      },
+      {
+        new: true,
+      }
+    );
+
+    //rest of the amount go to client wallet
+    const finalAmountToClientWallet = Math.floor(
+      finalAmountToAdminWallet - userShare
+    );
+
+    const walletEntryClient = {
+      type: "credit",
+      amount: finalAmountToClientWallet,
+      from: "admin",
+      fromId: adminId,
+      date: new Date(),
+    };
+
+    // final amount go to client wallet and status changed to rejected
+    const updateClientWallet = await ClientModel.findByIdAndUpdate(
+      clientId,
+      {
+        status: "rejected",
+        $inc: {
+          "wallet.balance": finalAmountToClientWallet,
+        },
+        $push: {
+          "wallet.transactions": walletEntryClient,
+        },
+      },
+      {
+        new: true,
+      }
+    );
 
     const contract = await ContractModel.findByIdAndUpdate(
       contractId,
@@ -1241,29 +1325,6 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       { "projectSubmissions.contractId": contractId },
       { $pull: { projectSubmissions: { contractId } } },
       { new: true }
-    );
-
-    const finalAmount: number = Math.floor(contract.amount % 10) * 100;
-    // 10% cut for admin
-    const adminWallet = await AdminModel.findByIdAndUpdate(
-      adminId,
-      {
-        $inc: { "wallet.balance": finalAmount },
-      },
-      {
-        new: true,
-      }
-    );
-
-    // final amount go to client wallet
-    const updateClientWallet = await ClientModel.findByIdAndUpdate(
-      clientId,
-      {
-        $inc: { "wallet.balance": finalAmount },
-      },
-      {
-        new: true,
-      }
     );
 
     return contract;
@@ -1289,8 +1350,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     let userName;
 
     const client = await ClientModel.findById(clientId).lean<Client>().exec();
-    if (!client) throw new Error('client not exists');
-    userName = client.companyName; 
+    if (!client) throw new Error("client not exists");
+    userName = client.companyName;
 
     const adminId: string = process.env.ADMIN_OBJECT_ID as string;
     if (!mongoose.Types.ObjectId.isValid(clientId)) {

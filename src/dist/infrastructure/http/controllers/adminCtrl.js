@@ -421,7 +421,7 @@ exports.adminController = {
     successMoneyTransfer: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const { userId, paymentScreenshot, amount, upiId, requestId, requestedAmount } = req.body.body;
-            const response = yield allCtrlConnection_1.allAdminUseCases.successMoneyTransferUseCase.execute(userId, paymentScreenshot, amount, upiId, requestId, requestedAmount);
+            const response = yield allCtrlConnection_1.allAdminUseCases.successMoneyTransferUseCase.execute(userId, paymentScreenshot, amount, upiId, requestId);
             res.status(enums_1.HttpStatusCode.OK).json({
                 message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK],
                 response,

@@ -67,6 +67,7 @@ const inviteUser_1 = require("../../application/usecases/client/inviteUser");
 const searchDeveloper_1 = require("../../application/usecases/client/searchDeveloper");
 const rejectContract_1 = require("../../application/usecases/client/rejectContract");
 const getallDevelopers_1 = require("../../application/usecases/client/getallDevelopers");
+const withdrawMoneyByClient_1 = require("../../application/usecases/client/withdrawMoneyByClient");
 const ChatRepository_1 = require("../../domain/interfaces/Repositaries/ChatRepository");
 const WishlistRepository_1 = require("../../domain/interfaces/Repositaries/WishlistRepository");
 // admin imports -----> 
@@ -155,6 +156,7 @@ const getallDevelopersUseCase = new getallDevelopers_1.GetallDevelopers(ClientRe
 const inviteUserUseCase = new inviteUser_1.InviteUser(ClientRepository);
 const rejectContractUseCase = new rejectContract_1.RejectContract(ClientRepository);
 const chatBotUseCase = new ChatBot_1.ChatBot(ClientRepository);
+const withdrawMoneyByClientUseCase = new withdrawMoneyByClient_1.WithdrawMoneyByClient(ClientRepository);
 const sendMessageUseCase = new sendMessage_1.SendMessage(ChatRepository);
 const getAllChatsUseCase = new getAllChats_1.GetAllChats(ChatRepository);
 const viewChatUseCase = new viewChat_1.ViewChat(ChatRepository);
@@ -247,6 +249,7 @@ exports.allClientUseCases = {
     searchDeveloperUseCase,
     rateAndReviewUserUseCase,
     inviteUserUseCase,
+    withdrawMoneyByClientUseCase,
     rejectContractUseCase,
     sendMessageUseCase,
     getAllChatsUseCase,

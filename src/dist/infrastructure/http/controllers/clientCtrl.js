@@ -723,7 +723,7 @@ exports.clientController = {
             if (!req.user || !req.user.id) {
                 res.status(401).json({ message: "Unauthorized", success: false });
             }
-            const { contractId } = req.params;
+            const { contractId } = req.body;
             const clientId = String((_a = req.user) === null || _a === void 0 ? void 0 : _a.id);
             const response = yield allCtrlConnection_1.allClientUseCases.rejectContractUseCase.execute(contractId, clientId);
             res.status(enums_1.HttpStatusCode.OK).json({
@@ -857,5 +857,29 @@ exports.clientController = {
             });
             return;
         }
-    })
+    }),
+    withdrawMoneyByClient: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
+        try {
+            const { amount, accountNumber, balance, type } = req.body;
+            if (!req.user || !req.user.id) {
+                res.status(401).json({ message: "Unauthorized", success: false });
+            }
+            const clientId = String((_a = req.user) === null || _a === void 0 ? void 0 : _a.id);
+            const response = yield allCtrlConnection_1.allClientUseCases.withdrawMoneyByClientUseCase.execute(clientId, amount, accountNumber);
+            res.status(enums_1.HttpStatusCode.CREATED).json({
+                message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.CREATED],
+                success: true,
+            });
+        }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
+            return;
+        }
+    }),
 };

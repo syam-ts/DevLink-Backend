@@ -934,13 +934,13 @@ class UserRepositoryMongoose {
         return __awaiter(this, void 0, void 0, function* () {
             const page_size = 6;
             const skip = (currentPage - 1) * page_size;
-            const wallet = yield User_1.UserModel.aggregate([
+            const theWallet = yield User_1.UserModel.aggregate([
                 { $match: { _id: new mongoose_1.default.Types.ObjectId(userId) } },
                 { $project: { totalTransactions: { $size: "$wallet.transactions" } } },
             ]);
-            const totalTransactions = wallet.length > 0 ? wallet[0].totalTransactions : 0;
+            const totalTransactions = theWallet.length > 0 ? theWallet[0].totalTransactions : 0;
             const totalPages = Math.ceil(totalTransactions / page_size);
-            const userWallet = yield User_1.UserModel.aggregate([
+            const wallet = yield User_1.UserModel.aggregate([
                 { $match: { _id: new mongoose_1.default.Types.ObjectId(userId) } },
                 {
                     $project: {
@@ -953,7 +953,7 @@ class UserRepositoryMongoose {
                 },
             ]);
             return {
-                userWallet,
+                wallet,
                 totalPages,
             };
         });
@@ -990,21 +990,13 @@ class UserRepositoryMongoose {
             return jobs;
         });
     }
-    withdrawMoney(userId, amount, accountNumber, type) {
+    withdrawMoney(userId, amount, accountNumber) {
         return __awaiter(this, void 0, void 0, function* () {
             let userName;
-            if (type === "user") {
-                const user = yield User_1.UserModel.findById(userId).lean().exec();
-                if (!user)
-                    throw new Error('user not exists');
-                userName = user.name;
-            }
-            else {
-                const client = yield Client_1.ClientModel.findById(userId).lean().exec();
-                if (!client)
-                    throw new Error('client not exists');
-                userName = client.companyName;
-            }
+            const user = yield User_1.UserModel.findById(userId).lean().exec();
+            if (!user)
+                throw new Error('user not exists');
+            userName = user.name;
             const adminId = process.env.ADMIN_OBJECT_ID;
             if (!mongoose_1.default.Types.ObjectId.isValid(userId)) {
                 throw new Error("Invalid userId: Must be a 24-character hex string.");

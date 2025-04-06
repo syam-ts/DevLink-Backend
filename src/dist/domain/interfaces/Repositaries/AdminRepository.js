@@ -440,6 +440,7 @@ class AdminRepository {
                 },
                 createdAt: new Date(),
             });
+            console.log('The notitfication: ', newNotification);
             newNotification.save();
             const adminId = process.env.ADMIN_OBJECT_ID;
             // Delete withdrawrequest from admin
