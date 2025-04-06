@@ -1214,15 +1214,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   async rejectContract(
     contractId: Id,
     clientId: Id
-  ): Promise<ContractDocument> {
-    // * Status as rejected in contract and jobpost
-    // * payment shared to three roles
-    // * admin get 10% and user also get 10% and client get rest of the money
-
-    console.log("The contrctId; ", contractId, clientId);
+  ): Promise<ContractDocument> { 
+ 
     const currentContract = await ContractModel.findById(contractId)
       .lean<ContractDocument>()
-      .exec();
+      .exec(); 
 
     if (!currentContract) throw new Error("Contract not exists");
 

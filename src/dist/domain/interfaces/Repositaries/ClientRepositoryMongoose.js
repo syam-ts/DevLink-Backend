@@ -962,10 +962,6 @@ class ClientRepositoryMongoose {
     }
     rejectContract(contractId, clientId) {
         return __awaiter(this, void 0, void 0, function* () {
-            // * Status as rejected in contract and jobpost
-            // * payment shared to three roles
-            // * admin get 10% and user also get 10% and client get rest of the money
-            console.log("The contrctId; ", contractId, clientId);
             const currentContract = yield Contract_1.ContractModel.findById(contractId)
                 .lean()
                 .exec();
