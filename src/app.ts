@@ -3,9 +3,7 @@ import path from 'node:path';
 import dotenv from 'dotenv';
 dotenv.config({
   path: path.resolve(__dirname, '.env')
-})
-
- 
+});
 import logger from './logger/logger'
 import cors from "cors";
 import cookieparser from "cookie-parser";
@@ -36,10 +34,6 @@ app.use("/", routes);
 
 const server = http.createServer(app); 
 initializeSocket(server);
-
-console.log('The monog URI: ',process.env.MONGO_URI)
-console.log('The Stripe Secret Key: ',process.env.STRIPE_SECRET_KEY)
-
 const PORT = (process.env.PORT as string) || 3000;
 
 (async () => {
