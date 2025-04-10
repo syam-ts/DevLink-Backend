@@ -131,8 +131,8 @@ exports.userController = {
             const { accessToken, refreshToken } = (0, generateTokens_1.default)(user);
             res.cookie("refreshToken", refreshToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "strict",
+                secure: true,
+                sameSite: "none",
             });
             res.status(enums_1.HttpStatusCode.OK).json({
                 message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK],
@@ -165,8 +165,8 @@ exports.userController = {
             const { accessToken, refreshToken } = (0, generateTokens_1.default)(user);
             res.cookie("refreshToken", refreshToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "strict",
+                secure: true,
+                sameSite: "none",
             });
             res.status(enums_1.HttpStatusCode.OK).json({
                 message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK],

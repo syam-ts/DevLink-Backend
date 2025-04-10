@@ -42,8 +42,6 @@ app.use((0, morgan_1.default)("dev"));
 app.use("/", routes_1.default);
 const server = node_http_1.default.createServer(app);
 (0, socket_1.default)(server);
-console.log('The monog URI: ', process.env.MONGO_URI);
-console.log('The Stripe Secret Key: ', process.env.STRIPE_SECRET_KEY);
 const PORT = process.env.PORT || 3000;
 (() => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, db_1.connectDB)();

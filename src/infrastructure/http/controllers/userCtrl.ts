@@ -131,8 +131,8 @@ export const userController = {
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        secure: true,
+        sameSite: "none",
       }); 
 
         res.status(HttpStatusCode.OK).json({
@@ -171,8 +171,8 @@ export const userController = {
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        secure: true,
+        sameSite: "none",
       });
 
       res.status(HttpStatusCode.OK).json({
