@@ -6,15 +6,15 @@ interface Proposal {
   jobPostId: string;
   jobPostInfo: string;
   userData: User;
-  description?: string;
-  status?: string;
+  description?: string | undefined;
+  status?: string | undefined;
   bidamount: number;
   bidDeadline: number;
   createdAt: Date;
 }
 
 export interface ClientRepository {
-  getProposals(clientId: string): Promise<any>;
+  getProposals(clientId: string): Promise<Proposal[]>;
 }
 
 export class GetProposals {

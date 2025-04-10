@@ -119,6 +119,12 @@ exports.clientController = {
     loginClient: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const client = yield allCtrlConnection_1.allClientUseCases.loginClientUseCase.execute(req.body);
+            if (!client) {
+                res
+                    .status(401)
+                    .json({ message: "Invalid credentials", success: false });
+                return;
+            }
             client.role = "client";
             const { accessToken, refreshToken } = (0, generateTokens_1.default)(client);
             res.cookie("refreshToken", refreshToken, {
@@ -190,7 +196,7 @@ exports.clientController = {
     getHomeClient: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const users = yield allCtrlConnection_1.allClientUseCases.getHomeClientUseCase.execute();
-            return res.status(enums_1.HttpStatusCode.OK).json({
+            res.status(enums_1.HttpStatusCode.OK).json({
                 message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK],
                 data: users,
                 success: true,
@@ -209,7 +215,7 @@ exports.clientController = {
     trendingJobs: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const jobs = yield allCtrlConnection_1.allClientUseCases.trendingJobsUseCase.execute();
-            return res.status(enums_1.HttpStatusCode.OK).json({
+            res.status(enums_1.HttpStatusCode.OK).json({
                 message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK],
                 data: jobs,
                 success: true,
@@ -464,7 +470,7 @@ exports.clientController = {
         try {
             const { userId, clientId, jobPostId, bidAmount, bidDeadline } = req.body;
             if (!userId && !clientId && !jobPostId) {
-                return res
+                res
                     .status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR)
                     .json({ message: "Missing informations ", success: false });
             }
@@ -490,12 +496,12 @@ exports.clientController = {
         try {
             const { userId, jobPostId } = req.body;
             if (!req.user || !req.user.id) {
-                return res.status(401).json({ message: "Unauthorized", success: false });
+                res.status(401).json({ message: "Unauthorized", success: false });
             }
             const clientId = String((_a = req.user) === null || _a === void 0 ? void 0 : _a.id);
             ;
             if (!userId && !clientId && !jobPostId) {
-                return res
+                res
                     .status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR)
                     .json({ message: "Missing informations ", success: false });
             }

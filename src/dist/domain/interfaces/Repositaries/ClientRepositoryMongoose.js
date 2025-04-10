@@ -117,8 +117,7 @@ class ClientRepositoryMongoose {
     }
     findClientByEmailAndPassword(email, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("The data: ", email, password);
-            const client = yield Client_1.ClientModel.findOne({ email }).lean().exec();
+            const client = yield Client_1.ClientModel.findOne({ email }).exec();
             if (!client) {
                 throw new Error("client not Found");
             }
@@ -132,7 +131,13 @@ class ClientRepositoryMongoose {
             if (!isValidPassword) {
                 throw new Error("wrong password");
             }
-            return client;
+            return {
+                _id: String(client._id),
+                companyName: String(client.companyName),
+                email: String(client.email),
+                password: String(client.password),
+                isBlocked: Boolean(client.isBlocked)
+            };
         });
     }
     findClientByOnlyEmail(email, companyName, password) {
@@ -140,11 +145,12 @@ class ClientRepositoryMongoose {
             const client = yield Client_1.ClientModel.findOne({ email }).exec();
             if (client) {
                 return {
-                    _id: client._id,
-                    companyName: client.companyName,
-                    email: client.email,
-                    isBlocked: client.isBlocked,
-                    isVerified: client.isVerified,
+                    _id: String(client._id),
+                    companyName: String(client.companyName),
+                    password: String(client.password),
+                    email: String(client.email),
+                    isBlocked: Boolean(client.isBlocked),
+                    isVerified: Boolean(client.isVerified)
                 };
             }
             else {
@@ -171,10 +177,12 @@ class ClientRepositoryMongoose {
                 });
                 const savedClient = yield createdClient.save();
                 return {
-                    _id: savedClient._id,
-                    companyName: savedClient.companyName,
-                    email: savedClient.email,
-                    password: savedClient.password,
+                    _id: String(savedClient._id),
+                    companyName: String(savedClient.companyName),
+                    password: String(savedClient.password),
+                    email: String(savedClient.email),
+                    isBlocked: Boolean(savedClient.isBlocked),
+                    isVerified: Boolean(savedClient.isVerified)
                 };
             }
         });

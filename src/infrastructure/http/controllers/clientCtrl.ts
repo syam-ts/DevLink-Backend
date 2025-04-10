@@ -132,13 +132,19 @@ export const clientController = {
     }
   },
 
-  loginClient: async (req: Request, res: any) => {
+  loginClient: async (req: Request, res: Response) => {
     try {
-      const client: any = await allClientUseCases.loginClientUseCase.execute(
+      const client = await allClientUseCases.loginClientUseCase.execute(
         req.body
       );
+      if (!client) {
+        res
+          .status(401)
+          .json({ message: "Invalid credentials", success: false });
+        return;
+      }
 
-      client.role = "client";
+      client.role = "client"; 
       const { accessToken, refreshToken } = generateTokens(client);
 
       res.cookie("refreshToken", refreshToken, {
@@ -174,7 +180,7 @@ export const clientController = {
 
   googleLogin: async (req: Request, res: Response): Promise<void> => {
     try {
-      const client: any = await allClientUseCases.GoogleLoginClientUseCase.execute(
+      const client = await allClientUseCases.GoogleLoginClientUseCase.execute(
         req.body
       );
 
@@ -213,11 +219,11 @@ export const clientController = {
     }
   },
 
-  getHomeClient: async (req: Request, res: any) => {
+  getHomeClient: async (req: Request, res: Response): Promise<void> => {
     try {
       const users = await allClientUseCases.getHomeClientUseCase.execute();
 
-      return res.status(HttpStatusCode.OK).json({
+       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         data: users,
         success: true,
@@ -233,11 +239,11 @@ export const clientController = {
     }
   },
 
-  trendingJobs: async (req: Request, res: any) => {
+  trendingJobs: async (req: Request, res: Response): Promise<void> => {
     try {
       const jobs = await allClientUseCases.trendingJobsUseCase.execute();
 
-      return res.status(HttpStatusCode.OK).json({
+       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         data: jobs,
         success: true,
@@ -513,12 +519,12 @@ export const clientController = {
     }
   },
 
-  createContract: async (req: Request, res: any) => {
+  createContract: async (req: Request, res: Response): Promise<void> => {
     try {
       const { userId, clientId, jobPostId, bidAmount, bidDeadline } = req.body;
 
       if (!userId && !clientId && !jobPostId) {
-        return res
+         res
           .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .json({ message: "Missing informations ", success: false });
       }
@@ -547,17 +553,17 @@ export const clientController = {
     }
   },
 
-  rejectProposal: async (req: Request, res: any) => {
+  rejectProposal: async (req: Request, res: Response): Promise<void> => {
     try {
       const { userId, jobPostId }: { userId: string; jobPostId: string } =
         req.body;
         if (!req.user || !req.user.id) {
-          return res.status(401).json({ message: "Unauthorized", success: false });
+           res.status(401).json({ message: "Unauthorized", success: false });
         }
         const clientId = String(req.user?.id);;
 
       if (!userId && !clientId && !jobPostId) {
-        return res
+         res
           .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .json({ message: "Missing informations ", success: false });
       }

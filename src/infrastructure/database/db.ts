@@ -13,7 +13,7 @@ export const connectDB = async () => {
         tlsAllowInvalidCertificates: true
     });   
         console.log('Database Connection established');
-    } catch (err: any) {
+    } catch (err: unknown) {
         console.error('Failed to Connect Database', err);
     }
 };

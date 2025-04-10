@@ -8,4 +8,12 @@ let logger;
 if (process.env.NODE_ENV === "production") {
     logger = (0, devlinkLogger_1.default)();
 }
+else {
+    logger = {
+        info: (...args) => console.log("[INFO]", ...args),
+        error: (...args) => console.error("[ERROR]", ...args),
+        warn: (...args) => console.warn("[WARN]", ...args),
+        debug: (...args) => console.debug("[DEBUG]", ...args),
+    };
+}
 exports.default = logger;

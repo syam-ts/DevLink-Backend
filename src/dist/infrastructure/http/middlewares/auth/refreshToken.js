@@ -8,16 +8,17 @@ const generateTokens_1 = __importDefault(require("../../../../utils/generateToke
 ;
 const refreshToken = (req, res) => {
     const refreshToken = req.cookies.refreshToken;
-    if (!refreshToken)
+    if (!refreshToken) {
         res.status(401).json({ message: "No refresh token" });
+        return;
+    }
     jsonwebtoken_1.default.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
-        if (err)
-            return res
-                .status(403)
-                .json({ message: "Invalid or expired refresh token" });
+        if (err || !decoded) {
+            res.status(403).json({ message: "Invalid or expired refresh token" });
+            return;
+        }
         const { accessToken } = (0, generateTokens_1.default)(decoded);
         res.json({ accessToken });
     });
-    return;
 };
 exports.default = refreshToken;

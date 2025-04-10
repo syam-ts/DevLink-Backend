@@ -1,5 +1,6 @@
  
 import mongoose, { Types } from "mongoose";
+import { JobPostDocument } from "./JobPost";
 
 interface Revenue {
   amount: number;
@@ -26,8 +27,8 @@ interface Request {
   type?: string;
   clientId?: Types.ObjectId;
   status?: "pending" | "approved" | "rejected";
-  data?: any;
-  unChangedData?: any;
+  data?: JobPostDocument;
+  unChangedData?: JobPostDocument;
 }
 
 export interface Admin {

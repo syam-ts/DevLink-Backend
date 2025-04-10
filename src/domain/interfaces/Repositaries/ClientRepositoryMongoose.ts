@@ -57,8 +57,8 @@ interface Wallet {
 
 interface Proposal {
   type: string;
-  UserId: ObjectId;
-  jobPostId: ObjectId;
+  UserId: string;
+  jobPostId: string;
   jobPostInfo: string;
   userData: User;
   description?: string | undefined;
@@ -179,9 +179,14 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   async findClientByEmailAndPassword(
     email: string,
     password: string
-  ): Promise<Client | null> {
-    console.log("The data: ", email, password);
-    const client = await ClientModel.findOne({ email }).lean<Client>().exec();
+  ): Promise<{
+    _id: string 
+    companyName: string
+    email: string
+    password: string
+    isBlocked: boolean 
+  }> { 
+    const client = await ClientModel.findOne({ email }).exec();
 
     if (!client) {
       throw new Error("client not Found");
@@ -204,23 +209,37 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       throw new Error("wrong password");
     }
 
-    return client;
+    return {
+      _id: String(client._id), 
+      companyName: String(client.companyName),
+      email: String(client.email),
+      password: String(client.password),
+      isBlocked: Boolean(client.isBlocked) 
+    };
   }
 
   async findClientByOnlyEmail(
     email: string,
     companyName: string,
     password: string
-  ): Promise<Client> {
+  ): Promise<{
+    _id: string 
+    companyName: string
+    email: string 
+    password: string
+    isBlocked: boolean  
+    isVerified: boolean  
+  }> {
     const client = await ClientModel.findOne({ email }).exec();
     if (client) {
       return {
-        _id: client._id,
-        companyName: client.companyName,
-        email: client.email,
-        isBlocked: client.isBlocked,
-        isVerified: client.isVerified,
-      } as Client;
+        _id: String(client._id),
+        companyName: String(client.companyName),
+        password: String(client.password),
+        email: String(client.email),
+        isBlocked: Boolean(client.isBlocked),
+        isVerified: Boolean(client.isVerified)
+      };
     } else {
       const salt: number = 10;
       const hashedPassword = await bcrypt.hash(password, salt);
@@ -246,12 +265,14 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
       const savedClient = await createdClient.save();
 
-      return {
-        _id: savedClient._id,
-        companyName: savedClient.companyName,
-        email: savedClient.email,
-        password: savedClient.password,
-      } as Client;
+      return {  
+        _id: String(savedClient._id),
+        companyName: String(savedClient.companyName),
+        password: String(savedClient.password),
+        email: String(savedClient.email),
+        isBlocked: Boolean(savedClient.isBlocked),
+        isVerified: Boolean(savedClient.isVerified)
+      };
     }
   }
 

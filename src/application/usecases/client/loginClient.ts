@@ -1,10 +1,17 @@
-import { Client } from "../../../domain/entities/Client";
+interface Client { 
+    _id: string 
+    companyName: string
+    email: string
+    password: string
+    isBlocked: boolean 
+    role?: string
+}
 
 export interface ClientRepositary {
     findClientByEmailAndPassword(
         email: string,
         password?: string
-    ): Promise<Client | null>;
+    ): Promise<Client>;
 }
 
 export class LoginClient {

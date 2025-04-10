@@ -1,4 +1,11 @@
-import { Client } from "../../../domain/entities/Client";
+ 
+interface Client {
+    _id: string
+    email: string;
+    companyName: string;
+    password: string;
+    role?: string
+  }
 
 interface ClientData {
     email: string

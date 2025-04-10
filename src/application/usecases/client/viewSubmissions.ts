@@ -1,12 +1,11 @@
-import { ObjectId } from "mongoose";
-import { Client } from "../../../domain/entities/Client";
+import { JobPostDocument } from "../../../domain/entities/JobPost";
 
 interface ProjectSubmission {
-    contractId: ObjectId;
+    contractId: string;
     description: string;
     progress: number;
     attachedFile: string;
-    jobPostData: any;
+    jobPostData: JobPostDocument;
     createdAt: Date;
   }
   
@@ -14,7 +13,7 @@ interface ProjectSubmission {
   export type ProjectSubmissions = ProjectSubmission[];
 
 export interface ClientRepository {
-    viewSubmissions(clientId: string): Promise<any>;
+    viewSubmissions(clientId: string): Promise<ProjectSubmissions>;
 }
 
 export class ViewSubmissions {
