@@ -1,5 +1,11 @@
 import express, { NextFunction, Request, Response } from "express";
-require("dotenv").config();
+import path from 'node:path';
+import dotenv from 'dotenv';
+dotenv.config({
+  path: path.resolve(__dirname, '.env')
+})
+
+ 
 import logger from './logger/logger'
 import cors from "cors";
 import cookieparser from "cookie-parser";

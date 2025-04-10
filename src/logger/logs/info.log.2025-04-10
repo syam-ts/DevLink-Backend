@@ -137,3 +137,55 @@
 {"level":"info","message":"route: /client/developers","timestamp":"2025-04-10 11:01:02"}
 {"level":"info","message":"route: /client/developers","timestamp":"2025-04-10 11:01:09"}
 {"level":"info","message":"route: /client/developers","timestamp":"2025-04-10 11:01:09"}
+{"level":"info","message":"route: /user/googleLogin","timestamp":"2025-04-10 11:48:15"}
+{"level":"info","message":"route: /user/googleLogin","timestamp":"2025-04-10 11:48:15"}
+{"level":"info","message":"route: /user/login","timestamp":"2025-04-10 11:48:24"}
+{"level":"info","message":"route: /user/login","timestamp":"2025-04-10 11:48:24"}
+{"level":"error","message":"wrong password","timestamp":"2025-04-10 11:48:24"}
+{"level":"info","message":"route: /user/googleLogin","timestamp":"2025-04-10 11:48:34"}
+{"level":"info","message":"route: /user/googleLogin","timestamp":"2025-04-10 11:48:34"}
+{"level":"info","message":"route: /user/searchJobs","timestamp":"2025-04-10 11:48:35"}
+{"level":"info","message":"route: /user/getHome","timestamp":"2025-04-10 11:48:35"}
+{"level":"info","message":"route: /user/home/listAllJobs","timestamp":"2025-04-10 11:48:35"}
+{"level":"info","message":"route: /user/home/latestJobs","timestamp":"2025-04-10 11:48:35"}
+{"level":"info","message":"route: /user/searchJobs","timestamp":"2025-04-10 11:48:35"}
+{"level":"info","message":"route: /user/getHome","timestamp":"2025-04-10 11:48:35"}
+{"level":"info","message":"route: /user/home/listAllJobs","timestamp":"2025-04-10 11:48:35"}
+{"level":"info","message":"route: /user/home/latestJobs","timestamp":"2025-04-10 11:48:35"}
+{"level":"error","message":"read ECONNRESET","timestamp":"2025-04-10 11:48:37"}
+{"level":"info","message":"route: /user/wallet?currentPage=1","timestamp":"2025-04-10 11:48:42"}
+{"level":"info","message":"route: /user/wallet?currentPage=1","timestamp":"2025-04-10 11:48:42"}
+{"level":"error","message":"PlanExecutor error during aggregation :: caused by :: The argument to $size must be an array, but was of type: missing","timestamp":"2025-04-10 11:48:42"}
+{"level":"info","message":"route: /user/profile/user-view","timestamp":"2025-04-10 11:48:58"}
+{"level":"info","message":"route: /user/profile/user-view","timestamp":"2025-04-10 11:48:58"}
+{"level":"info","message":"route: /user/contracts/pending?currentPage=1","timestamp":"2025-04-10 11:49:00"}
+{"level":"info","message":"route: /user/contracts/pending?currentPage=1","timestamp":"2025-04-10 11:49:00"}
+{"level":"info","message":"route: /user/proposals/pending","timestamp":"2025-04-10 11:49:00"}
+{"level":"info","message":"route: /user/proposals/pending","timestamp":"2025-04-10 11:49:00"}
+{"level":"error","message":"No proposal found","timestamp":"2025-04-10 11:49:00"}
+{"level":"info","message":"route: /user/invites","timestamp":"2025-04-10 11:49:01"}
+{"level":"info","message":"route: /user/invites","timestamp":"2025-04-10 11:49:01"}
+{"level":"info","message":"route: /user/wishlist","timestamp":"2025-04-10 11:49:02"}
+{"level":"info","message":"route: /user/wishlist","timestamp":"2025-04-10 11:49:02"}
+{"level":"error","message":"No wishlist founded","timestamp":"2025-04-10 11:49:02"}
+{"level":"info","message":"route: /user/contracts/pending?currentPage=1","timestamp":"2025-04-10 11:49:07"}
+{"level":"info","message":"route: /user/contracts/pending?currentPage=1","timestamp":"2025-04-10 11:49:07"}
+{"level":"info","message":"route: /user/jobs/listAllJobs?paymentType=hourly&&currentPage=1","timestamp":"2025-04-10 11:49:08"}
+{"level":"info","message":"route: /user/jobs/listAllJobs?paymentType=hourly&&currentPage=1","timestamp":"2025-04-10 11:49:08"}
+{"level":"info","message":"route: /user/jobs/bestMatches?paymentType=hourly&&currentPage=1","timestamp":"2025-04-10 11:49:10"}
+{"level":"info","message":"route: /user/jobs/bestMatches?paymentType=hourly&&currentPage=1","timestamp":"2025-04-10 11:49:10"}
+{"level":"error","message":"No matched job found ","timestamp":"2025-04-10 11:49:10"}
+{"level":"info","message":"route: /user/job/67c57b7113cbf55d1504099a","timestamp":"2025-04-10 11:49:11"}
+{"level":"info","message":"route: /user/job/67c57b7113cbf55d1504099a","timestamp":"2025-04-10 11:49:11"}
+{"level":"info","message":"route: /user/jobs/listAllJobs?paymentType=hourly&&currentPage=1","timestamp":"2025-04-10 11:49:15"}
+{"level":"info","message":"route: /user/jobs/listAllJobs?paymentType=hourly&&currentPage=1","timestamp":"2025-04-10 11:49:15"}
+{"level":"info","message":"route: /user/getHome","timestamp":"2025-04-10 11:49:16"}
+{"level":"info","message":"route: /user/home/listAllJobs","timestamp":"2025-04-10 11:49:16"}
+{"level":"info","message":"route: /user/home/latestJobs","timestamp":"2025-04-10 11:49:16"}
+{"level":"info","message":"route: /user/home/latestJobs","timestamp":"2025-04-10 11:49:16"}
+{"level":"info","message":"route: /user/getHome","timestamp":"2025-04-10 11:49:16"}
+{"level":"info","message":"route: /user/home/listAllJobs","timestamp":"2025-04-10 11:49:16"}
+{"level":"info","message":"route: /user/job/67e5719e2fd469b74dc2f167","timestamp":"2025-04-10 11:49:24"}
+{"level":"info","message":"route: /user/job/67e5719e2fd469b74dc2f167","timestamp":"2025-04-10 11:49:24"}
+{"level":"info","message":"route: /user/logout","timestamp":"2025-04-10 11:49:29"}
+{"level":"info","message":"route: /user/logout","timestamp":"2025-04-10 11:49:29"}

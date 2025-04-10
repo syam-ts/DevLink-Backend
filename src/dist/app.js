@@ -13,7 +13,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-require("dotenv").config();
+const node_path_1 = __importDefault(require("node:path"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config({
+    path: node_path_1.default.resolve(__dirname, '.env')
+});
 const logger_1 = __importDefault(require("./logger/logger"));
 const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
