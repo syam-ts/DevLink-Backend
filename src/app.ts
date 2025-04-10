@@ -37,6 +37,8 @@ app.use("/", routes);
 const server = http.createServer(app); 
 initializeSocket(server);
 
+console.log('The port: ',process.env.PORT)
+
 const PORT = (process.env.PORT as string) || 3000;
 
 (async () => {
