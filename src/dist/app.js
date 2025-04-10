@@ -42,6 +42,7 @@ app.use((0, morgan_1.default)("dev"));
 app.use("/", routes_1.default);
 const server = node_http_1.default.createServer(app);
 (0, socket_1.default)(server);
+console.log('The port from app.ts: ', process.env.PORT);
 const PORT = process.env.PORT || 3000;
 (() => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, db_1.connectDB)();
