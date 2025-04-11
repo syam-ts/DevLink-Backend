@@ -19,6 +19,7 @@ export class SignupUser {
     async execute(user: User) {
         console.log('The whole user includes Email: ',user)
         const existingUser = await this.userRepositary.signupUser(user.email);
+        console.log('the existing ',existingUser)
 
         if (existingUser) {
             throw new Error("User already exists");
