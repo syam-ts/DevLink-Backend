@@ -96,7 +96,9 @@ class UserRepositoryMongoose {
     }
     signupUser(email) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('The mail from repo: ', email);
             const foundUser = this.findUserByEmail(email);
+            console.log('The result from repo itself: ', foundUser);
             if (!foundUser)
                 throw new Error("User Not found");
             return foundUser;
