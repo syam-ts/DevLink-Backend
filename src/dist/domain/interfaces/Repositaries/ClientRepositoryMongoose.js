@@ -699,6 +699,14 @@ class ClientRepositoryMongoose {
             return jobs;
         });
     }
+    inviteJobsList(clientId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const jobs = yield JobPost_1.JobPostModel.find({ clientId: clientId, status: "pending" }).exec();
+            if (!jobs || jobs.length === 0)
+                throw new Error("No jobs found");
+            return jobs;
+        });
+    }
     closeContract(contractId, progress) {
         return __awaiter(this, void 0, void 0, function* () {
             //update contract status as closed ----------------

@@ -883,6 +883,12 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return jobs;
   }
 
+  async inviteJobsList(clientId: Id): Promise<JobPostDocument[]> {
+    const jobs = await JobPostModel.find({ clientId: clientId , status: "pending"}).exec();
+    if (!jobs || jobs.length === 0) throw new Error("No jobs found");
+    return jobs;
+  }
+
   async closeContract(contractId: Id, progress: number): Promise<unknown> {
     //update contract status as closed ----------------
     if (!progress) throw new Error("Progress data missing");

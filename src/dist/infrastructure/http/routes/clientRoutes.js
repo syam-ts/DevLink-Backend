@@ -11,7 +11,7 @@ const userCtrl_1 = require("../controllers/userCtrl");
 const verifyToken_1 = require("../middlewares/auth/verifyToken");
 const requireRole_1 = require("../middlewares/auth/requireRole");
 const enums_1 = require("../../../helper/constants/enums");
-const { signupClient, verifyOtp, resendOtp, loginClient, verifyEmail, resetPassword, googleLogin, logoutClient, getHomeClient, trendingJobs, getSelectedJobs, getProposals, viewContracts, makePayment, createJobPost, getProfile, profileVerification, editProfile, getUserProfile, createContract, viewSubmissions, getallDevelopers, closeContract, rejectContract, viewWallet, inviteUser, listAllJobs, getSingleJobPost, rejectProposal, getAllNotifications, getAllChats, viewChat, rateAndReview, sendMessage, viewInvite, searchDevlopers, withdrawMoneyByClient } = clientCtrl_1.clientController;
+const { signupClient, verifyOtp, resendOtp, loginClient, verifyEmail, resetPassword, googleLogin, logoutClient, getHomeClient, trendingJobs, getSelectedJobs, getProposals, viewContracts, makePayment, createJobPost, getProfile, profileVerification, editProfile, getUserProfile, createContract, viewSubmissions, getallDevelopers, closeContract, rejectContract, viewWallet, inviteUser, listAllJobs, inviteJobsList, getSingleJobPost, rejectProposal, getAllNotifications, getAllChats, viewChat, rateAndReview, sendMessage, viewInvite, searchDevlopers, withdrawMoneyByClient } = clientCtrl_1.clientController;
 const { viewSingleContract } = userCtrl_1.userController;
 const { CLIENT } = enums_1.allRoles;
 clientRouter.get("/getHome", verifyToken_1.verifyToken, (0, requireRole_1.requireRole)(CLIENT), getHomeClient);
@@ -20,6 +20,7 @@ clientRouter.get("/profile", verifyToken_1.verifyToken, (0, requireRole_1.requir
 clientRouter.get("/userProfile/:userId", verifyToken_1.verifyToken, (0, requireRole_1.requireRole)(CLIENT), getUserProfile);
 clientRouter.get("/developers", verifyToken_1.verifyToken, (0, requireRole_1.requireRole)(CLIENT), getallDevelopers);
 clientRouter.get("/listAllJobs", verifyToken_1.verifyToken, (0, requireRole_1.requireRole)(CLIENT), listAllJobs);
+clientRouter.get("/inviteJobsList", verifyToken_1.verifyToken, (0, requireRole_1.requireRole)(CLIENT), inviteJobsList);
 clientRouter.get('/jobs/:jobsType', verifyToken_1.verifyToken, (0, requireRole_1.requireRole)(CLIENT), getSelectedJobs);
 clientRouter.get('/job/:jobPostId', verifyToken_1.verifyToken, (0, requireRole_1.requireRole)(CLIENT), getSingleJobPost);
 clientRouter.get("/proposals/:proposalType", verifyToken_1.verifyToken, (0, requireRole_1.requireRole)(CLIENT), getProposals);

@@ -773,6 +773,31 @@ exports.clientController = {
             return;
         }
     }),
+    inviteJobsList: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
+        try {
+            if (!req.user || !req.user.id) {
+                res.status(401).json({ message: "Unauthorized", success: false });
+            }
+            const clientId = String((_a = req.user) === null || _a === void 0 ? void 0 : _a.id);
+            ;
+            const response = yield allCtrlConnection_1.allClientUseCases.inviteJobsListUseCase.execute(clientId);
+            res.status(enums_1.HttpStatusCode.OK).json({
+                message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK],
+                response,
+                success: true,
+            });
+        }
+        catch (error) {
+            const err = error;
+            logger_1.default.error(err.message);
+            res.status(enums_1.HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                message: err.message,
+                success: false,
+            });
+            return;
+        }
+    }),
     inviteUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         var _a;
         try {

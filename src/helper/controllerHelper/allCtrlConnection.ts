@@ -43,6 +43,7 @@ import { TrendingJobs } from '../../application/usecases/client/getHome';
 import { GetSelectedJobsClient } from '../../application/usecases/client/getSelectedJobs';
 import { ViewContractsClient } from '../../application/usecases/client/viewContracts';
 import { ListAllJobs } from '../../application/usecases/client/listAllJobs';  
+import { InviteJobsList } from '../../application/usecases/client/inviteJobsList';  
 import { EditClientProfile } from '../../application/usecases/client/EditClientProfile';
 import { GetClientProfile } from '../../application/usecases/client/getProfile';
 import { ProfileVerification } from '../../application/usecases/client/profileVerification';
@@ -139,6 +140,7 @@ const trendingJobsUseCase = new TrendingJobs(ClientRepository);
 const getSelectedJobsClientUseCase = new GetSelectedJobsClient(ClientRepository);
 const viewContractsClientUseCase = new ViewContractsClient(ClientRepository);
 const listAllJobsClientUseCase = new ListAllJobs(ClientRepository); 
+const inviteJobsListUseCase = new InviteJobsList(ClientRepository); 
 const editClientProfileUseCase = new EditClientProfile(ClientRepository);
 const getClientProfileUseCase = new GetClientProfile(ClientRepository);
 const profileVerificationUseCase = new ProfileVerification(ClientRepository);
@@ -237,6 +239,7 @@ export const allClientUseCases = {
      getSelectedJobsClientUseCase,
      viewContractsClientUseCase,
      listAllJobsClientUseCase,
+     inviteJobsListUseCase,
      editClientProfileUseCase,
      getClientProfileUseCase,
      profileVerificationUseCase,

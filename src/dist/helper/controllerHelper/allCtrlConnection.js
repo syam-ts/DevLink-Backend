@@ -44,6 +44,7 @@ const getHome_4 = require("../../application/usecases/client/getHome");
 const getSelectedJobs_2 = require("../../application/usecases/client/getSelectedJobs");
 const viewContracts_2 = require("../../application/usecases/client/viewContracts");
 const listAllJobs_1 = require("../../application/usecases/client/listAllJobs");
+const inviteJobsList_1 = require("../../application/usecases/client/inviteJobsList");
 const EditClientProfile_1 = require("../../application/usecases/client/EditClientProfile");
 const getProfile_2 = require("../../application/usecases/client/getProfile");
 const profileVerification_1 = require("../../application/usecases/client/profileVerification");
@@ -135,6 +136,7 @@ const trendingJobsUseCase = new getHome_4.TrendingJobs(ClientRepository);
 const getSelectedJobsClientUseCase = new getSelectedJobs_2.GetSelectedJobsClient(ClientRepository);
 const viewContractsClientUseCase = new viewContracts_2.ViewContractsClient(ClientRepository);
 const listAllJobsClientUseCase = new listAllJobs_1.ListAllJobs(ClientRepository);
+const inviteJobsListUseCase = new inviteJobsList_1.InviteJobsList(ClientRepository);
 const editClientProfileUseCase = new EditClientProfile_1.EditClientProfile(ClientRepository);
 const getClientProfileUseCase = new getProfile_2.GetClientProfile(ClientRepository);
 const profileVerificationUseCase = new profileVerification_1.ProfileVerification(ClientRepository);
@@ -230,6 +232,7 @@ exports.allClientUseCases = {
     getSelectedJobsClientUseCase,
     viewContractsClientUseCase,
     listAllJobsClientUseCase,
+    inviteJobsListUseCase,
     editClientProfileUseCase,
     getClientProfileUseCase,
     profileVerificationUseCase,

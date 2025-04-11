@@ -35,6 +35,7 @@ const {
   viewWallet,
   inviteUser,
   listAllJobs,
+  inviteJobsList,
   getSingleJobPost,
   rejectProposal,
   getAllNotifications,
@@ -58,6 +59,7 @@ clientRouter.get("/profile", verifyToken, requireRole(CLIENT), getProfile);
 clientRouter.get("/userProfile/:userId", verifyToken, requireRole(CLIENT), getUserProfile);
 clientRouter.get("/developers", verifyToken, requireRole(CLIENT), getallDevelopers);
 clientRouter.get("/listAllJobs", verifyToken, requireRole(CLIENT), listAllJobs);
+clientRouter.get("/inviteJobsList", verifyToken, requireRole(CLIENT), inviteJobsList);
 clientRouter.get('/jobs/:jobsType', verifyToken, requireRole(CLIENT), getSelectedJobs);
 clientRouter.get('/job/:jobPostId', verifyToken, requireRole(CLIENT), getSingleJobPost);
 clientRouter.get("/proposals/:proposalType", verifyToken, requireRole(CLIENT), getProposals);
