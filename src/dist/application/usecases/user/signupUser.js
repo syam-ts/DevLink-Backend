@@ -17,12 +17,15 @@ class SignupUser {
     }
     execute(user) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('The whole user includes Email: ', user);
             const existingUser = yield this.userRepositary.signupUser(user.email);
             if (existingUser) {
                 throw new Error("User already exists");
             }
             else {
+                console.log('Reachded here before');
                 const otp = yield (0, send_mail_1.sendMail)(user.email);
+                console.log('The email', user.email);
                 return otp;
             }
         });

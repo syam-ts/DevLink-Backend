@@ -333,8 +333,8 @@ exports.clientController = {
         try {
             res.clearCookie("refreshToken", {
                 httpOnly: true,
-                sameSite: "strict",
-                secure: process.env.NODE_ENV === "production",
+                sameSite: "none",
+                secure: true,
                 path: "/",
             });
             res

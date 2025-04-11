@@ -17,12 +17,15 @@ export class SignupUser {
     constructor(private userRepositary: UserRepositary) { }
 
     async execute(user: User) {
+        console.log('The whole user includes Email: ',user)
         const existingUser = await this.userRepositary.signupUser(user.email);
 
         if (existingUser) {
             throw new Error("User already exists");
         } else {
+            console.log('Reachded here before')
             const otp = await sendMail(user.email);
+            console.log('The email', user.email)
 
             return otp;
         }
