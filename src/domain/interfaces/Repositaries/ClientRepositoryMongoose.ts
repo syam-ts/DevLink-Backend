@@ -185,6 +185,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     email: string
     password: string
     isBlocked: boolean 
+    isVerified: boolean
   }> { 
     const client = await ClientModel.findOne({ email }).exec();
 
@@ -214,7 +215,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       companyName: String(client.companyName),
       email: String(client.email),
       password: String(client.password),
-      isBlocked: Boolean(client.isBlocked) 
+      isBlocked: Boolean(client.isBlocked),
+      isVerified: Boolean(client.isVerified)
     };
   }
 

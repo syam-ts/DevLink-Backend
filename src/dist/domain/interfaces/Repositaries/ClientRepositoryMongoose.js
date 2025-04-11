@@ -136,7 +136,8 @@ class ClientRepositoryMongoose {
                 companyName: String(client.companyName),
                 email: String(client.email),
                 password: String(client.password),
-                isBlocked: Boolean(client.isBlocked)
+                isBlocked: Boolean(client.isBlocked),
+                isVerified: Boolean(client.isVerified)
             };
         });
     }
