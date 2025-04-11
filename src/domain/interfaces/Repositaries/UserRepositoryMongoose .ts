@@ -168,10 +168,8 @@ export class UserRepositoryMongoose implements UserRepositary {
   }
 
 
-  async signupUser(email: string): Promise<User | null> {
-    console.log('The mail from repo: ',email)
-    const foundUser = this.findUserByEmail(email);
-    console.log('The result from repo itself: ',foundUser);
+  async signupUser(email: string): Promise<User | null> { 
+    const foundUser = this.findUserByEmail(email); 
     if (!foundUser) throw new Error("User Not found");
 
     return foundUser;
