@@ -11,7 +11,7 @@ interface User {
 }
 
 export interface UserRepository {
-    findUserByEmail(email: string): Promise<User>;
+    findUserByEmail(email: string): Promise<User | null>;
 }
 
 const sendMail = async (toMail: string, userId: string | unknown) => {

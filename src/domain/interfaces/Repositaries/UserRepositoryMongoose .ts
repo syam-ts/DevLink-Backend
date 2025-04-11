@@ -252,17 +252,21 @@ export class UserRepositoryMongoose implements UserRepositary {
     return user as User;
   }
 
-  async findUserByEmail(email: string): Promise<User> {
+  async findUserByEmail(email: string): Promise<User | null> {
     const user = await UserModel.findOne({ email }).lean<User>().exec();
-    if (!user) throw new Error('user not found');
+    if (!user) {
+      return null
+    } else {
 
-    return {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      mobile: user.mobile,
-    } as User;
+      return {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        mobile: user.mobile,
+      } as User;
+    }
+
   }
 
   async findUserByEmailAndPassword(

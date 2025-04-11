@@ -167,15 +167,18 @@ class UserRepositoryMongoose {
     findUserByEmail(email) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield User_1.UserModel.findOne({ email }).lean().exec();
-            if (!user)
-                throw new Error('user not found');
-            return {
-                _id: user._id,
-                name: user.name,
-                email: user.email,
-                password: user.password,
-                mobile: user.mobile,
-            };
+            if (!user) {
+                return null;
+            }
+            else {
+                return {
+                    _id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    password: user.password,
+                    mobile: user.mobile,
+                };
+            }
         });
     }
     findUserByEmailAndPassword(email, passwordUser) {
