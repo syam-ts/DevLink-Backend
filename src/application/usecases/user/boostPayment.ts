@@ -29,8 +29,8 @@ export class BoostPayment {
             },
           ],
           mode: "payment",
-          success_url: `http://localhost:5173/user/profileBoostSuccess`,
-          cancel_url: "http://localhost:5173/user/payment-failed",
+          success_url: `https://dev-link-frontend.vercel.app/user/profileBoostSuccess`,
+          cancel_url: "https://dev-link-frontend.vercel.app/user/payment-failed",
           customer_email: "samplemail@gmai.com",
         });
 
