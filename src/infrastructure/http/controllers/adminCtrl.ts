@@ -83,7 +83,7 @@ export const adminController = {
 
   getAllUsers: async (req: Request, res: Response): Promise<void> => {
     try {
-      const page = Number(req.query.currentPage) || 1;  
+      const page = Number(req.query.page) || 1;  
       const sortType = String(req.query.sortType || "asc");
 
       const users = await allAdminUseCases.getAllUsersUseCase.execute(
@@ -109,7 +109,7 @@ export const adminController = {
 
   getAllClients: async (req: Request, res: Response): Promise<void> => {
     try {
-      const page = Number(req.query.currentPage) || 1;  
+      const page = Number(req.query.page) || 1;  
       const sortType = String(req.query.sortType);
       const clients = await allAdminUseCases.getAllClientsUseCase.execute(
         page,
