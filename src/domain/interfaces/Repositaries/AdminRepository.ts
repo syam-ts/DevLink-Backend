@@ -151,7 +151,7 @@ export class AdminRepository implements AdminRepositary {
         },
       },
     ]);
-
+    
     return {
       adminWallet,
       totalPages,
@@ -455,12 +455,18 @@ export class AdminRepository implements AdminRepositary {
   }
 
   async successMoneyTransfer(
+    roleType: string,
     userId: string,
     paymentScreenshot: string,
     amount: number,
     upiId: number,
     requestId: string
   ): Promise<unknown> {
+
+ console.log('Whole data: ',roleType, userId, paymentScreenshot, amount, upiId, requestId);
+
+
+
     const newNotification = await NotificationModel.create({
       type: "Withdraw Money",
       message: "Succesfully transfer the money to bank account",
@@ -473,7 +479,6 @@ export class AdminRepository implements AdminRepositary {
       },
       createdAt: new Date(),
     });
-    console.log('The notitfication: ',newNotification);
 
     newNotification.save();
     const adminId = process.env.ADMIN_OBJECT_ID;
@@ -485,12 +490,63 @@ export class AdminRepository implements AdminRepositary {
       { new: true }
     );
 
-    // add withdrwa money to admin entity
+    // add withdraw money to admin entity for Withdraw history
     const addWithdrawMoney = await AdminModel.findByIdAndUpdate(adminId, {
       $push: {
         "revenue.totalWithdrawals": { amount: amount, createdAt: Date.now() },
       },
     });
+
+    // deduct money from admin wallet 
+     let walletEntryAdmin = {
+          type: "debit",
+          amount: amount,
+          from: "admin",
+          fromId: adminId,
+          date: new Date(),
+        };
+    
+    const updateAdminWallet = await AdminModel.findByIdAndUpdate(
+          adminId,
+          {
+            $inc: {
+              "wallet.balance": -amount,
+            },
+            $push: {
+              "wallet.transactions": walletEntryAdmin,
+              "revenue.grossAmount": {
+                amount: amount,
+                createdAt: Date.now(),
+              },
+            },
+          },
+          { new: true }
+        ).exec();
+
+    // deduct money from client wallet
+    if(roleType === 'user') {
+      const clientDeduction = await UserModel.findByIdAndUpdate(
+        userId,
+        {
+          $inc: {
+            "wallet.balance": -amount,
+          }
+        },
+        { new: true }
+      ).exec();
+
+    } else {
+      const clientDeduction = await ClientModel.findByIdAndUpdate(
+        userId,
+        {
+          $inc: {
+            "wallet.balance": -amount,
+          }
+        },
+        { new: true }
+      ).exec();
+      
+    }
 
     return newNotification;
   }

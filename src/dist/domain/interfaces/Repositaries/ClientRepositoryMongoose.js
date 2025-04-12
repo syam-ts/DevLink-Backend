@@ -53,7 +53,7 @@ class ClientRepositoryMongoose {
     verifyOtp(client) {
         return __awaiter(this, void 0, void 0, function* () {
             const { name, email, password } = client.user.data;
-            if (client.mailOtp === parseInt(client.user.otp)) {
+            if (client.mailOtp === parseInt(client.userOtp)) {
                 const salt = 10;
                 const hashedPassword = yield bcrypt_1.default.hash(password, salt);
                 let wallet = {
@@ -265,8 +265,10 @@ class ClientRepositoryMongoose {
                 type: "Profile Updation Request",
                 clientId: clientId,
                 status: "pending",
-                data: editData,
-                unChangedData: unChangedData,
+                data: {
+                    editData: unChangedData,
+                    unChangedData: editData,
+                },
             };
             const updatedAdmin = yield Admin_1.AdminModel.findByIdAndUpdate(adminId, { $push: { request: request } }, { new: true })
                 .lean()
@@ -1074,6 +1076,7 @@ class ClientRepositoryMongoose {
                 throw new Error("Invalid clientId: Must be a 24-character hex string.");
             }
             const withdrawRequestObject = {
+                roleType: 'client',
                 roleId: new mongoose_1.default.Types.ObjectId(clientId),
                 userName: userName,
                 amount: amount,

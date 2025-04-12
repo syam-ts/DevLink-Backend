@@ -31,7 +31,7 @@ const sendMail = async (toMail: string, userId: string | unknown) => {
             from: "syamnandhu3@gmail.com",
             to: toMail,
             subject: "Verified Email for password changing",
-            text: `http://localhost:5173/resetPassword/${userId}?role=user`,
+            text: `https://dev-link-frontend.vercel.app/resetPassword/${userId}?role=user`,
         });
     } catch (error) {
         console.error("Error sending email:", error);

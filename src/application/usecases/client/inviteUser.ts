@@ -10,7 +10,7 @@ export interface ClientRepository {
 }
 
 export class InviteUser {
-  constructor(private clientRepository: ClientRepository) {}
+  constructor(private clientRepository: ClientRepository) { }
 
   async execute(
     userId: string,
@@ -18,6 +18,16 @@ export class InviteUser {
     jobPostId: string,
     description: string
   ) {
+
+
+    if (!jobPostId) {
+      throw new Error('Please select a jobPost');
+    }
+
+    if (description.length < 10 && description.length < 30) {
+      throw new Error('Description should be between 10 to 30 characters');
+    } 
+
     const result = await this.clientRepository.inviteUser(
       userId,
       clientId,

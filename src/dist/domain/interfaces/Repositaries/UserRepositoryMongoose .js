@@ -105,7 +105,7 @@ class UserRepositoryMongoose {
     verifyOtp(user) {
         return __awaiter(this, void 0, void 0, function* () {
             const { name, email, password, mobile, } = user.user.data;
-            if (Number(user.mailOtp) == Number(user.mailOtp)) {
+            if (Number(user.mailOtp) == Number(user.userOtp)) {
                 const salt = 10;
                 const hashedPassword = yield bcrypt_1.default.hash(password, salt);
                 const createdUser = new User_1.UserModel({
@@ -1005,6 +1005,7 @@ class UserRepositoryMongoose {
                 throw new Error("Invalid userId: Must be a 24-character hex string.");
             }
             const withdrawRequestObject = {
+                roleType: 'user',
                 roleId: new mongoose_1.default.Types.ObjectId(userId),
                 userName: userName,
                 amount: amount,

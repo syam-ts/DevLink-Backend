@@ -75,11 +75,11 @@ userRouter.post('/logout', logoutUser);
 userRouter.post('/project/submit/:contractId', verifyToken, requireRole(USER), submitProject);
 userRouter.post('/chat/sendMessage', verifyToken, requireRole(USER), clientController.sendMessage);
 userRouter.post('/chatbot', verifyToken, requireRole(USER), chatbot);
-userRouter.post('/invite-reject/:inviteId', verifyToken, requireRole(USER), rejectInvite);
 userRouter.post('/refresh-token', refreshToken);
 
-userRouter.patch('/profileBoostSuccess', verifyToken, requireRole(USER), bosstSuccess);
 userRouter.put('/profileAlter/:type', verifyToken, requireRole(USER), alterProfile);
+userRouter.patch('/profileBoostSuccess', verifyToken, requireRole(USER), bosstSuccess);
+userRouter.patch('/invite-reject/:inviteId', verifyToken, requireRole(USER), rejectInvite);
 userRouter.patch('/removeFromWishlist/:wishlistId', verifyToken, requireRole(USER), removeFromWishlist);
 
 export default userRouter;

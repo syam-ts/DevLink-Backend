@@ -4,7 +4,7 @@ import { Client } from "../../../domain/entities/Client";
 
 interface ClientData {
     editData: Client
-    
+    unChangedData: Client
 }
 
 export interface ClientRepository {
@@ -15,8 +15,7 @@ export interface ClientRepository {
 export class ProfileVerification {
     constructor( private clientRepository: ClientRepository) {};
 
-    async execute(clientId: string, clientData: ClientData) { 
-
+    async execute(clientId: string, clientData: ClientData) {  
       
         const { companyName, location, description,domain,  numberOfEmployees, since } = clientData.editData;
       

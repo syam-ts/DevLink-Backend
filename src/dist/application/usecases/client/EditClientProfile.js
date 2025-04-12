@@ -19,7 +19,7 @@ class EditClientProfile {
             const unChangedData = JSON.parse(JSON.stringify(clientData.editData));
             for (const key of Object.keys(clientData.editData)) {
                 if (clientData.editData[key] === "") {
-                    clientData.editData[key] = clientData.unhangedData[key];
+                    clientData.editData[key] = clientData.unChangedData[key];
                 }
             }
             const client = yield this.clientRepository.editClientProfile(clientId, clientData.editData, unChangedData);

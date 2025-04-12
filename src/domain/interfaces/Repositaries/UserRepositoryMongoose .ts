@@ -177,6 +177,7 @@ export class UserRepositoryMongoose implements UserRepositary {
 
   async verifyOtp(user: {
     mailOtp: string;
+    userOtp: string;
     user: {
       data: {
         name: string;
@@ -193,8 +194,8 @@ export class UserRepositoryMongoose implements UserRepositary {
       mobile,
     } =
       user.user.data;
-
-    if (Number(user.mailOtp) == Number(user.mailOtp)) {
+      
+    if (Number(user.mailOtp) == Number(user.userOtp)) {
       const salt: number = 10;
       const hashedPassword: string = await bcrypt.hash(password, salt);
 
@@ -1202,6 +1203,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       throw new Error("Invalid userId: Must be a 24-character hex string.");
     }
     const withdrawRequestObject = {
+      roleType: 'user',
       roleId: new mongoose.Types.ObjectId(userId),
       userName: userName,
       amount: amount,

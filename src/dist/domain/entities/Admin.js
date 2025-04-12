@@ -10,6 +10,7 @@ const RevenueSchema = new mongoose_1.default.Schema({
     createdAt: { type: Date, required: true, default: Date.now, index: true },
 });
 const WithdrawRequestSchema = new mongoose_1.default.Schema({
+    roleType: { type: String, required: true },
     roleId: { type: mongoose_1.default.Schema.Types.ObjectId, required: true },
     userName: { type: String, required: true },
     amount: { type: Number, required: true },

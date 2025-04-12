@@ -8,6 +8,7 @@ interface Revenue {
 }
 
 interface WithdrawRequest {
+  roleType: string;
   roleId: Types.ObjectId;
   userName: string;
   amount: number;
@@ -54,6 +55,7 @@ const RevenueSchema = new mongoose.Schema({
 });
 
 const WithdrawRequestSchema = new mongoose.Schema({
+   roleType: {type: String, required: true},
     roleId: { type: mongoose.Schema.Types.ObjectId, required: true },
     userName: { type: String, required: true },
     amount: { type: Number, required: true },

@@ -1,5 +1,6 @@
 export interface AdminRepository {
   successMoneyTransfer(
+    roleType: string,
     userId: string,
     paymentScreenshot: string,
     amount: number,
@@ -12,6 +13,7 @@ export class SuccessMoneyTransfer {
   constructor(private adminRepository: AdminRepository) { }
 
   async execute(
+    roleType: string,
     userId: string,
     paymentScreenshot: string,
     amount: number,
@@ -20,6 +22,7 @@ export class SuccessMoneyTransfer {
   ) {
   
     const result = await this.adminRepository.successMoneyTransfer(
+      roleType,
       userId,
       paymentScreenshot,
       amount,

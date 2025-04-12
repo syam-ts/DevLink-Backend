@@ -87,7 +87,7 @@ exports.adminController = {
     }),
     getAllUsers: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const page = Number(req.query.page) || 1;
+            const page = Number(req.query.currentPage) || 1;
             const sortType = String(req.query.sortType || "asc");
             const users = yield allCtrlConnection_1.allAdminUseCases.getAllUsersUseCase.execute(page, sortType);
             res.status(enums_1.HttpStatusCode.OK).json({
@@ -108,7 +108,7 @@ exports.adminController = {
     }),
     getAllClients: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const page = Number(req.query.page) || 1;
+            const page = Number(req.query.currentPage) || 1;
             const sortType = String(req.query.sortType);
             const clients = yield allCtrlConnection_1.allAdminUseCases.getAllClientsUseCase.execute(page, sortType);
             res.status(enums_1.HttpStatusCode.OK).json({
@@ -201,7 +201,7 @@ exports.adminController = {
     }),
     viewWallet: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const currentPage = Number(req.query.page) || 1;
+            const currentPage = Number(req.query.currentPage) || 1;
             const wallet = yield allCtrlConnection_1.allAdminUseCases.viewWalletAdminUseCase.execute(currentPage);
             res
                 .status(enums_1.HttpStatusCode.OK)
@@ -420,8 +420,8 @@ exports.adminController = {
     }),
     successMoneyTransfer: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const { userId, paymentScreenshot, amount, upiId, requestId, requestedAmount } = req.body.body;
-            const response = yield allCtrlConnection_1.allAdminUseCases.successMoneyTransferUseCase.execute(userId, paymentScreenshot, amount, upiId, requestId);
+            const { roleType, userId, paymentScreenshot, amount, upiId, requestId, requestedAmount } = req.body.body;
+            const response = yield allCtrlConnection_1.allAdminUseCases.successMoneyTransferUseCase.execute(roleType, userId, paymentScreenshot, amount, upiId, requestId);
             res.status(enums_1.HttpStatusCode.OK).json({
                 message: stausMessages_1.StatusMessage[enums_1.HttpStatusCode.OK],
                 response,

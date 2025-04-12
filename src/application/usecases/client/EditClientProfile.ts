@@ -3,7 +3,7 @@ import { Client } from "../../../domain/entities/Client";
 
 interface ClientData {
   editData: Partial<Client>;
-  unhangedData: Client;
+  unChangedData: Client;
 }
 
 
@@ -18,7 +18,7 @@ export class EditClientProfile {
     const unChangedData = JSON.parse(JSON.stringify(clientData.editData));
     for (const key of Object.keys(clientData.editData) as Array<keyof Client>) {
       if (clientData.editData[key] === "") {
-        clientData.editData[key] = clientData.unhangedData[key];  
+        clientData.editData[key] = clientData.unChangedData[key];  
       }
     }
     const client = await this.clientRepository.editClientProfile(

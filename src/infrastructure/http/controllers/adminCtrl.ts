@@ -83,7 +83,7 @@ export const adminController = {
 
   getAllUsers: async (req: Request, res: Response): Promise<void> => {
     try {
-      const page = Number(req.query.page) || 1;  
+      const page = Number(req.query.currentPage) || 1;  
       const sortType = String(req.query.sortType || "asc");
 
       const users = await allAdminUseCases.getAllUsersUseCase.execute(
@@ -109,7 +109,7 @@ export const adminController = {
 
   getAllClients: async (req: Request, res: Response): Promise<void> => {
     try {
-      const page = Number(req.query.page) || 1;  
+      const page = Number(req.query.currentPage) || 1;  
       const sortType = String(req.query.sortType);
       const clients = await allAdminUseCases.getAllClientsUseCase.execute(
         page,
@@ -217,7 +217,7 @@ export const adminController = {
 
   viewWallet: async (req: Request, res: Response): Promise<void> => {
     try {
-      const currentPage = Number(req.query.page) || 1;  
+      const currentPage = Number(req.query.currentPage) || 1;
       const wallet = await allAdminUseCases.viewWalletAdminUseCase.execute(
         currentPage
       ); 
@@ -464,6 +464,7 @@ export const adminController = {
   successMoneyTransfer: async (req: Request, res: Response): Promise<void> => {
     try {
       const {
+        roleType,
         userId,
         paymentScreenshot,
         amount,
@@ -471,6 +472,7 @@ export const adminController = {
         requestId,
         requestedAmount
       }: {
+        roleType: string;
         userId: string;
         paymentScreenshot: string;
         amount: number;
@@ -481,6 +483,7 @@ export const adminController = {
 
       const response =
         await allAdminUseCases.successMoneyTransferUseCase.execute(
+          roleType,
           userId,
           paymentScreenshot,
           amount,

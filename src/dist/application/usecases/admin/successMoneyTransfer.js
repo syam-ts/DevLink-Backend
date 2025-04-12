@@ -14,9 +14,9 @@ class SuccessMoneyTransfer {
     constructor(adminRepository) {
         this.adminRepository = adminRepository;
     }
-    execute(userId, paymentScreenshot, amount, upiId, requestId) {
+    execute(roleType, userId, paymentScreenshot, amount, upiId, requestId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.adminRepository.successMoneyTransfer(userId, paymentScreenshot, amount, upiId, requestId);
+            const result = yield this.adminRepository.successMoneyTransfer(roleType, userId, paymentScreenshot, amount, upiId, requestId);
             return result;
         });
     }

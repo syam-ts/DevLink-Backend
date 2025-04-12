@@ -47,6 +47,7 @@ export interface UserRepository {
     createUser(user: User): Promise<User>;
     verifyOtp(user: {
         mailOtp: string;
+        userOtp: string;
         user: {
           data: {
             name: string;
@@ -59,10 +60,13 @@ export interface UserRepository {
 }
 
 export class VerifyOtp {
+  
     constructor(private userRepository: UserRepository) { }
+     
 
     async execute(user: {
         mailOtp: string;
+        userOtp: string;
         user: {
           data: {
             name: string;
@@ -72,6 +76,7 @@ export class VerifyOtp {
           };
         };
       }) {
+        
         const verifiedOtp = await this.userRepository.verifyOtp(user);
         return verifiedOtp;
     }

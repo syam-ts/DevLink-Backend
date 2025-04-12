@@ -104,6 +104,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async verifyOtp(client: {
     mailOtp: number;
+    userOtp: string
     user: {
       otp: string;
       data: { name: string; email: string; password: string };
@@ -111,7 +112,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }): Promise<Client> {
     const { name, email, password } = client.user.data;
 
-    if (client.mailOtp === parseInt(client.user.otp)) {
+    if (client.mailOtp === parseInt(client.userOtp)) {
       const salt = 10;
 
       const hashedPassword = await bcrypt.hash(password, salt);
@@ -318,8 +319,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async profileVerification(
     clientId: Id,
-    data: { editData: Client }
-  ): Promise<Admin> {
+    data: { unChangedData: Client, editData: Client }
+  ): Promise<Admin> { 
     const adminId = process.env.ADMIN_OBJECT_ID;
     const existingClient = await ClientModel.findById(clientId);
     if (!existingClient) throw new Error("Client not Exists");
@@ -354,9 +355,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async editClientProfile(
     clientId: Id,
-    editData: { editData: Partial<Client>; unhangedData: Client },
+    editData: { editData: Partial<Client>; unChangedData: Client },
     unChangedData: Client
-  ): Promise<Admin> {
+  ): Promise<Admin> { 
     const adminId = process.env.ADMIN_OBJECT_ID;
     const existingClient = await ClientModel.findById(clientId).lean<Client>();
     if (!existingClient) throw new Error("Client not exists");
@@ -369,8 +370,10 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       type: "Profile Updation Request",
       clientId: clientId,
       status: "pending",
-      data: editData,
-      unChangedData: unChangedData,
+      data: {
+        editData: unChangedData,
+        unChangedData: editData,
+      }, 
     };
 
     const updatedAdmin = await AdminModel.findByIdAndUpdate(
@@ -1383,6 +1386,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       throw new Error("Invalid clientId: Must be a 24-character hex string.");
     }
     const withdrawRequestObject = {
+      roleType: 'client',
       roleId: new mongoose.Types.ObjectId(clientId),
       userName: userName,
       amount: amount,
