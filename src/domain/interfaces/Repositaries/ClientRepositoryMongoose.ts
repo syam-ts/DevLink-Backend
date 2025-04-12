@@ -833,6 +833,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     newNotificationUser.save();
     newNotificationClient.save();
 
+
     //await allCronJobs.startContractHelperFn(timer, jobPostId, userId, contractId);
 
     return {

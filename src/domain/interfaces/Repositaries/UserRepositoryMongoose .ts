@@ -502,9 +502,8 @@ export class UserRepositoryMongoose implements UserRepositary {
     const user = await UserModel.findById(userId);
 
     if (!user) throw new Error("User not found");
-
-
-    //REMOVE INVITE DOC IF EXISTS 
+ 
+    //Removing existing proposal doc
     const existingProposal = await ClientModel.find({
       $and: [
         { "proposals.userId": userId },
@@ -527,7 +526,7 @@ export class UserRepositoryMongoose implements UserRepositary {
       if (!jobpost) throw new Error('Jobpost not found');
 
       // deletes invite doc if exists
-      const clearInvite = await InviteModel.deleteOne({ jobPostId: jobPostId });
+      const clearInvite = await InviteModel.deleteOne({ "jobPostData._id": jobPostId });
 
       const newProposal = {
         type: "New Job Proposal ",

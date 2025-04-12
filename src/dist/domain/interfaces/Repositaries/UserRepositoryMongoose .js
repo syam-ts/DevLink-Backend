@@ -391,7 +391,7 @@ class UserRepositoryMongoose {
             const user = yield User_1.UserModel.findById(userId);
             if (!user)
                 throw new Error("User not found");
-            //REMOVE INVITE DOC IF EXISTS 
+            //Removing existing proposal doc
             const existingProposal = yield Client_1.ClientModel.find({
                 $and: [
                     { "proposals.userId": userId },
@@ -410,7 +410,7 @@ class UserRepositoryMongoose {
                 if (!jobpost)
                     throw new Error('Jobpost not found');
                 // deletes invite doc if exists
-                const clearInvite = yield Invite_1.InviteModel.deleteOne({ jobPostId: jobPostId });
+                const clearInvite = yield Invite_1.InviteModel.deleteOne({ "jobPostData._id": jobPostId });
                 const newProposal = {
                     type: "New Job Proposal ",
                     userId: userId,
