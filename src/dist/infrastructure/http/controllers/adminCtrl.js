@@ -87,7 +87,6 @@ exports.adminController = {
     }),
     getAllUsers: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            console.log('fom u', req.query);
             const page = Number(req.query.page);
             const sortType = String(req.query.sortType || "asc");
             const users = yield allCtrlConnection_1.allAdminUseCases.getAllUsersUseCase.execute(page, sortType);
@@ -109,7 +108,6 @@ exports.adminController = {
     }),
     getAllClients: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            console.log('from C: ', req.query);
             const page = Number(req.query.page);
             const sortType = String(req.query.sortType);
             const clients = yield allCtrlConnection_1.allAdminUseCases.getAllClientsUseCase.execute(page, sortType);

@@ -82,8 +82,7 @@ export const adminController = {
   },
 
   getAllUsers: async (req: Request, res: Response): Promise<void> => {
-    try {
-      console.log('fom u', req.query)
+    try { 
       const page = Number(req.query.page);  
       const sortType = String(req.query.sortType || "asc");
 
@@ -109,8 +108,7 @@ export const adminController = {
   },
 
   getAllClients: async (req: Request, res: Response): Promise<void> => {
-    try {
-      console.log('from C: ',req.query)
+    try { 
       const page = Number(req.query.page);  
       const sortType = String(req.query.sortType);
       const clients = await allAdminUseCases.getAllClientsUseCase.execute(
