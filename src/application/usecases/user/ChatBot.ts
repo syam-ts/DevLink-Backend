@@ -1,43 +1,41 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+import Grog from "groq-sdk";
+import dotenv from "dotenv";
+dotenv.config();
 
-const apiKey = "AIzaSyDnkeEFUwQsG9-dG2J4c2tCP3Ji5Zmw22c";
-const genAI = new GoogleGenerativeAI(apiKey);
-
-const model = genAI.getGenerativeModel({
-  model: "gemini-2.0-flash-exp",
+const groq = new Grog({
+  apiKey: process.env.GROQ_API_KEY,
 });
 
-const generationConfig = {
-  temperature: 1,
-  topP: 0.95,
-  topK: 40,
-  maxOutputTokens: 8192,
-  responseMimeType: "text/plain",
-};
-
-export interface UserRepositary {
-  // chatInput(input: string): Promise< any >
-}
 
 export class ChatBot {
-  constructor(private userRepositary: UserRepositary) {}
+  constructor(private userRepositary: UserRepositary) { }
 
-async execute(userInput: string) {
-  try {
-    const chatSession = model.startChat({
-      generationConfig,
-      history: [
-        { role: "user", parts: [{ text: "hi\n" }] },
-        { role: "model", parts: [{ text: "Hi there! How can I help you today?\n" }] },
-      ],
-    });
+  async execute(userInput: string) {
+    try {
+      const chatComletion = await getResult(userInput);
 
-    const result = await chatSession.sendMessage(userInput);
-    return result.response.text();
-  } catch (error) {
-    console.error("Chatbot API Error:", error);
-    return "Sorry, I'm currently unavailable. Please try again later!";
+      const data = chatComletion.choices[0]?.message?.content;
+
+      return data;
+    } catch (error) {
+      console.error("Chatbot API Error:", error);
+      return error;
+    }
   }
 }
 
+async function getResult(input: string) {
+  return groq.chat.completions.create({
+    messages: [
+      {
+        role: "user",
+        content: input,
+      },
+    ],
+    model: "llama3-8b-8192",
+  });
+};
+  
+export interface UserRepositary {
+  // chatInput(input: string): Promise< any >
 }
