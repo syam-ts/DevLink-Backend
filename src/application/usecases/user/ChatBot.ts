@@ -1,6 +1,9 @@
 import Grog from "groq-sdk";
+import path from 'node:path';
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({
+  path: path.resolve(__dirname, '../../../.env')
+});
 
 const groq = new Grog({
   apiKey: process.env.GROQ_API_KEY,
