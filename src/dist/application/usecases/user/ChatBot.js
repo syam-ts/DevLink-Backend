@@ -17,7 +17,7 @@ const groq_sdk_1 = __importDefault(require("groq-sdk"));
 const node_path_1 = __importDefault(require("node:path"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config({
-    path: node_path_1.default.resolve(__dirname, '../../../.env')
+    path: node_path_1.default.resolve(__dirname, '.env')
 });
 const groq = new groq_sdk_1.default({
     apiKey: process.env.GROQ_API_KEY,
