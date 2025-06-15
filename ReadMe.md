@@ -76,9 +76,8 @@ cd devlink-backend
 </code></pre>
 
 <h3>📦 2. Install Dependencies</h3>
-<pre><code>yarn install
-# or
-npm install
+<pre><code>
+yarn install
 </code></pre>
 
 <h3>⚙️ 3. Create .env File</h3>
@@ -105,8 +104,6 @@ ACCESS_TOKEN_SECRET=your_access_token_secret
 
 <h3>▶️ 4. Run the Development Server (Non-Docker)</h3>
 <pre><code>yarn dev
-# or
-npm run dev
 </code></pre>
 
 <hr />
