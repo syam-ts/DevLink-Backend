@@ -6,7 +6,7 @@ dotenv.config({
 });
 
 const groq = new Grog({
-  apiKey: process.env.GROQ_API_KEY 
+  apiKey: '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' 
 });
 
 
