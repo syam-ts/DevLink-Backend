@@ -6,7 +6,7 @@ dotenv.config({
 });
 
 const groq = new Grog({
-  apiKey: process.env.GROQ_API_KEY as string,
+  apiKey: process.env.GROQ_API_KEY 
 });
 
 
