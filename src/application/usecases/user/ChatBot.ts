@@ -4,10 +4,12 @@ import dotenv from "dotenv";
 dotenv.config({
   path: path.resolve(__dirname, '.env')
 });
+
+console.log('ENter her : frist')
 console.log('ENV FILE LOADS HERE: ',process.env.GROQ_API_KEY)
 
 const groq = new Grog({
-  apiKey: process.env.GROQ_API_KEY,
+  apiKey: process.env.GROQ_API_KEY as string,
 });
 
 
