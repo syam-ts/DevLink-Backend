@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(cookieparser());
 app.use(
   cors({
-    origin: process.env.FRONTEND_ORIGIN || 'https://dev-link-frontend.vercel.app/',
+    origin: process.env.FRONTEND_ORIGIN || 'https://dev-link-frontend.vercel.app',
     credentials: true,
   })
 );
