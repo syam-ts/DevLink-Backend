@@ -38,7 +38,6 @@ app.use((0, cors_1.default)({
     origin: process.env.FRONTEND_ORIGIN || 'https://dev-link-frontend.vercel.app',
     credentials: true,
 }));
-console.log('ALL ENV FILES: ', process.env.BACKEND_ORIGIN, process.env.STRIPE_CUSTOMER_EMAIL, process.env.GMAIL_USER, process.env.GMAIL_APP_PASSWORD, process.env.GROQ_API_KEY, process.env.ADMIN_OBJECT_ID, process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD, process.env.BCRYPT_SALT, process.env.REFRESH_TOKEN_SECRET, process.env.ACCESS_TOKEN_SECRET);
 app.use((0, morgan_1.default)("dev"));
 app.use("/", routes_1.default);
 const server = node_http_1.default.createServer(app);

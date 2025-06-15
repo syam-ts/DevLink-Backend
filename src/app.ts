@@ -29,24 +29,6 @@ app.use(
   })
 );
 
-console.log('ALL ENV FILES: ',
-  process.env.BACKEND_ORIGIN ,
-process.env.STRIPE_CUSTOMER_EMAIL, 
-process.env.GMAIL_USER, 
-process.env.GMAIL_APP_PASSWORD, 
-
-process.env.GROQ_API_KEY,
-
-process.env.ADMIN_OBJECT_ID,
-process.env.ADMIN_USERNAME, 
-process.env.ADMIN_PASSWORD,
-
-process.env.BCRYPT_SALT, 
-
-process.env.REFRESH_TOKEN_SECRET, 
-process.env.ACCESS_TOKEN_SECRET
- )
-
 app.use(morgan("dev")); 
 app.use("/", routes);
 
