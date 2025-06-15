@@ -1177,9 +1177,9 @@ export class UserRepositoryMongoose implements UserRepositary {
     return updateInvite as InviteDocument;
   }
 
-  async searchJobsByTitle(input: string): Promise<JobPostDocument[]> {
+  async searchJobsBySkills(input: string): Promise<JobPostDocument[]> {
     const jobs = await JobPostModel.find({
-      title: { $regex: input, $options: "i" },
+      requiredSkills: { $regex: input, $options: "i" },
     });
     if (!jobs) throw new Error("No jobs found");
 

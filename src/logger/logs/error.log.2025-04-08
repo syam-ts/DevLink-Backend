@@ -1,6 +1,0 @@
-{"level":"error","message":"No matched job found ","timestamp":"2025-04-08 23:18:42"}
-{"level":"error","message":"No matched job found ","timestamp":"2025-04-08 23:18:46"}
-{"level":"error","message":"Cast to number failed for value \"[ { '$lt': 2000 }, { '$gt': 500 } ]\" (type Array) at path \"amount\" for model \"JobPost\"","timestamp":"2025-04-08 23:18:52"}
-{"level":"error","message":"Cast to number failed for value \"[ { '$lt': 2000 }, { '$gt': 500 } ]\" (type Array) at path \"amount\" for model \"JobPost\"","timestamp":"2025-04-08 23:18:57"}
-{"level":"error","message":"No jobs found","timestamp":"2025-04-08 23:19:00"}
-{"level":"error","message":"No matched job found ","timestamp":"2025-04-08 23:19:02"}

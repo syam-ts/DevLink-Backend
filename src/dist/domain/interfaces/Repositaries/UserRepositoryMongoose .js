@@ -983,10 +983,10 @@ class UserRepositoryMongoose {
             return updateInvite;
         });
     }
-    searchJobsByTitle(input) {
+    searchJobsBySkills(input) {
         return __awaiter(this, void 0, void 0, function* () {
             const jobs = yield JobPost_1.JobPostModel.find({
-                title: { $regex: input, $options: "i" },
+                requiredSkills: { $regex: input, $options: "i" },
             });
             if (!jobs)
                 throw new Error("No jobs found");

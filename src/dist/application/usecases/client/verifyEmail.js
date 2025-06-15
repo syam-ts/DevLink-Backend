@@ -30,7 +30,8 @@ const sendMail = (toMail, clientId) => __awaiter(void 0, void 0, void 0, functio
             from: 'syamnandhu3@gmail.com',
             to: toMail,
             subject: 'Verified Email for password changing',
-            text: `https://dev-link-frontend.vercel.app/resetPassword/${clientId}?role=client`,
+            //   text: `https://dev-link-frontend.vercel.app/resetPassword/${clientId}?role=client`,
+            text: `${process.env.FRONTEND_ORIGIN}/resetPassword/${clientId}?role=client`,
         });
     }
     catch (error) {

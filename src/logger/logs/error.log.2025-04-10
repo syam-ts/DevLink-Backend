@@ -1,6 +1,0 @@
-{"level":"error","message":"wrong password","timestamp":"2025-04-10 11:48:24"}
-{"level":"error","message":"read ECONNRESET","timestamp":"2025-04-10 11:48:37"}
-{"level":"error","message":"PlanExecutor error during aggregation :: caused by :: The argument to $size must be an array, but was of type: missing","timestamp":"2025-04-10 11:48:42"}
-{"level":"error","message":"No proposal found","timestamp":"2025-04-10 11:49:00"}
-{"level":"error","message":"No wishlist founded","timestamp":"2025-04-10 11:49:02"}
-{"level":"error","message":"No matched job found ","timestamp":"2025-04-10 11:49:10"}

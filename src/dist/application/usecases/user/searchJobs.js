@@ -16,7 +16,7 @@ class SearchJobs {
     }
     execute(input) {
         return __awaiter(this, void 0, void 0, function* () {
-            const jobs = yield this.userRepository.searchJobsByTitle(input);
+            const jobs = yield this.userRepository.searchJobsBySkills(input);
             return jobs;
         });
     }

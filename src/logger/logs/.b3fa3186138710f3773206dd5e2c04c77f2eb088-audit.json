@@ -6,44 +6,9 @@
     "auditLog": "src\\logger\\logs\\.b3fa3186138710f3773206dd5e2c04c77f2eb088-audit.json",
     "files": [
         {
-            "date": 1743692265283,
-            "name": "src\\logger\\logs\\combined.log.2025-04-03",
-            "hash": "8f62479906fdc14cbd1c543380ae1fc76e780044cf1b882c043aa53b23f9b439"
-        },
-        {
-            "date": 1743705140742,
-            "name": "src\\logger\\logs\\combined.log.2025-04-04",
-            "hash": "1d78d10cd7ff72406db2fd51623b970c48a3748504c8bff3891edd268be714fe"
-        },
-        {
-            "date": 1743868817753,
-            "name": "src\\logger\\logs\\combined.log.2025-04-05",
-            "hash": "c46f6ecb679872a2014877ef4abe7f8fa4a49665ab124f1f749e6f3330714925"
-        },
-        {
-            "date": 1743923979186,
-            "name": "src\\logger\\logs\\combined.log.2025-04-06",
-            "hash": "e954673bf41a0d454f5f6aaf3df30bdf6495b2d221361d53721f8f91a91ca69c"
-        },
-        {
-            "date": 1744019294413,
-            "name": "src\\logger\\logs\\combined.log.2025-04-07",
-            "hash": "69585caf8e1ecf3560ff1b2a6969187f4bf60f0ff98887dc681d59f63ace9b1d"
-        },
-        {
-            "date": 1744123577491,
-            "name": "src\\logger\\logs\\combined.log.2025-04-08",
-            "hash": "e9e7c81f577da883ed3eca8eb51c9bd76c3e5337aeac6a56ab56b18c185d7471"
-        },
-        {
-            "date": 1744137001411,
-            "name": "src\\logger\\logs\\combined.log.2025-04-09",
-            "hash": "874a7ee94015034e4521d159588d982abdc0ebf7ebc041c2e891dcc57aa278b8"
-        },
-        {
-            "date": 1744262657655,
-            "name": "src\\logger\\logs\\combined.log.2025-04-10",
-            "hash": "6f378b4804753e0cf31a278f716c1febb4ebfae88a42f38acd38411f9f667625"
+            "date": 1749977109990,
+            "name": "src\\logger\\logs\\combined.log.2025-06-15",
+            "hash": "578f733f543f2a13915e4849e8e3721e22916fadf099edde478e75b5026286c2"
         }
     ],
     "hashType": "sha256"
