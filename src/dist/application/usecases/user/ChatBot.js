@@ -20,7 +20,7 @@ dotenv_1.default.config({
     path: node_path_1.default.resolve(__dirname, '.env')
 });
 const groq = new groq_sdk_1.default({
-    apiKey: process.env.GROQ_API_KEY,
+    apiKey: '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'
 });
 class ChatBot {
     constructor(userRepositary) {
