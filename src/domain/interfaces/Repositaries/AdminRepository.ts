@@ -52,21 +52,21 @@ export class AdminRepository implements AdminRepositary {
 
     if (sortType === "latest") {
       users = await UserModel.aggregate([
-        { $match: {} },
+        { $match: {isProfileFilled: true} },
         { $sort: { createdAt: 1 } },
         { $skip: skip },
         { $limit: PAGE_SIZE },
       ]);
     } else if (sortType === "block") {
       users = await UserModel.aggregate([
-        { $match: {} },
+        { $match: {isProfileFilled: true} },
         { $sort: { isBlocked: 1 } },
         { $skip: skip },
         { $limit: PAGE_SIZE },
       ]);
     } else if (sortType === "unBlock") {
       users = await UserModel.aggregate([
-        { $match: {} },
+        { $match: {isProfileFilled: true} },
         { $sort: { isBlocked: -1 } },
         { $skip: skip },
         { $limit: PAGE_SIZE },
