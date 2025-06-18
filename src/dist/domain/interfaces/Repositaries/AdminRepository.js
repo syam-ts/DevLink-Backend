@@ -49,7 +49,7 @@ class AdminRepository {
             let users;
             if (sortType === "latest") {
                 users = yield User_1.UserModel.aggregate([
-                    { $match: {} },
+                    { $match: { isProfileFilled: true } },
                     { $sort: { createdAt: 1 } },
                     { $skip: skip },
                     { $limit: PAGE_SIZE },
@@ -57,7 +57,7 @@ class AdminRepository {
             }
             else if (sortType === "block") {
                 users = yield User_1.UserModel.aggregate([
-                    { $match: {} },
+                    { $match: { isProfileFilled: true } },
                     { $sort: { isBlocked: 1 } },
                     { $skip: skip },
                     { $limit: PAGE_SIZE },
@@ -65,7 +65,7 @@ class AdminRepository {
             }
             else if (sortType === "unBlock") {
                 users = yield User_1.UserModel.aggregate([
-                    { $match: {} },
+                    { $match: { isProfileFilled: true } },
                     { $sort: { isBlocked: -1 } },
                     { $skip: skip },
                     { $limit: PAGE_SIZE },
@@ -87,11 +87,11 @@ class AdminRepository {
             const PAGE_SIZE = 5;
             const skip = (page - 1) * PAGE_SIZE;
             const totalClients = yield Client_1.ClientModel.countDocuments({});
-            const totalPages = Math.ceil(totalClients / PAGE_SIZE);
+            const totalPages = Math.floor(totalClients / PAGE_SIZE);
             let clients;
             if (sortType === "latest") {
                 clients = yield Client_1.ClientModel.aggregate([
-                    { $match: {} },
+                    { $match: { isVerified: true } },
                     { $sort: { createdAt: 1 } },
                     { $skip: skip },
                     { $limit: PAGE_SIZE },
@@ -99,7 +99,7 @@ class AdminRepository {
             }
             else if (sortType === "block") {
                 clients = yield Client_1.ClientModel.aggregate([
-                    { $match: {} },
+                    { $match: { isVerified: true } },
                     { $sort: { isBlocked: 1 } },
                     { $skip: skip },
                     { $limit: PAGE_SIZE },
@@ -107,7 +107,7 @@ class AdminRepository {
             }
             else if (sortType === "unBlock") {
                 clients = yield Client_1.ClientModel.aggregate([
-                    { $match: {} },
+                    { $match: { isVerified: true } },
                     { $sort: { isBlocked: -1 } },
                     { $skip: skip },
                     { $limit: PAGE_SIZE },

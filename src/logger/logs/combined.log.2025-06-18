@@ -460,3 +460,7 @@
 {"level":"info","message":"route: /admin/getAllClients?page=1&sortType=latest","timestamp":"2025-06-18 13:51:26"}
 {"level":"info","message":"route: /admin/refresh-token","timestamp":"2025-06-18 13:51:26"}
 {"level":"info","message":"route: /admin/getAllClients?page=1&sortType=latest","timestamp":"2025-06-18 13:51:26"}
+{"level":"info","message":"route: /admin/getAllClients?page=2&sortType=latest","timestamp":"2025-06-18 13:52:14"}
+{"level":"info","message":"route: /admin/getAllClients?page=2&sortType=latest","timestamp":"2025-06-18 13:52:14"}
+{"level":"info","message":"route: /admin/getAllClients?page=1&sortType=latest","timestamp":"2025-06-18 13:52:15"}
+{"level":"info","message":"route: /admin/getAllClients?page=1&sortType=latest","timestamp":"2025-06-18 13:52:15"}
