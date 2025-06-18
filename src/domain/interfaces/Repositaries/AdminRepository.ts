@@ -87,26 +87,26 @@ export class AdminRepository implements AdminRepositary {
     const PAGE_SIZE: number = 5;
     const skip: number = (page - 1) * PAGE_SIZE;
     const totalClients: number = await ClientModel.countDocuments({});
-    const totalPages = Math.ceil(totalClients / PAGE_SIZE);
+    const totalPages = Math.floor(totalClients / PAGE_SIZE);
     let clients;
 
     if (sortType === "latest") {
       clients = await ClientModel.aggregate([
-        { $match: {} },
+        { $match: {isVerified: true} },
         { $sort: { createdAt: 1 } },
         { $skip: skip },
         { $limit: PAGE_SIZE },
       ]);
     } else if (sortType === "block") {
       clients = await ClientModel.aggregate([
-        { $match: {} },
+        { $match: {isVerified: true} },
         { $sort: { isBlocked: 1 } },
         { $skip: skip },
         { $limit: PAGE_SIZE },
       ]);
     } else if (sortType === "unBlock") {
       clients = await ClientModel.aggregate([
-        { $match: {} },
+        { $match: {isVerified: true} },
         { $sort: { isBlocked: -1 } },
         { $skip: skip },
         { $limit: PAGE_SIZE },
