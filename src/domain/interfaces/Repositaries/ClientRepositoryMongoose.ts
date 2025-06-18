@@ -1359,9 +1359,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return contract;
   }
 
-  async searchDeveloper(input: string): Promise<User> {
+  async searchDeveloperBySkills(input: string): Promise<User> {
     const developers = await UserModel.find({
-      name: { $regex: input, $options: "i" },
+      skills: { $regex: input, $options: "i" },
     })
       .lean<User>()
       .exec();

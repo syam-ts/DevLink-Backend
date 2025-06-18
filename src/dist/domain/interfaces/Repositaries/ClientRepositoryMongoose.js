@@ -1052,10 +1052,10 @@ class ClientRepositoryMongoose {
             return contract;
         });
     }
-    searchDeveloper(input) {
+    searchDeveloperBySkills(input) {
         return __awaiter(this, void 0, void 0, function* () {
             const developers = yield User_1.UserModel.find({
-                name: { $regex: input, $options: "i" },
+                skills: { $regex: input, $options: "i" },
             })
                 .lean()
                 .exec();

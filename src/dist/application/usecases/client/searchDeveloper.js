@@ -16,7 +16,7 @@ class SearchDeveloper {
     }
     execute(input) {
         return __awaiter(this, void 0, void 0, function* () {
-            const developers = yield this.clientRepositary.searchDeveloper(input);
+            const developers = yield this.clientRepositary.searchDeveloperBySkills(input);
             return developers;
         });
     }
