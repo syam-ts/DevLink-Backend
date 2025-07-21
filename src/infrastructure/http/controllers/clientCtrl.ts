@@ -391,28 +391,7 @@ export const clientController = {
     }
   },
 
-  getAllNotifications: async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { clientId } = req.params;
-      const response =
-        await allClientUseCases.getAllNotificationsUseCase.execute(clientId);
-
-      res.status(HttpStatusCode.OK).json({
-        message: StatusMessage[HttpStatusCode.OK],
-        notifications: response,
-        success: true,
-      });
-    } catch (error: unknown) {
-  const err = error as {message: string};
-      logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
-      return;
-    }
-  },
-
+  
   makePayment: async (req: Request, res: Response): Promise<void> => {
     try {
       //  if (!req.user || !req.user.id) {

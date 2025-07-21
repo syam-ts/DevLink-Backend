@@ -401,27 +401,7 @@ export const userController = {
     }
   },
 
-  allNotifications: async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { userId } = req.params;
-      const allNotifications =
-        await allUserUseCases.allNotificationsUseCase.execute(userId);
 
-      res.status(HttpStatusCode.OK).json({
-        message: StatusMessage[HttpStatusCode.OK],
-        notifications: allNotifications,
-        success: true,
-      });
-    } catch (error: unknown) {
-       const err = error as {message: string};
-       logger.error(err.message); 
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        });
-      return;
-    }
-  },
 
   // closingContract: async (req: Request, res: Response): Promise<void> => {
   //     try{

@@ -1,13 +1,13 @@
-export interface UserRepository {
-    allNotifications(userId: string): void;
-}
-
+import { INotificationRepository } from "../../../domain/interfaces/INotificationRepository";
+ 
 export class AllNotifications {
-    constructor(private userRepository: UserRepository) { }
+    constructor(private notificationRepository: INotificationRepository) { }
 
-    async execute(userId: string) {
-        const response = await this.userRepository.allNotifications(userId);
+      execute(userId: string) { 
+        return this.notificationRepository.getAllNotificationsUser(
+            userId
+        );
 
-        return response;
+        
     }
 }

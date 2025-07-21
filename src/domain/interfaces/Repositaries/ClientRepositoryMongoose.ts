@@ -462,22 +462,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return savedJobPost;
   }
 
-  async getAllNotifications(clientId: Id): Promise<Notification[]> {
-    const notifications = await NotificationModel.aggregate([
-      {
-        $match: { reciever_id: clientId },
-      },
-      {
-        $sort: { createdAt: -1 },
-      },
-    ]);
-
-    if (!notifications) {
-      throw new Error("No notification found");
-    } else {
-      return notifications;
-    }
-  }
+ 
 
   async findAllJobs(): Promise<JobPostDocument[]> {
     const allJobs = await JobPostModel.find().exec();
