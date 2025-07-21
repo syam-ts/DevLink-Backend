@@ -1,16 +1,9 @@
-import { InviteDocument } from "../../../domain/entities/Invite";
-  
-
-export interface UserRepositary {
-  rejectInvite(inviteId: string): Promise<InviteDocument>;
-}
+import { IInviteRepository } from "../../../domain/interfaces/IInviteRepository";
 
 export class RejectInvite {
-  constructor(private userRepositary: UserRepositary) {}
+  constructor(private inviteRepositary: IInviteRepository) { }
 
-  async execute(inviteId: string) {
-    const rejectedInvite = await this.userRepositary.rejectInvite(inviteId);
-
-    return rejectedInvite;
+  execute(inviteId: string) {
+    return this.inviteRepositary.rejectInviteByUser(inviteId);
   }
 }

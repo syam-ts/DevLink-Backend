@@ -1,13 +1,9 @@
-export interface UserRepositary {
-  getAllInvites(userId: string): void;
-}
+import { IInviteRepository } from "../../../domain/interfaces/IInviteRepository";
 
 export class GetAllInvites {
-  constructor(private userRepositary: UserRepositary) { }
+  constructor(private inviteRepositary: IInviteRepository) { }
 
-  async execute(userId: string) {
-    const response = await this.userRepositary.getAllInvites(userId);
-
-    return response;
+  execute(userId: string) {
+    return this.inviteRepositary.getAllInvitesUser(userId);
   }
 }

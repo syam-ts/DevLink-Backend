@@ -1144,29 +1144,9 @@ export class UserRepositoryMongoose implements UserRepositary {
     };
   }
 
-  async getAllInvites(userId: string): Promise<Invite[]> {
-    const foundedInvites = await InviteModel.find({
-      $and: [{ userId: userId }, { status: "pending" }],
-    });
+  
 
-    if (!foundedInvites) throw new Error("Invite not Found");
-    return foundedInvites;
-  }
-
-  async rejectInvite(inviteId: string): Promise<InviteDocument> {
-    const updateInvite = await InviteModel.updateOne(
-      { _id: inviteId },
-      {
-        status: "rejected",
-      },
-      {
-        new: true,
-      }
-    ).lean<InviteDocument>();
-
-    if (!updateInvite) throw new Error("Invite not Found");
-    return updateInvite as InviteDocument;
-  }
+ 
 
   async searchJobsBySkills(input: string): Promise<JobPostDocument[]> {
     const jobs = await JobPostModel.find({

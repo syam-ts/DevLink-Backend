@@ -690,52 +690,9 @@ export const userController = {
     }
   },
 
-  getAllInvites: async (req: Request, res: Response): Promise<void> => {
-    try {
-      if (!req.user || !req.user.id) {
-         res.status(401).json({ message: "Unauthorized", success: false });
-      }
-      const userId = String(req.user?.id);
-      const response = await allUserUseCases.getAllInvitesUseCase.execute(
-        userId
-      );
+  
 
-      res.status(HttpStatusCode.OK).json({
-        message: StatusMessage[HttpStatusCode.OK],
-        invites: response,
-        success: true,
-      });
-    } catch (error: unknown) {
-       const err = error as {message: string};
-       logger.error(err.message); 
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        });
-      return;
-    }
-  },
-
-  rejectInvite: async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { inviteId } = req.params;
-      const response = await allUserUseCases.rejectInviteUseCase.execute(
-        inviteId
-      );
-
-      res
-        .status(HttpStatusCode.OK)
-        .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-    } catch (error: unknown) {
-       const err = error as {message: string};
-       logger.error(err.message); 
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        });
-      return;
-    }
-  },
+ 
 
   searchJobs: async (req: Request, res: Response): Promise<void> => {
     try {
