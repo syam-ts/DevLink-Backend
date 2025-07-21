@@ -131,3 +131,7 @@
 {"level":"info","message":"route: /user/getHome","timestamp":"2025-07-21 21:04:37"}
 {"level":"info","message":"route: /user/home/listAllJobs","timestamp":"2025-07-21 21:04:38"}
 {"level":"info","message":"route: /user/home/latestJobs","timestamp":"2025-07-21 21:04:38"}
+{"level":"info","message":"route: /user/chatbot","timestamp":"2025-07-21 21:08:23"}
+{"level":"info","message":"route: /user/chatbot","timestamp":"2025-07-21 21:08:23"}
+{"level":"info","message":"route: /user/refresh-token","timestamp":"2025-07-21 21:08:23"}
+{"level":"info","message":"route: /user/chatbot","timestamp":"2025-07-21 21:08:23"}

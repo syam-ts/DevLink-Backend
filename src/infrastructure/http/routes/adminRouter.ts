@@ -1,10 +1,9 @@
-import express from 'express';
-const adminRouter = express.Router();
-import { adminController } from '../controllers/adminCtrl';
-import { verifyToken } from '../middlewares/auth/verifyToken';
-import refreshToken from '../middlewares/auth/refreshToken';
-import { requireRole } from '../middlewares/auth/requireRole';
-import { allRoles } from '../../../helper/constants/enums';
+import express, { Router } from "express";
+import { adminController } from "../controllers/adminCtrl";
+import { verifyToken } from "../middlewares/auth/verifyToken";
+import refreshToken from "../middlewares/auth/refreshToken";
+import { requireRole } from "../middlewares/auth/requireRole";
+import { allRoles } from "../../../helper/constants/enums";
 
 const {
     getDashboard,
@@ -27,37 +26,148 @@ const {
     unBlockClient,
     getAllContracts,
     viewSingleContract,
-    getWithdrawRequests
+    getWithdrawRequests,
 } = adminController;
 const { ADMIN }: { ADMIN: string } = allRoles;
 
-adminRouter.get('/getDashboard/:range', verifyToken, requireRole(ADMIN), getDashboard);
-adminRouter.get('/getAllUsers', verifyToken, requireRole(ADMIN), getAllUsers);
-adminRouter.get('/getAllClients', verifyToken, requireRole(ADMIN), getAllClients);
-adminRouter.get('/wallet', verifyToken, requireRole(ADMIN), viewWallet);
-adminRouter.get('/getRequests', verifyToken, requireRole(ADMIN), getRequests);
-adminRouter.get('/getWithdrawRequests', verifyToken, requireRole(ADMIN), getWithdrawRequests);
-adminRouter.post('/successMoneyTransfer', verifyToken, requireRole(ADMIN), successMoneyTransfer);
-adminRouter.get('/viewContracts', verifyToken, requireRole(ADMIN), viewContracts);
-adminRouter.get('/contract/:contractId', verifyToken, requireRole(ADMIN), viewContracts);
-adminRouter.get('/revenue', verifyToken, requireRole(ADMIN), viewContracts);
-adminRouter.get('/userMetrics', verifyToken, requireRole(ADMIN), viewContracts);
-adminRouter.get('/clientMetrics', verifyToken, requireRole(ADMIN), viewContracts);
-adminRouter.get('/request/getRequestedClient/:clientId', getRequestedClient);
-adminRouter.get('/viewRole/:roleId/:roleInfo', viewRoleInfo);
-adminRouter.get('/getWallet', verifyToken, requireRole(ADMIN), getWallet);
-adminRouter.get('/getAllContracts', verifyToken, requireRole(ADMIN), getAllContracts);
-adminRouter.get('/viewSingleContract/:contractId', verifyToken, requireRole(ADMIN), viewSingleContract);
-// adminRouter.post('/signup', adminController.signUpAdmin);
-adminRouter.post('/login', loginAdmin);
-adminRouter.post('/logout', logoutAdmin);
-adminRouter.post('/refresh-token', refreshToken);
-adminRouter.post('/getAllClients/sort?', verifyToken, requireRole(ADMIN), sortClient);
+class AdminRoute {
+    public router: Router;
+    constructor() {
+        this.router = Router();
 
-adminRouter.put('/verifyClient/accept', verifyToken, requireRole(ADMIN), verifyAccept);
-adminRouter.patch('/blockUser/:userId', verifyToken, requireRole(ADMIN), blockUser);
-adminRouter.patch('/unBlockUser/:userId', verifyToken, requireRole(ADMIN), unBlockUser);
-adminRouter.patch('/blockClient/:clientId', verifyToken, requireRole(ADMIN), blockClient);
-adminRouter.patch('/unBlockClient/:clientId', verifyToken, requireRole(ADMIN), unBlockClient);
+        this.initializeGetRoutes();
+        this.initializePostRoutes();
+        this.initializePutAndPatchRoutes()
+    }
 
-export default adminRouter;
+    initializeGetRoutes(): void {
+        this.router.get(
+            "/getDashboard/:range",
+            verifyToken,
+            requireRole(ADMIN),
+            getDashboard
+        );
+        this.router.get(
+            "/getAllUsers",
+            verifyToken,
+            requireRole(ADMIN),
+            getAllUsers
+        );
+        this.router.get(
+            "/getAllClients",
+            verifyToken,
+            requireRole(ADMIN),
+            getAllClients
+        );
+        this.router.get("/wallet", verifyToken, requireRole(ADMIN), viewWallet);
+        this.router.get(
+            "/getRequests",
+            verifyToken,
+            requireRole(ADMIN),
+            getRequests
+        );
+        this.router.get(
+            "/getWithdrawRequests",
+            verifyToken,
+            requireRole(ADMIN),
+            getWithdrawRequests
+        );
+
+        this.router.get(
+            "/viewContracts",
+            verifyToken,
+            requireRole(ADMIN),
+            viewContracts
+        );
+        this.router.get(
+            "/contract/:contractId",
+            verifyToken,
+            requireRole(ADMIN),
+            viewContracts
+        );
+        this.router.get("/revenue", verifyToken, requireRole(ADMIN), viewContracts);
+        this.router.get(
+            "/userMetrics",
+            verifyToken,
+            requireRole(ADMIN),
+            viewContracts
+        );
+        this.router.get(
+            "/clientMetrics",
+            verifyToken,
+            requireRole(ADMIN),
+            viewContracts
+        );
+        this.router.get(
+            "/request/getRequestedClient/:clientId",
+            getRequestedClient
+        );
+        this.router.get("/viewRole/:roleId/:roleInfo", viewRoleInfo);
+        this.router.get("/getWallet", verifyToken, requireRole(ADMIN), getWallet);
+        this.router.get(
+            "/getAllContracts",
+            verifyToken,
+            requireRole(ADMIN),
+            getAllContracts
+        );
+        this.router.get(
+            "/viewSingleContract/:contractId",
+            verifyToken,
+            requireRole(ADMIN),
+            viewSingleContract
+        );
+    }
+    initializePostRoutes(): void {
+        // this.router.post('/signup', adminController.signUpAdmin);
+        this.router.post("/login", loginAdmin);
+        this.router.post("/logout", logoutAdmin);
+        this.router.post("/refresh-token", refreshToken);
+        this.router.post(
+            "/getAllClients/sort?",
+            verifyToken,
+            requireRole(ADMIN),
+            sortClient
+        );
+        this.router.post(
+            "/successMoneyTransfer",
+            verifyToken,
+            requireRole(ADMIN),
+            successMoneyTransfer
+        );
+    }
+
+    initializePutAndPatchRoutes(): void {
+        this.router.put(
+            "/verifyClient/accept",
+            verifyToken,
+            requireRole(ADMIN),
+            verifyAccept
+        );
+        this.router.patch(
+            "/blockUser/:userId",
+            verifyToken,
+            requireRole(ADMIN),
+            blockUser
+        );
+        this.router.patch(
+            "/unBlockUser/:userId",
+            verifyToken,
+            requireRole(ADMIN),
+            unBlockUser
+        );
+        this.router.patch(
+            "/blockClient/:clientId",
+            verifyToken,
+            requireRole(ADMIN),
+            blockClient
+        );
+        this.router.patch(
+            "/unBlockClient/:clientId",
+            verifyToken,
+            requireRole(ADMIN),
+            unBlockClient
+        );
+    }
+}
+
+export default AdminRoute;

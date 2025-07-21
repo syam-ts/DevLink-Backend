@@ -1,12 +1,17 @@
-import express from 'express';
-import userRouter from './userRoutes';
-import clientRouter from './clientRoutes';
-import adminRouter from './adminRouter';
+import express from 'express'; 
+import UserRoute from './userRoutes';
+import ClientRoute from './clientRoutes';
+import AdminRoute from './adminRouter';
 
 const router = express.Router();
+ 
 
-router.use('/user', userRouter);
-router.use('/client', clientRouter);
-router.use('/admin',adminRouter);
+const userRoute = new UserRoute();
+const clientRoute = new ClientRoute();
+const adminRoute = new AdminRoute();
+
+router.use('/user', userRoute.router);
+router.use('/client', clientRoute.router);
+router.use('/admin', adminRoute.router);
 
 export default router;

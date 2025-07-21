@@ -1,11 +1,10 @@
-import express from "express";
-const clientRouter = express.Router();
-import refreshToken from '../middlewares/auth/refreshToken';
+import express, { Router } from "express";
+import refreshToken from "../middlewares/auth/refreshToken";
 import { clientController } from "../controllers/clientCtrl";
 import { userController } from "../controllers/userCtrl";
 import { verifyToken } from "../middlewares/auth/verifyToken";
 import { requireRole } from "../middlewares/auth/requireRole";
-import { allRoles } from '../../../helper/constants/enums';
+import { allRoles } from "../../../helper/constants/enums";
 
 const {
   signupClient,
@@ -45,54 +44,200 @@ const {
   sendMessage,
   viewInvite,
   searchDevlopers,
-  withdrawMoneyByClient
+  withdrawMoneyByClient,
 } = clientController;
-const {
-  viewSingleContract
-} = userController;
+const { viewSingleContract } = userController;
 const { CLIENT }: { CLIENT: string } = allRoles;
 
+class ClientRoute {
+  public router: Router;
+  constructor() {
+    this.router = Router();
 
-clientRouter.get("/getHome", verifyToken, requireRole(CLIENT), getHomeClient);
-clientRouter.get("/trendingJobs", verifyToken, requireRole(CLIENT), trendingJobs);
-clientRouter.get("/profile", verifyToken, requireRole(CLIENT), getProfile);
-clientRouter.get("/userProfile/:userId", verifyToken, requireRole(CLIENT), getUserProfile);
-clientRouter.get("/developers", verifyToken, requireRole(CLIENT), getallDevelopers);
-clientRouter.get("/listAllJobs", verifyToken, requireRole(CLIENT), listAllJobs);
-clientRouter.get("/inviteJobsList", verifyToken, requireRole(CLIENT), inviteJobsList);
-clientRouter.get('/jobs/:jobsType', verifyToken, requireRole(CLIENT), getSelectedJobs);
-clientRouter.get('/job/:jobPostId', verifyToken, requireRole(CLIENT), getSingleJobPost);
-clientRouter.get("/proposals/:proposalType", verifyToken, requireRole(CLIENT), getProposals);
-clientRouter.get('/contracts/:contractViewType', verifyToken, requireRole(CLIENT), viewContracts);
-clientRouter.get("/contract/:contractId", verifyToken, requireRole(CLIENT), viewSingleContract);
-clientRouter.get("/invites/:inviteType", verifyToken, requireRole(CLIENT), viewInvite);
-clientRouter.get("/contractsSubmissions", verifyToken, requireRole(CLIENT), viewSubmissions);
-clientRouter.get("/wallet", verifyToken, requireRole(CLIENT), viewWallet);
-clientRouter.get("/allChat/view/:roleId", verifyToken, requireRole(CLIENT), getAllChats);
-clientRouter.get("/chat/view/:roleType/:roleId/:targetId", verifyToken, requireRole(CLIENT), viewChat);
-clientRouter.get("/notifications/:clientId", verifyToken, requireRole(CLIENT), getAllNotifications);
+    this.initializeGetRoutes();
+    this.initializePostAndPutRoutes();
+  }
 
-clientRouter.post("/projectApprove", closeContract);
-clientRouter.post("/jobPaymentStripe", makePayment);
-clientRouter.post("/paymentSuccess", verifyToken, requireRole(CLIENT), createJobPost);
-clientRouter.post("/profile/verify", verifyToken, requireRole(CLIENT), profileVerification);
-clientRouter.post("/profile/edit", verifyToken, requireRole(CLIENT), editProfile);
-clientRouter.post('/searchDevelopers', verifyToken, requireRole(CLIENT), searchDevlopers);
-clientRouter.post('/createContract', verifyToken, requireRole(CLIENT), createContract);
-clientRouter.post("/chat/sendMessage", verifyToken, requireRole(CLIENT), sendMessage);
-clientRouter.post("/contractSubmitReject", verifyToken, requireRole(CLIENT), rejectContract);
-clientRouter.post('/inviteUser', verifyToken, requireRole(CLIENT), inviteUser)
-clientRouter.post("/rate-user/:notificationId", verifyToken, requireRole(CLIENT), rateAndReview);
-clientRouter.put('/proposalReject', verifyToken, requireRole(CLIENT), rejectProposal);
-clientRouter.post('/withdrawMoney', verifyToken, requireRole(CLIENT), withdrawMoneyByClient ); 
-clientRouter.post("/signup", signupClient);
-clientRouter.post("/verify-otp", verifyOtp);
-clientRouter.post("/resend-otp", resendOtp);
-clientRouter.post("/login", loginClient);
-clientRouter.post("/verify-email", verifyEmail);
-clientRouter.post("/resetPassword/:clientId", resetPassword);
-clientRouter.post("/googleLogin", googleLogin);
-clientRouter.post("/logout", logoutClient);
-clientRouter.post('/refresh-token', refreshToken);
+  initializeGetRoutes(): void {
+    this.router.get(
+      "/getHome",
+      verifyToken,
+      requireRole(CLIENT),
+      getHomeClient
+    );
+    this.router.get(
+      "/trendingJobs",
+      verifyToken,
+      requireRole(CLIENT),
+      trendingJobs
+    );
+    this.router.get("/profile", verifyToken, requireRole(CLIENT), getProfile);
+    this.router.get(
+      "/userProfile/:userId",
+      verifyToken,
+      requireRole(CLIENT),
+      getUserProfile
+    );
+    this.router.get(
+      "/developers",
+      verifyToken,
+      requireRole(CLIENT),
+      getallDevelopers
+    );
+    this.router.get(
+      "/listAllJobs",
+      verifyToken,
+      requireRole(CLIENT),
+      listAllJobs
+    );
+    this.router.get(
+      "/inviteJobsList",
+      verifyToken,
+      requireRole(CLIENT),
+      inviteJobsList
+    );
+    this.router.get(
+      "/jobs/:jobsType",
+      verifyToken,
+      requireRole(CLIENT),
+      getSelectedJobs
+    );
+    this.router.get(
+      "/job/:jobPostId",
+      verifyToken,
+      requireRole(CLIENT),
+      getSingleJobPost
+    );
+    this.router.get(
+      "/proposals/:proposalType",
+      verifyToken,
+      requireRole(CLIENT),
+      getProposals
+    );
+    this.router.get(
+      "/contracts/:contractViewType",
+      verifyToken,
+      requireRole(CLIENT),
+      viewContracts
+    );
+    this.router.get(
+      "/contract/:contractId",
+      verifyToken,
+      requireRole(CLIENT),
+      viewSingleContract
+    );
+    this.router.get(
+      "/invites/:inviteType",
+      verifyToken,
+      requireRole(CLIENT),
+      viewInvite
+    );
+    this.router.get(
+      "/contractsSubmissions",
+      verifyToken,
+      requireRole(CLIENT),
+      viewSubmissions
+    );
+    this.router.get("/wallet", verifyToken, requireRole(CLIENT), viewWallet);
+    this.router.get(
+      "/allChat/view/:roleId",
+      verifyToken,
+      requireRole(CLIENT),
+      getAllChats
+    );
+    this.router.get(
+      "/chat/view/:roleType/:roleId/:targetId",
+      verifyToken,
+      requireRole(CLIENT),
+      viewChat
+    );
+    this.router.get(
+      "/notifications/:clientId",
+      verifyToken,
+      requireRole(CLIENT),
+      getAllNotifications
+    );
+  }
 
-export default clientRouter;
+  initializePostAndPutRoutes(): void {
+    this.router.post("/refresh-token", refreshToken);
+    this.router.post("/projectApprove", closeContract);
+    this.router.post("/jobPaymentStripe", makePayment);
+    this.router.post(
+      "/paymentSuccess",
+      verifyToken,
+      requireRole(CLIENT),
+      createJobPost
+    );
+    this.router.post(
+      "/profile/verify",
+      verifyToken,
+      requireRole(CLIENT),
+      profileVerification
+    );
+    this.router.post(
+      "/profile/edit",
+      verifyToken,
+      requireRole(CLIENT),
+      editProfile
+    );
+    this.router.post(
+      "/searchDevelopers",
+      verifyToken,
+      requireRole(CLIENT),
+      searchDevlopers
+    );
+    this.router.post(
+      "/createContract",
+      verifyToken,
+      requireRole(CLIENT),
+      createContract
+    );
+    this.router.post(
+      "/chat/sendMessage",
+      verifyToken,
+      requireRole(CLIENT),
+      sendMessage
+    );
+    this.router.post(
+      "/contractSubmitReject",
+      verifyToken,
+      requireRole(CLIENT),
+      rejectContract
+    );
+    this.router.post(
+      "/inviteUser",
+      verifyToken,
+      requireRole(CLIENT),
+      inviteUser
+    );
+    this.router.post(
+      "/rate-user/:notificationId",
+      verifyToken,
+      requireRole(CLIENT),
+      rateAndReview
+    );
+    this.router.post(
+      "/withdrawMoney",
+      verifyToken,
+      requireRole(CLIENT),
+      withdrawMoneyByClient
+    );
+    this.router.post("/signup", signupClient);
+    this.router.post("/verify-otp", verifyOtp);
+    this.router.post("/resend-otp", resendOtp);
+    this.router.post("/login", loginClient);
+    this.router.post("/verify-email", verifyEmail);
+    this.router.post("/resetPassword/:clientId", resetPassword);
+    this.router.post("/googleLogin", googleLogin);
+    this.router.post("/logout", logoutClient);
+    this.router.put(
+      "/proposalReject",
+      verifyToken,
+      requireRole(CLIENT),
+      rejectProposal
+    );
+  }
+}
+
+export default ClientRoute;
