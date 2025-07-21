@@ -6,6 +6,7 @@ import refreshToken from "../middlewares/auth/refreshToken";
 import { requireRole } from "../middlewares/auth/requireRole";
 import { allRoles } from "../../../helper/constants/enums";
 import { NotificationController } from "../controllers/notificationCtrl";
+import { InviteController } from "../controllers/inviteCtrl";
 
 const {
     signupUser,
@@ -34,14 +35,13 @@ const {
     viewSingleContract,
     withdrawMoneyByUser,
     searchJobs,
-    submitProject,
-    getAllInvites,
-    rejectInvite,
+    submitProject, 
     chatbot, 
 } = userController;
 const { USER }: { USER: string } = allRoles;
 
-const { allNotifications } = new NotificationController()
+const { allNotifications } = new NotificationController();
+const { getAllInvites, rejectInvite} = new InviteController();
 
 class UserRoute {
     public router: Router;
