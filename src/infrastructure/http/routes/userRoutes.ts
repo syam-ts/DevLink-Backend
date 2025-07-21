@@ -1,11 +1,10 @@
-import express from 'express';
-const userRouter = express.Router();
-import { userController } from '../controllers/userCtrl'
-import { verifyToken } from '../middlewares/auth/verifyToken';
-import { clientController } from '../controllers/clientCtrl';
-import refreshToken from '../middlewares/auth/refreshToken';
-import { requireRole } from '../middlewares/auth/requireRole';
-import { allRoles } from '../../../helper/constants/enums';
+import express, { Router } from "express";
+import { userController } from "../controllers/userCtrl";
+import { verifyToken } from "../middlewares/auth/verifyToken";
+import { clientController } from "../controllers/clientCtrl";
+import refreshToken from "../middlewares/auth/refreshToken";
+import { requireRole } from "../middlewares/auth/requireRole";
+import { allRoles } from "../../../helper/constants/enums";
 
 const {
     signupUser,
@@ -42,45 +41,158 @@ const {
 } = userController;
 const { USER }: { USER: string } = allRoles;
 
+class UserRoute {
+    public router: Router;
+    constructor() {
+        this.router = Router();
 
-userRouter.get('/getHome', getHomeUser);
-userRouter.get('/home/:type', listHomeJobs);
-userRouter.get('/jobs/:jobsType', verifyToken, requireRole(USER), getSelectedJobs);
-userRouter.get('/proposals/:proposalType', verifyToken, requireRole(USER), viewProposals);
-userRouter.get('/contracts/:contractViewType', verifyToken, requireRole(USER), viewContracts);
-userRouter.get('/profile/:type', verifyToken, requireRole(USER), getProfile);
-userRouter.get('/wishlist', verifyToken, requireRole(USER), viewAllWishlist);
-userRouter.get('/job/:jobPostId', verifyToken, requireRole(USER), getSingleJobPost);
-userRouter.get("/contract/:contractId", verifyToken, requireRole(USER), viewSingleContract);
-userRouter.get('/notifications/:userId', verifyToken, requireRole(USER), allNotifications);
-userRouter.get('/allChat/view/:roleId', clientController.getAllChats);
-userRouter.get('/chat/:memberId', verifyToken, requireRole(USER), clientController.getAllChats);
-userRouter.get("/invites", verifyToken, requireRole(USER), getAllInvites);
-userRouter.get("/chat/view/:roleType/:roleId/:targetId", clientController.viewChat);
-userRouter.get("/wallet", verifyToken, requireRole(USER), viewWalletUser);
+        this.initializeGetRoutes();
+        this.initializePostRoutes();
+        this.initializePutAndPatchRoutes();
+    }
 
-userRouter.post('/addToWishlist', verifyToken, requireRole(USER), addToWishlist);
-userRouter.post('/boostProfile', verifyToken, requireRole(USER), boostAccount);
-userRouter.post('/withdrawMoney', verifyToken, requireRole(USER), withdrawMoneyByUser);
-userRouter.post('/createProposal', verifyToken, requireRole(USER), createProposal);
-userRouter.post('/searchJobs', verifyToken, requireRole(USER), searchJobs);
-userRouter.post('/signup', signupUser);
-userRouter.post('/verify-otp', verifyOtp);
-userRouter.post('/resend-otp', resendOtp);
-userRouter.post('/verify-email', verifyEmail);
-userRouter.post('/resetPassword/:userId', resetPassword);
-userRouter.post('/login', loginUser);
-userRouter.post('/googleLogin', googleLogin);
-userRouter.post('/logout', logoutUser);
-userRouter.post('/project/submit/:contractId', verifyToken, requireRole(USER), submitProject);
-userRouter.post('/chat/sendMessage', verifyToken, requireRole(USER), clientController.sendMessage);
-userRouter.post('/chatbot', verifyToken, requireRole(USER), chatbot);
-userRouter.post('/refresh-token', refreshToken);
+    public initializeGetRoutes(): void {
+        this.router.get("/getHome", getHomeUser);
+        this.router.get("/home/:type", listHomeJobs);
+        this.router.get(
+            "/jobs/:jobsType",
+            verifyToken,
+            requireRole(USER),
+            getSelectedJobs
+        );
+        this.router.get(
+            "/proposals/:proposalType",
+            verifyToken,
+            requireRole(USER),
+            viewProposals
+        );
+        this.router.get(
+            "/contracts/:contractViewType",
+            verifyToken,
+            requireRole(USER),
+            viewContracts
+        );
+        this.router.get(
+            "/profile/:type",
+            verifyToken,
+            requireRole(USER),
+            getProfile
+        );
+        this.router.get(
+            "/wishlist",
+            verifyToken,
+            requireRole(USER),
+            viewAllWishlist
+        );
+        this.router.get(
+            "/job/:jobPostId",
+            verifyToken,
+            requireRole(USER),
+            getSingleJobPost
+        );
+        this.router.get(
+            "/contract/:contractId",
+            verifyToken,
+            requireRole(USER),
+            viewSingleContract
+        );
+        this.router.get(
+            "/notifications/:userId",
+            verifyToken,
+            requireRole(USER),
+            allNotifications
+        );
+        this.router.get("/allChat/view/:roleId", clientController.getAllChats);
+        this.router.get(
+            "/chat/:memberId",
+            verifyToken,
+            requireRole(USER),
+            clientController.getAllChats
+        );
+        this.router.get("/invites", verifyToken, requireRole(USER), getAllInvites);
+        this.router.get(
+            "/chat/view/:roleType/:roleId/:targetId",
+            clientController.viewChat
+        );
+        this.router.get("/wallet", verifyToken, requireRole(USER), viewWalletUser);
+    }
 
-userRouter.put('/profileAlter/:type', verifyToken, requireRole(USER), alterProfile);
-userRouter.patch('/profileBoostSuccess', verifyToken, requireRole(USER), bosstSuccess);
-userRouter.patch('/invite-reject/:inviteId', verifyToken, requireRole(USER), rejectInvite);
-userRouter.patch('/removeFromWishlist/:wishlistId', verifyToken, requireRole(USER), removeFromWishlist);
+    public initializePostRoutes(): void {
+        this.router.post(
+            "/addToWishlist",
+            verifyToken,
+            requireRole(USER),
+            addToWishlist
+        );
+        this.router.post(
+            "/boostProfile",
+            verifyToken,
+            requireRole(USER),
+            boostAccount
+        );
+        this.router.post(
+            "/withdrawMoney",
+            verifyToken,
+            requireRole(USER),
+            withdrawMoneyByUser
+        );
+        this.router.post(
+            "/createProposal",
+            verifyToken,
+            requireRole(USER),
+            createProposal
+        );
+        this.router.post("/searchJobs", verifyToken, requireRole(USER), searchJobs);
+        this.router.post("/signup", signupUser);
+        this.router.post("/verify-otp", verifyOtp);
+        this.router.post("/resend-otp", resendOtp);
+        this.router.post("/verify-email", verifyEmail);
+        this.router.post("/resetPassword/:userId", resetPassword);
+        this.router.post("/login", loginUser);
+        this.router.post("/googleLogin", googleLogin);
+        this.router.post("/logout", logoutUser);
+        this.router.post(
+            "/project/submit/:contractId",
+            verifyToken,
+            requireRole(USER),
+            submitProject
+        );
+        this.router.post(
+            "/chat/sendMessage",
+            verifyToken,
+            requireRole(USER),
+            clientController.sendMessage
+        );
+        this.router.post("/chatbot", verifyToken, requireRole(USER), chatbot);
+        this.router.post("/refresh-token", refreshToken);
+    }
 
-export default userRouter;
+    public initializePutAndPatchRoutes(): void {
+        this.router.put(
+            "/profileAlter/:type",
+            verifyToken,
+            requireRole(USER),
+            alterProfile
+        );
+        this.router.patch(
+            "/profileBoostSuccess",
+            verifyToken,
+            requireRole(USER),
+            bosstSuccess
+        );
+        this.router.patch(
+            "/invite-reject/:inviteId",
+            verifyToken,
+            requireRole(USER),
+            rejectInvite
+        );
+        this.router.patch(
+            "/removeFromWishlist/:wishlistId",
+            verifyToken,
+            requireRole(USER),
+            removeFromWishlist
+        );
+    }
+}
 
+export default UserRoute;
