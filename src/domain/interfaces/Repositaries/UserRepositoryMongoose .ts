@@ -6,10 +6,9 @@ import { JobPostDocument, JobPostModel } from "../../entities/JobPost";
 import { UserRepositary } from "../../../application/usecases/user/signupUser";
 import { ContractDocument, ContractModel } from "../../entities/Contract";
 import { AdminModel } from "../../entities/Admin";
-import { Notification, NotificationModel } from "../../entities/Notification";
+import { NotificationModel } from "../../entities/Notification";
 import mongoose, { isObjectIdOrHexString } from "mongoose";
-import { InviteDocument, InviteModel } from "../../entities/Invite";
-import { WishlistModel } from "../../entities/WIshlist";
+import { InviteModel } from "../../entities/Invite"; 
 
 type Id = string;
 

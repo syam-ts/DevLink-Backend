@@ -6,11 +6,8 @@ import { NotificationModel, Notification } from "../../entities/Notification";
 import { JobPostDocument, JobPostModel } from "../../entities/JobPost";
 import { Admin, AdminModel } from "../../entities/Admin";
 import { ContractDocument, ContractModel } from "../../entities/Contract";
-import bcrypt from "bcrypt";
-import validator from "validator";
-import allCronJobs from "../../../helper/cron-jobs/index";
-import mongoose, { ObjectId } from "mongoose";
-import { InviteDocument, InviteModel } from "../../entities/Invite";
+import bcrypt from "bcrypt"; 
+import mongoose, { ObjectId } from "mongoose"; 
 import { ProjectSubmissions } from "../../../application/usecases/client/viewSubmissions";
 
 type Id = string;
@@ -1139,65 +1136,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return { updateUser, removeExtra };
   }
 
-  async inviteUser(
-    userId: Id,
-    clientId: Id,
-    jobPostId: Id,
-    description: string
-  ): Promise<InviteDocument> {
-    const jobPostData = await JobPostModel.findById(jobPostId);
-    if (!jobPostData) throw new Error("jobpost not found");
-
-    const client = await ClientModel.findById(clientId);
-    if (!client) throw new Error("client not found");
-
-    const existingInvite = await InviteModel.find({
-      $and: [{ "jobPostData._id": jobPostId }, { userId: userId }],
-    });
-
-    if (existingInvite.length !== 0) throw new Error("Invite already send");
-
-    const inviteFn = new InviteModel({
-      clientId,
-      userId,
-      description,
-      jobPostData: {
-        _id: jobPostData._id,
-        title: jobPostData.title,
-        description: jobPostData.description,
-        expertLevel: jobPostData.expertLevel,
-        location: jobPostData.location,
-        requiredSkills: jobPostData.requiredSkills,
-        amount: jobPostData.amount,
-        paymentType: jobPostData.paymentType,
-        estimateTimeinHours: jobPostData.estimateTimeinHours,
-        projectType: jobPostData.projectType,
-      },
-      clientData: {
-        companyName: client.companyName,
-        email: client.email,
-        location: client.location,
-      },
-      state: "pending",
-      createdAt: new Date(),
-    });
-
-    const savedInvite = await inviteFn.save();
-
-    const newNotificationClient = await NotificationModel.create({
-      type: "invited user",
-      message: "Invite sended to the user",
-      sender_id: process.env._ADMIN_OBJECT_ID,
-      reciever_id: clientId,
-      inviteSuccess: {
-        userId: userId,
-      },
-      createdAt: new Date(),
-    });
-    console.log(newNotificationClient);
-
-    return savedInvite as InviteDocument;
-  }
+ 
 
   async getSingleJobPost(jobPostId: string): Promise<JobPostDocument> {
     const jobPost = await JobPostModel.findById(jobPostId).exec();
@@ -1206,28 +1145,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return jobPost;
   }
 
-  async ViewInviteClient(
-    clientId: string,
-    inviteType: string
-  ): Promise<InviteDocument> {
-    let invite;
-    if (inviteType === "pending") {
-      invite = await InviteModel.find({
-        $and: [{ clientId: clientId }, { status: "pending" }],
-      })
-        .lean<InviteDocument>()
-        .exec();
-    } else {
-      invite = await InviteModel.find({
-        $and: [{ clientId: clientId }, { status: "rejected" }],
-      })
-        .lean<InviteDocument>()
-        .exec();
-    }
 
-    if (!invite) throw new Error("No invites found");
-    return invite;
-  }
 
   async rejectContract(
     contractId: Id,

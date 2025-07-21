@@ -6,6 +6,7 @@ import { verifyToken } from "../middlewares/auth/verifyToken";
 import { requireRole } from "../middlewares/auth/requireRole";
 import { allRoles } from "../../../helper/constants/enums";
 import { NotificationController } from "../controllers/notificationCtrl";
+import { InviteController } from "../controllers/inviteCtrl";
 
 const {
   signupClient,
@@ -33,23 +34,22 @@ const {
   closeContract,
   rejectContract,
   viewWallet,
-  inviteUser,
   listAllJobs,
   inviteJobsList,
   getSingleJobPost,
-  rejectProposal, 
+  rejectProposal,
   getAllChats,
   viewChat,
   rateAndReview,
   sendMessage,
-  viewInvite,
   searchDevlopers,
   withdrawMoneyByClient,
 } = clientController;
 const { viewSingleContract } = userController;
 const { CLIENT }: { CLIENT: string } = allRoles;
 
-const { getAllNotificationsClient} = new NotificationController();
+const { getAllNotificationsClient } = new NotificationController();
+const { inviteUser, viewInvite } = new InviteController();
 
 class ClientRoute {
   public router: Router;

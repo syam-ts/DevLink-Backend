@@ -11,8 +11,7 @@ import { ViewProposals } from "../../application/usecases/user/viewProposals";
 import { AlterUserProfile } from "../../application/usecases/user/alterProfile"; 
 import { GetUserProfile } from "../../application/usecases/user/getProfile";
 import { GetSelectedJobs } from "../../application/usecases/user/getSelectedJobs";
-import { CreateProposal } from "../../application/usecases/user/createProposal";   
-import { AllNotifications } from "../../application/usecases/user/allNotifications"; 
+import { CreateProposal } from "../../application/usecases/user/createProposal";    
 import { BoostPayment } from "../../application/usecases/user/boostPayment"; 
 import { BoostSuccess } from "../../application/usecases/user/boostSuccess"; 
 import { GetSingleJobPost } from "../../application/usecases/user/getSingleJobPost"; 
@@ -22,9 +21,7 @@ import { ChatBot } from "../../application/usecases/user/ChatBot";
 import { AddToWishlist } from "../../application/usecases/user/addToWishlist";   
 import { ViewAllWishlist } from "../../application/usecases/user/viewAllWishlist";   
 import { RemoveFromWishlist } from "../../application/usecases/user/removeFromWishlist";   
-import { ViewWalletUser } from "../../application/usecases/user/viewWalletUser"; 
-import { GetAllInvites } from "../../application/usecases/user/getAllInvites"; 
-import { RejectInvite } from "../../application/usecases/user/rejectInvite"; 
+import { ViewWalletUser } from "../../application/usecases/user/viewWalletUser";  
 import { ViewSingleContractUser } from "../../application/usecases/user/viewSingleContract"; 
 import { WithdrawMoneyByUser } from "../../application/usecases/user/withdrawMoneyByUser"; 
 import { SearchJobs } from "../../application/usecases/user/searchJobs"; 
@@ -35,8 +32,7 @@ import { SignupClient } from '../../application/usecases/client/signupClient';
 import { LoginClient } from '../../application/usecases/client/loginClient';
 import { GoogleLoginClient } from '../../application/usecases/client/GoogleLoginClient';
 import { ClientRepositoryMongoose } from '../../domain/interfaces/Repositaries/ClientRepositoryMongoose';   
-import { VerifyEmailClient } from '../../application/usecases/client/verifyEmail';
-import { ResetPasswordClient } from '../../application/usecases/client/resetPassword';
+import { VerifyEmailClient } from '../../application/usecases/client/verifyEmail'; 
 import { verifyOtpClient } from '../../application/usecases/client/verifyOtpClient';
 import { getHomeClient } from '../../application/usecases/client/getHome';
 import { TrendingJobs } from '../../application/usecases/client/getHome';
@@ -47,8 +43,7 @@ import { InviteJobsList } from '../../application/usecases/client/inviteJobsList
 import { EditClientProfile } from '../../application/usecases/client/EditClientProfile';
 import { GetClientProfile } from '../../application/usecases/client/getProfile';
 import { ProfileVerification } from '../../application/usecases/client/profileVerification';
-import { CreateJobPost } from '../../application/usecases/client/createJobPost';
-import { GetAllNotifications } from '../../application/usecases/client/getAllNotifications'; 
+import { CreateJobPost } from '../../application/usecases/client/createJobPost'; 
 import { MakePayment } from '../../application/usecases/client/makePayment';
 import { GetUserProfileClient } from '../../application/usecases/client/getUserProfile';
 import { GetProposals } from '../../application/usecases/client/getProposals'; 
@@ -56,15 +51,12 @@ import { CreateContract } from '../../application/usecases/client/createContract
 import { RejectProposal } from '../../application/usecases/client/rejectProposal'; 
 import { ViewSubmissions } from '../../application/usecases/client/viewSubmissions';
 import { CloseContract } from '../../application/usecases/client/closeContract';
-import { RateAndReview } from '../../application/usecases/client/rateAndReview';
-import { CreateChat } from '../../application/usecases/client/createChat';
+import { RateAndReview } from '../../application/usecases/client/rateAndReview'; 
 import { SendMessage } from '../../application/usecases/client/sendMessage';
 import { GetAllChats } from '../../application/usecases/client/getAllChats';
 import { ViewWallet } from '../../application/usecases/client/viewWallet'; 
-import { ViewChat } from '../../application/usecases/client/viewChat';
-import { ViewInviteClient } from '../../application/usecases/client/viewInvite';
-import { GetSingleJobPostClient } from '../../application/usecases/client/getSingleJobPost';
-import { InviteUser } from '../../application/usecases/client/inviteUser';
+import { ViewChat } from '../../application/usecases/client/viewChat'; 
+import { GetSingleJobPostClient } from '../../application/usecases/client/getSingleJobPost'; 
 import { SearchDeveloper } from '../../application/usecases/client/searchDeveloper';
 import { RejectContract } from '../../application/usecases/client/rejectContract';
 import { GetallDevelopers } from '../../application/usecases/client/getallDevelopers';
@@ -84,8 +76,7 @@ import { ViewWalletAdmin } from '../../application/usecases/admin/viewWallet';
 import { SuccessMoneyTransfer } from '../../application/usecases/admin/successMoneyTransfer'; 
 import { GetWithdrawRequests } from '../../application/usecases/admin/getWithdrawRequests'; 
 import { ViewContractsAdmin } from '../../application/usecases/admin/viewContracts'; 
-import { ViewSingleContractAdmin } from '../..//application/usecases/admin/viewSingleContract';    
-import { Create } from '../../application/usecases/admin/create';
+import { ViewSingleContractAdmin } from '../..//application/usecases/admin/viewSingleContract';  
 import { VerifyAccept } from '../../application/usecases/admin/verifyAccept';
 import { GetAllRequests } from '../../application/usecases/admin/getAllRequests';
 import { GetRequestedClient } from '../../application/usecases/admin/getRequestedClient';
@@ -109,8 +100,7 @@ const getProfileUseCase = new GetUserProfile(userRepository);
 const listHomeJobsUseCase = new ListHomeJobs(userRepository);
 const getSelectedJobsUseCase = new GetSelectedJobs(userRepository);
 const viewProposalsUseCase = new ViewProposals(userRepository); 
-const createProposalUseCase = new CreateProposal(userRepository);  
-const allNotificationsUseCase = new AllNotifications(userRepository);
+const createProposalUseCase = new CreateProposal(userRepository);   
 const boostAccountUseCase = new BoostPayment(userRepository);
 const boostSuccessUseCase = new BoostSuccess(userRepository);
 const getSingleJobPostUseCase = new GetSingleJobPost(userRepository);
@@ -120,8 +110,6 @@ const addToWishlistUseCase = new AddToWishlist(wishlistRepository);
 const viewAllWishlistUseCase = new ViewAllWishlist(wishlistRepository); 
 const removeFromWishlistUseCase = new RemoveFromWishlist(wishlistRepository); 
 const viewWalletUserUseCase = new ViewWalletUser(userRepository); 
-const getAllInvitesUseCase = new GetAllInvites(userRepository); 
-const rejectInviteUseCase = new RejectInvite(userRepository); 
 const searchJobsUseCase = new SearchJobs(userRepository); 
 const viewSingleContractUserUseCase = new ViewSingleContractUser(userRepository); 
 const withdrawMoneyByUserUseCase =  new WithdrawMoneyByUser(userRepository);
@@ -144,22 +132,19 @@ const inviteJobsListUseCase = new InviteJobsList(ClientRepository);
 const editClientProfileUseCase = new EditClientProfile(ClientRepository);
 const getClientProfileUseCase = new GetClientProfile(ClientRepository);
 const profileVerificationUseCase = new ProfileVerification(ClientRepository);
-const createJobPostUseCase = new CreateJobPost(ClientRepository);
-const getAllNotificationsUseCase = new GetAllNotifications(ClientRepository); 
+const createJobPostUseCase = new CreateJobPost(ClientRepository);  
 const makePaymentUseCase = new MakePayment(ClientRepository);
 const getUserProfileUseCase = new GetUserProfileClient(ClientRepository);
 const getProposalsUseCase = new GetProposals(ClientRepository); 
 const createContractUseCase = new CreateContract(ClientRepository);
-const rejectProposalUseCase = new RejectProposal(ClientRepository); 
-const viewInviteUseCase = new ViewInviteClient(ClientRepository); 
+const rejectProposalUseCase = new RejectProposal(ClientRepository);  
 const getSingleJobPostClientUseCase = new GetSingleJobPostClient(ClientRepository); 
 const viewSubmissionsUseCase = new ViewSubmissions(ClientRepository);
 const closeContractUseCase = new CloseContract(ClientRepository);
 const rateAndReviewUserUseCase = new RateAndReview(ClientRepository);
 const viewWalletUseCase = new ViewWallet(ClientRepository);
 const searchDeveloperUseCase = new SearchDeveloper(ClientRepository);
-const getallDevelopersUseCase = new GetallDevelopers(ClientRepository);
-const inviteUserUseCase = new InviteUser(ClientRepository);
+const getallDevelopersUseCase = new GetallDevelopers(ClientRepository); 
 const rejectContractUseCase = new RejectContract(ClientRepository);
 const chatBotUseCase = new ChatBot(ClientRepository);
 const withdrawMoneyByClientUseCase = new WithdrawMoneyByClient(ClientRepository);
@@ -207,8 +192,7 @@ export const allUserUseCases = {
         getSelectedJobsUseCase ,
         createProposalUseCase ,
         closeContractUseCase , 
-        viewContractsUseCase , 
-        allNotificationsUseCase ,
+        viewContractsUseCase ,  
         boostAccountUseCase ,
         boostSuccessUseCase ,
         getSingleJobPostUseCase ,
@@ -218,9 +202,7 @@ export const allUserUseCases = {
         viewAllWishlistUseCase,
         removeFromWishlistUseCase,
         viewProposalsUseCase,
-        viewWalletUserUseCase,
-        getAllInvitesUseCase,
-        rejectInviteUseCase,
+        viewWalletUserUseCase, 
         searchJobsUseCase,
         viewSingleContractUserUseCase, 
         withdrawMoneyByUserUseCase,
@@ -243,22 +225,19 @@ export const allClientUseCases = {
      editClientProfileUseCase,
      getClientProfileUseCase,
      profileVerificationUseCase,
-     createJobPostUseCase,
-     getAllNotificationsUseCase, 
+     createJobPostUseCase,  
      makePaymentUseCase,
      getUserProfileUseCase,
      getProposalsUseCase,
      viewWalletUseCase, 
      createContractUseCase,
-     rejectProposalUseCase, 
-     viewInviteUseCase,
+     rejectProposalUseCase,  
      viewSubmissionsUseCase,
      getallDevelopersUseCase,
      getSingleJobPostClientUseCase,
      closeContractUseCase,
      searchDeveloperUseCase,
-     rateAndReviewUserUseCase, 
-     inviteUserUseCase, 
+     rateAndReviewUserUseCase,  
      withdrawMoneyByClientUseCase,
      rejectContractUseCase, 
      sendMessageUseCase,

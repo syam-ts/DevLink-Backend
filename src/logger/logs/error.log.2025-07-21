@@ -19,3 +19,4 @@
 {"level":"error","message":"this.notificationRepository.getAllNotificationsClient is not a function","timestamp":"2025-07-21 22:10:07"}
 {"level":"error","message":"this.notificationRepository.getAllNotificationsClient is not a function","timestamp":"2025-07-21 22:14:26"}
 {"level":"error","message":"this.notificationRepository.getAllNotificationsClient is not a function","timestamp":"2025-07-21 22:15:42"}
+{"level":"error","message":"Please select a jobPost","timestamp":"2025-07-21 23:12:37"}

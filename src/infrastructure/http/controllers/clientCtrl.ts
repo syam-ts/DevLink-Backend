@@ -886,68 +886,7 @@ export const clientController = {
     }
   },
 
-  inviteUser: async (req: Request, res: Response): Promise<void> => {
-    try {
-      const {
-        userId,
-        selectJobId,
-        description,
-      }: {
-        userId: string;
-        selectJobId: string;
-        description: string;
-      } = req.body;
-      if (!req.user || !req.user.id) {
-         res.status(401).json({ message: "Unauthorized", success: false });
-      }
-      const clientId = String(req.user?.id);;
-
-      const response = await allClientUseCases.inviteUserUseCase.execute(
-        userId,
-        clientId,
-        selectJobId,
-        description
-      );
-
-      res.status(HttpStatusCode.CREATED).json({
-        message: StatusMessage[HttpStatusCode.CREATED],
-        success: true,
-      });
-    } catch (error: unknown) {
-     const err = error as {message: string};
-      logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
-      return;
-    }
-  },
-
-  viewInvite: async (req: Request, res: Response): Promise<void> => {
-    try {  
-      if (!req.user || !req.user.id) {
-         res.status(401).json({ message: "Unauthorized", success: false });
-      }
-      const clientId = String(req.user?.id);;
-      const {inviteType}= req.params;
-
-      const invites = await allClientUseCases.viewInviteUseCase.execute(clientId, inviteType);
-      res.status(HttpStatusCode.OK).json({
-        message: StatusMessage[HttpStatusCode.OK],
-        invites,
-        success: true,
-      });
-    } catch (error: unknown) {
-      const err = error as {message: string};
-      logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
-      return;
-    }
-  },
+  
 
   getSingleJobPost: async (req: Request, res: Response): Promise<void> => {
     try {

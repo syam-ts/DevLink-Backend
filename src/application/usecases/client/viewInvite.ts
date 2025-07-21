@@ -1,14 +1,9 @@
-import { InviteDocument } from "../../../domain/entities/Invite";
+import { IInviteRepository } from "../../../domain/interfaces/IInviteRepository";
 
-export interface ClientRepository {
-    ViewInviteClient(clientId: string, inviteType: string): Promise<InviteDocument>;
-}
+export class ViewInviteByClient {
+  constructor(private inviteRepository: IInviteRepository) { }
 
-export class ViewInviteClient {
-  constructor(private clientRepository: ClientRepository) {}
-
-  async execute(clientId: string, inviteType: string) {
-    const result = await this.clientRepository.ViewInviteClient(clientId,inviteType);
-    return result;
+  execute(clientId: string, inviteType: string) {
+    return this.inviteRepository.ViewInviteByClient(clientId, inviteType);
   }
 }
