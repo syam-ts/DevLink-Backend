@@ -1,15 +1,9 @@
-import { Notification } from "../../../domain/entities/Notification";
-
-export interface ClientRepository {
-    getAllNotifications(clientId: string): Promise<Notification[]>;
-}
-
+import { INotificationRepository } from "../../../domain/interfaces/INotificationRepository";
+ 
 export class GetAllNotifications {
-    constructor(private clientRepository: ClientRepository) { }
+    constructor(private notificationRepository: INotificationRepository) { }
 
-    async execute(clientId: string) {
-        const client = await this.clientRepository.getAllNotifications(clientId);
-
-        return client;
+    execute(clientId: string) {
+        return this.notificationRepository.getAllNotificationsClient(clientId);
     }
 }

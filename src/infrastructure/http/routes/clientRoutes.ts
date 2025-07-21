@@ -5,6 +5,7 @@ import { userController } from "../controllers/userCtrl";
 import { verifyToken } from "../middlewares/auth/verifyToken";
 import { requireRole } from "../middlewares/auth/requireRole";
 import { allRoles } from "../../../helper/constants/enums";
+import { NotificationController } from "../controllers/notificationCtrl";
 
 const {
   signupClient,
@@ -36,8 +37,7 @@ const {
   listAllJobs,
   inviteJobsList,
   getSingleJobPost,
-  rejectProposal,
-  getAllNotifications,
+  rejectProposal, 
   getAllChats,
   viewChat,
   rateAndReview,
@@ -48,6 +48,8 @@ const {
 } = clientController;
 const { viewSingleContract } = userController;
 const { CLIENT }: { CLIENT: string } = allRoles;
+
+const { getAllNotificationsClient} = new NotificationController();
 
 class ClientRoute {
   public router: Router;
@@ -155,7 +157,7 @@ class ClientRoute {
       "/notifications/:clientId",
       verifyToken,
       requireRole(CLIENT),
-      getAllNotifications
+      getAllNotificationsClient
     );
   }
 

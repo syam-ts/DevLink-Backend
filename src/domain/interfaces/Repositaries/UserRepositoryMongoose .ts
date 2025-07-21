@@ -613,15 +613,6 @@ export class UserRepositoryMongoose implements UserRepositary {
     }
   }
 
-  async allNotifications(userId: Id): Promise<Notification[] | unknown> {
-    const notifications = await NotificationModel.find({
-      reciever_id: userId,
-    })
-      .sort({ createdAt: -1 })
-      .exec();
-
-    return notifications;
-  }
 
   async getSelectedJobs(
     userId: string,

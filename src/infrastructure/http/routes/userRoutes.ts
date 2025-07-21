@@ -5,6 +5,7 @@ import { clientController } from "../controllers/clientCtrl";
 import refreshToken from "../middlewares/auth/refreshToken";
 import { requireRole } from "../middlewares/auth/requireRole";
 import { allRoles } from "../../../helper/constants/enums";
+import { NotificationController } from "../controllers/notificationCtrl";
 
 const {
     signupUser,
@@ -36,10 +37,11 @@ const {
     submitProject,
     getAllInvites,
     rejectInvite,
-    chatbot,
-    allNotifications,
+    chatbot, 
 } = userController;
 const { USER }: { USER: string } = allRoles;
+
+const { allNotifications } = new NotificationController()
 
 class UserRoute {
     public router: Router;
@@ -107,7 +109,7 @@ class UserRoute {
             "/chat/:memberId",
             verifyToken,
             requireRole(USER),
-            clientController.getAllChats
+            allNotifications
         );
         this.router.get("/invites", verifyToken, requireRole(USER), getAllInvites);
         this.router.get(
