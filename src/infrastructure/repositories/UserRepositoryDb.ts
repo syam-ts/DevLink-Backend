@@ -1,13 +1,21 @@
 import bcrypt from "bcrypt";
-import { UserModel } from "../../entities/User";
-import { Client, ClientModel } from "../../entities/Client";
-import { JobPostDocument, JobPostModel } from "../../entities/JobPost"; 
-import { ContractDocument, ContractModel } from "../../entities/Contract";
-import { AdminModel } from "../../entities/Admin";
-import { NotificationModel } from "../../entities/Notification";
+import {
+  IProposal,
+  IUser,
+  IUserRepository,
+  IWallet,
+} from "../../domain/interfaces/IUserRepository";
+import { UserModel } from "../../domain/entities/User";
+import { Client, ClientModel } from "../../domain/entities/Client";
+import { JobPostDocument, JobPostModel } from "../../domain/entities/JobPost";
+import {
+  ContractDocument,
+  ContractModel,
+} from "../../domain/entities/Contract";
+import { AdminModel } from "../../domain/entities/Admin";
 import mongoose from "mongoose";
-import { InviteModel } from "../../entities/Invite";
-import { IProposal, IUser, IUserRepository, IWallet } from "../IUserRepository";
+import { NotificationModel } from "../../domain/entities/Notification";
+import { InviteModel } from "../../domain/entities/Invite";
 
 export class UserRepositoryDb implements IUserRepository {
   async createUser(user: IUser): Promise<IUser> {

@@ -1,8 +1,8 @@
 import express, { Router } from "express";
-import { adminController } from "../controllers/adminCtrl";
-import { verifyToken } from "../middlewares/auth/verifyToken";
-import refreshToken from "../middlewares/auth/refreshToken";
-import { requireRole } from "../middlewares/auth/requireRole";
+import { adminController } from "../../controllers/adminCtrl";
+import { verifyToken } from "../../middleware/auth/verifyToken";
+import refreshToken from "../../middleware/auth/refreshToken";
+import { requireRole } from "../../middleware/auth/requireRole";
 import { allRoles } from "../../../helper/constants/enums";
 
 const {

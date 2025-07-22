@@ -1,7 +1,11 @@
-import { Notification, NotificationModel } from "../../entities/Notification";
-import { INotificationRepository } from "../INotificationRepository";
+ 
+import { Notification, NotificationModel } from "../../domain/entities/Notification";
+import { INotificationRepository } from "../../domain/interfaces/INotificationRepository";
+
+ 
 
 export class NotificationRepositoryDb implements INotificationRepository {
+
   public async getAllNotificationsClient(
     clientId: string
   ): Promise<Notification[]> {

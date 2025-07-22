@@ -1,9 +1,9 @@
-import { allAdminUseCases } from "../../../helper/controllerHelper/allCtrlConnection";
-import { HttpStatusCode } from "../../../helper/constants/enums";
-import { StatusMessage } from "../../../helper/constants/stausMessages";
-import generateTokens from "../../../utils/generateTokens";
-import { ErrorRequestHandler, Request, Response } from "express";
-import logger from '../../../logger/logger';
+import { allAdminUseCases } from "../../helper/controllerHelper/allCtrlConnection";
+import { HttpStatusCode } from "../../helper/constants/enums";
+import { StatusMessage } from "../../helper/constants/stausMessages";
+import generateTokens from "../../utils/generateTokens";
+import { Request, Response } from "express";
+import logger from '../../logger/logger';
 
 export const adminController = {
   // signUpAdmin: async(req: Request, res: Response): Promise<void> => {

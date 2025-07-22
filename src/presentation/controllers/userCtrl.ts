@@ -1,16 +1,12 @@
 import { Request, Response } from "express";
-import { allUserUseCases } from "../../../helper/controllerHelper/allCtrlConnection";
-import { HttpStatusCode } from "../../../helper/constants/enums";
-import { StatusMessage } from "../../../helper/constants/stausMessages";
-import generateTokens from "../../../utils/generateTokens";
+import { allUserUseCases } from "../../helper/controllerHelper/allCtrlConnection";
+import { HttpStatusCode } from "../../helper/constants/enums";
+import { StatusMessage } from "../../helper/constants/stausMessages";
+import generateTokens from "../../utils/generateTokens";
 import { Error } from "mongoose";
-import logger from "../../../logger/logger";
+import logger from "../../logger/logger";
 
-export class UserController { 
-
-  constructor() { 
-  }
-
+export class UserController {
   async signupUser(req: Request, res: Response): Promise<void> {
     try {
       const otp = await allUserUseCases.signupUseCase.execute(req.body);
@@ -36,9 +32,7 @@ export class UserController {
 
   async verifyOtp(req: Request, res: Response): Promise<void> {
     try {
-      const user = await allUserUseCases.verifyUserUseCase.execute(
-        req.body
-      );
+      const user = await allUserUseCases.verifyUserUseCase.execute(req.body);
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         success: true,
@@ -121,7 +115,6 @@ export class UserController {
 
   async loginUser(req: Request, res: Response) {
     try {
-
       const user = await allUserUseCases.loginUseCase.execute(req.body);
       if (!user) {
         res
@@ -223,9 +216,7 @@ export class UserController {
         res.status(401).json({ message: "Unauthorized", success: false });
       }
       const userId = String(req.user?.id);
-      const user = await allUserUseCases.getProfileUseCase.execute(
-        userId
-      );
+      const user = await allUserUseCases.getProfileUseCase.execute(userId);
 
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
@@ -299,9 +290,7 @@ export class UserController {
   async listHomeJobs(req: Request, res: Response): Promise<void> {
     try {
       const { type } = req.params;
-      const response = await allUserUseCases.listHomeJobsUseCase.execute(
-        type
-      );
+      const response = await allUserUseCases.listHomeJobsUseCase.execute(type);
 
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
@@ -336,13 +325,12 @@ export class UserController {
           | "advanced",
       };
 
-      const response =
-        await allUserUseCases.getSelectedJobsUseCase.execute(
-          userId,
-          jobsType,
-          query,
-          currentPage
-        );
+      const response = await allUserUseCases.getSelectedJobsUseCase.execute(
+        userId,
+        jobsType,
+        query,
+        currentPage
+      );
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         data: response,
@@ -363,14 +351,13 @@ export class UserController {
     try {
       const { userId, jobPostId, description, bidAmount, bidDeadline } =
         req.body.body;
-      const response =
-        await allUserUseCases.createProposalUseCase.execute(
-          userId,
-          jobPostId,
-          description,
-          bidAmount,
-          bidDeadline
-        );
+      const response = await allUserUseCases.createProposalUseCase.execute(
+        userId,
+        jobPostId,
+        description,
+        bidAmount,
+        bidDeadline
+      );
 
       res.status(HttpStatusCode.CREATED).json({
         message: StatusMessage[HttpStatusCode.CREATED],
@@ -432,8 +419,7 @@ export class UserController {
         res.status(401).json({ message: "Unauthorized", success: false });
       }
       const userId = String(req.user?.id);
-      const paymentUrl =
-        await allUserUseCases.boostAccountUseCase.execute();
+      const paymentUrl = await allUserUseCases.boostAccountUseCase.execute();
 
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
@@ -480,8 +466,9 @@ export class UserController {
   async getSingleJobPost(req: Request, res: Response): Promise<void> {
     try {
       const { jobPostId } = req.params;
-      const jobPost =
-        await allUserUseCases.getSingleJobPostUseCase.execute(jobPostId);
+      const jobPost = await allUserUseCases.getSingleJobPostUseCase.execute(
+        jobPostId
+      );
 
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
@@ -507,12 +494,11 @@ export class UserController {
       const userId = String(req.user?.id);
       const { contractViewType } = req.params;
       const currentPage: number = Number(req.query.currentPage) || 1;
-      const contracts =
-        await allUserUseCases.viewContractsUseCase.execute(
-          userId,
-          contractViewType,
-          currentPage
-        );
+      const contracts = await allUserUseCases.viewContractsUseCase.execute(
+        userId,
+        contractViewType,
+        currentPage
+      );
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         data: contracts,
@@ -558,9 +544,7 @@ export class UserController {
     try {
       const { userInput } = req.body;
 
-      const response = await allUserUseCases.chatBotUseCase.execute(
-        userInput
-      );
+      const response = await allUserUseCases.chatBotUseCase.execute(userInput);
 
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
@@ -611,8 +595,9 @@ export class UserController {
         res.status(401).json({ message: "Unauthorized", success: false });
       }
       const userId = String(req.user?.id);
-      const wishlist =
-        await allUserUseCases.viewAllWishlistUseCase.execute(userId);
+      const wishlist = await allUserUseCases.viewAllWishlistUseCase.execute(
+        userId
+      );
 
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
@@ -634,11 +619,10 @@ export class UserController {
     try {
       const { wishlistId } = req.params;
       const { jobPostId } = req.body;
-      const wishlist =
-        await allUserUseCases.removeFromWishlistUseCase.execute(
-          wishlistId,
-          jobPostId
-        );
+      const wishlist = await allUserUseCases.removeFromWishlistUseCase.execute(
+        wishlistId,
+        jobPostId
+      );
 
       res
         .status(HttpStatusCode.OK)
@@ -661,11 +645,10 @@ export class UserController {
       }
       const userId = String(req.user?.id);
       const currentPage = Number(req.query.currentPage);
-      const response =
-        await allUserUseCases.viewWalletUserUseCase.execute(
-          userId,
-          currentPage
-        );
+      const response = await allUserUseCases.viewWalletUserUseCase.execute(
+        userId,
+        currentPage
+      );
 
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
@@ -687,9 +670,7 @@ export class UserController {
     try {
       const { contractId } = req.params;
       const contract =
-        await allUserUseCases.viewSingleContractUserUseCase.execute(
-          contractId
-        );
+        await allUserUseCases.viewSingleContractUserUseCase.execute(contractId);
 
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
@@ -735,12 +716,11 @@ export class UserController {
       }
       const userId = String(req.user?.id);
 
-      const response =
-        await allUserUseCases.withdrawMoneyByUserUseCase.execute(
-          userId,
-          amount,
-          accountNumber
-        );
+      const response = await allUserUseCases.withdrawMoneyByUserUseCase.execute(
+        userId,
+        amount,
+        accountNumber
+      );
 
       res.status(HttpStatusCode.CREATED).json({
         message: StatusMessage[HttpStatusCode.CREATED],

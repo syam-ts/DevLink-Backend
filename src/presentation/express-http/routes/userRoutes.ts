@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { UserController } from "../controllers/userCtrl";
-import { verifyToken } from "../middlewares/auth/verifyToken";
-import { clientController } from "../controllers/clientCtrl";
-import refreshToken from "../middlewares/auth/refreshToken";
-import { requireRole } from "../middlewares/auth/requireRole";
+import { UserController } from "../../controllers/userCtrl";
+import { verifyToken } from "../../middleware/auth/verifyToken";
+import { clientController } from "../../controllers/clientCtrl";
+import refreshToken from "../../middleware/auth/refreshToken";
+import { requireRole } from "../../middleware/auth/requireRole";
 import { allRoles } from "../../../helper/constants/enums";
-import { NotificationController } from "../controllers/notificationCtrl";
-import { InviteController } from "../controllers/inviteCtrl";
+import { NotificationController } from "../../controllers/notificationCtrl";
+import { InviteController } from "../../controllers/inviteCtrl";
 
 class UserRoute {
     private USER: string;

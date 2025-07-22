@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Response, NextFunction, Request } from "express";
-import { HttpStatusCode } from "../../../../helper/constants/enums";
-import { StatusMessage } from "../../../../helper/constants/stausMessages";
+import { HttpStatusCode } from "../../../helper/constants/enums";
+import { StatusMessage } from "../../../helper/constants/stausMessages";
 
 interface DecodedUser {
   _id: string;

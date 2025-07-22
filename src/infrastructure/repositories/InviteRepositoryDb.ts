@@ -1,8 +1,10 @@
-import { ClientModel } from "../../entities/Client";
-import { InviteDocument, InviteModel } from "../../entities/Invite";
-import { JobPostModel } from "../../entities/JobPost";
-import { NotificationModel } from "../../entities/Notification";
-import { IInviteRepository } from "../IInviteRepository";
+import { ClientModel } from "../../domain/entities/Client";
+import { InviteDocument, InviteModel } from "../../domain/entities/Invite";
+import { JobPostModel } from "../../domain/entities/JobPost";
+import { NotificationModel } from "../../domain/entities/Notification";
+import { IInviteRepository } from "../../domain/interfaces/IInviteRepository";
+
+ 
 
 
 export class InviteRepositoryDb implements IInviteRepository {
