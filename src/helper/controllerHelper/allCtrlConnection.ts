@@ -25,7 +25,7 @@ import { ViewWalletUser } from "../../application/usecases/user/viewWalletUser";
 import { ViewSingleContractUser } from "../../application/usecases/user/viewSingleContract"; 
 import { WithdrawMoneyByUser } from "../../application/usecases/user/withdrawMoneyByUser"; 
 import { SearchJobs } from "../../application/usecases/user/searchJobs"; 
-import { UserRepositoryMongoose } from "../../domain/interfaces/Repositaries/UserRepositoryMongoose ";
+import { UserRepositoryDb } from "../../domain/interfaces/Repositaries/UserRepositoryMongooseDb";
  
 // Client imports ----------------> 
 import { SignupClient } from '../../application/usecases/client/signupClient';
@@ -42,6 +42,8 @@ import { ListAllJobs } from '../../application/usecases/client/listAllJobs';
 import { InviteJobsList } from '../../application/usecases/client/inviteJobsList';  
 import { EditClientProfile } from '../../application/usecases/client/EditClientProfile';
 import { GetClientProfile } from '../../application/usecases/client/getProfile';
+import { ResetPasswordClient } from "../../application/usecases/client/resetPassword";
+
 import { ProfileVerification } from '../../application/usecases/client/profileVerification';
 import { CreateJobPost } from '../../application/usecases/client/createJobPost'; 
 import { MakePayment } from '../../application/usecases/client/makePayment';
@@ -86,7 +88,7 @@ import { SortUser } from '../../application/usecases/admin/sortUser';
 import { SortClient } from '../../application/usecases/admin/sortClient'; 
  
 // User Respo instance  ---------->
-const userRepository = new UserRepositoryMongoose();
+const userRepository = new UserRepositoryDb();
 const wishlistRepository = new WishlistRepositoryMongoose();
 const signupUseCase = new SignupUser(userRepository);
 const loginUseCase = new LoginUser(userRepository);
@@ -101,7 +103,7 @@ const listHomeJobsUseCase = new ListHomeJobs(userRepository);
 const getSelectedJobsUseCase = new GetSelectedJobs(userRepository);
 const viewProposalsUseCase = new ViewProposals(userRepository); 
 const createProposalUseCase = new CreateProposal(userRepository);   
-const boostAccountUseCase = new BoostPayment(userRepository);
+const boostAccountUseCase = new BoostPayment();
 const boostSuccessUseCase = new BoostSuccess(userRepository);
 const getSingleJobPostUseCase = new GetSingleJobPost(userRepository);
 const viewContractsUseCase = new ViewContracts(userRepository); 
@@ -121,7 +123,7 @@ const signupClientUseCase = new SignupClient(ClientRepository);
 const loginClientUseCase = new LoginClient(ClientRepository); 
 const verifyClientUseCase = new verifyOtpClient(ClientRepository);
 const verifyEmailClientUseCase = new VerifyEmailClient(ClientRepository);
-const resetPasswordClientUseCase = new ResetPassword(ClientRepository);
+const resetPasswordClientUseCase = new ResetPasswordClient(ClientRepository);
 const GoogleLoginClientUseCase = new GoogleLoginClient(ClientRepository);
 const getHomeClientUseCase = new getHomeClient(ClientRepository);
 const trendingJobsUseCase = new TrendingJobs(ClientRepository);
@@ -146,7 +148,7 @@ const viewWalletUseCase = new ViewWallet(ClientRepository);
 const searchDeveloperUseCase = new SearchDeveloper(ClientRepository);
 const getallDevelopersUseCase = new GetallDevelopers(ClientRepository); 
 const rejectContractUseCase = new RejectContract(ClientRepository);
-const chatBotUseCase = new ChatBot(ClientRepository);
+const chatBotUseCase = new ChatBot();
 const withdrawMoneyByClientUseCase = new WithdrawMoneyByClient(ClientRepository);
 const sendMessageUseCase = new SendMessage(ChatRepository);
 const getAllChatsUseCase = new GetAllChats(ChatRepository);
@@ -176,6 +178,7 @@ const sortClientUseCase = new SortClient(adminRepository);
 const verifyAcceptUseCase = new VerifyAccept(adminRepository);
 const getAllRequestsUseCase = new GetAllRequests(adminRepository);
 const getRequestedClientUseCase = new GetRequestedClient(adminRepository); 
+
   
 // export all user usecases
 export const allUserUseCases = {

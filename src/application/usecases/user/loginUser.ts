@@ -1,3 +1,5 @@
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository"
+
 interface User { 
     _id: string
     name: string
@@ -8,16 +10,10 @@ interface User {
     isProfileFilled: boolean 
     role?: string;
 }
-export interface UserRepository {
-    findUserByEmailAndPassword(
-        email: string,
-        password: string,
-    ): Promise<User>;
-}
-
+ 
 
 export class LoginUser {
-    constructor(private userRepository: UserRepository) { }
+    constructor(private userRepository: IUserRepository) { }
 
     async execute(theUser: User) {  
         const user = await this.userRepository.findUserByEmailAndPassword(

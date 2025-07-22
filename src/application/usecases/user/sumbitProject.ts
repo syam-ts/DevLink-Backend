@@ -1,22 +1,15 @@
-interface Body {
-    description: string
-    progress: number
-    attachedFile: string
-};
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
 
-export interface UserRepository {
-    submitProject(contractId: string, body: Body): void;
+interface IBody {
+    description: string;
+    progress: number;
+    attachedFile: string;
 }
 
 export class SubmitProject {
-    constructor(private userRepository: UserRepository) { }
+    constructor(private userRepository: IUserRepository) { }
 
-    async execute(contractId: string, body: Body) {
-        const response = await this.userRepository.submitProject(
-            contractId,
-            body
-        );
-
-        return response;
+    execute(contractId: string, body: IBody) {
+        return this.userRepository.submitProject(contractId, body);
     }
 }

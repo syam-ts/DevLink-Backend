@@ -1,12 +1,12 @@
-export interface UserRepository {
-  listHomeJobs(type: string): void;
-}
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
+
+ 
 
 export class ListHomeJobs {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: IUserRepository) {}
 
-  async execute(type: string) {
-    const allJobs = await this.userRepository.listHomeJobs(type);
-    return allJobs;
+    execute(type: string) {
+    return this.userRepository.listHomeJobs(type);
+ 
   }
 }

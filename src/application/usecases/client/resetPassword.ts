@@ -1,9 +1,9 @@
-import { Client } from '../../../domain/entities/Client';
+ 
 import bcrypt from 'bcrypt';
  
 
 export interface ClientRepositary {
-    resetPassword(email: string, password: string): Promise<Client>;
+    resetPassword(email: string, password: string): Promise<string>;
 }
 
 export class ResetPasswordClient {
@@ -16,9 +16,7 @@ export class ResetPasswordClient {
 
         const resetPassword = await this.clientRepositary.resetPassword(id , hashedPassword); 
        
-        return { 
-
-         };
+        return {};
   
         
     }

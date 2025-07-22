@@ -1,36 +1,23 @@
-interface User {
-  _id: string
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
+
+interface IUser {
+  _id: string;
   email: string;
   name: string;
   password: string;
-  role?: string
-}
-
-export interface UserRepository { 
-  findUserByOnlyEmail(
-    email: string,
-    name: string,
-    password: string
-  ): Promise<User>;
+  role?: string;
 }
 
 export class GoogleLoginUser {
-  constructor(private userRepository: UserRepository) { }
+  constructor(private userRepository: IUserRepository) { }
 
-  async execute(user: User) {
+  execute(user: IUser) {
     const {
       email,
       name,
       password,
     }: { email: string; name: string; password: string } = user;
 
-    const userGoogleLogin = await this.userRepository.findUserByOnlyEmail(
-      email,
-      name,
-      password
-    );
-
-    return userGoogleLogin;
+    return this.userRepository.findUserByOnlyEmail(email, name, password);
   }
-};
-
+}

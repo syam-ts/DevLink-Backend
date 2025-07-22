@@ -1,13 +1,9 @@
-export interface UserRepository {
-  viewProposals(userId: string): void;
-}
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
 
 export class ViewProposals {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: IUserRepository) { }
 
-  async execute(userId: string) {
-    const result = await this.userRepository.viewProposals(userId);
-
-    return result;
+  execute(userId: string) {
+    return this.userRepository.viewProposals(userId);
   }
 }

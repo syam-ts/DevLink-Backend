@@ -1,12 +1,10 @@
-import { User } from "../../../domain/entities/User";
+ 
 import bcrypt from "bcrypt";
-
-export interface UserRepositary {
-    resetPassword(email: string, password: string): Promise<string>;
-}
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
+ 
 
 export class ResetPassword {
-    constructor(private userRepositary: UserRepositary) { }
+    constructor(private userRepositary: IUserRepository) { }
 
     async execute(id: string, password: string) {
         const salt: number = 10;

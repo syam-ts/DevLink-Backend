@@ -1,15 +1,9 @@
-import { JobPostDocument } from "../../../domain/entities/JobPost";
-
-export interface UserRepository {
-    searchJobsBySkills(input: string): Promise<JobPostDocument[]>;
-}
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
 
 export class SearchJobs {
-    constructor(private userRepository: UserRepository) { }
+    constructor(private userRepository: IUserRepository) { }
 
-    async execute(input: string) {
-        const jobs = await this.userRepository.searchJobsBySkills(input);
-
-        return jobs;
+    execute(input: string) {
+        return this.userRepository.searchJobsBySkills(input);
     }
 }

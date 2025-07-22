@@ -1,32 +1,21 @@
-type Id = string;
-export interface UserRepositary {
-    createProposal(
-        userId: Id,
-        jobPostId: Id,
-        description: Id,
-        bidAmount: number,
-        bidDeadline: number
-    ): void;
-}
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
 
 export class CreateProposal {
-    constructor(private userRepositary: UserRepositary) { }
+    constructor(private userRepositary: IUserRepository) { }
 
-    async execute(
-        userId: Id,
-        jobPostId: Id,
-        description: Id,
+    execute(
+        userId: string,
+        jobPostId: string,
+        description: string,
         bidAmount: number,
         bidDeadline: number
     ) {
-        const result = await this.userRepositary.createProposal(
+        return this.userRepositary.createProposal(
             userId,
             jobPostId,
             description,
             bidAmount,
             bidDeadline
         );
-
-        return result;
     }
 }

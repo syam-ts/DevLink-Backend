@@ -1,29 +1,17 @@
-import { User } from "../../../domain/entities/User";
-import { JobPostDocument } from "../../../domain/entities/JobPost";
-import { Client } from "../../../domain/entities/Client";
-
-export interface UserRepository {
-  findAllClients(): Promise<Client[]>;
-  listHomeJobs(type: string): Promise<{latestJobs?: JobPostDocument[],
-      allJobs?: JobPostDocument[], totalJobs?: number,
-       totalHours?: unknown, verifiedAccounts?: number}>;
-}
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
 
 export class getHomeUser {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: IUserRepository) { }
 
-  async execute() {
-    const foundClients = await this.userRepository.findAllClients();
-
-    return foundClients;
+  execute() {
+    return this.userRepository.findAllClients();
   }
 }
 
 export class ListHomeJobs {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: IUserRepository) { }
 
-  async execute(type: string) {
-    const allJobs = await this.userRepository.listHomeJobs(type);
-    return allJobs;
+  execute(type: string) {
+    return this.userRepository.listHomeJobs(type);
   }
 }

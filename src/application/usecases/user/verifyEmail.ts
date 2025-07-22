@@ -1,17 +1,14 @@
 // import { User } from "../../../domain/entities/User";
 import nodemailer from "nodemailer";
 import generateOtp from "../../../utils/otp-gen";
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
 
 interface User {
-    _id: string,
-    name: string,
-    email: string,
-    password: string,
-    mobile: number,
-}
-
-export interface UserRepository {
-    findUserByEmail(email: string): Promise<User | null>;
+    _id: string;
+    name: string;
+    email: string;
+    password: string;
+    mobile: number;
 }
 
 const sendMail = async (toMail: string, userId: string | unknown) => {
@@ -40,7 +37,7 @@ const sendMail = async (toMail: string, userId: string | unknown) => {
 };
 
 export class VerifyEmail {
-    constructor(private userRepository: UserRepository) { }
+    constructor(private userRepository: IUserRepository) { }
 
     async execute(email: string) {
         const foundUser = await this.userRepository.findUserByEmail(email);

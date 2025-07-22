@@ -1,13 +1,6 @@
 import { JobPostDocument } from "../../../domain/entities/JobPost";
-
-export interface UserRepository {
-  getSelectedJobs(
-    userId: string,
-    jobsType: string,
-    query: Query,
-    currentPage: number
-  ): Promise<{ jobs: JobPostDocument[]; totalPages: number | undefined }>;
-}
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
+  
 
 interface Query {
   amount: number;
@@ -16,7 +9,7 @@ interface Query {
 }
 
 export class GetSelectedJobs {
-  constructor(private userRepository: UserRepository) { }
+  constructor(private userRepository: IUserRepository) { }
 
   async execute(
     userId: string,

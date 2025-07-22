@@ -1,23 +1,13 @@
-import { ContractDocument } from "../../../domain/entities/Contract";
-
-export interface UserRepositary {
-  viewContracts(
-    userId: string,
-    contractViewType: string,
-    currentPage: number
-  ): Promise<{contract: ContractDocument[], totalPages: number}>;
-}
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
 
 export class ViewContracts {
-  constructor(private userRepositary: UserRepositary) {}
+  constructor(private userRepositary: IUserRepository) { }
 
-  async execute(userId: string, contractViewType: string, currentPage: number) {
-    const response = await this.userRepositary.viewContracts(
+  execute(userId: string, contractViewType: string, currentPage: number) {
+    return this.userRepositary.viewContracts(
       userId,
       contractViewType,
       currentPage
     );
-
-    return response;
   }
 }

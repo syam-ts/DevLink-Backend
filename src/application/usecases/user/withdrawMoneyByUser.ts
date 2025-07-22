@@ -1,26 +1,9 @@
-export interface UserRepository {
-  withdrawMoney(
-    userId: string,
-    amount: number,
-    accountNumber: number
-  ): void;
-}
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
 
 export class WithdrawMoneyByUser {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: IUserRepository) { }
 
-  async execute(
-    userId: string,
-    amount: number,
-    accountNumber: number
-  ) { 
-
-    const result = await this.userRepository.withdrawMoney(
-      userId,
-      amount,
-      accountNumber
-    );
-
-    return result;
+  execute(userId: string, amount: number, accountNumber: number) {
+    return this.userRepository.withdrawMoney(userId, amount, accountNumber);
   }
 }

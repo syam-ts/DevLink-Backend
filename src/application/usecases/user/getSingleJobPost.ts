@@ -1,13 +1,9 @@
-export interface userRepository {
-    getSingleJobPost(jobPostId: string): void;
-}
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
 
 export class GetSingleJobPost {
-    constructor(private userepository: userRepository) { }
+    constructor(private userepository: IUserRepository) { }
 
-    async execute(jobPostId: string) {
-        const jobPost = await this.userepository.getSingleJobPost(jobPostId);
-
-        return jobPost;
+    execute(jobPostId: string) {
+        return this.userepository.getSingleJobPost(jobPostId);
     }
 }

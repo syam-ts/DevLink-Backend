@@ -1,50 +1,10 @@
-interface User {  
-  _id: string;
-  name: string;
-  email: string;
-  password: string;
-  mobile: number;
-  skills: string[];
-  profilePicture: string;
-  location: string;
-  description: string;
-  experience: string;
-  education: string;
-  budget: number;
-  rating: number;
-  domain: string; 
-  githubLink: string;
-  totalJobs: number;
-  totalHours: number;
-  whyHireMe: string;
-  completedJobs: string;
-  inProgress: string;
-  review?: [
-    {
-      theReview: string;
-      rating: number;
-      companyName: string;
-    }
-  ];
-  workHistory: string[];
-  isEditRequest: boolean;
-  isProfileFilled: boolean;
-  request: string[];
-  wallet: string[];
-  isBlocked: boolean;
-  isBoosted: boolean;
-  createdAt: string;
-  
-}
-export interface UserRepository {
-  findUserById(userId: string): Promise<User>;
-}
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
 
 export class GetUserProfile {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: IUserRepository) {}
 
   async execute(userId: string) {
-    const user = await this.userRepository.findUserById(userId); 
+    const user = await this.userRepository.findUserById(userId);
 
     return {
       name: user.name,
@@ -69,4 +29,4 @@ export class GetUserProfile {
       totalHours: user.totalHours,
     };
   }
-};
+}

@@ -1,18 +1,15 @@
 import Grog from "groq-sdk";
-import path from 'node:path';
+import path from "node:path";
 import dotenv from "dotenv";
 dotenv.config({
-  path: path.resolve(__dirname, '.env')
+  path: path.resolve(__dirname, ".env"),
 });
 
 const groq = new Grog({
-  apiKey: process.env.GROQ_API_KEY as string
+  apiKey: process.env.GROQ_API_KEY as string,
 });
 
-
 export class ChatBot {
-  constructor(private userRepositary: UserRepositary) { }
-
   async execute(userInput: string) {
     try {
       const chatComletion = await getResult(userInput);
@@ -37,8 +34,4 @@ async function getResult(input: string) {
     ],
     model: "llama3-8b-8192",
   });
-};
-  
-export interface UserRepositary {
-  // chatInput(input: string): Promise< any >
 }
