@@ -1,7 +1,7 @@
-import { User } from "../../../domain/entities/User";
+import { IUser } from "../../../domain/entities/User";
 
 export interface ClientRepositary {
-    searchDeveloperBySkills(input: string): Promise<User>;
+    searchDeveloperBySkills(input: string): Promise<IUser>;
 }
 
 export class SearchDeveloper {

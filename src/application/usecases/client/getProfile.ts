@@ -1,7 +1,9 @@
-import { Client } from "../../../domain/entities/Client";
+import { IClient } from "../../../domain/entities/Client";
+
+ 
 
 export interface ClientRepository {
-    getClientProfile(clientId: string): Promise<Client>;
+    getClientProfile(clientId: string): Promise<IClient>;
 }
 
 export class GetClientProfile {

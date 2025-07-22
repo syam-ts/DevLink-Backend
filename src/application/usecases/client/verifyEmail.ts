@@ -1,10 +1,10 @@
-import { Client } from '../../../domain/entities/Client';
+import { IClient } from '../../../domain/entities/Client';
 import nodemailer from 'nodemailer';
 import generateOtp  from '../../../utils/otp-gen'; 
 
  
 export interface ClientRepositary {
-    findClientByEmail(email: string): Promise<Client | null>;
+    findClientByEmail(email: string): Promise<IClient | null>;
 }
 
 

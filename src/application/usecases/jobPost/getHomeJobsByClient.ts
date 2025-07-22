@@ -1,8 +1,8 @@
  
-import { User } from "../../../domain/entities/User"; 
+import { IUser } from "../../../domain/entities/User"; 
 
 export interface ClientRepository {
-  findAllUsers(): Promise<User[]>; 
+  findAllUsers(): Promise<IUser[]>; 
 }
 
 export class getHomeClientJobsByClient {

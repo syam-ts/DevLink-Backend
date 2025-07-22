@@ -1,8 +1,8 @@
-import { User } from "../../../domain/entities/User";
- 
+import { IUser } from "../../../domain/entities/User";
 
+ 
 export interface ClientRepository {
-    getUserProfile(userId: string): Promise<User>
+    getUserProfile(userId: string): Promise<IUser>
 };
 
 

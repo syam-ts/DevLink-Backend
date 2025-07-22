@@ -1,6 +1,4 @@
-import { JobPostDocument } from "../../../domain/entities/JobPost";
 import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
-  
 
 interface Query {
   amount: number;
@@ -9,7 +7,7 @@ interface Query {
 }
 
 export class GetSelectedJobs {
-  constructor(private userRepository: IUserRepository) { }
+  constructor(private userRepository: IUserRepository) {}
 
   async execute(
     userId: string,

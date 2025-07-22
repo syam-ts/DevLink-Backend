@@ -1,5 +1,6 @@
-import { Client } from "../../../domain/entities/Client";
+import { IClient } from "../../../domain/entities/Client";
 
+ 
 export interface ClientRepositary {
     verifyOtp(client: {
         mailOtp: number;
@@ -8,7 +9,7 @@ export interface ClientRepositary {
             otp: string;
             data: { name: string; email: string; password: string };
         };
-    }): Promise<Client>;
+    }): Promise<IClient>;
 }
 
 export class verifyOtpClient {

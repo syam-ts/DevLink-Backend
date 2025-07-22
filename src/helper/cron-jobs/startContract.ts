@@ -1,12 +1,13 @@
 import cron from 'node-cron';
-import { ContractDocument, ContractModel } from '../../domain/entities/Contract';
-import { UserModel } from '../../domain/entities/User';
-import { JobPostModel } from '../../domain/entities/JobPost';
+import { IContractDocument } from '../../domain/entities/Contract';
+import { ContractModel } from '../../infrastructure/database/Schema/ContractSchema';
+import { JobPostModel } from '../../infrastructure/database/Schema/jobSchema';
+import { UserModel } from '../../infrastructure/database/Schema/userSchema';
 
 type Id = string;
 
 const sendingContractFinishRequest = async (jobPostId: Id, userId: Id, contractId: Id) => {
-     const currentContract = await ContractModel.findById(contractId).lean<ContractDocument>().exec();
+     const currentContract = await ContractModel.findById(contractId).lean<IContractDocument>().exec();
      const updateJobPost = await JobPostModel.findByIdAndUpdate(jobPostId, {
       status: 'finished'
      }, {

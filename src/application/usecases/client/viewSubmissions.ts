@@ -1,11 +1,11 @@
-import { JobPostDocument } from "../../../domain/entities/JobPost";
+import { IJobPostDocument } from "../../../domain/entities/JobPost";
 
 interface ProjectSubmission {
     contractId: string;
     description: string;
     progress: number;
     attachedFile: string;
-    jobPostData: JobPostDocument;
+    jobPostData: IJobPostDocument;
     createdAt: Date;
   }
   

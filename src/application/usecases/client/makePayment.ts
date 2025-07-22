@@ -1,12 +1,12 @@
 import Stripe from "stripe";
-import { JobPostDocument } from "../../../domain/entities/JobPost";
+import { IJobPostDocument } from "../../../domain/entities/JobPost";
 
 interface DataInterface {
-  formData: JobPostDocument
+  formData: IJobPostDocument
 }
 
 export interface ClientRepository {
-  createJobPost(clientId: string, postData: JobPostDocument): void;
+  createJobPost(clientId: string, postData: IJobPostDocument): void;
 }
  
 const stripe = new Stripe('sk_test_51QbMd0IRhIB5V98AeCCvXn0kLeqwJ8HDxvSA92ucQQqItioMMPIEFwQk4kY9boTeeh1JRvF91jDnnAvOgJIO2F2k00J7W4XS9H');

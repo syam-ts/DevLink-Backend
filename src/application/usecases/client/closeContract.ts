@@ -1,4 +1,3 @@
-import { ContractDocument } from "../../../domain/entities/Contract";
 
 export interface ClientRepository {
     closeContract(

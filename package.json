@@ -8,7 +8,7 @@
     "dev": "node src/dist/app.js",
     "start": "cross-env NODE_ENV=production node src/dist/app.js",
     "test": "echo && exit 0",
-    "build": "tsc "
+    "build": "tsc"
   },
   "license": "MIT",
   "dependencies": {

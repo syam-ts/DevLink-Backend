@@ -1,7 +1,8 @@
-import { Client } from '../../../domain/entities/Client';
+import { IClient } from "../../../domain/entities/Client";
 
+ 
 export interface ClientRepositary {
-    rejectProposal(clientId: string, userId: string, jobPostId: string): Promise<Client>; 
+    rejectProposal(clientId: string, userId: string, jobPostId: string): Promise<IClient>; 
 }
 
 export class RejectProposal {
