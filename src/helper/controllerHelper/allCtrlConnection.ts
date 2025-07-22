@@ -29,8 +29,7 @@ import { SearchJobs } from "../../application/usecases/user/searchJobs";
 // Client imports ----------------> 
 import { SignupClient } from '../../application/usecases/client/signupClient';
 import { LoginClient } from '../../application/usecases/client/loginClient';
-import { GoogleLoginClient } from '../../application/usecases/client/GoogleLoginClient';
-import { ClientRepositoryMongoose } from '../../domain/interfaces/Repositaries/ClientRepositoryMongoose';   
+import { GoogleLoginClient } from '../../application/usecases/client/GoogleLoginClient';   
 import { VerifyEmailClient } from '../../application/usecases/client/verifyEmail'; 
 import { verifyOtpClient } from '../../application/usecases/client/verifyOtpClient';  
 import { ViewContractsClient } from '../../application/usecases/client/viewContracts'; 
@@ -80,6 +79,7 @@ import { SortUser } from '../../application/usecases/admin/sortUser';
 import { SortClient } from '../../application/usecases/admin/sortClient'; 
 import { UserRepositoryDb } from "../../infrastructure/repositories/UserRepositoryDb";
 import { getHomeClientJobsByClient } from "../../application/usecases/jobPost/getHomeJobsByClient";
+import { ClientRepositoryDb } from "../../infrastructure/repositories/clientRepositoryDb";
  
 // User Respo instance  ---------->
 const userRepository = new UserRepositoryDb();
@@ -111,7 +111,7 @@ const viewSingleContractUserUseCase = new ViewSingleContractUser(userRepository)
 const withdrawMoneyByUserUseCase =  new WithdrawMoneyByUser(userRepository);
   
 // Client Repo instance -------------->  
-const ClientRepository = new ClientRepositoryMongoose();
+const ClientRepository = new ClientRepositoryDb();
 const ChatRepository = new ChatRepositoryMongoose();
 const signupClientUseCase = new SignupClient(ClientRepository); 
 const loginClientUseCase = new LoginClient(ClientRepository); 

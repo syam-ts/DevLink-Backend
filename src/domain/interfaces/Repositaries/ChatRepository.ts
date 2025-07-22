@@ -1,8 +1,9 @@
-import mongoose from "mongoose";
-import { Chat, ChatModel } from "../../../domain/entities/Chat";
-import { MessageModel } from "../../entities/Message";
-import { UserModel } from "../../entities/User";
-import { Client, ClientModel } from "../../entities/Client";
+import mongoose from "mongoose"; 
+import { IChat } from "../../entities/Chat";
+import { UserModel } from "../../../infrastructure/database/Schema/userSchema";
+import { ClientModel } from "../../../infrastructure/database/Schema/clientSchema";
+import { ChatModel } from "../../../infrastructure/database/Schema/chatSchema";
+import { MessageModel } from "../../../infrastructure/database/Schema/messageSchema";
 // import { io } from '../../../infrastructure/socket/socket';
 
 interface Members {
@@ -46,9 +47,10 @@ export class ChatRepositoryMongoose {
 
 
 
-  async getAllChats(roleId: string): Promise<Chat> {
+  async getAllChats(roleId: string): Promise<IChat> {
 
-    const allChats = await ChatModel.find({ members: roleId }).lean<Chat>().exec(); 
+    const allChats = await ChatModel
+    .find({ members: roleId }).lean<IChat>().exec(); 
 
     if (!allChats) throw new Error("No chats found"); 
     return allChats;
@@ -92,7 +94,7 @@ export class ChatRepositoryMongoose {
 
 
 
-  async sendMessage(body: Message): Promise<Chat> {
+  async sendMessage(body: Message): Promise<IChat> {
     const { chatId, sender, text, roleType }: Message = body; 
     const newMessage = new MessageModel({
       chatId: chatId,
@@ -119,7 +121,7 @@ export class ChatRepositoryMongoose {
           new: true,
           upsert: true,
         }
-      ).sort({ "chatHistory.clientChat.createdAt": 1 }).lean<Chat>();
+      ).sort({ "chatHistory.clientChat.createdAt": 1 }).lean<IChat>();
 
 
       return updateChat;
@@ -139,7 +141,7 @@ export class ChatRepositoryMongoose {
           new: true,
           upsert: true,
         }
-      ).sort({ "chatHistory.useChat.createdAt": 1 }).lean<Chat>();
+      ).sort({ "chatHistory.useChat.createdAt": 1 }).lean<IChat>();
       return updateChat;
     }
  

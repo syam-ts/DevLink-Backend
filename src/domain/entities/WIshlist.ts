@@ -1,22 +1,8 @@
-import mongoose, { Schema, Model } from "mongoose";
-import { Jobs, jobPostSchema } from "../entities/User";
+import { IJobPostDocument } from "./JobPost";
 
-export interface Wishlist extends Document {
+ 
+
+export interface IWishlist {
   userId: String;
-  jobPostData: [Jobs];
+  jobPostData: [IJobPostDocument];
 }
-
-const WishlistSchema = new Schema<Wishlist>({
-  userId: { type: String, required: false },
-  jobPostData: [
-    {
-      type: jobPostSchema,
-      required: false,
-    },
-  ],
-});
-
-export const WishlistModel: Model<Wishlist> = mongoose.model<Wishlist>(
-  "Wishlist",
-  WishlistSchema
-);

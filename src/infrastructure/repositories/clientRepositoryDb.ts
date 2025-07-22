@@ -1,14 +1,17 @@
-import { Client, ClientModel } from "../../entities/Client";
-import { User } from "../../entities/User";
-import { ClientRepositary } from "../../../application/usecases/client/signupClient";
-import { UserModel } from "../../entities/User";
-import { NotificationModel, Notification } from "../../entities/Notification";
-import { JobPostModel } from "../../entities/JobPost";
-import { Admin, AdminModel } from "../../entities/Admin";
-import { ContractDocument, ContractModel } from "../../entities/Contract";
-import bcrypt from "bcrypt"; 
-import mongoose from "mongoose"; 
-import { ProjectSubmissions } from "../../../application/usecases/client/viewSubmissions";
+ 
+import bcrypt from "bcrypt";
+import mongoose from "mongoose";
+import { IUser } from "../../domain/entities/User";
+import { ClientModel } from "../database/Schema/clientSchema";
+import { IClient } from "../../domain/entities/Client";
+import { ContractModel } from "../database/Schema/ContractSchema";
+import { AdminModel } from "../database/Schema/adminSchema";
+import { NotificationModel } from "../database/Schema/notificationSchema";
+import { UserModel } from "../database/Schema/userSchema";
+import { JobPostModel } from "../database/Schema/jobSchema";
+import { ProjectSubmissions } from "../../application/usecases/client/viewSubmissions";
+import { IAdmin } from "../../domain/entities/Admin";
+import { IContractDocument } from "../../domain/entities/Contract";
 
 type Id = string;
 
@@ -57,7 +60,7 @@ interface Proposal {
   UserId: string;
   jobPostId: string;
   jobPostInfo: string;
-  userData: User;
+  userData: IUser;
   description?: string | undefined;
   status?: string | undefined;
   bidamount: number;
@@ -71,8 +74,8 @@ interface CreateClient {
   password: string;
 }
 
-export class ClientRepositoryMongoose implements ClientRepositary {
-  async createClient(client: Client): Promise<Client> {
+export class ClientRepositoryDb {
+  async createClient(client: IClient): Promise<IClient> {
     if (!client.password) throw new Error("Password is required");
 
     const salt: number = 10;
@@ -90,10 +93,10 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       companyName: savedClient.companyName as string,
       email: savedClient.email as string,
       password: savedClient.password as string,
-    } as Client;
+    } as IClient;
   }
 
-  async signupClient(email: string): Promise<Client | null> {
+  async signupClient(email: string): Promise<IClient | null> {
     const foundClient = this.findClientByEmail(email);
     if (!foundClient) throw new Error("Client Not Found");
     return foundClient;
@@ -101,12 +104,12 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async verifyOtp(client: {
     mailOtp: number;
-    userOtp: string
+    userOtp: string;
     user: {
       otp: string;
       data: { name: string; email: string; password: string };
     };
-  }): Promise<Client> {
+  }): Promise<IClient> {
     const { name, email, password } = client.user.data;
 
     if (client.mailOtp === parseInt(client.userOtp)) {
@@ -153,13 +156,13 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         companyName: savedClient.companyName,
         email: savedClient.email,
         password: savedClient.password,
-      } as Client;
+      } as IClient;
     } else {
       throw new Error("incorrect OTP");
     }
   }
 
-  async findClientByEmail(email: string): Promise<Client | null> {
+  async findClientByEmail(email: string): Promise<IClient | null> {
     const client = await ClientModel.findOne({ email }).exec();
 
     if (!client) {
@@ -170,7 +173,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         companyName: client.companyName,
         email: client.email,
         password: client.password,
-      } as Client;
+      } as any;
     }
   }
 
@@ -178,13 +181,13 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     email: string,
     password: string
   ): Promise<{
-    _id: string 
-    companyName: string
-    email: string
-    password: string
-    isBlocked: boolean 
-    isVerified: boolean
-  }> { 
+    _id: string;
+    companyName: string;
+    email: string;
+    password: string;
+    isBlocked: boolean;
+    isVerified: boolean;
+  }> {
     const client = await ClientModel.findOne({ email }).exec();
 
     if (!client) {
@@ -209,12 +212,12 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     }
 
     return {
-      _id: String(client._id), 
+      _id: String(client._id),
       companyName: String(client.companyName),
       email: String(client.email),
       password: String(client.password),
       isBlocked: Boolean(client.isBlocked),
-      isVerified: Boolean(client.isVerified)
+      isVerified: Boolean(client.isVerified),
     };
   }
 
@@ -223,12 +226,12 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     companyName: string,
     password: string
   ): Promise<{
-    _id: string 
-    companyName: string
-    email: string 
-    password: string
-    isBlocked: boolean  
-    isVerified: boolean  
+    _id: string;
+    companyName: string;
+    email: string;
+    password: string;
+    isBlocked: boolean;
+    isVerified: boolean;
   }> {
     const client = await ClientModel.findOne({ email }).exec();
     if (client) {
@@ -238,7 +241,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         password: String(client.password),
         email: String(client.email),
         isBlocked: Boolean(client.isBlocked),
-        isVerified: Boolean(client.isVerified)
+        isVerified: Boolean(client.isVerified),
       };
     } else {
       const salt: number = 10;
@@ -265,30 +268,28 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
       const savedClient = await createdClient.save();
 
-      return {  
+      return {
         _id: String(savedClient._id),
         companyName: String(savedClient.companyName),
         password: String(savedClient.password),
         email: String(savedClient.email),
         isBlocked: Boolean(savedClient.isBlocked),
-        isVerified: Boolean(savedClient.isVerified)
+        isVerified: Boolean(savedClient.isVerified),
       };
     }
   }
 
-  async findAllUsers(): Promise<User[]> {
+  async findAllUsers(): Promise<IUser[]> {
     const users = await UserModel.find({
       $and: [{ isProfileFilled: true }, { isBlocked: false }],
     })
       .limit(4)
-      .lean<User[]>()
+      .lean<IUser[]>()
       .exec();
     if (!users || users.length === 0) throw new Error("Users not found");
 
     return users;
   }
-
-
 
   async resetPassword(clientId: Id, password: string): Promise<string> {
     const pass = { password: password };
@@ -303,8 +304,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return "Password reset successfully!";
   }
 
-  async getClientProfile(clientId: Id): Promise<Client> {
-    const client = await ClientModel.findById(clientId).lean<Client>().exec();
+  async getClientProfile(clientId: Id): Promise<IClient> {
+    const client = await ClientModel.findById(clientId).lean<IClient>().exec();
     if (!client) throw new Error("Client not found");
 
     return client;
@@ -312,8 +313,8 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async profileVerification(
     clientId: Id,
-    data: { unChangedData: Client, editData: Client }
-  ): Promise<Admin> { 
+    data: { unChangedData: IClient; editData: IClient }
+  ): Promise<IAdmin> {
     const adminId = process.env.ADMIN_OBJECT_ID;
     const existingClient = await ClientModel.findById(clientId);
     if (!existingClient) throw new Error("Client not Exists");
@@ -332,7 +333,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       { $push: { request: request } },
       { new: true }
     )
-      .lean<Admin>()
+      .lean<IAdmin>()
       .exec();
 
     if (!updatedAdmin) throw new Error("Admin not found");
@@ -348,11 +349,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
   async editClientProfile(
     clientId: Id,
-    editData: { editData: Partial<Client>; unChangedData: Client },
-    unChangedData: Client
-  ): Promise<Admin> { 
+    editData: { editData: Partial<IClient>; unChangedData: IClient },
+    unChangedData: IClient
+  ): Promise<IAdmin> {
     const adminId = process.env.ADMIN_OBJECT_ID;
-    const existingClient = await ClientModel.findById(clientId).lean<Client>();
+    const existingClient = await ClientModel.findById(clientId).lean<IClient>();
     if (!existingClient) throw new Error("Client not exists");
 
     if (existingClient.isEditRequest) {
@@ -366,7 +367,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       data: {
         editData: unChangedData,
         unChangedData: editData,
-      }, 
+      },
     };
 
     const updatedAdmin = await AdminModel.findByIdAndUpdate(
@@ -374,7 +375,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       { $push: { request: request } },
       { new: true }
     )
-      .lean<Admin>()
+      .lean<IAdmin>()
       .exec();
 
     if (!updatedAdmin) throw new Error("Admin not found");
@@ -388,20 +389,16 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return updatedAdmin;
   }
 
-
- 
-
-
   async getProposals(clientId: Id): Promise<Proposal[]> {
-    const client = await ClientModel.findById(clientId).lean<Client>().exec();
+    const client = await ClientModel.findById(clientId).lean<IClient>().exec();
     if (!client) throw new Error("Client not found");
     const proposals = client.proposals;
 
     return proposals as unknown as Proposal[];
   }
 
-  async getUserProfile(userId: Id): Promise<User> {
-    const user = await UserModel.findById(userId).lean<User>().exec();
+  async getUserProfile(userId: Id): Promise<IUser> {
+    const user = await UserModel.findById(userId).lean<IUser>().exec();
 
     if (!user) {
       throw new Error("User not found");
@@ -428,11 +425,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         workHistory: user.workHistory,
       };
 
-      return userProfile as User;
+      return userProfile as any;
     }
   }
 
-  async getallDevelopers(): Promise<User[] | unknown> {
+  async getallDevelopers(): Promise<IUser[] | unknown> {
     const developers = await UserModel.find({ isProfileFilled: true }).exec();
 
     if (!developers || developers.length === 0)
@@ -445,7 +442,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     clientId: Id,
     contractViewType: string,
     currentPage: number
-  ): Promise<{ contract: ContractDocument[]; totalPages: number }> {
+  ): Promise<{ contract: IContractDocument[]; totalPages: number }> {
     const page_size: number = 3;
     const skip: number = (currentPage - 1) * page_size;
 
@@ -576,7 +573,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   }
 
   async viewSubmissions(clientId: Id): Promise<ProjectSubmissions> {
-    const client = await ClientModel.findById(clientId).lean<Client>().exec();
+    const client = await ClientModel.findById(clientId).lean<IClient>().exec();
     if (!client) throw new Error("Client not found");
 
     return client.projectSubmissions as unknown as ProjectSubmissions;
@@ -659,9 +656,9 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         contractId: savedContract._id,
       },
       createdAt: new Date(),
-    })) as unknown as Notification;
+    })) as unknown as any;
 
-    const newNotificationClient = (await NotificationModel.create<Notification>(
+    const newNotificationClient = (await NotificationModel.create(
       {
         type: "Contract",
         message: "New Contract signed in",
@@ -672,11 +669,10 @@ export class ClientRepositoryMongoose implements ClientRepositary {
         },
         createdAt: new Date(),
       }
-    )) as unknown as Notification;
+    )) as unknown as any;
 
     newNotificationUser.save();
     newNotificationClient.save();
-
 
     //await allCronJobs.startContractHelperFn(timer, jobPostId, userId, contractId);
 
@@ -690,7 +686,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     clientId: Id,
     userId: Id,
     jobPostId: Id
-  ): Promise<Client> {
+  ): Promise<IClient> {
     const proposal = await ClientModel.findOneAndUpdate(
       {
         _id: new mongoose.Types.ObjectId(clientId),
@@ -706,7 +702,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       },
       { new: true }
     )
-      .lean<Client>()
+      .lean<IClient>()
       .exec();
     if (!proposal) throw new Error("Client not exists");
 
@@ -724,9 +720,6 @@ export class ClientRepositoryMongoose implements ClientRepositary {
 
     return proposal;
   }
-
- 
-
 
   async closeContract(contractId: Id, progress: number): Promise<unknown> {
     //update contract status as closed ----------------
@@ -932,7 +925,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     notificationId: Id,
     rating: number,
     review: string
-  ): Promise<{ updateUser: User; removeExtra: Notification }> {
+  ): Promise<{ updateUser: IUser; removeExtra: Notification }> {
     interface Rating {
       rating: {
         ratingSum: number;
@@ -955,7 +948,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       rating: rating,
     };
 
-    const client = await ClientModel.findById(clientId).lean<Client>();
+    const client = await ClientModel.findById(clientId).lean<IClient>();
     if (!client) throw new Error("Client not found");
 
     const updateUser = await UserModel.findByIdAndUpdate(
@@ -973,7 +966,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       },
       { new: true }
     )
-      .lean<User>()
+      .lean<IUser>()
       .exec();
     if (!updateUser) throw new Error("user not exists");
 
@@ -989,17 +982,13 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return { updateUser, removeExtra };
   }
 
- 
-
-
   async rejectContract(
     contractId: Id,
     clientId: Id
-  ): Promise<ContractDocument> { 
- 
+  ): Promise<IContractDocument> {
     const currentContract = await ContractModel.findById(contractId)
-      .lean<ContractDocument>()
-      .exec(); 
+      .lean<IContractDocument>()
+      .exec();
 
     if (!currentContract) throw new Error("Contract not exists");
 
@@ -1107,11 +1096,11 @@ export class ClientRepositoryMongoose implements ClientRepositary {
     return contract;
   }
 
-  async searchDeveloperBySkills(input: string): Promise<User> {
+  async searchDeveloperBySkills(input: string): Promise<IUser> {
     const developers = await UserModel.find({
       skills: { $regex: input, $options: "i" },
     })
-      .lean<User>()
+      .lean<IUser>()
       .exec();
 
     if (!developers) throw new Error("No developer found");
@@ -1126,7 +1115,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
   ): Promise<void> {
     let userName;
 
-    const client = await ClientModel.findById(clientId).lean<Client>().exec();
+    const client = await ClientModel.findById(clientId).lean<IClient>().exec();
     if (!client) throw new Error("client not exists");
     userName = client.companyName;
 
@@ -1135,7 +1124,7 @@ export class ClientRepositoryMongoose implements ClientRepositary {
       throw new Error("Invalid clientId: Must be a 24-character hex string.");
     }
     const withdrawRequestObject = {
-      roleType: 'client',
+      roleType: "client",
       roleId: new mongoose.Types.ObjectId(clientId),
       userName: userName,
       amount: amount,

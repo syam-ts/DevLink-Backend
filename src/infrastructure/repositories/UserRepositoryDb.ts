@@ -4,18 +4,18 @@ import {
   IUser,
   IUserRepository,
   IWallet,
-} from "../../domain/interfaces/IUserRepository";
-import { UserModel } from "../../domain/entities/User";
-import { Client, ClientModel } from "../../domain/entities/Client";
-import { JobPostDocument, JobPostModel } from "../../domain/entities/JobPost";
-import {
-  ContractDocument,
-  ContractModel,
-} from "../../domain/entities/Contract";
-import { AdminModel } from "../../domain/entities/Admin";
-import mongoose from "mongoose";
-import { NotificationModel } from "../../domain/entities/Notification";
-import { InviteModel } from "../../domain/entities/Invite";
+} from "../../domain/interfaces/IUserRepository"; 
+import mongoose from "mongoose"; 
+import { UserModel } from "../database/Schema/userSchema";
+import { ClientModel } from "../database/Schema/clientSchema";
+import { IClient } from "../../domain/entities/Client";
+import { JobPostModel } from "../database/Schema/jobSchema";
+import { IJobPostDocument } from "../../domain/entities/JobPost";
+import { NotificationModel } from "../database/Schema/notificationSchema";
+import { IContractDocument } from "../../domain/entities/Contract";
+import { ContractModel } from "../database/Schema/ContractSchema";
+import { AdminModel } from "../database/Schema/adminSchema";
+import { InviteModel } from "../database/Schema/inviteSchema";
 
 export class UserRepositoryDb implements IUserRepository {
   async createUser(user: IUser): Promise<IUser> {
@@ -269,10 +269,10 @@ export class UserRepositoryDb implements IUserRepository {
     }
   }
 
-  async findAllClients(): Promise<Client[]> {
+  async findAllClients(): Promise<IClient[]> {
     const clients = await ClientModel.find({ isVerified: true })
       .limit(3)
-      .lean<Client[]>()
+      .lean<IClient[]>()
       .exec();
     if (!clients) throw new Error("Clients not found");
 
@@ -405,10 +405,10 @@ export class UserRepositoryDb implements IUserRepository {
     description: string,
     bidAmount: number,
     bidDeadline: number
-  ): Promise<{ proposal: Client; notification: unknown }> {
+  ): Promise<{ proposal: IClient; notification: unknown }> {
     //CHECK IF MAX PROP REACHED
     const proposals = await JobPostModel.findById(jobPostId)
-      .lean<JobPostDocument>()
+      .lean<IJobPostDocument>()
       .exec();
     if (!proposals) throw new Error("Jobpost not found");
     const { proposalCount, maxProposals } = proposals;
@@ -465,7 +465,7 @@ export class UserRepositoryDb implements IUserRepository {
         jobpost.clientId,
         { $push: { proposals: newProposal } },
         { new: true }
-      ).lean<Client>();
+      ).lean<IClient>();
 
       if (!proposal) throw new Error("Proposals not found");
 
@@ -494,8 +494,8 @@ export class UserRepositoryDb implements IUserRepository {
   }
 
   async listHomeJobs(type: string): Promise<{
-    latestJobs?: JobPostDocument[];
-    allJobs?: JobPostDocument[];
+    latestJobs?:  IJobPostDocument[];
+    allJobs?: IJobPostDocument[];
     totalJobs?: number;
     totalHours?: unknown;
     verifiedAccounts?: number;
@@ -542,7 +542,7 @@ export class UserRepositoryDb implements IUserRepository {
     },
     currentPage: number
   ): Promise<{
-    jobs: JobPostDocument[];
+    jobs: IJobPostDocument[];
     totalPages: number | undefined;
   }> {
     const page_size: number = 4;
@@ -977,7 +977,7 @@ export class UserRepositoryDb implements IUserRepository {
     return { updateUserWallet, updateAdminWallet };
   }
 
-  async viewSingleContract(contractId: string): Promise<ContractDocument> {
+  async viewSingleContract(contractId: string): Promise<IContractDocument> {
     const contract = await ContractModel.findById(contractId);
     if (!contract) throw new Error("contract not found");
 
@@ -988,7 +988,7 @@ export class UserRepositoryDb implements IUserRepository {
     userId: string,
     contractViewType: string,
     currentPage: number
-  ): Promise<{ contract: ContractDocument[]; totalPages: number }> {
+  ): Promise<{ contract: IContractDocument[]; totalPages: number }> {
     const page_size: number = 3;
     const skip: number = (currentPage - 1) * page_size;
 
@@ -1059,7 +1059,7 @@ export class UserRepositoryDb implements IUserRepository {
     return user?.request;
   }
 
-  async getSingleJobPost(jobPostId: string): Promise<JobPostDocument> {
+  async getSingleJobPost(jobPostId: string): Promise<IJobPostDocument> {
     const jobPost = await JobPostModel.findById(jobPostId).exec();
     if (!jobPost) throw new Error("Job Post didnt found");
 
@@ -1078,14 +1078,14 @@ export class UserRepositoryDb implements IUserRepository {
       {
         update: true,
       }
-    ).lean<ContractDocument>();
+    ).lean<IContractDocument>();
     if (!contract) throw new Error("Contract not exists");
 
     const clientId = contract.clientId;
     const jobPostId = contract.jobPostId;
 
     const jobPost = await JobPostModel.findById(jobPostId)
-      .lean<JobPostDocument>()
+      .lean<IJobPostDocument>()
       .exec();
     if (!jobPost) throw new Error("Jobpost doesnt exists");
 
@@ -1150,7 +1150,7 @@ export class UserRepositoryDb implements IUserRepository {
     };
   }
 
-  async searchJobsBySkills(input: string): Promise<JobPostDocument[]> {
+  async searchJobsBySkills(input: string): Promise <IJobPostDocument[]> {
     const jobs = await JobPostModel.find({
       requiredSkills: { $regex: input, $options: "i" },
     });

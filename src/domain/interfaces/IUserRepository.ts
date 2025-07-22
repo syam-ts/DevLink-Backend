@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { Client } from "../entities/Client";
-import { JobPostDocument } from "../entities/JobPost";
-import { ContractDocument } from "../entities/Contract";
+import { IClient } from "../entities/Client";
+import { IJobPostDocument } from "../entities/JobPost";
+import { IContractDocument } from "../entities/Contract";
 
 export interface IUser {
     role?: string;
@@ -100,7 +100,7 @@ export interface IUserRepository {
         password: string
     ): Promise<IUser>;
 
-    findAllClients(): Promise<Client[]>;
+    findAllClients(): Promise<IClient[]>;
 
     resetPassword(userId: string, password: string): Promise<string>;
 
@@ -118,11 +118,11 @@ export interface IUserRepository {
         description: string,
         bidAmount: number,
         bidDeadline: number
-    ): Promise<{ proposal: Client; notification: unknown }>;
+    ): Promise<{ proposal: IClient; notification: unknown }>;
 
     listHomeJobs(type: string): Promise<{
-        latestJobs?: JobPostDocument[];
-        allJobs?: JobPostDocument[];
+        latestJobs?: IJobPostDocument[];
+        allJobs?: IJobPostDocument[];
         totalJobs?: number;
         totalHours?: unknown;
         verifiedAccounts?: number;
@@ -138,7 +138,7 @@ export interface IUserRepository {
         },
         currentPage: number
     ): Promise<{
-        jobs: JobPostDocument[];
+        jobs: IJobPostDocument[];
         totalPages: number | undefined;
     }>;
 
@@ -148,17 +148,17 @@ export interface IUserRepository {
         progress: number
     ): Promise<{ updateUserWallet: IUser; updateAdminWallet: unknown }>;
 
-    viewSingleContract(contractId: string): Promise<ContractDocument>;
+    viewSingleContract(contractId: string): Promise<IContractDocument>;
 
     viewContracts(
         userId: string,
         contractViewType: string,
         currentPage: number
-    ): Promise<{ contract: ContractDocument[]; totalPages: number }>;
+    ): Promise<{ contract: IContractDocument[]; totalPages: number }>;
 
     boostSuccess(userId: string): Promise<unknown>;
 
-    getSingleJobPost(jobPostId: string): Promise<JobPostDocument>;
+    getSingleJobPost(jobPostId: string): Promise<IJobPostDocument>;
 
     submitProject(
         contractId: string,
@@ -170,7 +170,7 @@ export interface IUserRepository {
         currentPage: number
     ): Promise<{ wallet: IWallet[]; totalPages: number }>;
 
-    searchJobsBySkills(input: string): Promise<JobPostDocument[]>;
+    searchJobsBySkills(input: string): Promise<IJobPostDocument[]>;
 
     withdrawMoney(
         userId: string,

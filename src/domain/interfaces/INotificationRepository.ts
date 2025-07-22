@@ -1,6 +1,7 @@
-import { Notification } from "../entities/Notification";
+import { INotification } from "../entities/Notification";
 
+ 
 export interface INotificationRepository {
-    getAllNotificationsClient(clientId: string): Promise<Notification[]>;
-    getAllNotificationsUser(userId: string): Promise<Notification[]>;
+    getAllNotificationsClient(clientId: string): Promise<INotification[]>;
+    getAllINotificationsUser(userId: string): Promise<INotification[]>;
 }

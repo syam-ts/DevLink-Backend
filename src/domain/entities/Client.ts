@@ -1,116 +1,57 @@
-import mongoose from 'mongoose';
-import { User } from './User'
+import { IUser } from "./User";
 
-export interface Client extends mongoose.Document {
+export interface IClient {
     length?: number;
     companyName?: string;
     password?: string;
     email: string;
     description?: string;
     location?: string;
-    numberOfEmployees: number,
+    numberOfEmployees: number;
     domain?: string;
-    since?: number,
-    totalJobs?: number,
-    isVerified: boolean,
-    isBlocked: boolean,
-    isEditRequest: boolean,
-    isGoogle?: boolean,
-    proposals: [{
-        type: string,
-        UserId: mongoose.Types.ObjectId,
-        jobPostId: mongoose.Types.ObjectId,
-        jobPostInfo: string,
-        userData: User,
-        description?: string,
-        status?: string,
-        bidamount: number,
-        bidDeadline: number,
-        createdAt: Date
-    }],
-    wallet: {
-        balance: { type: Number, required: false },
-        transactions: [
-            {
-                type: []
-            }
-        ]
-    },
-    projectSubmissions: [
-        {
-            contractId: mongoose.Types.ObjectId,
-            description: String,
-            progress: Number,
-            attachedFile: String,
-            jobPostData: {
-                jobPostId: mongoose.Types.ObjectId,
-                title: String,
-                amount: Number
-            },
-            createdAt: Date
-        }
-    ],
-    totalSpend: number,
-    totalHours: number,
-    createdAt: Date
-}
-
-//Client Schema
-const ClientSchema: mongoose.Schema = new mongoose.Schema({
-    companyName: { type: String, required: true },
-    password: { type: String, required: false },
-    email: { type: String, required: true, unique: true },
-    location: { type: String, required: false },
-    domain: { type: String, required: false },
-    description: { type: String, required: false },
-    numberOfEmployees: { type: Number, required: false },
-    since: { type: Number, required: false },
-    totalJobs: { type: Number, required: false },
-    isBlocked: { type: Boolean, required: false },
-    isVerified: { type: Boolean, required: false },
-    isEditRequest: { type: Boolean, required: false },
-    isGoogle: { type: Boolean, required: false },
+    since?: number;
+    totalJobs?: number;
+    isVerified: boolean;
+    isBlocked: boolean;
+    isEditRequest: boolean;
+    isGoogle?: boolean;
     proposals: [
         {
-            type: { type: String, required: false },
-            userId: { type: mongoose.Types.ObjectId, required: false },
-            jobPostId: { type: mongoose.Types.ObjectId, required: false },
-            jobPostInfo: { type: String, required: false },
-            userData: {
-
-            },
-            description: { type: String, required: false },
-            status: { type: String, required: false },
-            bidAmount: { type: Number, required: false },
-            bidDeadline: { type: Number, required: false },
-            createdAt: { type: Date, required: false },
+            type: string;
+            UserId: string;
+            jobPostId: string;
+            jobPostInfo: string;
+            userData: IUser;
+            description?: string;
+            status?: string;
+            bidamount: number;
+            bidDeadline: number;
+            createdAt: Date;
         }
-    ],
+    ];
     wallet: {
-        balance: { type: Number, required: false },
-        transactions: [{
-            type: Array
-        }]
-    },
+        balance: { type: Number; required: false };
+        transactions: [
+            {
+                type: [];
+            }
+        ];
+    };
     projectSubmissions: [
         {
-            contractId: { type: mongoose.Types.ObjectId, required: false },
-            description: { type: String, required: false },
-            progress: { type: Number, required: false },
-            attachedFile: { type: String, required: false },
+            contractId: string;
+            description: String;
+            progress: Number;
+            attachedFile: String;
             jobPostData: {
-                jobPostId: { type: mongoose.Types.ObjectId, required: false },
-                title: { type: String, required: false },
-                amount: { type: Number, required: false }
-            },
-            createdAt: { type: Date, required: false }
+                jobPostId: string;
+                title: String;
+                amount: Number;
+            };
+            createdAt: Date;
         }
-    ],
-    totalSpend: { type: Number, required: false },
-    totalHours: { type: Number, required: false },
-    createdAt: { type: Date, required: false }
-});
-
-
-//Cliet model
-export const ClientModel = mongoose.model("Client", ClientSchema);
+    ];
+    totalSpend: number;
+    totalHours: number;
+    createdAt: Date;
+}
