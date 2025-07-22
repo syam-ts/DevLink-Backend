@@ -1,15 +1,13 @@
-import { ProjectSubmissions } from "../../application/usecases/client/viewSubmissions"; 
+import { ProjectSubmissions } from "../../application/usecases/client/viewSubmissions";
 import { IAdmin } from "../entities/Admin";
 import { IClient } from "../entities/Client";
 import { IContractDocument } from "../entities/Contract";
 import { IProposal, IUser } from "./IUserRepository";
 
-
 export interface IClientRepository {
-    
- createClient(client: IClient): Promise<IClient>
+  createClient(client: IClient): Promise<IClient>;
 
-   signupClient(email: string): Promise<IClient | null> 
+  signupClient(email: string): Promise<IClient | null>;
 
   verifyOtp(client: {
     mailOtp: number;
@@ -18,10 +16,10 @@ export interface IClientRepository {
       otp: string;
       data: { name: string; email: string; password: string };
     };
-  }): Promise<IClient>
+  }): Promise<IClient>;
 
- findClientByEmail(email: string): Promise<IClient | null>
- findClientByEmailAndPassword(
+  findClientByEmail(email: string): Promise<IClient | null>;
+  findClientByEmailAndPassword(
     email: string,
     password: string
   ): Promise<{
@@ -31,7 +29,7 @@ export interface IClientRepository {
     password: string;
     isBlocked: boolean;
     isVerified: boolean;
-  }>
+  }>;
   findClientByOnlyEmail(
     email: string,
     companyName: string,
@@ -43,67 +41,54 @@ export interface IClientRepository {
     password: string;
     isBlocked: boolean;
     isVerified: boolean;
-  }>
+  }>;
 
-    findAllUsers(): Promise<IUser[]> 
+  findAllUsers(): Promise<IUser[]>;
 
-   resetPassword(clientId: string, password: string): Promise<string> 
+  resetPassword(clientId: string, password: string): Promise<string>;
 
-     getClientProfile(clientId: string): Promise<IClient> 
-
+  getClientProfile(clientId: string): Promise<IClient>;
 
   profileVerification(
     clientId: string,
     data: { unChangedData: IClient; editData: IClient }
-  ): Promise<IAdmin>
+  ): Promise<IAdmin>;
 
-
-
-
-   editClientProfile(
+  editClientProfile(
     clientId: string,
     editData: { editData: Partial<IClient>; unChangedData: IClient },
     unChangedData: IClient
-  ): Promise<IAdmin> 
+  ): Promise<IAdmin>;
 
-     getProposals(clientId: string): Promise<IProposal[]> 
+  getProposals(clientId: string): Promise<IProposal[]>;
 
+  getUserProfile(userId: string): Promise<IUser>;
 
+  getallDevelopers(): Promise<IUser[] | unknown>;
 
-   getUserProfile(userId: string): Promise<IUser> 
-
-
-
- getallDevelopers(): Promise<IUser[] | unknown>
-
-
- viewContracts(
+  viewContracts(
     clientId: string,
     contractViewType: string,
     currentPage: number
-  ): Promise<{ contract: IContractDocument[]; totalPages: number }> 
+  ): Promise<{ contract: IContractDocument[]; totalPages: number }>;
 
-
-   viewWallet(
+  viewWallet(
     clientId: string,
     page: number
   ): Promise<{
     wallet: unknown;
     totalPages: number;
-  }> 
+  }>;
 
-   addMoneyToAdminWallet(
+  addMoneyToAdminWallet(
     role: string,
     roleId: string,
     amount: number
-  ): Promise<string>
+  ): Promise<string>;
 
+  viewSubmissions(clientId: string): Promise<ProjectSubmissions>;
 
-   viewSubmissions(clientId: string): Promise<ProjectSubmissions> 
-
-
-
-   createContract(
+  createContract(
     clientId: string,
     userId: string,
     jobPostId: string,
@@ -112,53 +97,34 @@ export interface IClientRepository {
   ): Promise<{
     newNotificationUser: Notification;
     newNotificationClient: Notification;
-  }> 
+  }>;
 
- rejectProposal(
+  rejectProposal(
     clientId: string,
     userId: string,
     jobPostId: string
-  ): Promise<IClient> 
+  ): Promise<IClient>;
 
+  closeContract(contractId: string, progress: number): Promise<unknown>;
 
-   closeContract(contractId: string, progress: number): Promise<unknown> 
-
-
-
-   rateAndReviewUser(
+  rateAndReviewUser(
     userId: string,
     clientId: string,
     notificationId: string,
     rating: number,
     review: string
-  ): Promise<{ updateUser: IUser; removeExtra: Notification }> 
+  ): Promise<{ updateUser: IUser; removeExtra: Notification }>;
 
-
-
- rejectContract(
+  rejectContract(
     contractId: string,
     clientId: string
-  ): Promise<IContractDocument>
+  ): Promise<IContractDocument>;
 
+  searchDeveloperBySkills(input: string): Promise<IUser>;
 
-   searchDeveloperBySkills(input: string): Promise<IUser> 
-
-
-
-
-   withdrawMoney(
+  withdrawMoney(
     clientId: string,
     amount: number,
     accountNumber: number
-  ): Promise<void> 
-
-
-
-
-
-
-
-
-
-
+  ): Promise<void>;
 }
