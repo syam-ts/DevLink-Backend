@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { allClientUseCases } from "../../helper/controllerHelper/allCtrlConnection";
 import { HttpStatusCode } from "../../helper/constants/enums";
 import { StatusMessage } from "../../helper/constants/stausMessages";
-import generateTokens from "../../utils/generateTokens"; 
+import generateTokens from "../../utils/generateTokens";
 import logger from "../../logger/logger";
 
 type Id = string;
@@ -18,8 +18,9 @@ interface RequestRole {
   };
 }
 
-export const clientController = {
-  signupClient: async (req: Request, res: Response): Promise<void> => {
+export class ClientController {
+  
+  async signupClient(req: Request, res: Response): Promise<void> {
     try {
       const otp = await allClientUseCases.signupClientUseCase.execute(req.body);
 
@@ -40,9 +41,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  verifyOtp: async (req: Request, res: Response): Promise<void> => {
+  async verifyOtp(req: Request, res: Response): Promise<void> {
     try {
       const client = await allClientUseCases.verifyClientUseCase.execute(
         req.body
@@ -59,11 +60,11 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
   //From here fix status
 
-  resendOtp: async (req: Request, res: Response): Promise<void> => {
+  async resendOtp(req: Request, res: Response): Promise<void> {
     try {
       const client = await allClientUseCases.signupClientUseCase.execute(
         req.body
@@ -83,9 +84,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  verifyEmail: async (req: Request, res: Response): Promise<void> => {
+  async verifyEmail(req: Request, res: Response): Promise<void> {
     try {
       const response = await allClientUseCases.verifyEmailClientUseCase.execute(
         req.body.email
@@ -105,9 +106,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  resetPassword: async (req: Request, res: Response): Promise<void> => {
+  async resetPassword(req: Request, res: Response): Promise<void> {
     try {
       const { clientId } = req.params;
       const { password } = req.body;
@@ -129,9 +130,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  loginClient: async (req: Request, res: Response) => {
+  async loginClient(req: Request, res: Response): Promise<void> {
     try {
       const client = await allClientUseCases.loginClientUseCase.execute(
         req.body
@@ -175,9 +176,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  googleLogin: async (req: Request, res: Response): Promise<void> => {
+  async googleLogin(req: Request, res: Response): Promise<void> {
     try {
       const client = await allClientUseCases.GoogleLoginClientUseCase.execute(
         req.body
@@ -217,9 +218,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  getHomeClient: async (req: Request, res: Response): Promise<void> => {
+  async getHomeClient(req: Request, res: Response): Promise<void> {
     try {
       const users = await allClientUseCases.getHomeClientUseCase.execute();
 
@@ -237,9 +238,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  getProfile: async (req: Request, res: Response): Promise<void> => {
+  async getProfile(req: Request, res: Response): Promise<void> {
     try {
       if (!req.user || !req.user.id) {
         res.status(401).json({ message: "Unauthorized", success: false });
@@ -263,9 +264,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  profileVerification: async (req: Request, res: Response): Promise<void> => {
+  async profileVerification(req: Request, res: Response): Promise<void> {
     try {
       if (!req.user || !req.user.id) {
         res.status(401).json({ message: "Unauthorized", success: false });
@@ -290,9 +291,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  editProfile: async (req: Request, res: Response): Promise<void> => {
+  async editProfile(req: Request, res: Response): Promise<void> {
     try {
       if (!req.user || !req.user.id) {
         res.status(401).json({ message: "Unauthorized", success: false });
@@ -316,9 +317,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  logoutClient: async (req: Request, res: Response): Promise<void> => {
+  async logoutClient(req: Request, res: Response): Promise<void> {
     try {
       res.clearCookie("refreshToken", {
         httpOnly: true,
@@ -338,9 +339,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  makePayment: async (req: Request, res: Response): Promise<void> => {
+  async makePayment(req: Request, res: Response): Promise<void> {
     try {
       //  if (!req.user || !req.user.id) {
       //   return res.status(401).json({ message: "Unauthorized", success: false });
@@ -366,9 +367,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  getUserProfile: async (req: Request, res: Response): Promise<void> => {
+  async getUserProfile(req: Request, res: Response): Promise<void> {
     try {
       const { userId } = req.params;
       const response = await allClientUseCases.getUserProfileUseCase.execute(
@@ -389,9 +390,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  getProposals: async (req: Request, res: Response): Promise<void> => {
+  async getProposals(req: Request, res: Response): Promise<void> {
     try {
       if (!req.user || !req.user.id) {
         res.status(401).json({ message: "Unauthorized", success: false });
@@ -415,9 +416,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  createContract: async (req: Request, res: Response): Promise<void> => {
+  async createContract(req: Request, res: Response): Promise<void> {
     try {
       const { userId, clientId, jobPostId, bidAmount, bidDeadline } = req.body;
 
@@ -449,9 +450,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  rejectProposal: async (req: Request, res: Response): Promise<void> => {
+  async rejectProposal(req: Request, res: Response): Promise<void> {
     try {
       const { userId, jobPostId }: { userId: string; jobPostId: string } =
         req.body;
@@ -486,9 +487,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  viewContracts: async (req: Request, res: Response): Promise<void> => {
+  async viewContracts(req: Request, res: Response): Promise<void> {
     try {
       if (!req.user || !req.user.id) {
         res.status(401).json({ message: "Unauthorized", success: false });
@@ -516,9 +517,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  viewSubmissions: async (req: Request, res: Response): Promise<void> => {
+  async viewSubmissions(req: Request, res: Response): Promise<void> {
     try {
       if (!req.user || !req.user.id) {
         res.status(401).json({ message: "Unauthorized", success: false });
@@ -542,9 +543,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  closeContract: async (req: Request, res: Response): Promise<void> => {
+  async closeContract(req: Request, res: Response): Promise<void> {
     try {
       const { contractId, progress } = req.body;
       const response = await allClientUseCases.closeContractUseCase.execute(
@@ -566,9 +567,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  rateAndReview: async (req: Request, res: Response): Promise<void> => {
+  async rateAndReview(req: Request, res: Response): Promise<void> {
     try {
       if (!req.user || !req.user.id) {
         res.status(401).json({ message: "Unauthorized", success: false });
@@ -602,9 +603,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  sendMessage: async (req: Request, res: Response): Promise<void> => {
+  async sendMessage(req: Request, res: Response): Promise<void> {
     try {
       const response = await allClientUseCases.sendMessageUseCase.execute(
         req.body
@@ -624,9 +625,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  getAllChats: async (req: Request, res: Response): Promise<void> => {
+  async getAllChats(req: Request, res: Response): Promise<void> {
     try {
       const { roleId } = req.params;
       const response = await allClientUseCases.getAllChatsUseCase.execute(
@@ -647,9 +648,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  viewChat: async (req: Request, res: Response): Promise<void> => {
+  async viewChat(req: Request, res: Response): Promise<void> {
     try {
       const { roleType, roleId, targetId, roleName } = req.params;
 
@@ -674,9 +675,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  viewWallet: async (req: Request, res: Response): Promise<void> => {
+  async viewWallet(req: Request, res: Response): Promise<void> {
     try {
       if (!req.user || !req.user.id) {
         res.status(401).json({ message: "Unauthorized", success: false });
@@ -702,9 +703,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  getallDevelopers: async (req: Request, res: Response): Promise<void> => {
+  async getallDevelopers(req: Request, res: Response): Promise<void> {
     try {
       const response =
         await allClientUseCases.getallDevelopersUseCase.execute();
@@ -723,9 +724,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  rejectContract: async (req: Request, res: Response): Promise<void> => {
+  async rejectContract(req: Request, res: Response): Promise<void> {
     try {
       if (!req.user || !req.user.id) {
         res.status(401).json({ message: "Unauthorized", success: false });
@@ -751,9 +752,9 @@ export const clientController = {
       });
       return;
     }
-  },
+  }
 
-  searchDevlopers: async (req: Request, res: Response): Promise<void> => {
+  async searchDevlopers(req: Request, res: Response): Promise<void> {
     try {
       const { input }: { input: string } = req.body;
       const developers = await allClientUseCases.searchDeveloperUseCase.execute(
@@ -774,8 +775,8 @@ export const clientController = {
       });
       return;
     }
-  },
-  withdrawMoneyByClient: async (req: Request, res: Response): Promise<void> => {
+  }
+  async withdrawMoneyByClient(req: Request, res: Response): Promise<void> {
     try {
       const { amount, accountNumber, balance, type } = req.body;
       if (!req.user || !req.user.id) {
@@ -803,5 +804,5 @@ export const clientController = {
       });
       return;
     }
-  },
-};
+  }
+}

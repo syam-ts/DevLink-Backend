@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { UserController } from "../../controllers/userCtrl";
 import { verifyToken } from "../../middleware/auth/verifyToken";
-import { clientController } from "../../controllers/clientCtrl";
+import { ClientController } from "../../controllers/clientCtrl";
 import refreshToken from "../../middleware/auth/refreshToken";
 import { requireRole } from "../../middleware/auth/requireRole";
 import { allRoles } from "../../../helper/constants/enums";
@@ -14,6 +14,7 @@ class UserRoute {
     private userController: UserController;
     private notificationController: NotificationController;
     private inviteController: InviteController;
+    private clientController: ClientController;
 
     constructor() {
 
@@ -22,12 +23,13 @@ class UserRoute {
         this.userController = new UserController();
         this.notificationController = new NotificationController();
         this.inviteController = new InviteController();
+        this.clientController = new ClientController();
 
         this.initializeGetRoutes();
         this.initializePostRoutes();
         this.initializePutAndPatchRoutes();
     }
-    
+
 
     public initializeGetRoutes(): void {
 
@@ -41,10 +43,10 @@ class UserRoute {
         this.router.get("/job/:jobPostId", verifyToken, requireRole(this.USER), this.userController.getSingleJobPost);
         this.router.get("/contract/:contractId", verifyToken, requireRole(this.USER), this.userController.viewSingleContract);
         this.router.get("/notifications/:userId", verifyToken, requireRole(this.USER), this.notificationController.allNotifications);
-        this.router.get("/allChat/view/:roleId", clientController.getAllChats);
+        this.router.get("/allChat/view/:roleId", this.clientController.getAllChats);
         this.router.get("/chat/:memberId", verifyToken, requireRole(this.USER), this.notificationController.allNotifications);
         this.router.get("/invites", verifyToken, requireRole(this.USER), this.inviteController.getAllInvites);
-        this.router.get("/chat/view/:roleType/:roleId/:targetId", clientController.viewChat);
+        this.router.get("/chat/view/:roleType/:roleId/:targetId", this.clientController.viewChat);
         this.router.get("/wallet", verifyToken, requireRole(this.USER), this.userController.viewWalletUser);
     }
 
@@ -64,7 +66,7 @@ class UserRoute {
         this.router.post("/googleLogin", this.userController.googleLogin);
         this.router.post("/logout", this.userController.logoutUser);
         this.router.post("/project/submit/:contractId", verifyToken, requireRole(this.USER), this.userController.submitProject);
-        this.router.post("/chat/sendMessage", verifyToken, requireRole(this.USER), clientController.sendMessage);
+        this.router.post("/chat/sendMessage", verifyToken, requireRole(this.USER), this.clientController.sendMessage);
         this.router.post("/chatbot", verifyToken, requireRole(this.USER), this.userController.chatbot);
         this.router.post("/refresh-token", refreshToken);
     }
