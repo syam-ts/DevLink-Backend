@@ -1,17 +1,19 @@
-import { InviteDocument } from "../entities/Invite";
+import { IInviteDocument } from "../entities/Invite";
+
+ 
 
 export interface IInviteRepository {
-    getAllInvitesUser(userId: string): Promise<InviteDocument[]>;
-    rejectInviteByUser(inviteId: string): Promise<InviteDocument>;
+    getAllInvitesUser(userId: string): Promise<IInviteDocument[]>;
+    rejectInviteByUser(inviteId: string): Promise<IInviteDocument>;
     inviteUser(
         userId: string,
         clientId: string,
         jobPostId: string,
         description: string
-    ): Promise<InviteDocument>;
+    ): Promise<IInviteDocument>;
 
     ViewInviteByClient(
         clientId: string,
         inviteType: string
-    ): Promise<InviteDocument>;
+    ): Promise<IInviteDocument>;
 }

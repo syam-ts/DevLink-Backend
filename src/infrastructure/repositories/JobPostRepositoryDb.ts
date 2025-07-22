@@ -1,14 +1,17 @@
-import { Client, ClientModel } from "../../domain/entities/Client";
-import { JobPostDocument, JobPostModel } from "../../domain/entities/JobPost";
-import { NotificationModel } from "../../domain/entities/Notification";
+ 
+import { IClient } from "../../domain/entities/Client";
+import { IJobPostDocument } from "../../domain/entities/JobPost";
 import { IJobPostRepository } from "../../domain/interfaces/IJobsPostRepository";
+import { ClientModel } from "../database/Schema/clientSchema";
+import { JobPostModel } from "../database/Schema/jobSchema";
+import { NotificationModel } from "../database/Schema/notificationSchema";
 
 export class JobPostRespositoryDb implements IJobPostRepository {
     async createJobPost(
         clientId: string,
-        data: JobPostDocument
-    ): Promise<JobPostDocument> {
-        const client = await ClientModel.findById(clientId).lean<Client>();
+        data: IJobPostDocument
+    ): Promise<IJobPostDocument> {
+        const client = await ClientModel.findById(clientId).lean<IClient>();
         if (!client) throw new Error("Client not found");
 
         //update client jobpost count
@@ -71,19 +74,19 @@ export class JobPostRespositoryDb implements IJobPostRepository {
         return savedJobPost;
     }
 
-    async listAllJobs(clientId: string): Promise<JobPostDocument[]> {
+    async listAllJobs(clientId: string): Promise<IJobPostDocument[]> {
         const jobs = await JobPostModel.find({ clientId: clientId }).exec();
         if (!jobs || jobs.length === 0) throw new Error("No jobs found");
         return jobs;
     }
 
-    async trendingJobs(): Promise<JobPostDocument[]> {
+    async trendingJobs(): Promise<IJobPostDocument[]> {
         const jobs = await JobPostModel.find().limit(3).exec();
         if (!jobs) throw new Error("Jobs not found");
         return jobs;
     }
 
-    async findAllJobs(): Promise<JobPostDocument[]> {
+    async findAllJobs(): Promise<IJobPostDocument[]> {
         const allJobs = await JobPostModel.find().exec();
 
         if (!allJobs || allJobs.length === 0) throw new Error("No job found");
@@ -95,7 +98,7 @@ export class JobPostRespositoryDb implements IJobPostRepository {
         clientId: string,
         jobType: string,
         currentPage: number
-    ): Promise<{ jobs: JobPostDocument[]; totalPages: number }> {
+    ): Promise<{ jobs: IJobPostDocument[]; totalPages: number }> {
         const page_size: number = 3;
         const skip: number = (currentPage - 1) * page_size;
 
@@ -152,7 +155,7 @@ export class JobPostRespositoryDb implements IJobPostRepository {
         }
     }
 
-    async inviteJobsList(clientId: string): Promise<JobPostDocument[]> {
+    async inviteJobsList(clientId: string): Promise<IJobPostDocument[]> {
         const jobs = await JobPostModel.find({
             clientId: clientId,
             status: "pending",
@@ -161,7 +164,7 @@ export class JobPostRespositoryDb implements IJobPostRepository {
         return jobs;
     }
 
-    async getSingleJobPost(jobPostId: string): Promise<JobPostDocument> {
+    async getSingleJobPost(jobPostId: string): Promise<IJobPostDocument> {
         const jobPost = await JobPostModel.findById(jobPostId).exec();
         if (!jobPost) throw new Error("Job Post didnt found");
 

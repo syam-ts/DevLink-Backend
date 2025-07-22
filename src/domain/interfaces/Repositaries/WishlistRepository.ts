@@ -1,13 +1,13 @@
-import { Wishlist, WishlistModel } from "../../entities/WIshlist";
-import { Jobs } from "../../entities/User";
-import { JobPostModel } from "../../entities/JobPost";
+import { JobPostModel } from "../../../infrastructure/database/Schema/jobSchema";
+import { WishlistModel } from "../../../infrastructure/database/Schema/wishlistSchema";
+import { IWishlist } from "../../entities/WIshlist";
 
 export class WishlistRepositoryMongoose {
-  async addToWishlist(userId: string, jobPostId: string): Promise<Wishlist> {
+  async addToWishlist(userId: string, jobPostId: string): Promise<IWishlist> {
     const jobPost = await JobPostModel.findById(jobPostId).exec();
     if (!jobPost) throw new Error("Job post not found");
 
-    const jobPostData: Jobs = {
+    const jobPostData = {
       _id: jobPost._id,
       title: jobPost.title,
       description: jobPost.description,
@@ -48,7 +48,7 @@ export class WishlistRepositoryMongoose {
     return wishlist;
   }
 
-  async viewAllWishlist(userId: string): Promise<Wishlist> {
+  async viewAllWishlist(userId: string): Promise<IWishlist> {
     const wishlist = await WishlistModel.findOne({ userId: userId }).exec();
     if (!wishlist) throw new Error("No wishlist founded");
 
@@ -58,12 +58,12 @@ export class WishlistRepositoryMongoose {
   async removeFromWishlist(
     wishlistId: string,
     jobPostId: string
-  ): Promise<Wishlist> {
+  ): Promise<IWishlist> {
     const deleteWishlist = await WishlistModel.findOneAndUpdate(
       { _id: wishlistId },
       { $pull: { jobPostData: { _id: jobPostId } } },
       { new: true }
-    ); 
+    );
 
     if (!deleteWishlist) throw Error("Wishlist not found");
     return deleteWishlist;

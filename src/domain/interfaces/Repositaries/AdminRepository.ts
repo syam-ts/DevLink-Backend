@@ -1,11 +1,13 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 import { AdminRepositary } from "../../../application/usecases/admin/loginAdmin";
-import { User } from "../../entities/User";
-import { UserModel } from "../../entities/User";
-import { NotificationModel } from "../../entities/Notification";
-import { Client, ClientModel } from "../../entities/Client";
-import { AdminModel } from "../../entities/Admin"; 
-import { ContractDocument, ContractModel } from "../../entities/Contract";
+import { IUser } from "../IUserRepository";
+import { UserModel } from "../../../infrastructure/database/Schema/userSchema";
+import { IClient } from "../../entities/Client";
+import { ClientModel } from "../../../infrastructure/database/Schema/clientSchema";
+import { AdminModel } from "../../../infrastructure/database/Schema/adminSchema";
+import { NotificationModel } from "../../../infrastructure/database/Schema/notificationSchema";
+import { IContractDocument } from "../../entities/Contract";
+import { ContractModel } from "../../../infrastructure/database/Schema/ContractSchema";
 
 interface Wallet {
    balance: number,
@@ -30,8 +32,8 @@ export class AdminRepository implements AdminRepositary {
     return { _id: process.env.ADMIN_OBJECT_ID };
   }
   
-  async findAllUsers(): Promise<User[]> {
-    const users = await UserModel.find().lean<User[]>().exec();  
+  async findAllUsers(): Promise<IUser[]> {
+    const users = await UserModel.find().lean<IUser[]>().exec();  
   
     if (!users || users.length === 0) {
       throw new Error("Users not found");
@@ -43,7 +45,7 @@ export class AdminRepository implements AdminRepositary {
   
   
 
-  async getAllUsers(page: number, sortType: string): Promise<{users: User[], totalPages: number}> {
+  async getAllUsers(page: number, sortType: string): Promise<{users: IUser[], totalPages: number}> {
     const PAGE_SIZE: number = 5;
     const skip: number = (page - 1) * PAGE_SIZE;
     const totalUsers: number = await UserModel.countDocuments({});
@@ -83,7 +85,7 @@ export class AdminRepository implements AdminRepositary {
     };
   }
 
-  async getAllClients(page: number, sortType: string): Promise<{ clients: Client[], totalPages: number}> {
+  async getAllClients(page: number, sortType: string): Promise<{ clients: IClient[], totalPages: number}> {
     const PAGE_SIZE: number = 5;
     const skip: number = (page - 1) * PAGE_SIZE;
     const totalClients: number = await ClientModel.countDocuments({});
@@ -158,7 +160,7 @@ export class AdminRepository implements AdminRepositary {
     };
   }
 
-  async sortUser(sortingType: string): Promise<{users: User[], totalPages: number}> {
+  async sortUser(sortingType: string): Promise<{users: IUser[], totalPages: number}> {
     const page = 1;
     const PAGE_SIZE: number = 3;
     const skip: number = (page - 1) * PAGE_SIZE;
@@ -223,7 +225,7 @@ export class AdminRepository implements AdminRepositary {
   }
  
 
-  async sortClients(sortingType: string): Promise<{clients: Client[], totalPages:number}> {
+  async sortClients(sortingType: string): Promise<{clients: IClient[], totalPages:number}> {
     const page = 1;
     const PAGE_SIZE: number = 3;
     const skip: number = (page - 1) * PAGE_SIZE;
@@ -284,56 +286,56 @@ export class AdminRepository implements AdminRepositary {
     }
   }
 
-  async findAllClients(): Promise<Client[]> {
-    const clients = await ClientModel.find().lean<Client[]>().exec(); 
+  async findAllClients(): Promise<IClient[]> {
+    const clients = await ClientModel.find().lean<IClient[]>().exec(); 
     if (!clients || clients.length === 0) throw new Error("Clients not found"); 
     return clients;
   }
   
   
 
-  async blockUser(userId: string): Promise<User> {
+  async blockUser(userId: string): Promise<IUser> {
     const user = await UserModel.findByIdAndUpdate(
       userId,
       { isBlocked: true },
       { new: true }
-    ).lean<User>().exec(); 
+    ).lean<IUser>().exec(); 
 
     if (!user) throw new Error("User not Found"); 
 
     return user;
   }
 
-  async unBlockUser(userId: string): Promise<User> {
+  async unBlockUser(userId: string): Promise<IUser> {
     const user = await UserModel.findByIdAndUpdate(
       userId,
       { isBlocked: false },
       { new: true }
-    ).lean<User>().exec(); 
+    ).lean<IUser>().exec(); 
 
     if (!user) throw new Error("User not Found"); 
 
     return user;
   }
 
-  async blockClient(clientId: string): Promise<Client> {
+  async blockClient(clientId: string): Promise<IClient> {
     const client = await ClientModel.findByIdAndUpdate(
       clientId,
       { isBlocked: true },
       { new: true }
-    ).lean<Client>().exec(); 
+    ).lean<IClient>().exec(); 
 
     if (!client) throw new Error("Client not Found"); 
 
     return client;
   }
 
-  async unBlockClient(clientId: string): Promise<Client> {
+  async unBlockClient(clientId: string): Promise<IClient> {
     const client = await ClientModel.findByIdAndUpdate(
       clientId,
       { isBlocked: false },
       { new: true }
-    ).lean<Client>().exec(); 
+    ).lean<IClient>().exec(); 
 
     if (!client) throw new Error("Client not Found"); 
 
@@ -342,7 +344,7 @@ export class AdminRepository implements AdminRepositary {
 
   //verify client profile
   async verifyAccept(data: {clientId: string, editData: {
-    editData: Client, isVerified: boolean, isEditRequest: boolean
+    editData: IClient, isVerified: boolean, isEditRequest: boolean
   }}): Promise<unknown> {
     const { clientId, editData } = data; 
 
@@ -414,8 +416,8 @@ export class AdminRepository implements AdminRepositary {
     return admin.request;
   }
 
-  async findClient(clientId: string): Promise<Client> {
-    const client = await ClientModel.findById(clientId).lean<Client>().exec();
+  async findClient(clientId: string): Promise<IClient> {
+    const client = await ClientModel.findById(clientId).lean<IClient>().exec();
 
     if (!client) throw new Error("Client not found"); 
     return client;
@@ -447,8 +449,8 @@ export class AdminRepository implements AdminRepositary {
     return admin.wallet;
   }
 
-  async getAllContracts(): Promise<ContractDocument> {
-    const contracts = await ContractModel.find().lean<ContractDocument>().exec();
+  async getAllContracts(): Promise<IContractDocument> {
+    const contracts = await ContractModel.find().lean<IContractDocument>().exec();
 
     if (!contracts) throw new Error("Contracts not found"); 
     return contracts;
@@ -561,7 +563,7 @@ export class AdminRepository implements AdminRepositary {
   }
 
   async viewContracts(currentPage: number): Promise<{
-    contracts: ContractDocument[], totalPages: number
+    contracts: IContractDocument[], totalPages: number
   }> {
     const page_size: number = 4;
     const skip: number = (currentPage - 1) * page_size;
@@ -575,7 +577,7 @@ export class AdminRepository implements AdminRepositary {
     return { contracts, totalPages };
   }
 
-  async viewSingleContract(contractId: string): Promise<ContractDocument> {
+  async viewSingleContract(contractId: string): Promise<IContractDocument> {
     const contract = await ContractModel.findById(contractId).exec();
     if (!contract) throw new Error("Contract not found");
 

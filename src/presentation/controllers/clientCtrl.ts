@@ -2,8 +2,7 @@ import { Request, Response } from "express";
 import { allClientUseCases } from "../../helper/controllerHelper/allCtrlConnection";
 import { HttpStatusCode } from "../../helper/constants/enums";
 import { StatusMessage } from "../../helper/constants/stausMessages";
-import generateTokens from "../../utils/generateTokens";
-import { GetSingleJobPost } from "../../application/usecases/user/getSingleJobPost";
+import generateTokens from "../../utils/generateTokens"; 
 import logger from "../../logger/logger";
 
 type Id = string;

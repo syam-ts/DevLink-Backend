@@ -1,15 +1,17 @@
-import { ClientModel } from "../../domain/entities/Client";
-import { InviteDocument, InviteModel } from "../../domain/entities/Invite";
-import { JobPostModel } from "../../domain/entities/JobPost";
-import { NotificationModel } from "../../domain/entities/Notification";
+
+import { IInviteDocument } from "../../domain/entities/Invite";
 import { IInviteRepository } from "../../domain/interfaces/IInviteRepository";
+import { ClientModel } from "../database/Schema/clientSchema";
+import { InviteModel } from "../database/Schema/inviteSchema";
+import { JobPostModel } from "../database/Schema/jobSchema";
+import { NotificationModel } from "../database/Schema/notificationSchema";
 
  
 
 
 export class InviteRepositoryDb implements IInviteRepository {
  
-   async getAllInvitesUser(userId: string): Promise<InviteDocument[]> {
+   async getAllInvitesUser(userId: string): Promise<IInviteDocument[]> {
         const foundedInvites = await InviteModel.find({
               $and: [{ userId: userId }, { status: "pending" }],
             });
@@ -18,7 +20,7 @@ export class InviteRepositoryDb implements IInviteRepository {
             return foundedInvites;
     }
 
-     async rejectInviteByUser(inviteId: string): Promise<InviteDocument> {
+     async rejectInviteByUser(inviteId: string): Promise<IInviteDocument> {
         const updateInvite = await InviteModel.updateOne(
           { _id: inviteId },
           {
@@ -27,10 +29,10 @@ export class InviteRepositoryDb implements IInviteRepository {
           {
             new: true,
           }
-        ).lean<InviteDocument>();
+        ).lean<IInviteDocument>();
     
         if (!updateInvite) throw new Error("Invite not Found");
-        return updateInvite as InviteDocument;
+        return updateInvite as IInviteDocument;
       }
 
 
@@ -39,7 +41,7 @@ export class InviteRepositoryDb implements IInviteRepository {
           clientId: string,
           jobPostId: string,
           description: string
-        ): Promise<InviteDocument> {
+        ): Promise<IInviteDocument> {
           const jobPostData = await JobPostModel.findById(jobPostId);
           if (!jobPostData) throw new Error("jobpost not found");
       
@@ -91,26 +93,26 @@ export class InviteRepositoryDb implements IInviteRepository {
           });
           console.log(newNotificationClient);
       
-          return savedInvite as InviteDocument;
+          return savedInvite as IInviteDocument;
         }
 
 
           async ViewInviteByClient(
             clientId: string,
             inviteType: string
-          ): Promise<InviteDocument> {
+          ): Promise<IInviteDocument> {
             let invite;
             if (inviteType === "pending") {
               invite = await InviteModel.find({
                 $and: [{ clientId: clientId }, { status: "pending" }],
               })
-                .lean<InviteDocument>()
+                .lean<IInviteDocument>()
                 .exec();
             } else {
               invite = await InviteModel.find({
                 $and: [{ clientId: clientId }, { status: "rejected" }],
               })
-                .lean<InviteDocument>()
+                .lean<IInviteDocument>()
                 .exec();
             }
         

@@ -1,24 +1,26 @@
-import { JobPostDocument } from "../entities/JobPost";
+import { IJobPostDocument } from "../entities/JobPost";
+
+ 
 
 export interface IJobPostRepository {
     createJobPost(
         clientId: string,
-        data: JobPostDocument
-    ): Promise<JobPostDocument>;
+        data: IJobPostDocument
+    ): Promise<IJobPostDocument>;
 
-    listAllJobs(clientId: string): Promise<JobPostDocument[]>;
+    listAllJobs(clientId: string): Promise<IJobPostDocument[]>;
 
-    trendingJobs(): Promise<JobPostDocument[]>;
+    trendingJobs(): Promise<IJobPostDocument[]>;
 
-    findAllJobs(): Promise<JobPostDocument[]>;
+    findAllJobs(): Promise<IJobPostDocument[]>;
 
     getSelectedJobs(
         clientId: string,
         jobType: string,
         currentPage: number
-    ): Promise<{ jobs: JobPostDocument[]; totalPages: number }>;
+    ): Promise<{ jobs: IJobPostDocument[]; totalPages: number }>;
 
-    inviteJobsList(clientId: string): Promise<JobPostDocument[]>;
+    inviteJobsList(clientId: string): Promise<IJobPostDocument[]>;
 
-    getSingleJobPost(jobPostId: string): Promise<JobPostDocument>;
+    getSingleJobPost(jobPostId: string): Promise<IJobPostDocument>;
 }
