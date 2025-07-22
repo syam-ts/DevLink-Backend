@@ -9,20 +9,24 @@ import { UserController } from "../../controllers/userCtrl";
 import { JobpostController } from "../../controllers/jobPostCtrl";
 import { ClientController } from "../../controllers/clientCtrl";
 
-const { viewSingleContract } = new UserController();
 const { CLIENT }: { CLIENT: string } = allRoles;
 
-const { getAllNotificationsClient } = new NotificationController();
-const { inviteUser, viewInvite } = new InviteController();
 
 class ClientRoute {
 
   public router: Router;
+  private userController: UserController;
+  private notificationController: NotificationController;
+  private inviteController: InviteController; 
   private jobpostController: JobpostController;
   private clientController: ClientController;
 
   constructor() {
+    
     this.router = Router();
+    this.userController = new UserController();
+    this.notificationController = new NotificationController();
+    this.inviteController = new InviteController();
     this.jobpostController = new JobpostController();
     this.clientController = new ClientController();
 
@@ -43,13 +47,13 @@ class ClientRoute {
     this.router.get("/job/:jobPostId", verifyToken, requireRole(CLIENT), this.jobpostController.getSingleJobPost);
     this.router.get("/proposals/:proposalType", verifyToken, requireRole(CLIENT), this.clientController.getProposals);
     this.router.get("/contracts/:contractViewType", verifyToken, requireRole(CLIENT), this.clientController.viewContracts);
-    this.router.get("/contract/:contractId", verifyToken, requireRole(CLIENT), viewSingleContract);
-    this.router.get("/invites/:inviteType", verifyToken, requireRole(CLIENT), viewInvite);
+    this.router.get("/contract/:contractId", verifyToken, requireRole(CLIENT), this.userController.viewSingleContract);
+    this.router.get("/invites/:inviteType", verifyToken, requireRole(CLIENT), this.inviteController.viewInvite);
     this.router.get("/contractsSubmissions", verifyToken, requireRole(CLIENT), this.clientController.viewSubmissions);
     this.router.get("/wallet", verifyToken, requireRole(CLIENT), this.clientController.viewWallet);
     this.router.get("/allChat/view/:roleId", verifyToken, requireRole(CLIENT), this.clientController.getAllChats);
     this.router.get("/chat/view/:roleType/:roleId/:targetId", verifyToken, requireRole(CLIENT), this.clientController.viewChat);
-    this.router.get("/notifications/:clientId", verifyToken, requireRole(CLIENT), getAllNotificationsClient);
+    this.router.get("/notifications/:clientId", verifyToken, requireRole(CLIENT), this.notificationController.getAllNotificationsClient);
   }
 
 
@@ -64,7 +68,7 @@ class ClientRoute {
     this.router.post("/createContract", verifyToken, requireRole(CLIENT), this.clientController.createContract);
     this.router.post("/chat/sendMessage", verifyToken, requireRole(CLIENT), this.clientController.sendMessage);
     this.router.post("/contractSubmitReject", verifyToken, requireRole(CLIENT), this.clientController.rejectContract);
-    this.router.post("/inviteUser", verifyToken, requireRole(CLIENT), inviteUser);
+    this.router.post("/inviteUser", verifyToken, requireRole(CLIENT), this.inviteController.inviteUser);
     this.router.post("/rate-user/:notificationId", verifyToken, requireRole(CLIENT), this.clientController.rateAndReview);
     this.router.post("/withdrawMoney", verifyToken, requireRole(CLIENT), this.clientController.withdrawMoneyByClient);
     this.router.post("/signup", this.clientController.signupClient);
