@@ -53,12 +53,10 @@ import { ViewChat } from '../../application/usecases/client/viewChat';
 import { SearchDeveloper } from '../../application/usecases/client/searchDeveloper';
 import { RejectContract } from '../../application/usecases/client/rejectContract';
 import { GetallDevelopers } from '../../application/usecases/client/getallDevelopers';
-import { WithdrawMoneyByClient } from '../../application/usecases/client/withdrawMoneyByClient';
-import { ChatRepositoryMongoose } from "../../domain/interfaces/Repositaries/ChatRepository";
+import { WithdrawMoneyByClient } from '../../application/usecases/client/withdrawMoneyByClient'; 
   
 // admin imports -----> 
-import { LoginAdmin } from '../../application/usecases/admin/loginAdmin';
-import { AdminRepository } from '../../domain/interfaces/Repositaries/AdminRepository'; 
+import { LoginAdmin } from '../../application/usecases/admin/loginAdmin'; 
 import { ClientMetrics, UserMetrics, GetRevenue } from '../../application/usecases/admin/getDashboard';
 import { GetAllUsers } from '../../application/usecases/admin/getAllUsers';
 import { GetAllClients } from '../../application/usecases/admin/getAllClients';
@@ -80,6 +78,8 @@ import { UserRepositoryDb } from "../../infrastructure/repositories/UserReposito
 import { getHomeClientJobsByClient } from "../../application/usecases/jobPost/getHomeJobsByClient";
 import { ClientRepositoryDb } from "../../infrastructure/repositories/clientRepositoryDb";
 import { WishlistRepositoryDb } from "../../infrastructure/repositories/wishllistRepositoryDb";
+import { ChatRepositoryDb } from "../../infrastructure/repositories/chatRepositoryDb";
+import { AdminRepositoryDb } from "../../infrastructure/repositories/adminRepositoryDb";
  
 // User Respo instance  ---------->
 const userRepository = new UserRepositoryDb();
@@ -112,7 +112,7 @@ const withdrawMoneyByUserUseCase =  new WithdrawMoneyByUser(userRepository);
   
 // Client Repo instance -------------->  
 const ClientRepository = new ClientRepositoryDb();
-const ChatRepository = new ChatRepositoryMongoose();
+const ChatRepository = new ChatRepositoryDb();
 const signupClientUseCase = new SignupClient(ClientRepository); 
 const loginClientUseCase = new LoginClient(ClientRepository); 
 const verifyClientUseCase = new verifyOtpClient(ClientRepository);
@@ -143,7 +143,7 @@ const getAllChatsUseCase = new GetAllChats(ChatRepository);
 const viewChatUseCase = new ViewChat(ChatRepository);
     
 // Admin repo intances -------> 
-const adminRepository = new AdminRepository();
+const adminRepository = new AdminRepositoryDb();
 const loginAdminUseCase = new LoginAdmin(adminRepository);
 const clientMetricsUseCase = new ClientMetrics(adminRepository);
 const userMetricsUseCase = new UserMetrics(adminRepository);
