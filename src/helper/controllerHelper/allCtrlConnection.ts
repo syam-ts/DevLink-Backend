@@ -55,7 +55,6 @@ import { RejectContract } from '../../application/usecases/client/rejectContract
 import { GetallDevelopers } from '../../application/usecases/client/getallDevelopers';
 import { WithdrawMoneyByClient } from '../../application/usecases/client/withdrawMoneyByClient';
 import { ChatRepositoryMongoose } from "../../domain/interfaces/Repositaries/ChatRepository";
-import { WishlistRepositoryMongoose } from "../../domain/interfaces/Repositaries/WishlistRepository";
   
 // admin imports -----> 
 import { LoginAdmin } from '../../application/usecases/admin/loginAdmin';
@@ -80,10 +79,11 @@ import { SortClient } from '../../application/usecases/admin/sortClient';
 import { UserRepositoryDb } from "../../infrastructure/repositories/UserRepositoryDb";
 import { getHomeClientJobsByClient } from "../../application/usecases/jobPost/getHomeJobsByClient";
 import { ClientRepositoryDb } from "../../infrastructure/repositories/clientRepositoryDb";
+import { WishlistRepositoryDb } from "../../infrastructure/repositories/wishllistRepositoryDb";
  
 // User Respo instance  ---------->
 const userRepository = new UserRepositoryDb();
-const wishlistRepository = new WishlistRepositoryMongoose();
+const wishlistRepository = new WishlistRepositoryDb();
 const signupUseCase = new SignupUser(userRepository);
 const loginUseCase = new LoginUser(userRepository);
 const getHomeUseCase = new getHomeUser(userRepository);

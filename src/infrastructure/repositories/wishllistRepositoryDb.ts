@@ -1,8 +1,11 @@
-import { JobPostModel } from "../../../infrastructure/database/Schema/jobSchema";
-import { WishlistModel } from "../../../infrastructure/database/Schema/wishlistSchema";
-import { IWishlist } from "../../entities/WIshlist";
+import { IWishlist } from "../../domain/entities/WIshlist";
+import { IWishlistRepository } from "../../domain/interfaces/IWishlistRepository";
+import { JobPostModel } from "../database/Schema/jobSchema";
+import { WishlistModel } from "../database/Schema/wishlistSchema";
 
-export class WishlistRepositoryMongoose {
+ 
+
+export class WishlistRepositoryDb implements IWishlistRepository {
   async addToWishlist(userId: string, jobPostId: string): Promise<IWishlist> {
     const jobPost = await JobPostModel.findById(jobPostId).exec();
     if (!jobPost) throw new Error("Job post not found");
