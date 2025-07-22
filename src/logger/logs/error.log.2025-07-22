@@ -19,3 +19,5 @@
 {"level":"error","message":"Cannot read properties of undefined (reading 'getSelectedJobsUsecase')","timestamp":"2025-07-22 13:03:41"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'getSelectedJobsUsecase')","timestamp":"2025-07-22 13:04:01"}
 {"level":"error","message":"wrong password","timestamp":"2025-07-22 14:24:14"}
+{"level":"error","message":"wrong password","timestamp":"2025-07-22 17:10:56"}
+{"level":"error","message":"wrong password","timestamp":"2025-07-22 17:11:03"}
