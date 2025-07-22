@@ -1,3 +1,4 @@
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
 import { sendMail } from "../../../utils/send-mail";
 
 interface User {
@@ -8,21 +9,16 @@ interface User {
     mobile: number;
 }
 
-export interface UserRepositary {
-    createUser(user: User): Promise<User>;
-    signupUser(email: string): Promise<User | null>;
-}
-
 export class SignupUser {
-    constructor(private userRepositary: UserRepositary) { }
+    constructor(private userRepositary: IUserRepository) { }
 
-    async execute(user: User) { 
-        const existingUser = await this.userRepositary.signupUser(user.email); 
+    async execute(user: User) {
+        const existingUser = await this.userRepositary.signupUser(user.email);
 
         if (existingUser) {
             throw new Error("User already exists");
-        } else { 
-            const otp = await sendMail(user.email); 
+        } else {
+            const otp = await sendMail(user.email);
 
             return otp;
         }

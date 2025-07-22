@@ -1,3 +1,5 @@
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
+
  
     interface UserData {
       _id: string;
@@ -41,18 +43,11 @@
     unchangedData: UserData
   };
 
-export interface UserRepository {
-  alterUserProfile(
-    userId: string,
-    userData: ProfileData,
-    type: string
-  ): Promise<{user: UserData}>
-};
-
+ 
 
 
 export class AlterUserProfile {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: IUserRepository) {}
 
   async execute(userId: string, profileData: ProfileData, type: string) {
     if (type === "verify") {

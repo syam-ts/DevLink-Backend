@@ -1,15 +1,9 @@
-import { ContractDocument } from "../../../domain/entities/Contract";
-
-export interface UserRepositary {
-  viewSingleContract(contractId: string): Promise<ContractDocument>;
-}
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
 
 export class ViewSingleContractUser {
-  constructor(private userRepositary: UserRepositary) {}
+  constructor(private userRepositary: IUserRepository) { }
 
   async execute(contractId: string) {
-    const response = await this.userRepositary.viewSingleContract(contractId);
-
-    return response;
+    return this.userRepositary.viewSingleContract(contractId);
   }
 }

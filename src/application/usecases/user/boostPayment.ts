@@ -1,10 +1,11 @@
 import Stripe from "stripe";
- 
-export interface UserRepositary {}
-const stripe = new Stripe('sk_test_51QbMd0IRhIB5V98AeCCvXn0kLeqwJ8HDxvSA92ucQQqItioMMPIEFwQk4kY9boTeeh1JRvF91jDnnAvOgJIO2F2k00J7W4XS9H');
+
+const stripe = new Stripe(
+  "sk_test_51QbMd0IRhIB5V98AeCCvXn0kLeqwJ8HDxvSA92ucQQqItioMMPIEFwQk4kY9boTeeh1JRvF91jDnnAvOgJIO2F2k00J7W4XS9H"
+);
 
 export class BoostPayment {
-  constructor(private userRepositary: UserRepositary) {}
+  constructor() { }
 
   async execute() {
     const product = await stripe.products.create({
@@ -30,7 +31,8 @@ export class BoostPayment {
           ],
           mode: "payment",
           success_url: `https://dev-link-frontend.vercel.app/user/profileBoostSuccess`,
-          cancel_url: "https://dev-link-frontend.vercel.app/user/payment-failed",
+          cancel_url:
+            "https://dev-link-frontend.vercel.app/user/payment-failed",
           customer_email: "samplemail@gmai.com",
         });
 

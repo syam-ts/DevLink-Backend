@@ -1,15 +1,9 @@
-export interface UserRepositary {
-
-
-  viewWallet(userId: string, currentPage: number): void;
-}
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
 
 export class ViewWalletUser {
-  constructor(private userRepositary: UserRepositary) {}
+  constructor(private userRepositary: IUserRepository) { }
 
-  async execute(userId: string, currentPage: number) {
-    const result = await this.userRepositary.viewWallet(userId, currentPage);
-
-    return result;
+  execute(userId: string, currentPage: number) {
+    return this.userRepositary.viewWallet(userId, currentPage);
   }
 }

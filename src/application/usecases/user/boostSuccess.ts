@@ -1,13 +1,9 @@
-export interface UserRepositary {
-  boostSuccess(userId: string): void;
-}
+import { IUserRepository } from "../../../domain/interfaces/IUserRepository";
 
 export class BoostSuccess {
-  constructor(private userRepositary: UserRepositary) {}
+  constructor(private userRepositary: IUserRepository) { }
 
-  async execute(userId: string) {
-    const updateUser = await this.userRepositary.boostSuccess(userId);
-
-    return updateUser;
+  execute(userId: string) {
+    return this.userRepositary.boostSuccess(userId);
   }
 }

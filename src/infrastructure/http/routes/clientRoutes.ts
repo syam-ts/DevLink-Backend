@@ -1,12 +1,12 @@
 import express, { Router } from "express";
 import refreshToken from "../middlewares/auth/refreshToken";
-import { clientController } from "../controllers/clientCtrl";
-import { userController } from "../controllers/userCtrl";
+import { clientController } from "../controllers/clientCtrl"; 
 import { verifyToken } from "../middlewares/auth/verifyToken";
 import { requireRole } from "../middlewares/auth/requireRole";
 import { allRoles } from "../../../helper/constants/enums";
 import { NotificationController } from "../controllers/notificationCtrl";
 import { InviteController } from "../controllers/inviteCtrl";
+import { UserController } from "../controllers/userCtrl";
 
 const {
   signupClient,
@@ -45,7 +45,7 @@ const {
   searchDevlopers,
   withdrawMoneyByClient,
 } = clientController;
-const { viewSingleContract } = userController;
+const { viewSingleContract } = new UserController();
 const { CLIENT }: { CLIENT: string } = allRoles;
 
 const { getAllNotificationsClient } = new NotificationController();
