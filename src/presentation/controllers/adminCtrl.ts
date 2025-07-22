@@ -3,10 +3,10 @@ import { HttpStatusCode } from "../../helper/constants/enums";
 import { StatusMessage } from "../../helper/constants/stausMessages";
 import generateTokens from "../../utils/generateTokens";
 import { Request, Response } from "express";
-import logger from '../../logger/logger';
+import logger from "../../logger/logger";
 
-export const adminController = {
-  // signUpAdmin: async(req: Request, res: Response): Promise<void> => {
+export class AdminController {
+  // async signUpAdmin(req: Request, res: Response): Promise<void>  {
   //     try{
   //         const adminId: string = '676bfa326c2e4c9fc3afba8e'
 
@@ -19,10 +19,10 @@ export const adminController = {
   //     }
   // },
 
-  loginAdmin: async (req: Request, res: Response): Promise<void> => {
+  async loginAdmin(req: Request, res: Response): Promise<void> {
     try {
       const admin = await allAdminUseCases.loginAdminUseCase.execute(req.body);
-      if(!admin) throw new Error('admin not exists');
+      if (!admin) throw new Error("admin not exists");
 
       admin.role = "admin";
 
@@ -42,48 +42,51 @@ export const adminController = {
         success: true,
       });
     } catch (error: unknown) {
-         const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-  getDashboard: async (req: Request, res: Response): Promise<void> => {
-    try { 
-      const clientMetrics = await allAdminUseCases.clientMetricsUseCase.execute();
+  async getDashboard(req: Request, res: Response): Promise<void> {
+    try {
+      const clientMetrics =
+        await allAdminUseCases.clientMetricsUseCase.execute();
       const userMetrics = await allAdminUseCases.userMetricsUseCase.execute();
 
-      const { range } = req.params; 
-      const getRevenue = await allAdminUseCases.getRevenueUseCase.execute(range);
-   
+      const { range } = req.params;
+      const getRevenue = await allAdminUseCases.getRevenueUseCase.execute(
+        range
+      );
+
       const response = {
         clientMetrics: clientMetrics,
-        userMetrics: userMetrics ,
-        getRevenue: getRevenue
-      }
-        res.status(HttpStatusCode.OK).json({
+        userMetrics: userMetrics,
+        getRevenue: getRevenue,
+      };
+      res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         response,
         success: true,
       });
     } catch (error: unknown) {
-         const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-  getAllUsers: async (req: Request, res: Response): Promise<void> => {
-    try { 
-      const page = Number(req.query.page);  
+  async getAllUsers(req: Request, res: Response): Promise<void> {
+    try {
+      const page = Number(req.query.page);
       const sortType = String(req.query.sortType || "asc");
 
       const users = await allAdminUseCases.getAllUsersUseCase.execute(
@@ -97,19 +100,19 @@ export const adminController = {
         success: true,
       });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-  getAllClients: async (req: Request, res: Response): Promise<void> => {
-    try { 
-      const page = Number(req.query.page);  
+  async getAllClients(req: Request, res: Response): Promise<void> {
+    try {
+      const page = Number(req.query.page);
       const sortType = String(req.query.sortType);
       const clients = await allAdminUseCases.getAllClientsUseCase.execute(
         page,
@@ -122,125 +125,116 @@ export const adminController = {
         success: true,
       });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-  blockUser: async (req: Request, res: Response): Promise<void> => {
+  async blockUser(req: Request, res: Response): Promise<void> {
     try {
-      const {userId } = req.params;
-      const user = await allAdminUseCases.blockUserUseCase.execute(userId);  
-        res
-          .status(HttpStatusCode.OK)
-          .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-   
+      const { userId } = req.params;
+      const user = await allAdminUseCases.blockUserUseCase.execute(userId);
+      res
+        .status(HttpStatusCode.OK)
+        .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-  unBlockUser: async (req: Request, res: Response): Promise<void> => {
+  async unBlockUser(req: Request, res: Response): Promise<void> {
     try {
-      const {userId } = req.params;
-      const user = await allAdminUseCases.unBlockUserUseCase.execute(
-        userId
-      ); 
-        res
-          .status(HttpStatusCode.OK)
-          .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-       
+      const { userId } = req.params;
+      const user = await allAdminUseCases.unBlockUserUseCase.execute(userId);
+      res
+        .status(HttpStatusCode.OK)
+        .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-  blockClient: async (req: Request, res: Response): Promise<void> => {
+  async blockClient(req: Request, res: Response): Promise<void> {
     try {
-      const {clientId } = req.params;
+      const { clientId } = req.params;
       const client = await allAdminUseCases.blockClientUseCase.execute(
         clientId
-      );  
-        res
-          .status(HttpStatusCode.OK)
-          .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-    
+      );
+      res
+        .status(HttpStatusCode.OK)
+        .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-  unBlockClient: async (req: Request, res: Response): Promise<void> => {
+  async unBlockClient(req: Request, res: Response): Promise<void> {
     try {
-      const {clientId} = req.params;
+      const { clientId } = req.params;
       const client = await allAdminUseCases.unBlockClientUseCase.execute(
         clientId
-      );  
-      
-        res
-          .status(HttpStatusCode.OK)
-          .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
-    
+      );
+
+      res
+        .status(HttpStatusCode.OK)
+        .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-  viewWallet: async (req: Request, res: Response): Promise<void> => {
+  async viewWallet(req: Request, res: Response): Promise<void> {
     try {
       const currentPage = Number(req.query.currentPage) || 1;
       const wallet = await allAdminUseCases.viewWalletAdminUseCase.execute(
         currentPage
-      ); 
-        res
-          .status(HttpStatusCode.OK)
-          .json({
-            message: StatusMessage[HttpStatusCode.OK],
-            wallet,
-            success: true,
-          });
-   
+      );
+      res.status(HttpStatusCode.OK).json({
+        message: StatusMessage[HttpStatusCode.OK],
+        wallet,
+        success: true,
+      });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-  logoutAdmin: async (req: Request, res: Response): Promise<void> => {
+  async logoutAdmin(req: Request, res: Response): Promise<void> {
     try {
       res.clearCookie("refreshToken", {
         httpOnly: true,
@@ -253,17 +247,17 @@ export const adminController = {
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-  verifyAccept: async (req: Request, res: Response): Promise<void> => {
+  async verifyAccept(req: Request, res: Response): Promise<void> {
     try {
       const response = await allAdminUseCases.verifyAcceptUseCase.execute(
         req.body
@@ -273,17 +267,17 @@ export const adminController = {
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-  getRequests: async (req: Request, res: Response): Promise<void> => {
+  async getRequests(req: Request, res: Response): Promise<void> {
     try {
       const response = await allAdminUseCases.getAllRequestsUseCase.execute();
 
@@ -293,17 +287,17 @@ export const adminController = {
         success: true,
       });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-  getRequestedClient: async (req: Request, res: Response): Promise<void> => {
+  async getRequestedClient(req: Request, res: Response): Promise<void> {
     try {
       const { clientId } = req.params;
       const response = await allAdminUseCases.getRequestedClientUseCase.execute(
@@ -316,17 +310,17 @@ export const adminController = {
         success: true,
       });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-  viewRoleInfo: async (req: Request, res: Response): Promise<void> => {
+  async viewRoleInfo(req: Request, res: Response): Promise<void> {
     try {
       const { roleId, roleInfo } = req.params;
       const response = await allAdminUseCases.viewRoleInfoUseCase.execute(
@@ -340,17 +334,17 @@ export const adminController = {
         success: true,
       });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-  getWallet: async (req: Request, res: Response): Promise<void> => {
+  async getWallet(req: Request, res: Response): Promise<void> {
     try {
       const response = await allAdminUseCases.getWalletUseCase.execute();
 
@@ -360,19 +354,17 @@ export const adminController = {
         success: true,
       });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-   
-
-  sortUser: async (req: Request, res: Response): Promise<void> => {
+  async sortUser(req: Request, res: Response): Promise<void> {
     try {
       const sortingType = String(req.query.sortType);
       const response = await allAdminUseCases.sortUserUseCase.execute(
@@ -385,18 +377,17 @@ export const adminController = {
         success: true,
       });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
- 
+  }
 
-  sortClient: async (req: Request, res: Response): Promise<void> => {
+  async sortClient(req: Request, res: Response): Promise<void> {
     try {
       const sortingType = String(req.query.sortingType);
       const response = await allAdminUseCases.sortClientUseCase.execute(
@@ -408,60 +399,62 @@ export const adminController = {
         success: true,
       });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-  getAllContracts: async (req: Request, res: Response): Promise<void> => {
+  async getAllContracts(req: Request, res: Response): Promise<void> {
     try {
-      const currentPage = Number(req.query.currentPage)
-      const contracts = await allAdminUseCases.viewContractsAdminUseCase.execute(currentPage);
+      const currentPage = Number(req.query.currentPage);
+      const contracts =
+        await allAdminUseCases.viewContractsAdminUseCase.execute(currentPage);
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         contracts,
         success: true,
       });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-  viewSingleContract: async (req: Request, res: Response): Promise<void> => {
+  async viewSingleContract(req: Request, res: Response): Promise<void> {
     try {
       const contractId = String(req.params.contractId);
 
-      const contract = await allAdminUseCases.viewSingleContractAdminUseCase.execute(
-        contractId
-      );
+      const contract =
+        await allAdminUseCases.viewSingleContractAdminUseCase.execute(
+          contractId
+        );
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         contract,
         success: true,
       });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-  successMoneyTransfer: async (req: Request, res: Response): Promise<void> => {
+  async successMoneyTransfer(req: Request, res: Response): Promise<void> {
     try {
       const {
         roleType,
@@ -470,15 +463,15 @@ export const adminController = {
         amount,
         upiId,
         requestId,
-        requestedAmount
+        requestedAmount,
       }: {
         roleType: string;
         userId: string;
         paymentScreenshot: string;
         amount: number;
         upiId: number;
-        requestId: string
-        requestedAmount: number
+        requestId: string;
+        requestedAmount: number;
       } = req.body.body;
 
       const response =
@@ -502,44 +495,47 @@ export const adminController = {
         success: false,
       });
     }
-  },
+  }
 
-  getWithdrawRequests: async (req: Request, res: Response): Promise<void> => {
+  async getWithdrawRequests(req: Request, res: Response): Promise<void> {
     try {
-      const requests = await allAdminUseCases.getWithdrawRequestsUseCase.execute();
+      const requests =
+        await allAdminUseCases.getWithdrawRequestsUseCase.execute();
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         requests,
         success: true,
       });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
-  },
+  }
 
-  viewContracts: async (req: Request, res: Response): Promise<void> => {
+  async viewContracts(req: Request, res: Response): Promise<void> {
     try {
       const currentPage = Number(req.query.currentPage);
-      const response = await allAdminUseCases.viewContractsAdminUseCase.execute(currentPage);
+      const response = await allAdminUseCases.viewContractsAdminUseCase.execute(
+        currentPage
+      );
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         response,
         success: true,
       });
     } catch (error: unknown) {
-            const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   }
-};
+}
