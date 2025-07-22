@@ -10,28 +10,28 @@ import cookieparser from "cookie-parser";
 import http from "node:http";
 import morgan from "morgan";
 import routes from "./presentation/express-http/routes";
-import { connectDB } from "./infrastructure/database/db";
 import initializeSocket from "./infrastructure/socket/socket";
+import Database from "./infrastructure/database/db";
 
 class Server {
-
     private app: express.Application;
     private port: number;
     private frontendUrl: string;
     private corsMethods: string[];
+    private database: Database;
     constructor() {
-
         dotenv.config({
             path: ".env",
         }),
-             this.app = express() 
+            (this.app = express());
         this.port = parseInt(process.env.PORT || "3000");
         this.frontendUrl =
             process.env.FRONTEND_ORIGIN || "https://dev-link-frontend.vercel.app";
-        this.corsMethods = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"] 
-            this.configureMiddlewaresAndLogger();
+        this.corsMethods = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"];
+        this.configureMiddlewaresAndLogger();
         this.loggerConfigs();
         this.configuredRoute();
+        this.database = new Database();
     }
 
     public configureMiddlewaresAndLogger(): void {
@@ -61,8 +61,7 @@ class Server {
     }
 
     private async connectToDatabase(): Promise<void> {
-        await connectDB();
- 
+        await this.database.connect();
     }
 
     public start(): void {
@@ -77,6 +76,5 @@ class Server {
         });
     }
 }
-
 
 export default Server;
