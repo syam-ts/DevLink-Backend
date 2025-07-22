@@ -32,19 +32,13 @@ import { LoginClient } from '../../application/usecases/client/loginClient';
 import { GoogleLoginClient } from '../../application/usecases/client/GoogleLoginClient';
 import { ClientRepositoryMongoose } from '../../domain/interfaces/Repositaries/ClientRepositoryMongoose';   
 import { VerifyEmailClient } from '../../application/usecases/client/verifyEmail'; 
-import { verifyOtpClient } from '../../application/usecases/client/verifyOtpClient';
-import { getHomeClient } from '../../application/usecases/client/getHome';
-import { TrendingJobs } from '../../application/usecases/client/getHome';
-import { GetSelectedJobsClient } from '../../application/usecases/client/getSelectedJobs';
-import { ViewContractsClient } from '../../application/usecases/client/viewContracts';
-import { ListAllJobs } from '../../application/usecases/client/listAllJobs';  
-import { InviteJobsList } from '../../application/usecases/client/inviteJobsList';  
+import { verifyOtpClient } from '../../application/usecases/client/verifyOtpClient';  
+import { ViewContractsClient } from '../../application/usecases/client/viewContracts'; 
 import { EditClientProfile } from '../../application/usecases/client/EditClientProfile';
 import { GetClientProfile } from '../../application/usecases/client/getProfile';
 import { ResetPasswordClient } from "../../application/usecases/client/resetPassword";
 
-import { ProfileVerification } from '../../application/usecases/client/profileVerification';
-import { CreateJobPost } from '../../application/usecases/client/createJobPost'; 
+import { ProfileVerification } from '../../application/usecases/client/profileVerification'; 
 import { MakePayment } from '../../application/usecases/client/makePayment';
 import { GetUserProfileClient } from '../../application/usecases/client/getUserProfile';
 import { GetProposals } from '../../application/usecases/client/getProposals'; 
@@ -56,8 +50,7 @@ import { RateAndReview } from '../../application/usecases/client/rateAndReview';
 import { SendMessage } from '../../application/usecases/client/sendMessage';
 import { GetAllChats } from '../../application/usecases/client/getAllChats';
 import { ViewWallet } from '../../application/usecases/client/viewWallet'; 
-import { ViewChat } from '../../application/usecases/client/viewChat'; 
-import { GetSingleJobPostClient } from '../../application/usecases/client/getSingleJobPost'; 
+import { ViewChat } from '../../application/usecases/client/viewChat';  
 import { SearchDeveloper } from '../../application/usecases/client/searchDeveloper';
 import { RejectContract } from '../../application/usecases/client/rejectContract';
 import { GetallDevelopers } from '../../application/usecases/client/getallDevelopers';
@@ -86,6 +79,7 @@ import { GetWallet } from '../../application/usecases/admin/getWallet';
 import { SortUser } from '../../application/usecases/admin/sortUser'; 
 import { SortClient } from '../../application/usecases/admin/sortClient'; 
 import { UserRepositoryDb } from "../../infrastructure/repositories/UserRepositoryDb";
+import { getHomeClientJobsByClient } from "../../application/usecases/jobPost/getHomeJobsByClient";
  
 // User Respo instance  ---------->
 const userRepository = new UserRepositoryDb();
@@ -124,23 +118,17 @@ const loginClientUseCase = new LoginClient(ClientRepository);
 const verifyClientUseCase = new verifyOtpClient(ClientRepository);
 const verifyEmailClientUseCase = new VerifyEmailClient(ClientRepository);
 const resetPasswordClientUseCase = new ResetPasswordClient(ClientRepository);
-const GoogleLoginClientUseCase = new GoogleLoginClient(ClientRepository);
-const getHomeClientUseCase = new getHomeClient(ClientRepository);
-const trendingJobsUseCase = new TrendingJobs(ClientRepository);
-const getSelectedJobsClientUseCase = new GetSelectedJobsClient(ClientRepository);
-const viewContractsClientUseCase = new ViewContractsClient(ClientRepository);
-const listAllJobsClientUseCase = new ListAllJobs(ClientRepository); 
-const inviteJobsListUseCase = new InviteJobsList(ClientRepository); 
+const GoogleLoginClientUseCase = new GoogleLoginClient(ClientRepository); 
+const viewContractsClientUseCase = new ViewContractsClient(ClientRepository); 
 const editClientProfileUseCase = new EditClientProfile(ClientRepository);
 const getClientProfileUseCase = new GetClientProfile(ClientRepository);
-const profileVerificationUseCase = new ProfileVerification(ClientRepository);
-const createJobPostUseCase = new CreateJobPost(ClientRepository);  
-const makePaymentUseCase = new MakePayment(ClientRepository);
+const profileVerificationUseCase = new ProfileVerification(ClientRepository); 
+const getHomeClientUseCase = new getHomeClientJobsByClient(ClientRepository)
+const makePaymentUseCase = new MakePayment();
 const getUserProfileUseCase = new GetUserProfileClient(ClientRepository);
 const getProposalsUseCase = new GetProposals(ClientRepository); 
 const createContractUseCase = new CreateContract(ClientRepository);
-const rejectProposalUseCase = new RejectProposal(ClientRepository);  
-const getSingleJobPostClientUseCase = new GetSingleJobPostClient(ClientRepository); 
+const rejectProposalUseCase = new RejectProposal(ClientRepository);    
 const viewSubmissionsUseCase = new ViewSubmissions(ClientRepository);
 const closeContractUseCase = new CloseContract(ClientRepository);
 const rateAndReviewUserUseCase = new RateAndReview(ClientRepository);
@@ -219,16 +207,11 @@ export const allClientUseCases = {
      verifyEmailClientUseCase,
      resetPasswordClientUseCase,
      GoogleLoginClientUseCase,
-     getHomeClientUseCase,
-     trendingJobsUseCase,
-     getSelectedJobsClientUseCase,
-     viewContractsClientUseCase,
-     listAllJobsClientUseCase,
-     inviteJobsListUseCase,
+     getHomeClientUseCase, 
+     viewContractsClientUseCase, 
      editClientProfileUseCase,
      getClientProfileUseCase,
-     profileVerificationUseCase,
-     createJobPostUseCase,  
+     profileVerificationUseCase, 
      makePaymentUseCase,
      getUserProfileUseCase,
      getProposalsUseCase,
@@ -236,8 +219,7 @@ export const allClientUseCases = {
      createContractUseCase,
      rejectProposalUseCase,  
      viewSubmissionsUseCase,
-     getallDevelopersUseCase,
-     getSingleJobPostClientUseCase,
+     getallDevelopersUseCase, 
      closeContractUseCase,
      searchDeveloperUseCase,
      rateAndReviewUserUseCase,  

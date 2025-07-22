@@ -4,7 +4,7 @@ import { HttpStatusCode } from "../../helper/constants/enums";
 import { StatusMessage } from "../../helper/constants/stausMessages";
 import generateTokens from "../../utils/generateTokens";
 import { GetSingleJobPost } from "../../application/usecases/user/getSingleJobPost";
-import logger from '../../logger/logger';
+import logger from "../../logger/logger";
 
 type Id = string;
 
@@ -21,9 +21,9 @@ interface RequestRole {
 
 export const clientController = {
   signupClient: async (req: Request, res: Response): Promise<void> => {
-    try { 
+    try {
       const otp = await allClientUseCases.signupClientUseCase.execute(req.body);
-     
+
       if (otp) {
         res.status(HttpStatusCode.CREATED).json({
           message: StatusMessage[HttpStatusCode.CREATED],
@@ -33,12 +33,12 @@ export const clientController = {
         });
       }
     } catch (error: unknown) {
-  const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
@@ -52,12 +52,12 @@ export const clientController = {
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
     } catch (error: unknown) {
-  const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
@@ -76,12 +76,12 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-  const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
@@ -98,12 +98,12 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-  const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
@@ -122,12 +122,12 @@ export const clientController = {
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
     } catch (error: unknown) {
-  const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
@@ -144,7 +144,7 @@ export const clientController = {
         return;
       }
 
-      client.role = "client"; 
+      client.role = "client";
       const { accessToken, refreshToken } = generateTokens(client);
 
       res.cookie("refreshToken", refreshToken, {
@@ -168,12 +168,12 @@ export const clientController = {
         });
       }
     } catch (error: unknown) {
-  const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
@@ -206,15 +206,16 @@ export const clientController = {
           message: StatusMessage[HttpStatusCode.OK],
           client,
           accessToken,
-          refreshToken, success: true
+          refreshToken,
+          success: true,
         });
     } catch (error: unknown) {
-  const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
@@ -223,69 +224,18 @@ export const clientController = {
     try {
       const users = await allClientUseCases.getHomeClientUseCase.execute();
 
-       res.status(HttpStatusCode.OK).json({
+      res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
         data: users,
         success: true,
       });
     } catch (error: unknown) {
-  const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
-      return;
-    }
-  },
-
-  trendingJobs: async (req: Request, res: Response): Promise<void> => {
-    try {
-      const jobs = await allClientUseCases.trendingJobsUseCase.execute();
-
-       res.status(HttpStatusCode.OK).json({
-        message: StatusMessage[HttpStatusCode.OK],
-        data: jobs,
-        success: true,
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
       });
-    } catch (error: unknown) {
-  const err = error as {message: string};
-      logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
-      return;
-    }
-  },
-
-  getSelectedJobs: async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { jobsType } = req.params;
-       if (!req.user || !req.user.id) {
-         res.status(401).json({ message: "Unauthorized", success: false });
-      }
-      const clientId = String(req.user?.id);;
-      const currentPage: number = Number(req.query.currentPage) || 1;
-
-      const response =
-        await allClientUseCases.getSelectedJobsClientUseCase.execute(
-          clientId,
-          jobsType,
-          currentPage
-        );
-      res.status(HttpStatusCode.OK).json({
-        message: StatusMessage[HttpStatusCode.OK],
-        data: response,
-        success: true,
-      });
-    } catch (error: unknown) {
-    const err = error as {message: string};
-      logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
       return;
     }
   },
@@ -293,9 +243,9 @@ export const clientController = {
   getProfile: async (req: Request, res: Response): Promise<void> => {
     try {
       if (!req.user || !req.user.id) {
-          res.status(401).json({ message: "Unauthorized", success: false });
+        res.status(401).json({ message: "Unauthorized", success: false });
       }
-       const clientId = String(req.user?.id);
+      const clientId = String(req.user?.id);
       const client = await allClientUseCases.getClientProfileUseCase.execute(
         clientId
       );
@@ -306,22 +256,22 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-      const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
-     return;
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
+      return;
     }
   },
 
   profileVerification: async (req: Request, res: Response): Promise<void> => {
     try {
       if (!req.user || !req.user.id) {
-         res.status(401).json({ message: "Unauthorized", success: false });
+        res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const clientId = String(req.user?.id);;
+      const clientId = String(req.user?.id);
 
       const response =
         await allClientUseCases.profileVerificationUseCase.execute(
@@ -333,12 +283,12 @@ export const clientController = {
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
     } catch (error: unknown) {
-    const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
@@ -346,9 +296,9 @@ export const clientController = {
   editProfile: async (req: Request, res: Response): Promise<void> => {
     try {
       if (!req.user || !req.user.id) {
-         res.status(401).json({ message: "Unauthorized", success: false });
+        res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const clientId = String(req.user?.id);; 
+      const clientId = String(req.user?.id);
       const response = await allClientUseCases.editClientProfileUseCase.execute(
         clientId,
         req.body
@@ -359,12 +309,12 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-    const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
@@ -381,24 +331,23 @@ export const clientController = {
         .status(HttpStatusCode.OK)
         .json({ message: StatusMessage[HttpStatusCode.OK], success: true });
     } catch (error: unknown) {
-  const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
 
-  
   makePayment: async (req: Request, res: Response): Promise<void> => {
     try {
       //  if (!req.user || !req.user.id) {
       //   return res.status(401).json({ message: "Unauthorized", success: false });
       // }
       // const clientId = String(req.user?.id);;
-      const clientId = '67e268a4a9ff4accb5a24d34'
+      const clientId = "67e268a4a9ff4accb5a24d34";
       const response = await allClientUseCases.makePaymentUseCase.execute(
         clientId,
         req.body
@@ -410,41 +359,12 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-      const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
-     return;
-    }
-  },
-
-  createJobPost: async (req: Request, res: Response): Promise<void> => {
-    try { 
-      if (!req.user || !req.user.id) {
-         res.status(401).json({ message: "Unauthorized", success: false });
-      }
-      const clientId = String(req.user?.id);;
-      const { data } = req.body;
-
-      const jobPost = await allClientUseCases.createJobPostUseCase.execute(
-        clientId,
-        data
-      );
-
-      res.status(HttpStatusCode.CREATED).json({
-        message: StatusMessage[HttpStatusCode.CREATED],
-        data: jobPost,
-        success: true,
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
       });
-    } catch (error: unknown) {
-  const err = error as {message: string};
-      logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
       return;
     }
   },
@@ -462,22 +382,22 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-    const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
 
   getProposals: async (req: Request, res: Response): Promise<void> => {
     try {
-       if (!req.user || !req.user.id) {
-         res.status(401).json({ message: "Unauthorized", success: false });
+      if (!req.user || !req.user.id) {
+        res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const clientId = String(req.user?.id);;
+      const clientId = String(req.user?.id);
       const response = await allClientUseCases.getProposalsUseCase.execute(
         clientId
       );
@@ -488,12 +408,12 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-     const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
@@ -503,7 +423,7 @@ export const clientController = {
       const { userId, clientId, jobPostId, bidAmount, bidDeadline } = req.body;
 
       if (!userId && !clientId && !jobPostId) {
-         res
+        res
           .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .json({ message: "Missing informations ", success: false });
       }
@@ -522,12 +442,12 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-     const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
@@ -536,13 +456,13 @@ export const clientController = {
     try {
       const { userId, jobPostId }: { userId: string; jobPostId: string } =
         req.body;
-        if (!req.user || !req.user.id) {
-           res.status(401).json({ message: "Unauthorized", success: false });
-        }
-        const clientId = String(req.user?.id);;
+      if (!req.user || !req.user.id) {
+        res.status(401).json({ message: "Unauthorized", success: false });
+      }
+      const clientId = String(req.user?.id);
 
       if (!userId && !clientId && !jobPostId) {
-         res
+        res
           .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .json({ message: "Missing informations ", success: false });
       }
@@ -559,22 +479,22 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-     const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
 
   viewContracts: async (req: Request, res: Response): Promise<void> => {
     try {
-       if (!req.user || !req.user.id) {
-         res.status(401).json({ message: "Unauthorized", success: false });
+      if (!req.user || !req.user.id) {
+        res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const clientId = String(req.user?.id);;
+      const clientId = String(req.user?.id);
       const { contractViewType } = req.params;
       const currentPage: number = Number(req.query.currentPage) || 1;
       const contracts =
@@ -589,22 +509,22 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-    const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
 
   viewSubmissions: async (req: Request, res: Response): Promise<void> => {
     try {
-       if (!req.user || !req.user.id) {
-         res.status(401).json({ message: "Unauthorized", success: false });
+      if (!req.user || !req.user.id) {
+        res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const clientId = String(req.user?.id);;
+      const clientId = String(req.user?.id);
       const response = await allClientUseCases.viewSubmissionsUseCase.execute(
         clientId
       );
@@ -615,18 +535,18 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-     const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
 
   closeContract: async (req: Request, res: Response): Promise<void> => {
-    try { 
+    try {
       const { contractId, progress } = req.body;
       const response = await allClientUseCases.closeContractUseCase.execute(
         contractId,
@@ -639,12 +559,12 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-     const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
@@ -653,8 +573,8 @@ export const clientController = {
     try {
       if (!req.user || !req.user.id) {
         res.status(401).json({ message: "Unauthorized", success: false });
-     }
-     const clientId = String(req.user?.id);
+      }
+      const clientId = String(req.user?.id);
       const { notificationId } = req.params;
       const {
         userId,
@@ -675,12 +595,12 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-     const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
@@ -697,18 +617,18 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-     const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
 
   getAllChats: async (req: Request, res: Response): Promise<void> => {
-    try { 
+    try {
       const { roleId } = req.params;
       const response = await allClientUseCases.getAllChatsUseCase.execute(
         roleId
@@ -720,18 +640,18 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-     const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
 
   viewChat: async (req: Request, res: Response): Promise<void> => {
-    try {  
+    try {
       const { roleType, roleId, targetId, roleName } = req.params;
 
       const response = await allClientUseCases.viewChatUseCase.execute(
@@ -747,12 +667,12 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-     const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
@@ -760,10 +680,10 @@ export const clientController = {
   viewWallet: async (req: Request, res: Response): Promise<void> => {
     try {
       if (!req.user || !req.user.id) {
-         res.status(401).json({ message: "Unauthorized", success: false });
+        res.status(401).json({ message: "Unauthorized", success: false });
       }
       const clientId = String(req.user?.id);
-      const currentPage = Number(req.query.currentPage)
+      const currentPage = Number(req.query.currentPage);
       const response = await allClientUseCases.viewWalletUseCase.execute(
         clientId,
         currentPage
@@ -775,13 +695,13 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-      const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        });  
-     return; 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
+      return;
     }
   },
 
@@ -796,12 +716,12 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-     const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
@@ -811,8 +731,8 @@ export const clientController = {
       if (!req.user || !req.user.id) {
         res.status(401).json({ message: "Unauthorized", success: false });
       }
-      const { contractId }: {contractId: string} = req.body;
-     const clientId = String(req.user?.id);
+      const { contractId }: { contractId: string } = req.body;
+      const clientId = String(req.user?.id);
       const response = await allClientUseCases.rejectContractUseCase.execute(
         contractId,
         clientId
@@ -824,99 +744,22 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-     const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
-      return;
-    }
-  },
-
-  listAllJobs: async (req: Request, res: Response): Promise<void> => {
-    try {
-      if (!req.user || !req.user.id) {
-         res.status(401).json({ message: "Unauthorized", success: false });
-      }
-      const clientId = String(req.user?.id);;
-      const response = await allClientUseCases.listAllJobsClientUseCase.execute(
-        clientId
-      );
-
-      res.status(HttpStatusCode.OK).json({
-        message: StatusMessage[HttpStatusCode.OK],
-        response,
-        success: true,
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
       });
-    } catch (error: unknown) {
-     const err = error as {message: string};
-      logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
       return;
     }
   },
 
-  inviteJobsList: async (req: Request, res: Response): Promise<void> => {
+  searchDevlopers: async (req: Request, res: Response): Promise<void> => {
     try {
-      if (!req.user || !req.user.id) {
-         res.status(401).json({ message: "Unauthorized", success: false });
-      }
-      const clientId = String(req.user?.id);;
-      const response = await allClientUseCases.inviteJobsListUseCase.execute(
-        clientId
+      const { input }: { input: string } = req.body;
+      const developers = await allClientUseCases.searchDeveloperUseCase.execute(
+        input
       );
-
-      res.status(HttpStatusCode.OK).json({
-        message: StatusMessage[HttpStatusCode.OK],
-        response,
-        success: true,
-      });
-    } catch (error: unknown) {
-     const err = error as {message: string};
-      logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
-      return;
-    }
-  },
-
-  
-
-  getSingleJobPost: async (req: Request, res: Response): Promise<void> => {
-    try {
-
-      const { jobPostId } = req.params;
-      const jobPost = await allClientUseCases.getSingleJobPostClientUseCase.execute(
-        jobPostId
-      );
-
-      res.status(HttpStatusCode.OK).json({
-        message: StatusMessage[HttpStatusCode.OK],
-        jobPost,
-        success: true,
-      });
-    } catch (error: unknown) {
-      const err = error as {message: string};
-      logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        }); 
-      return;
-    }
-  },
-
-  searchDevlopers: async(req: Request, res: Response): Promise<void> => {
-    try {
-
-    const {input}: {input: string} = req.body;
-    const developers = await allClientUseCases.searchDeveloperUseCase.execute(input);
 
       res.status(HttpStatusCode.OK).json({
         message: StatusMessage[HttpStatusCode.OK],
@@ -924,12 +767,12 @@ export const clientController = {
         success: true,
       });
     } catch (error: unknown) {
-      const err = error as {message: string};
+      const err = error as { message: string };
       logger.error(err.message);
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        });  
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },
@@ -937,27 +780,28 @@ export const clientController = {
     try {
       const { amount, accountNumber, balance, type } = req.body;
       if (!req.user || !req.user.id) {
-         res.status(401).json({ message: "Unauthorized", success: false });
+        res.status(401).json({ message: "Unauthorized", success: false });
       }
       const clientId = String(req.user?.id);
 
-      const response = await allClientUseCases.withdrawMoneyByClientUseCase.execute(
-        clientId,
-        amount,
-        accountNumber
-      );
+      const response =
+        await allClientUseCases.withdrawMoneyByClientUseCase.execute(
+          clientId,
+          amount,
+          accountNumber
+        );
 
       res.status(HttpStatusCode.CREATED).json({
         message: StatusMessage[HttpStatusCode.CREATED],
         success: true,
       });
     } catch (error: unknown) {
-       const err = error as {message: string};
-       logger.error(err.message); 
-         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-          message: err.message,
-          success: false,
-        });
+      const err = error as { message: string };
+      logger.error(err.message);
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: err.message,
+        success: false,
+      });
       return;
     }
   },

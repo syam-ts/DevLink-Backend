@@ -1,12 +1,13 @@
 import express, { Router } from "express";
 import refreshToken from "../../middleware/auth/refreshToken";
-import { clientController } from "../../controllers/clientCtrl"; 
+import { clientController } from "../../controllers/clientCtrl";
 import { verifyToken } from "../../middleware/auth/verifyToken";
 import { requireRole } from "../../middleware/auth/requireRole";
 import { allRoles } from "../../../helper/constants/enums";
 import { NotificationController } from "../../controllers/notificationCtrl";
 import { InviteController } from "../../controllers/inviteCtrl";
 import { UserController } from "../../controllers/userCtrl";
+import { JobpostController } from "../../controllers/jobPostCtrl";
 
 const {
   signupClient,
@@ -18,12 +19,9 @@ const {
   googleLogin,
   logoutClient,
   getHomeClient,
-  trendingJobs,
-  getSelectedJobs,
   getProposals,
   viewContracts,
   makePayment,
-  createJobPost,
   getProfile,
   profileVerification,
   editProfile,
@@ -34,9 +32,6 @@ const {
   closeContract,
   rejectContract,
   viewWallet,
-  listAllJobs,
-  inviteJobsList,
-  getSingleJobPost,
   rejectProposal,
   getAllChats,
   viewChat,
@@ -53,8 +48,11 @@ const { inviteUser, viewInvite } = new InviteController();
 
 class ClientRoute {
   public router: Router;
+  private jobpostController: JobpostController;
+
   constructor() {
     this.router = Router();
+    this.jobpostController = new JobpostController();
 
     this.initializeGetRoutes();
     this.initializePostAndPutRoutes();
@@ -71,7 +69,7 @@ class ClientRoute {
       "/trendingJobs",
       verifyToken,
       requireRole(CLIENT),
-      trendingJobs
+      this.jobpostController.trendingJobs
     );
     this.router.get("/profile", verifyToken, requireRole(CLIENT), getProfile);
     this.router.get(
@@ -90,25 +88,25 @@ class ClientRoute {
       "/listAllJobs",
       verifyToken,
       requireRole(CLIENT),
-      listAllJobs
+      this.jobpostController.listAllJobs
     );
     this.router.get(
       "/inviteJobsList",
       verifyToken,
       requireRole(CLIENT),
-      inviteJobsList
+      this.jobpostController.inviteJobsList
     );
     this.router.get(
       "/jobs/:jobsType",
       verifyToken,
       requireRole(CLIENT),
-      getSelectedJobs
+      this.jobpostController.getSelectedJobs
     );
     this.router.get(
       "/job/:jobPostId",
       verifyToken,
       requireRole(CLIENT),
-      getSingleJobPost
+      this.jobpostController.getSingleJobPost
     );
     this.router.get(
       "/proposals/:proposalType",
@@ -169,7 +167,7 @@ class ClientRoute {
       "/paymentSuccess",
       verifyToken,
       requireRole(CLIENT),
-      createJobPost
+      this.jobpostController.createJobPost
     );
     this.router.post(
       "/profile/verify",
