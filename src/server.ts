@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response, Router } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import path from "node:path";
 import dotenv from "dotenv";
 dotenv.config({
@@ -9,7 +9,7 @@ import cors from "cors";
 import cookieparser from "cookie-parser";
 import http from "node:http";
 import morgan from "morgan";
-import routes from "./infrastructure/http/routes";
+import routes from "./presentation/express-http/routes";
 import { connectDB } from "./infrastructure/database/db";
 import initializeSocket from "./infrastructure/socket/socket";
 

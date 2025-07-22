@@ -1,5 +1,5 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import generateTokens from "../../../../utils/generateTokens";
+import generateTokens from "../../../utils/generateTokens";
 import { Request, Response } from "express";
 
 interface User {

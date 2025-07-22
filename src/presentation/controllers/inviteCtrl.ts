@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { GetAllInvites } from "../../../application/usecases/user/getAllInvites";
-import { RejectInvite } from "../../../application/usecases/user/rejectInvite";
-import { InviteRepositoryDb } from "../../../domain/interfaces/Repositaries/InviteRepositoryDb";
-import { HttpStatusCode } from "../../../helper/constants/enums";
-import logger from "../../../logger/logger";
-import { StatusMessage } from "../../../helper/constants/stausMessages";
-import { ViewInviteByClient } from "../../../application/usecases/client/viewInvite";
-import { InviteUser } from "../../../application/usecases/client/inviteUser";
+import { GetAllInvites } from "../../application/usecases/user/getAllInvites";
+import { RejectInvite } from "../../application/usecases/user/rejectInvite"; 
+import { HttpStatusCode } from "../../helper/constants/enums";
+import logger from "../../logger/logger";
+import { StatusMessage } from "../../helper/constants/stausMessages";
+import { ViewInviteByClient } from "../../application/usecases/client/viewInvite";
+import { InviteUser } from "../../application/usecases/client/inviteUser";
+import { InviteRepositoryDb } from "../../infrastructure/repositories/InviteRepositoryDb";
 
 const inviteRepo = new InviteRepositoryDb();
 const getAllInvitesUserUseCase = new GetAllInvites(inviteRepo);

@@ -24,8 +24,7 @@ import { RemoveFromWishlist } from "../../application/usecases/user/removeFromWi
 import { ViewWalletUser } from "../../application/usecases/user/viewWalletUser";  
 import { ViewSingleContractUser } from "../../application/usecases/user/viewSingleContract"; 
 import { WithdrawMoneyByUser } from "../../application/usecases/user/withdrawMoneyByUser"; 
-import { SearchJobs } from "../../application/usecases/user/searchJobs"; 
-import { UserRepositoryDb } from "../../domain/interfaces/Repositaries/UserRepositoryMongooseDb";
+import { SearchJobs } from "../../application/usecases/user/searchJobs";  
  
 // Client imports ----------------> 
 import { SignupClient } from '../../application/usecases/client/signupClient';
@@ -86,6 +85,7 @@ import { ViewRoleInfo } from '../../application/usecases/admin/viewRoleInfo';
 import { GetWallet } from '../../application/usecases/admin/getWallet'; 
 import { SortUser } from '../../application/usecases/admin/sortUser'; 
 import { SortClient } from '../../application/usecases/admin/sortClient'; 
+import { UserRepositoryDb } from "../../infrastructure/repositories/UserRepositoryDb";
  
 // User Respo instance  ---------->
 const userRepository = new UserRepositoryDb();

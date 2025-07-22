@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { HttpStatusCode } from "../../../../helper/constants/enums";
-import { StatusMessage } from "../../../../helper/constants/stausMessages";
+import { HttpStatusCode } from "../../../helper/constants/enums";
+import { StatusMessage } from "../../../helper/constants/stausMessages";
 
 const requireRole = (role: string) => {
   return (req: Request, res: Response, next: NextFunction): void => {

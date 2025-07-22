@@ -1,10 +1,10 @@
-import { GetAllNotifications } from "../../../application/usecases/client/getAllNotifications";
-import { NotificationRepositoryDb } from "../../../domain/interfaces/Repositaries/notificationRepositoryDb";
-import { HttpStatusCode } from "../../../helper/constants/enums";
-import { StatusMessage } from "../../../helper/constants/stausMessages";
+import { GetAllNotifications } from "../../application/usecases/client/getAllNotifications"; 
+import { HttpStatusCode } from "../../helper/constants/enums";
+import { StatusMessage } from "../../helper/constants/stausMessages";
 import { Response, Request } from "express";
-import logger from "../../../logger/logger";
-import { AllNotifications } from "../../../application/usecases/user/allNotifications";
+import logger from "../../logger/logger";
+import { AllNotifications } from "../../application/usecases/user/allNotifications";
+import { NotificationRepositoryDb } from "../../infrastructure/repositories/notificationRepositoryDb";
 
 const notificationRepo = new NotificationRepositoryDb();
 const getAllNotificationsUserUseCase = new AllNotifications(notificationRepo);

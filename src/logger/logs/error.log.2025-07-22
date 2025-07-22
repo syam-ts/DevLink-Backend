@@ -7,3 +7,5 @@
 {"level":"error","message":"Cannot read properties of undefined (reading 'allUseCases')","timestamp":"2025-07-22 10:46:36"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'allUseCases')","timestamp":"2025-07-22 10:47:14"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'allUseCases')","timestamp":"2025-07-22 10:48:00"}
+{"level":"error","message":"wrong password","timestamp":"2025-07-22 10:50:51"}
+{"level":"error","message":"No jobs found","timestamp":"2025-07-22 10:51:24"}
