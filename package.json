@@ -5,8 +5,10 @@
   "repository": "https://github.com/syam-ts/DevLink-Backend.git",
   "author": "<syamnandhu3@gmail.com>",
   "scripts": {
-    "dev": "npx nodemon --exec ts-node --transpile-only src/app.ts",
-    "start": "cross-env NODE_ENV=production node src/dist/app.js"
+    "dev": "node src/dist/app.js",
+    "start": "cross-env NODE_ENV=production node src/dist/app.js",
+    "test": "echo && exit 0",
+    "build": "tsc "
   },
   "license": "MIT",
   "dependencies": {
@@ -32,7 +34,7 @@
     "socket.io": "^4.8.1",
     "stripe": "^17.5.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.2",
+    "typescript": "^5.8.3",
     "validator": "^13.12.0",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0"
