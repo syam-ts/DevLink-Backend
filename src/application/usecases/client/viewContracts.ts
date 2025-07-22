@@ -5,14 +5,13 @@ export interface ClientRepository {
   export class ViewContractsClient {
     constructor(private clientRepository: ClientRepository) {}
   
-    async execute(clientId: string, contractViewType: string, currentPage: number) {
-      const response = await this.clientRepository.viewContracts(
+      execute(clientId: string, contractViewType: string, currentPage: number) {
+     return this.clientRepository.viewContracts(
         clientId,
         contractViewType,
         currentPage
       );
-  
-      return response;
+   
     }
   };
   

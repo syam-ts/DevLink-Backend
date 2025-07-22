@@ -7,6 +7,11 @@ import { Error } from "mongoose";
 import logger from "../../logger/logger";
 
 export class UserController {
+
+constructor() {
+  
+}
+
   async signupUser(req: Request, res: Response): Promise<void> {
     try {
       const otp = await allUserUseCases.signupUseCase.execute(req.body);

@@ -12,7 +12,7 @@ export interface ClientRepository {
 const stripe = new Stripe('sk_test_51QbMd0IRhIB5V98AeCCvXn0kLeqwJ8HDxvSA92ucQQqItioMMPIEFwQk4kY9boTeeh1JRvF91jDnnAvOgJIO2F2k00J7W4XS9H');
 
 export class MakePayment {
-  constructor(private clientRepository: ClientRepository) {}
+  constructor() {}
 
   async execute(clientId: string, data: DataInterface) { 
     const { 
