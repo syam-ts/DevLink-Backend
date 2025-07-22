@@ -20,27 +20,36 @@
 
 <pre>
 /devlink-backend
-|
-├── <b>Dockerfile</b>              # Docker build config
-├── <b>docker-compose.yml</b>      # Docker compose file (optional)
-├── <b>package.json</b>
-├── <b>tsconfig.json</b>
-├── <b>yarn.lock</b>
-├── <b>ReadMe.md</b>
-├── <b>node_modules/</b>
-├── <b>.env</b>                    # Environment variables (not committed)
-|
-└── <b>/src</b>
-    ├── <b>app.ts</b>              # Main entry point
-    ├── <b>application/</b>        # Core application logic (use cases, services)
-    ├── <b>domain/</b>             # Business models and interfaces
-    ├── <b>helper/</b>             # Common helper functions/utilities
-    ├── <b>infrastructure/</b>     # External services, DB, route handlers
-    ├── <b>logger/</b>             # Winston logger configuration
-    ├── <b>types/</b>              # TypeScript types and interfaces
-    ├── <b>utils/</b>              # Reusable utility functions
-    └── <b>dist/</b>               # Compiled output (ignored in dev)
+
+├── <b>.github/</b>
+│   └── <b>workflows/</b>            
+│
+└── <b>src/</b>                      
+    │
+    ├── <b>application/</b>          
+    │   └── <i>usecases/</i>         
+    │
+    ├── <b>domain/</b>               
+    ├── <b>helper/</b>               
+    ├── <b>infrastructure/</b>       
+    ├── <b>logger/</b>              
+    ├── <b>presentation/</b>        
+    ├── <b>types/</b>                
+    ├── <b>utils/</b>                 
+    │
+    ├── <b>app.ts</b>               
+    └── <b>server.ts</b>             
+│
+├── <b>.dockerignore</b>            
+├── <b>.gitignore</b>                
+├── <b>Dockerfile</b>                
+├── <b>ReadMe.md</b>                
+├── <b>package.json</b>              
+├── <b>tsconfig.json</b>            
+├── <b>yarn.lock</b>                 
+│
 </pre>
+
 
 <p>
 This layout follows <strong>Clean Architecture principles</strong>, making your backend modular, testable, and scalable.
