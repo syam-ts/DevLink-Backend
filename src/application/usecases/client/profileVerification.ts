@@ -1,14 +1,15 @@
-import { Admin } from "../../../domain/entities/Admin";
-import { Client } from "../../../domain/entities/Client";
+import { IAdmin } from "../../../domain/entities/Admin";
+import { IClient } from "../../../domain/entities/Client";
 
+ 
 
 interface ClientData {
-    editData: Client
-    unChangedData: Client
+    editData: IClient
+    unChangedData: any
 }
 
 export interface ClientRepository {
-    profileVerification(clientId: string, clientData: ClientData): Promise <Admin>
+    profileVerification(clientId: string, clientData: ClientData): Promise <IAdmin>
 };
 
 

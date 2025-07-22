@@ -1,6 +1,7 @@
 import { IUser } from "./User";
 
 export interface IClient {
+    _id?: string;
     length?: number;
     companyName?: string;
     password?: string;

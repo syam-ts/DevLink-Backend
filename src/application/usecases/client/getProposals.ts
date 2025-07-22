@@ -1,11 +1,13 @@
-import { User } from "../../../domain/entities/User";
+import { IUser } from "../../../domain/entities/User";
+
+ 
 
 interface Proposal {
   type: string;
   UserId: string;
   jobPostId: string;
   jobPostInfo: string;
-  userData: User;
+  userData: IUser;
   description?: string | undefined;
   status?: string | undefined;
   bidamount: number;

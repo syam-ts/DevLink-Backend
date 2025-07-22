@@ -1,4 +1,4 @@
-import { InviteDocument } from "../../../domain/entities/Invite";
+ 
 import { IInviteRepository } from "../../../domain/interfaces/IInviteRepository";
 
 export class InviteUser {

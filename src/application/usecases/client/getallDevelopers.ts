@@ -1,7 +1,7 @@
-import { User } from "../../../domain/entities/User";
+import { IUser } from "../../../domain/entities/User";
 
 export interface ClientRepository {
-    getallDevelopers(): Promise<User[] | unknown>;
+    getallDevelopers(): Promise<IUser[] | unknown>;
 }
 
 export class GetallDevelopers {

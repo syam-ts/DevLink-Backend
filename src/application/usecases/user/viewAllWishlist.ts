@@ -1,7 +1,9 @@
-import { Wishlist } from "../../../domain/entities/WIshlist";
+import { IWishlist } from "../../../domain/entities/WIshlist";
+
+ 
 
 export interface UserRepositary {
-  viewAllWishlist(userId: string): Promise<Wishlist>;
+  viewAllWishlist(userId: string): Promise<IWishlist>;
 }
 
 export class ViewAllWishlist {

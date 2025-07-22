@@ -1,7 +1,9 @@
-import { Client } from "../../../domain/entities/Client";
+import { IClient } from "../../../domain/entities/Client";
+
+ 
 
 export interface AdminRepositary {
-    sortClients(sortingType: string): Promise<{clients: Client[], totalPages:number}>;
+    sortClients(sortingType: string): Promise<{clients: IClient[], totalPages:number}>;
 }
 
 export class SortClient {

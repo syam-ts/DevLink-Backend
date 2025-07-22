@@ -1,6 +1,6 @@
- 
-import { Notification } from "../../../domain/entities/Notification";
+import { INotification } from "../../../domain/entities/Notification";
 
+ 
 export interface ClientRepository {
   createContract(
     clientId: string,
@@ -8,8 +8,8 @@ export interface ClientRepository {
     jobPostId: string,
     bidAmount: number,
     bidDeadline: string
-  ): Promise<{ newNotificationUser: Notification,
-      newNotificationClient: Notification}>;
+  ): Promise<{ newNotificationUser: INotification,
+      newNotificationClient: INotification}>;
 }
 
 export class CreateContract {

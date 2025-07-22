@@ -1,5 +1,7 @@
-import { Notification } from "../../../domain/entities/Notification";
-import { User } from "../../../domain/entities/User";
+import { INotification } from "../../../domain/entities/Notification";
+import { IUser } from "../../../domain/entities/User";
+
+ 
 
 type Id = string;
 
@@ -10,7 +12,7 @@ export interface ClientRepository {
         notificationId: Id,
         rating: number,
         review: string
-    ): Promise<{updateUser: User, removeExtra: Notification}>;
+    ): Promise<{updateUser: IUser, removeExtra: INotification}>;
 }
 
 export class RateAndReview {

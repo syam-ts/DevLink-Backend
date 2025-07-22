@@ -12,6 +12,7 @@ import { JobPostModel } from "../database/Schema/jobSchema";
 import { ProjectSubmissions } from "../../application/usecases/client/viewSubmissions";
 import { IAdmin } from "../../domain/entities/Admin";
 import { IContractDocument } from "../../domain/entities/Contract";
+import { INotification } from "../../domain/entities/Notification";
 
 type Id = string;
 
@@ -586,8 +587,8 @@ export class ClientRepositoryDb {
     bidAmount: number,
     bidDeadline: string
   ): Promise<{
-    newNotificationUser: Notification;
-    newNotificationClient: Notification;
+    newNotificationUser: INotification;
+    newNotificationClient: INotification;
   }> {
     // updating job post status
     const currentJobPost = await JobPostModel.findByIdAndUpdate(
@@ -925,7 +926,7 @@ export class ClientRepositoryDb {
     notificationId: Id,
     rating: number,
     review: string
-  ): Promise<{ updateUser: IUser; removeExtra: Notification }> {
+  ): Promise<{ updateUser: IUser; removeExtra: INotification }> {
     interface Rating {
       rating: {
         ratingSum: number;
@@ -975,8 +976,9 @@ export class ClientRepositoryDb {
       { extra: {} },
       { update: true }
     )
-      .lean<Notification>()
+      .lean<any>()
       .exec();
+
     if (!removeExtra) throw new Error("notification not exists");
 
     return { updateUser, removeExtra };

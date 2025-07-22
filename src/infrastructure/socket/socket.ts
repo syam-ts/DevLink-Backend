@@ -1,6 +1,6 @@
 import { Socket } from "socket.io";
-import { ChatModel } from "../../domain/entities/Chat";
 import { Server as HttpServer } from "http";
+import { ChatModel } from "../database/Schema/chatSchema";
 const socket = require("socket.io");
 
 
