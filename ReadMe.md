@@ -150,3 +150,7 @@ services:
 </code></pre>
 
 <p><strong>Note:</strong> Make sure MongoDB is hosted on Atlas or accessible via <code>MONGO_URI</code> in your <code>.env</code> file.</p>
+
+## Licence
+
+[MIT Licence](LICENCE)
