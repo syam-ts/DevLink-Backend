@@ -5,6 +5,7 @@ dotenv.config({
   path: path.resolve(__dirname, '../../../.env')
 });
  
+console.log('THE NEW API KEY FOR GROQ TEST: ', process.env.GROQ_API_KEY);
 
 const groq = new Grog({
   apiKey: process.env.GROQ_API_KEY as string,
